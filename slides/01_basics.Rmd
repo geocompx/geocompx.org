@@ -1,0 +1,496 @@
+---
+title: "Tutorial: Geocomputation with R"
+subtitle: "⚔<br/>The basics"
+author: "Jannes Muenchow, Robin Lovelace"
+date: "ERUM Budapest, 2018-05-14"
+output:
+  xaringan::moon_reader:
+    css: "my-theme.css"
+    seal: true
+    lib_dir: libs
+    nature:
+#      highlightStyle: dracula
+      highlightLines: true
+      ratio: '4:3'
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("references.bib", check = FALSE)
+```
+
+layout: true
+background-image: url(img/r_geocomp_background.png)
+background-size: cover
+
+
+---
+
+# Find the slides and code
+<br>
+<br>
+<br>
+<br>
+https://github.com/jannes-m/erum18_geocompr
+
+<br>
+<br>
+Please install following packages:
+```{r, eval=FALSE}
+install.packages(c("sf", "raster", "spData", "dplyr", "RQGIS"))
+```
+
+Or from [docker](https://github.com/Robinlovelace/geocompr#running-the-book-in-docker):
+
+```
+docker run -d -p 8787:8787 -v ${pwd}:/data robinlovelace/geocompr
+```
+
+---
+layout: false
+
+# Contents of the tutorial
+
+```{r, eval=FALSE, echo=FALSE}
+library(sf)
+library(spData)
+world_laea = st_transform(world, 
+                          crs = "+proj=laea +x_0=0 +y_0=0 +lon_0=-77 +lat_0=39")
+gr = st_graticule(ndiscr = 1000) %>%
+  st_transform("+proj=laea +y_0=0 +lon_0=-77 +lat_0=39 +ellps=WGS84 +no_defs")
+png(filename = "pres/img/globe.png")
+plot(gr$geometry, col = "lightgray", lwd = 3)
+plot(world_laea$geom, bg = "white", col = "lightgray", add = TRUE)
+dev.off()
+```
+
+<figure>
+<img align="right" src="img/globe.png" width = "60%", height = "60%"/>
+</figure>
+
+
+1. Basics
+--
+
+1. Spatial vector data
+--
+
+1. Spatial raster data
+--
+
+1. Mapping
+--
+
+1. Bridges to GIS
+--
+
+1. (Spatial statistical learning)
+---
+
+# Who are we
+
+<figure>
+<img align="right" src="img/globe.png" width = "60%", height = "60%"/>
+</figure>
+
+- [Jannes Muenchow](http://www.geographie.uni-jena.de/en/Muenchow.html) - GIScientist from Jena with a special focus on ecology, landsliding and geomarketing; creator of the **RQGIS** package
+--
+
+- [Robin Lovelace](https://www.robinlovelace.net/) - Geographer and Environmental Scientist focussing on sustainable transport planning; creator of **stplanr**
+--
+
+- together with [Jakub Nowosad](https://nowosad.github.io/) we are writing:
+<br>
+<br>
+<center>
+<b>
+<font size = "6">
+[Geocomputation with R](https://geocompr.robinlovelace.net/)
+---
+
+layout: true
+background-image: url(img/r_geocomp_background.png)
+background-size: cover
+---
+
+# Where are we from
+
+<center>
+```{r, echo = FALSE}
+library(leaflet)
+popup = c("Robin", "Jakub", "Jannes")
+leaflet() %>%
+  addProviderTiles("NASAGIBS.ViirsEarthAtNight2012") %>%
+  addMarkers(lng = c(-3, 23, 11),
+             lat = c(52, 53, 49), 
+             popup = popup)
+```
+---
+class: inverse, center, middle
+
+# Some definitions
+---
+
+# What is a GIS?
+
+<figure>
+<img align="right" src="img/gis_logos.png" width = "40%", height = "40%"/>
+</figure>
+
+- A **G**eographic **I**nformation **S**ystem is a system for the analysis, manipulation and visualization of geographical data `r Citep(my_bib, "longley_geographic_2015a", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+- Six components of a GIS: software, data, procedures, hardware, people, network
+--
+
+- Typical GIS software packages: QGIS, SAGA-GIS, GRASS-GIS, ArcMap (commercial)
+
+???
+Remember R has never been intended to be a GIS though it is great that we can use it as one. Certain spatial operations are not possible. But R has been designed from the beginning as an interface to other languages. And later on, we will see how we can build bridges from R to GIS software.
+---
+
+# What is geocomputation?
+- Geocomputation
+- GIScience
+- Geographic data science
+--
+
+### Graphical User Interface (GUI) GIS vs Geocomputation with R
+
+```{r gdsl, echo=FALSE, message=FALSE}
+d = readr::read_csv("https://github.com/Robinlovelace/geocompr/raw/master/extdata/gis-vs-gds-table.csv")
+knitr::kable(x = d, format = "html")
+```
+
+<br>
+<br>
+--
+Further reading:
+[https://geocompr.robinlovelace.net/intro.html#what-is-geocomputation](https://geocompr.robinlovelace.net/intro.html#what-is-geocomputation)
+
+???
+"Geographic information systems are useful tools, helping everyone from scientists to citizens to solve geographic problems. But like many other kinds of tools, such as computers themselves, their use raises questions that are sometimes frustrating, and sometimes profound. For example, how does a GIS user know that the results obtained are accurate? What principles might help a GIS user to design better maps? How can locationbased services be used to help users to navigate and understand human and natural environments? Some of these are questions of GIS design, and others are aboutGIS data and methods. Taken together, we can think of them as questions that arise from the use of GIS - that are stimulated by exposure to GIS or to its products. Many of them are addressed in detail at many points in this book,
+and the book's title emphasizes the importance of both systems and science. The term geographic information science was coined in a paper by Michael Goodchild published in 1992. In it, the author argued that these questions and others like them were important, and that their systematic study constituted a science in its own right. Information science studies the fundamental issues arising from the creation, handling, storage, and use of information - similarly, GIScience should study the fundamental issues arising from geographic information, as a well-defined class of information in general. Other terms have much the same meaning: geomatics and geoinformatics, spatial information science, geoinformation engineering. All suggest a scientific approach to the fundamental issues raised by the use of GIS and related technologies, though they all have different roots and emphasize different ways of thinking about problems (specifically geographic or more generally spatial,
+emphasizing engineering or science, etc.) (Longley et al., 2005)."
+
+"There are many close synonyms for geographic information science (GIScience), one of which is geocomputation - a term first coined by the geographer Stan Openshaw to describe the scientific application of computationally-intensive techniques to problems with a spatial dimension" (Longley et al., 2005).
+---
+class: inverse, center, middle
+
+# Geographic data models
+
+---
+# Geographic data
+
+- Geographic data consists of **xy-coordinates** and corresponding **attributes** (this might include a time stamp, otherwise the data is static).
+--
+
+- Usually we neglect the curvature of the Earth when visualizing geographic data.
+--
+
+- Geographic data only represents a simplified representation of the world. So we decide what we display for which purpose.
+--
+
+- Geographic data can quickly become big.
+--
+
+- Two data models for representing digitally geographic data: **the vector** and **the raster** data model
+
+???
+Do not confuse the spatial vector data model with the vectors in R. The two are completely different things and in fact unrelated. Though we will see that we use vectors in R to represent the spatial vector data model.
+---
+
+# Vector data model
+```{r, echo=FALSE, eval=FALSE}
+library(sf)
+p = st_point(c(1.5, 4.5))
+pts = matrix(data = c(1.4, 4.4, 1.5, 4.6, 1.6, 4.4), ncol = 2, byrow = TRUE)
+l = st_linestring(pts)
+pts = matrix(data = c(1.3, 4.3, 1.4, 4.8, 1.6, 4.8, 1.65, 4.3, 1.3, 4.3),
+             ncol = 2, byrow = TRUE)
+poly = st_polygon(list(pts))
+png("pres/img/vector.png")
+plot(p, cex = 2, pch = 16, col = "salmon")
+plot(l, add = TRUE, col = "darkblue", lwd = 2)
+plot(poly, add = TRUE)
+dev.off()
+```
+
+<figure>
+<img align="right" src="img/vector.png" width = "60%", height = "60%"/>
+</figure>
+
+- Discrete objects represented by points
+--
+
+- Three main subtypes: points, lines and polygons
+--
+
+- Especially suitable for objects with well-defined borders (lakes, houses, streets, etc.)
+--
+
+- Attribute table
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+Further reading: [https://geocompr.robinlovelace.net/spatial-class.html#vector-data](https://geocompr.robinlovelace.net/spatial-class.html#vector-data)
+---
+
+# Raster data model
+```{r, echo=FALSE, message=FALSE, eval=FALSE}
+library(raster)
+library(grid)
+library(gridExtra)
+library(lattice)
+library(latticeExtra)
+
+
+small_ras = raster(matrix(1:16, 4, 4, byrow = TRUE))
+small_ras_val = raster(matrix(sample.int(100, 16), 4, 4, byrow = TRUE))
+small_ras_val[c(7, 9)] = NA
+
+polys = rasterToPolygons(small_ras, na.rm = FALSE)
+# cell IDs
+p_1 = spplot(small_ras, colorkey = FALSE, col.regions = "white",
+             main = "A. Cell IDs",
+             sp.layout = list(
+               list("sp.polygons", polys, first = FALSE),
+               list("sp.text", xyFromCell(small_ras_val, 1:ncell(small_ras)),
+                    1:ncell(small_ras))
+             )
+)
+# cell values
+p_2 = spplot(small_ras_val, colorkey = FALSE, col.regions = "white",
+             main = "",
+             sp.layout = list(
+               list("sp.polygons", polys, first = FALSE),
+               list("sp.text", xyFromCell(small_ras_val,
+                                          1:ncell(small_ras_val)),
+                    values(small_ras_val))
+             )
+)
+# colored raster
+p_3 = spplot(small_ras_val, 
+             col.regions = 
+               colorRampPalette(c("#a50026", "#ffffbf", "#006837"))(16),
+             colorkey = FALSE)
+png("pres/img/raster.png")
+grid.draw(grobTree(rectGrob(gp = gpar(lwd = 0))))
+grid.draw(arrangeGrob(p_2, p_3, ncol = 1, clip = TRUE))
+dev.off()
+```
+
+<figure>
+<img align="right" src="img/raster.png" width = "50%", height = "50%"/>
+</figure>
+
+- Continous fields represented by pixels (cells)
+--
+
+- One attribute value for one cell
+--
+
+- Especially suitable for continous data without sharp borders (elevation, precipitation)
+--
+
+- Structure: raster header (origin, resolution, ncol, nrow, crs, NAvalue) and matrix containing the data
+--
+
+- Map algebra
+--
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+Further reading: [https://geocompr.robinlovelace.net/spatial-class.html#raster-data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)
+
+---
+
+# Raster header
+<center>
+<figure>
+<img src="img/raster_header.png" width = "100%", height = "100%"/>
+</figure>
+---
+class: inverse, center, middle
+
+# A brief word on CRS
+
+---
+# A brief word on CRS
+
+We use Coordinate Reference Systems (CRS) to locate our geographic data on Earth.
+
+We distinguish between:
+
+- Geographical CRS span the entire world
+- Projected CRS are (usually) localized to minimize visual distortion in a particular region (use a specific ellipsoid which is especially suitable for a this particular part of the Earth)
+
+???
+CRS consists of a reference ellipsoid, a datum (defines the origin. I think of this as the base information needed to “draw” the imaginary coordinate lines on a globe or map. A datum is chosen to give the best possible fit to the true shape of the Earth. )
+A geographic CRS uses a grid that wraps around the entire globe. This means that each point on the globe is defined using the SAME coordinate system and the same units as defined within that particular geographic CRS.
+---
+
+# Geographic CRS
+
+.pull-left[
+- Usually in decimal degrees
+- Used by many people/institutions (GPS)
+- Great for locating a place on Earth
+- Best for global analysis
+- Less suitable if you want to measure distance
+]
+
+
+
+.pull-right[
+<img  src="https://geocompr.robinlovelace.net/figures/vector_lonlat.png" width = "90%", height = "90%"/>
+<figcaption >Source: <a href="https://geocompr.robinlovelace.net/spatial-class.html">Geocomputation with R</a>.</figcaption>
+ </figure>
+ ]
+
+???
+difference 1 decimal degree at the equator and at the poles
+---
+# Geographic CRS
+
+.pull-left[
+- Usually in decimal degrees
+- Used by many people/institutions (GPS)
+- Great for locating a place on Earth
+- Best for global analysis
+- Less suitable if you want to measure distance
+- Heavily distorted towards the poles
+
+]
+
+
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+library(spData)
+library(sf)
+par(mar = rep(0, 4))
+plot(st_geometry(world))
+plot(st_geometry(st_graticule(world)), add = TRUE)
+```
+]
+???
+difference 1 decimal degree at the equator and at the poles
+---
+
+
+# Projected CRS
+- Spatial projections flatten the 3D shape of the Earth onto a 2D plane
+- Especially suitable for "local" analysis
+
+```{r vectorplots, eval = FALSE, fig.cap="Projected CRSs (source: Geocomputation with R and [progonos.com/furuti](http://progonos.com/furuti/))", out.width="40%", fig.show='hold', echo=FALSE}
+knitr::include_graphics(c("https://geocompr.robinlovelace.net/figures/vector_projected.png", "img/spatial-projection-transformations-crs.png"))
+```
+
+.pull-right[
+<figure>
+<img  src="img/spatial-projection-transformations-crs.png" width = "90%", height = "90%"/>
+<figcaption>Source: <a href="http://progonos.com/furuti/">progonos.com/furuti/</a> </figcaption>
+</figure>
+]
+
+--
+<br> 
+Further reading:
+- [Gecomputation with R - Projections](https://geocompr.robinlovelace.net/transform.html#reproj-geo-data)
+- [QGIS CRS documentation](https://docs.qgis.org/2.14/en/docs/gentle_gis_introduction/coordinate_reference_systems.html)
+- [Earth Data Science CRS](https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-to-coordinate-reference-systems/)
+
+???
+conic, azimuthal and cylindrical projections
+---
+class: inverse, center, middle
+
+# Brief history of R-spatial
+---
+
+# Brief history of R-spatial
+
+- Spatial packages already available in the S language since the 1990s `r Citep(my_bib, "bivand_implementing_2000", .opts = list(cite.style = "authoryear"))`
+--
+
+- By 2000, modifications of these became R packages for point pattern analysis, geostatistics, exploratory spatial data analysis and spatial econometrics
+--
+
+- R-GIS bridges `r Citep(my_bib, "bivand_using_2000", .opts = list(cite.style = "authoryear"))`
+--
+
+- `r Citet(my_bib, "hornik_approaches_2003", .opts = list(cite.style = "authoryear"))` proposed a spatial data class system for R which eventually led to the packages **rgdal** `r Citep(my_bib, "bivand_rgdal_2018", .opts = list(cite.style = "authoryear"), before = "first released in 2003; ")` and **sp** `r Citep(my_bib, "bivand_applied_2013", .opts = list(cite.style = "authoryear"), before = "first released in 2005; ")`
+--
+
+- 2008: Applied Spatial Data Analysis with R `r Citep(my_bib, "bivand_applied_2013", .opts = list(cite.style = "authoryear"))`
+--
+
+- 2010: **raster** package `r Citep(my_bib, "hijmans_raster_2017", .opts = list(cite.style = "authoryear"))`
+--
+
+- 2011: **rgeos** package `r Citep(my_bib, "bivand_rgeos_2017", .opts = list(cite.style = "authoryear"))`
+--
+
+- 2016-17: **sf** - simple features for R `r Citep(my_bib, "pebesma_sf_2018", .opts = list(cite.style = "authoryear"))`
+--
+
+- 2017-18: **stars** - spatiotemporal tidy arrays for R `r Citep(my_bib, "pebesma_stars_2018", .opts = list(cite.style = "authoryear"))`
+
+--
+<br>
+<br>
+<br>
+Further reading: [https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial](https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial)
+---
+layout: false
+# Recap
+
+<figure>
+<img align="right" src="img/globe.png" width = "60%", height = "60%"/>
+</figure>
+
+- What is a GIS?
+--
+
+- What is Gecomputation?
+--
+
+- Why is geographic data special?
+--
+
+- Difference between the spatial vector and raster data model
+--
+
+- CRS
+--
+
+- Brief history of R-spatial
+
+
+---
+class: small
+# References
+```{r, 'refs', results="asis", echo=FALSE}
+PrintBibliography(my_bib)
+```
