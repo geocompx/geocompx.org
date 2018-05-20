@@ -2,7 +2,7 @@
 Place to host presentations, articles and other types of web content related to [Geocomputation with R](geocompr.robinlovelace.net)
 
 <hr>
-## Workshop "Geocomputation with R". 
+## Workshop "Geocomputation with R" 
 [eRum 2018](https://2018.erum.io/). Budapest, 2018-05-14
 
 Slides:
