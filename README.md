@@ -12,3 +12,9 @@ Slides:
 1. [Viz](workshops/erum2018/04_viz.html)
 1. [rqgis](workshops/erum2018/05_rqgis.html)
 
+## Presentation "Introduction to geocomputation with R"
+[CinDay RUG](https://www.meetup.com/CinDay-RUG/). Mason, Ohio, 2018-05-22
+
+Slides:
+
+- [Introduction to geocomputation with R](presentations/cinrug/geocompr_cinday.html)
