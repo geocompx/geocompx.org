@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spatial data and the tidyverse</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Robin Lovelace and Jakub Nowosad" />
+    <meta name="date" content="2017-09-04" />
+    <link href="spatial-tidyverse_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="spatial-tidyverse_files/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <script src="spatial-tidyverse_files/htmlwidgets-1.2/htmlwidgets.js"></script>
+    <script src="spatial-tidyverse_files/pymjs-1.3.2/pym.v1.js"></script>
+    <script src="spatial-tidyverse_files/widgetframe-binding-0.3.1/widgetframe.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Spatial data and the tidyverse
+## 🌐<br/> new tools for geocomputation with R
+### Robin Lovelace and Jakub Nowosad
+### 2017-09-04
+
+---
+
+
+
+
+
+
+
+This mini-workshop will introduce you to recent developments that enable work with spatial data 'in the tidyverse'. By this we mean handling spatial datasets using functions (such as ` %&gt;% ` and `filter()`) and concepts (such as type stability) from R packages that are part of the metapackage **tidyverse**, which can now be installed from CRAN with the following command:
+
+
+```r
+install.packages("tidyverse")
+```
+
+This functionality is possible thanks to **sf**, a recent package (first release in 2016) that implements the open standard data model *simple features*. Get **sf** with:
+
+
+```r
+install.packages("sf")
+```
+
+The workshop will briefly introduce both packages (which should be installed on your computer before attending) before demonstrating how they can work in harmony using a dataset from the **spData** package, which can be installed with:
+
+
+```r
+install.packages("spData")
+```
+
+The workshop is based on our work on the forthcoming book *Geocomputation with R* - please take a look at the book and its source code prior to the workshop here: [github.com/Robinlovelace/geocompr](https://github.com/Robinlovelace/geocompr). 
+
+---
+
+## Context
+
+- Software for 'data science' is evolving
+- In R, packages **ggplot2** and **dplyr** have become immensely popular and now they are a part of the **tidyverse**
+- These packages use the 'tidy data' principles for consistency and speed of processing (from `vignette("tidy-data")`):
+
+
+&gt;    - Each variable forms a column.
+&gt;    - Each observation forms a row.
+&gt;    - Each type of observational unit forms a table
+
+- Historically spatial R packages have not been compatible with the **tidyverse**
+
+---
+background-image: url("https://pbs.twimg.com/media/CvzEQcfWIAAIs-N.jpg")
+background-size: cover
+
+---
+
+## Enter sf
+
+- **sf** is a recently developed package for spatial (vector) data
+- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**
+- Has many advantages, including:
+    - Faster data I/O
+    - More geometry types supported
+    - Compatibility with the *tidyverse*
+    
+That's the topic of this workshop
+
+---
+background-image: url("https://media1.giphy.com/media/Hw5LkPYy9yfVS/giphy.gif")
+
+## Geocomputation with R
+
+- A book we are working on for CRC Press (to be published in 2018)
+- Chapters 3 ~~and 4~~ of this book form the basis of the worked examples presented here
+
+---
+
+## Prerequisites
+
+- Install the required packages. You need a recent version of the GDAL, GEOS, Proj.4, and UDUNITS libraries installed for this to work on Mac and Linux. More information on that at https://github.com/r-spatial/sf#installling.
+
+
+```r
+devtools::install_github("robinlovelace/geocompr")
+```
+
+- Load the ones we need:
+
+
+```r
+library(spData)
+library(dplyr)
+library(sf)
+```
+
+- Check it's all working, e.g. with this command:
+
+
+```r
+world %&gt;%
+  plot()
+```
+
+---
+
+## Reading and writing spatial data
+
+
+```r
+library(sf)
+library(spData)
+vector_filepath = system.file("shapes/world.gpkg", package = "spData")
+vector_filepath
+```
+
+```
+## [1] "/home/jn/R/x86_64-redhat-linux-gnu-library/3.5/spData/shapes/world.gpkg"
+```
+
+```r
+world = st_read(vector_filepath)
+```
+
+```
+## Reading layer `wrld.gpkg' from data source `/home/jn/R/x86_64-redhat-linux-gnu-library/3.5/spData/shapes/world.gpkg' using driver `GPKG'
+## Simple feature collection with 177 features and 10 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+```
+
+Counterpart to `st_read()` is the `st_write` function, e.g. `st_write(world, 'data/new_world.gpkg')`. A full list of supported formats could be found using `sf::st_drivers()`.
+
+---
+
+## Structure of the sf objects 
+
+
+```r
+world
+```
+
+
+```
+## Simple feature collection with 177 features and 10 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 3 features:
+##   iso_a2   name_long continent region_un       subregion              type
+## 1     AF Afghanistan      Asia      Asia   Southern Asia Sovereign country
+## 2     AO      Angola    Africa    Africa   Middle Africa Sovereign country
+## 3     AL     Albania    Europe    Europe Southern Europe Sovereign country
+##    area_km2      pop  lifeExp gdpPercap                           geom
+## 1  652270.1 31627506 60.37446  1844.022 MULTIPOLYGON (((61.21082 35...
+## 2 1245463.7 24227524 52.26688  6955.960 MULTIPOLYGON (((16.32653 -5...
+## 3   29694.8  2893654 77.83046 10698.525 MULTIPOLYGON (((20.59025 41...
+```
+
+
+```r
+class(world)
+```
+
+```
+## [1] "sf"         "data.frame"
+```
+
+---
+
+## Structure of the sf objects 
+
+
+```r
+world$name_long
+```
+
+
+```
+## [1] Afghanistan Angola      Albania    
+## 177 Levels: Afghanistan Albania Algeria Angola Antarctica ... Zimbabwe
+```
+
+
+```r
+world$geom
+```
+
+
+```
+## Geometry set for 177 features 
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 3 geometries:
+```
+
+```
+## MULTIPOLYGON (((61.21082 35.65007, 62.23065 35....
+```
+
+```
+## MULTIPOLYGON (((16.32653 -5.87747, 16.57318 -6....
+```
+
+```
+## MULTIPOLYGON (((20.59025 41.8554, 20.46318 41.5...
+```
+
+---
+## sf vs sp
+
+
+- The **sp** package is a predecessor of the **sf** package 
+- Together with the **rgdal** and **rgeos** package, it creates a powerful tool to works with spatial data
+- Many spatial R packages still depends on the **sp** package, therefore it is important to know how to convert **sp** to and from **sf** objects
+
+
+```r
+library(sp)
+world_sp = as(world, "Spatial")
+world_sf = st_as_sf(world_sp)
+```
+
+- The structures in the **sp** packages are more complicated - `str(world_sf)` vs `str(world_sp)`
+  
+- Moreover, many of the **sp** functions are not "pipeable" (it's hard to combine them with the **tidyverse**)
+
+
+```r
+world_sp %&gt;% 
+  filter(name_long == "England")
+```
+
+`Error in UseMethod("filter_") : 
+  no applicable method for 'filter_' applied to an object of class "c('SpatialPolygonsDataFrame', 'SpatialPolygons', 'Spatial')"`
+
+---
+
+## Non-spatial operations on the sf objects
+
+
+```r
+world %&gt;% 
+  left_join(worldbank_df, by = "iso_a2") %&gt;%
+  select(name_long, pop, pop_growth, area_km2) %&gt;%
+  arrange(area_km2) %&gt;% 
+  mutate(pop_density = pop/area_km2) %&gt;%
+  rename(population = pop)
+```
+
+```
+## Simple feature collection with 183 features and 5 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 10 features:
+##              name_long population pop_growth  area_km2 pop_density
+## 1           Luxembourg     556319  2.3569787  2416.870   230.18155
+## 2      Northern Cyprus         NA         NA  3786.365          NA
+## 3      Northern Cyprus         NA         NA  3786.365          NA
+## 4      Northern Cyprus         NA         NA  3786.365          NA
+## 5            Palestine    4294682  2.9579950  5037.104   852.60939
+## 6               Cyprus    1153658  0.7327776  6207.006   185.86384
+## 7              Vanuatu     258883  2.2298147  7490.040    34.56363
+## 8  Trinidad and Tobago    1354483  0.4621243  7737.810   175.04734
+## 9          Puerto Rico    3534888 -1.6331283  9224.663   383.19968
+## 10             Lebanon    5612096  6.0164395 10099.003   555.70792
+##                              geom
+## 1  MULTIPOLYGON (((6.043073 50...
+## 2  MULTIPOLYGON (((32.73178 35...
+## 3  MULTIPOLYGON (((32.73178 35...
+## 4  MULTIPOLYGON (((32.73178 35...
+## 5  MULTIPOLYGON (((35.54567 32...
+## 6  MULTIPOLYGON (((33.97362 35...
+## 7  MULTIPOLYGON (((167.8449 -1...
+## 8  MULTIPOLYGON (((-61.68 10.7...
+## 9  MULTIPOLYGON (((-66.28243 1...
+## 10 MULTIPOLYGON (((35.8211 33....
+```
+
+---
+
+## Non-spatial operations
+
+
+```r
+world_cont = world %&gt;% 
+        group_by(continent) %&gt;% 
+        summarize(pop_sum = sum(pop, na.rm = TRUE))
+```
+
+
+```
+## Simple feature collection with 8 features and 2 fields
+## geometry type:  GEOMETRY
+## dimension:      XY
+## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## # A tibble: 8 x 3
+##   continent    pop_sum                                                geom
+##   &lt;fct&gt;          &lt;dbl&gt;                                  &lt;MULTIPOLYGON [°]&gt;
+## 1 Africa    1147005839 (((49.54352 -12.46983, 49.80898 -12.89528, 50.0565…
+## # ... with 7 more rows
+```
+
+
+- The `st_set_geometry` function can be used to remove the geometry column:
+
+
+```r
+world_df =st_set_geometry(world_cont, NULL)
+class(world_df)
+```
+
+```
+## [1] "tbl_df"     "tbl"        "data.frame"
+```
+
+---
+
+## Spatial operations
+
+It's a big topic which includes:
+
+- Spatial subsetting
+- Spatial joining/aggregation
+- Topological relations
+- Distances
+- Spatial geometry modification
+- Raster operations (map algebra)
+
+See [Chapter 4](http://geocompr.robinlovelace.net/spatial-operations.html) of *Geocomputation with R* 
+
+---
+
+## Spatial subsetting
+
+
+```r
+lnd_buff = lnd[1, ] %&gt;% 
+  st_transform(crs = 27700) %&gt;%  # uk CRS
+  st_buffer(500000) %&gt;%
+  st_transform(crs = 4326)
+near_lnd = world[lnd_buff, ]
+plot(near_lnd$geom)
+```
+
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+- What is going with the country miles away?
+
+---
+
+## Multi-objects
+
+Some objects have multiple geometries:
+
+
+```r
+st_geometry_type(near_lnd)
+```
+
+```
+## [1] MULTIPOLYGON MULTIPOLYGON MULTIPOLYGON MULTIPOLYGON MULTIPOLYGON
+## [6] MULTIPOLYGON MULTIPOLYGON
+## 18 Levels: GEOMETRY POINT LINESTRING POLYGON ... TRIANGLE
+```
+
+Which have more than 1?
+
+
+```r
+data.frame(near_lnd$name_long,
+           sapply(near_lnd$geom, length))
+```
+
+```
+##   near_lnd.name_long sapply.near_lnd.geom..length.
+## 1            Belgium                             1
+## 2            Germany                             1
+## 3             France                             3
+## 4     United Kingdom                             2
+## 5            Ireland                             1
+## 6         Luxembourg                             1
+## 7        Netherlands                             1
+```
+
+---
+
+## Subsetting contiguous polygons
+
+
+```r
+near_lnd_new = world %&gt;% 
+  st_cast(to = "POLYGON") %&gt;% 
+  filter(st_intersects(., lnd_buff, sparse = FALSE))
+plot(st_geometry(near_lnd_new))
+```
+
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+
+# Tidyverse pitfall 1: row names
+
+You can also do tidy spatial subsetting:
+
+
+```r
+near_lnd_tidy = world %&gt;% 
+  filter(st_intersects(., lnd_buff, sparse = FALSE))
+```
+
+But a) it's verbose and b) it boshes the row names!
+
+
+```r
+row.names(near_lnd_tidy)
+```
+
+```
+## [1] "1" "2" "3" "4" "5" "6" "7"
+```
+
+```r
+row.names(near_lnd)
+```
+
+```
+## [1] "13"  "42"  "56"  "58"  "75"  "98"  "118"
+```
+
+- Consequences for joining - rownames can be useful! 
+
+Also affects non-spatial data - [tidyverse/dplyr#366](https://github.com/tidyverse/dplyr/issues/366)
+
+---
+
+# Tidyverse pitfall 2: Duplicate column names
+
+See [edzer/sf#544](https://github.com/r-spatial/sf/issues/544)
+
+
+```r
+names(world)
+```
+
+```
+##  [1] "iso_a2"    "name_long" "continent" "region_un" "subregion"
+##  [6] "type"      "area_km2"  "pop"       "lifeExp"   "gdpPercap"
+## [11] "geom"
+```
+
+```r
+names(lnd_buff)
+```
+
+```
+## [1] "NAME"       "GSS_CODE"   "HECTARES"   "NONLD_AREA" "ONS_INNER" 
+## [6] "SUB_2009"   "SUB_2006"   "geometry"
+```
+
+
+```r
+lnd_buff$iso_a2 = NA
+```
+
+
+```r
+st_intersection(world, lnd_buff) # works
+world_tidy = st_as_sf(as_tibble(world))
+st_intersection(world_tidy, lnd_buff) # fails
+```
+
+```
+Error: Column `iso_a2` must have a unique name
+```
+
+---
+
+# Tidyverse pitfall 3: binding rows
+
+
+
+```r
+rbind(near_lnd, near_lnd) # works
+bind_rows(near_lnd, near_lnd)
+```
+
+```
+Error in .subset2(x, i, exact = exact) : 
+  attempt to select less than one element in get1index
+```
+
+But this does:
+
+
+```r
+near_lnd_data = st_set_geometry(near_lnd, NULL)
+d = bind_rows(near_lnd_data, near_lnd_data)
+d_sf = st_sf(d, geometry = c(near_lnd$geom, near_lnd$geom))
+plot(d_sf)
+```
+
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+---
+
+## CRS
+
+
+```r
+na_2163 = world %&gt;%
+  filter(continent == "North America") %&gt;% 
+  st_transform(2163) #US National Atlas Equal Area
+st_crs(na_2163)
+```
+
+```
+## Coordinate Reference System:
+##   EPSG: 2163 
+##   proj4string: "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"
+```
+
+
+
+![](figs/coord_compare.png)
+
+---
+## Basic maps
+
+- Basic maps of `sf` objects can be quickly created using the `plot()` function:
+
+
+```r
+plot(world[0])
+```
+
+
+```r
+plot(world["pop"])
+```
+
+
+
+![](figs/plot_compare.png)
+
+---
+## tmap
+
+https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html
+
+```r
+library(tmap)
+tmap_mode("plot") #check the "view"
+tm_shape(world, projection = "+proj=moll") +
+        tm_polygons("lifeExp", title = "Life expactancy",
+          style = "pretty", palette = "RdYlGn") +
+        tm_style("grey")
+```
+
+&lt;img src="spatial-tidyverse_files/figure-html/unnamed-chunk-39-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## leaflet
+
+
+```r
+library(leaflet)
+leaflet(world) %&gt;%
+        addTiles() %&gt;%
+        addPolygons(color = "#444444", weight = 1, fillOpacity = 0.5,
+                    fillColor = ~colorQuantile("YlOrRd", lifeExp)(lifeExp),
+                    popup = paste(round(world$lifeExp, 2)))
+```
+
+<div id="htmlwidget-0f0c84173ae399372e95" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0f0c84173ae399372e95">{"x":{"url":"spatial-tidyverse_files/figure-html//widgets/widget_unnamed-chunk-41.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+## Raster data in the tidyverse
+
+Raster data is not yet closely connected to the **tidyverse**, however:
+
+- Some functions from the **raster** package works well in `pipes`
+- You can convert vector data to the `Spatial*` form using `as(my_vector, "Spatial")`before working on raster-vector interactions
+- There are some initial efforts to bring raster data closer to the **tidyverse**, such as [tabularaster](https://github.com/hypertidy/tabularaster), [sfraster](https://github.com/mdsumner/sfraster), or [fasterize](https://github.com/ecohealthalliance/fasterize)
+- The development of the [stars](https://github.com/r-spatial/stars), package focused on multidimensional, large datasets should start soon. It will allow pipe-based workflows
+
+---
+
+## Geocomputation with R
+
+The online version of the book is at http://geocompr.robinlovelace.net/ and its source code at https://github.com/robinlovelace/geocompr.
+
+We encourage contributions on any part of the book, including:
+
+- Improvements to the text, e.g. clarifying unclear sentences, fixing typos (see guidance from [Yihui Xie](https://yihui.name/en/2013/06/fix-typo-in-documentation/))
+- Changes to the code, e.g. to do things in a more efficient way
+- Suggestions on content (see the project's [issue tracker](https://github.com/Robinlovelace/geocompr/issues) and the [work-in-progress](https://github.com/Robinlovelace/geocompr/tree/master/work-in-progress) folder for chapters in the pipeline)
+
+Please see [our-style.md](https://github.com/Robinlovelace/geocompr/blob/master/our-style.md) for the book's style.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
