@@ -3,11 +3,11 @@
 
 Slides:
 
-- [Introduction to geocomputation with R](presentations/geocompr_cinday.html)
+- [Introduction to geocomputation with R](geocompr_cinday.html)
 
 ## Presentation "Spatial data and the tidyverse"
 [Geocomputation 2017](www.geocomputation.org/2017). Leeds, UK, 2017-09-04
 
 Slides:
 
-- [Spatial data and the tidyverse](presentations/spatial-tidyverse.html)
+- [Spatial data and the tidyverse](spatial-tidyverse.html)
