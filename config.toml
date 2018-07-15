@@ -1,4 +1,4 @@
-baseURL = "http://geocompr.github.io/"
+baseURL = "https://geocompr.github.io/"
 languageCode = "en-us"
 title = "Geocomputation with R"
 theme = "minimal"
