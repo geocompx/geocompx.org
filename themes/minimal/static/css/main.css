@@ -16,6 +16,13 @@ main {
     max-width: 750px;
 }
 
+mainhome {
+    margin: auto;
+    padding: 25px;
+    flex: 0 0 auto;
+    max-width: 750px;
+}
+
 /*footer*/
 
 .copyright {
@@ -98,3 +105,19 @@ footer {
 img {
     max-width: 100%;
 }
+
+.two-columns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-column {
+      width: 50%;
+}
+
+.right-column {
+      width: 50%;
+      margin: 10px;
+      padding: 10px;
+ }

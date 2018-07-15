@@ -1,17 +1,22 @@
 {{ partial "header" . }}
 
-<main>
+<mainhome>
 
-    <div class="intro">
+    <div class="two-columns">
+        
+        <div class="left-column">
+                  <figure class="full-figure">
+            	<img src="/img/logo.png" alt="Book cover">
+            	      </figure>
 
-        {{ with .Site.Params.profilePic }} <img class="profile" src="{{ . }}"> {{ end }}
-
-        <h1>{{ .Site.Title }}</h1>
-
-        <h2>{{ markdownify .Site.Params.Description }}</h2>
+        </div>
+        <div class="right-column">
+                    <h1>{{ .Site.Title }}</h1>
+                    <h2>{{ markdownify .Site.Params.Description }}</h2>
+        </div>
 
     </div>
 
-</main>
+</mainhome>
 
 {{ partial "footer" . }}
