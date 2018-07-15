@@ -6,7 +6,7 @@ Slides:
 - [Introduction to geocomputation with R](geocompr_cinday.html)
 
 ## Presentation "Spatial data and the tidyverse"
-[Geocomputation 2017](www.geocomputation.org/2017). Leeds, UK, 2017-09-04
+[Geocomputation 2017](http://www.geocomputation.org/2017). Leeds, UK, 2017-09-04
 
 Slides:
 
