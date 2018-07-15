@@ -4,7 +4,7 @@ sudo: false
 
 branches:
   only:
-    - master
+    - source
 
 cache:
   packages: yes
@@ -22,7 +22,6 @@ deploy:
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   on:
-    branch: master
+    branch: source
   local_dir: public
-  repo: geocompr/geocompr.github.io
   target_branch: master
