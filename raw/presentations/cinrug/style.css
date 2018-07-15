@@ -1,0 +1,13 @@
+a {
+color: #2199e8;
+}
+
+code {
+  /* background: #F5F5F5; /* lighter */
+  background: #e7e8e2; /* darker */
+} 
+
+blockquote {
+  border-left: solid 5px lightgray;
+  padding-left: 1em;
+}
