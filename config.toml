@@ -6,7 +6,7 @@ theme = "minimal"
 googleAnalytics = ""
 
 [params]
-    author = "Jakub Nowosad"
+    author = "Robin Lovelace, Jakub Nowosad, Jannes Muenchow"
     description = "a forthcoming book"
     githubUsername = "#"
     accent = "green"
