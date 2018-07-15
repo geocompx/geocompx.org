@@ -25,3 +25,4 @@ deploy:
     branch: source
   local_dir: public
   target_branch: master
+  
