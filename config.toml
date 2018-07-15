@@ -22,10 +22,10 @@ googleAnalytics = ""
     name = "Home"
     weight = 1
 
-[[menu.main]]
-    url = "/post/"
-    name = "Posts"
-    weight = 2
+# [[menu.main]]
+#     url = "/post/"
+#     name = "Posts"
+#     weight = 2
 
 [[menu.main]]
     url = "/presentations/"
