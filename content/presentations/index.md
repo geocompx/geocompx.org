@@ -11,3 +11,16 @@ Slides:
 Slides:
 
 - [Spatial data and the tidyverse](spatial-tidyverse.html)
+
+### Presentation "**RQGIS** - integrating R with QGIS for statistical geocomputing"
+[UseR!](https://user2017.brussels/), Brussels, Belgium, 2017-07-05
+
+- [slides](schd.ws/hosted_files/user2017/37/rqgis_useR.pptx)
+
+- [video recording](https://channel9.msdn.com/events/useR-international-R-User-conferences/useR-International-R-User-2017-Conference/RQGIS-integrating-R-with-QGIS-for-innovative-geocomputing?term=rqgis&lang-en=true)
+
+### Presentation "Integrating R with GIS for innovative geocomputing – the examples of **RQGIS** and **RSAGA**"
+[EGU](https://www.egu2017.eu/), Vienna, Austria, 2017-04-25
+
+- [abstract](http://adsabs.harvard.edu/abs/2017EGUGA..19.3301M)
+- [slides](https://presentations.copernicus.org/EGU2017-3301_presentation.pdf)
