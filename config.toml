@@ -39,7 +39,7 @@ googleAnalytics = ""
     
 [[menu.main]]
     url = "/geocompkg/articles/"
-    name = "Vignettes"
+    name = "Vignettes and solutions"
     weight = 5
         
 # Social icons to be shown on the right-hand side of the navigation bar
