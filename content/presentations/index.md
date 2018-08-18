@@ -1,3 +1,10 @@
+### Presentation "Geocomputation with R: An overview of the field and introduction to the book"
+[GEOSTAT2018](https://geostat-course.org/). Prague, Czech Republic, 2018-08-20
+
+Slides:
+
+- [Geocomputation with R](geostat18-geocomputation.html)
+
 ### Presentation "Introduction to geocomputation with R"
 [CinDay RUG](https://www.meetup.com/CinDay-RUG/). Mason, Ohio, 2018-05-22
 
