@@ -43,11 +43,11 @@ background-size: cover
 
 --
 
-- [Robin Lovelace](https://www.robinlovelace.net/), creator of **stplanr**. Lecturing 11:00 Weds on spatial data and the **tidyverse**.
+- [Robin Lovelace](https://www.robinlovelace.net/), creator of **stplanr**, co-author of Efficent R Programming. Lecturing 11:00 Weds on spatial data and the **tidyverse**.
 
 --
 
-- Front cover image competition! Submissions (code / ideas welcome) by Thursday evening. Prize: $100 CRC Press book voucher.
+- Front cover image competition! Submissions (code / ideas welcome) by Thursday evening. Prize: ~~$100~~ $150 CRC Press book voucher.
 
 ---
 
@@ -289,7 +289,7 @@ Why R?
 
 --
 
-&gt; What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications (Longley, Brooks, McDonnell, and MacMillan, 1998).
+&gt; What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications (Longley, Brooks, McDonnell, et al., 1998).
 
 --
 
@@ -301,7 +301,49 @@ It's about doing "practical work that is beneficial or useful" (Openshaw and Abr
 
 ---
 
-# A little less conversation...
+# What's in the geocompr box?
+
+.pull-left[
+
+- Chapter 1: History + 'philosophy' = important
+
+Foundations
+
+- Starting from nothing
+- Class definitions
+- Spatial/attribute operations
+- Projections 
+- Data IO
+
+Extensions
+
+- Advanced methods
+- How to build your own functions
+
+Applications
+
+- A taster of what you can do
+
+]
+
+.pull-right[
+&lt;img src="images/geocompr-index.png" width="369" height="500" /&gt;
+]
+
+
+---
+
+# Just do it!
+
+--
+
+"A little less conversation a little more action"
+
+--
+
+- "The sky is the limit with R" (Tom Hengl, 2018)
+
+--
 
 ![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
 
@@ -330,37 +372,6 @@ Still works today, 25 years later:
 
 ```r
 library(splancs)
-```
-
-```
-## Loading required package: sp
-```
-
-```
-## 
-## Spatial Point Pattern Analysis Code in S-Plus
-##  
-##  Version 2 - Spatial and Space-Time analysis
-```
-
-```
-## 
-## Attaching package: 'splancs'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     tribble
-```
-
-```
-## The following object is masked from 'package:tibble':
-## 
-##     tribble
-```
-
-```r
 #&gt; Spatial Point Pattern Analysis Code in S-Plus
 #&gt; Version 2 - Spatial and Space-Time analysis
 ```
@@ -375,7 +386,7 @@ plot(bodmin$poly, asp=1, type="n")
 pointmap(as.points(bodmin), add=TRUE)
 ```
 
-![](geostat18-geocomputation_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ```r
 # zoom()
@@ -466,7 +477,7 @@ a package for making interactive maps that has been extended by the R community,
 
 
 
-![](geostat18-geocomputation_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -503,7 +514,7 @@ plot(nz_height, add = TRUE, col = "red")
 plot(nz)
 ```
 
-![](geostat18-geocomputation_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 
 --
@@ -519,7 +530,7 @@ tm_shape(nz) +
   tm_polygons("Median_income", palette = "RdYlBu")
 ```
 
-![](geostat18-geocomputation_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -531,9 +542,6 @@ tm_shape(nz) +
 - Wide range of spatial classes (including `raster` objects) supported.
 - Well documented + developed --- see [`tmap-nutshell`](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html) and JSS paper
 .
-
-
--
 
 
 # tmap basics
@@ -549,7 +557,7 @@ tm_shape(nz) + tm_fill() + tm_borders()
 ```
 
 &lt;div class="figure"&gt;
-&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-25-1.png" alt="tmap basics" width="32%" /&gt;&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-25-2.png" alt="tmap basics" width="32%" /&gt;&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-25-3.png" alt="tmap basics" width="32%" /&gt;
+&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-26-1.png" alt="tmap basics" width="32%" /&gt;&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-26-2.png" alt="tmap basics" width="32%" /&gt;&lt;img src="geostat18-geocomputation_files/figure-html/unnamed-chunk-26-3.png" alt="tmap basics" width="32%" /&gt;
 &lt;p class="caption"&gt;tmap basics&lt;/p&gt;
 &lt;/div&gt;
 
@@ -573,14 +581,16 @@ m@map
 
 ---
 
-# Web mapping applications
+# Just do it! II
 
-- Leaflet integrates with **shiny** via `leaflet::leafletOutput()`, enabling web mapping applications built on R
-- These can be set-up to scale nationally, as illustrated by [pct.bike](http://www.pct.bike/)
-.
+--
 
+&gt; Geographic data can save the world ([Robin Lovelace 2018, Jena](https://twitter.com/robinlovelace/status/983978278569553920))
 
-![](https://raw.githubusercontent.com/npct/pct-team/master/figures/pct-frontpage.png)&lt;!-- --&gt;
+--
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
 
 ---
 
@@ -589,30 +599,116 @@ m@map
 - Sea level rise could change the course of humanity
 - See code: https://github.com/geocompr/geostats_18/blob/master/code/geocompr/slr.R
 
-Todo: improve this section, add refs + image!
+
+```r
+knitr::include_graphics("https://camo.githubusercontent.com/9ba73ec5a33f2e5a008d04517ea8ba12a7b0c01d/68747470733a2f2f692e696d6775722e636f6d2f634a62304977312e706e67")
+```
+
+![](https://camo.githubusercontent.com/9ba73ec5a33f2e5a008d04517ea8ba12a7b0c01d/68747470733a2f2f692e696d6775722e636f6d2f634a62304977312e706e67)&lt;!-- --&gt;
+
+---
+
+# Finding a problem that is "beneficial or useful"
+
+- With so much data emerging, more options than ever, including:
+
+--
+
+- Earth: how to replenish topsoil?
+- Water: how to deal with aquifer depletion?
+- Fire: how to encourage fire-resistent ecosystems?
+
+---
+
+# Sea level rise: a global geo* issue
+
+- How to prepare for future sea level rise 
+(Clark, Shakun, Marcott, et al., 2016)?
+
+&lt;img src="images/slr-long-clark-et-al-2016.png" width="2563" /&gt;
+
+---
+
+## (Retrospective) justification
+
+--
+
+- It's supported by evidence! (see previous figure):
 
 
+
+--
+
+- Why study it? (are there 'bigger fish to fry'?)
+&lt;!-- what you're studying? Scientific justifications abound. --&gt;
+
+--
+
+&gt; We are headed for "much higher global average temperature than any interglacial in the past 1.2 million years and to sea levels significantly higher than at any time in the Holocene" 
+(Steffen, Rockström, Richardson, et al., 2018)
+
+&gt; Melting at the base of floating ice shelves [of the West Antarctic Ice Sheet (WAIS)] can lead to runaway retreat ... WAIS + Greenland have contributed at most ∼3 to 10 m
+(Pollard, DeConto, and Alley, 2015)
+
+--
+
+- Retrospective justifications like "I like bikes" 
+(Lovelace, Goodman, Aldred, et al., 2017)
+❎
+
+--
+
+- Pre-emptive justification like "it's the number one area I can make a difference" (you can always change direction) ✔️
+
+---
+
+# A case study of doing something useful I
+
+- Motivation: I like bikes!
+- Tech: **shiny** + `leaflet::leafletOutput()` -&gt; [pct.bike](http://www.pct.bike/)
+(Lovelace, Goodman, Aldred, et al., 2017).
+
+
+![](https://raw.githubusercontent.com/npct/pct-team/master/figures/pct-frontpage.png)&lt;!-- --&gt;
+
+---
+
+# A case study of 'doing' something useful II
+
+- Sea level rise could change the course of humanity
+- See code: https://github.com/geocompr/geostats_18/blob/master/code/geocompr/slr.R
+
+- Live demo (to be continued Weds)`
+``{r}, echo=FALSE
+knitr::include_graphics("https://camo.githubusercontent.com/9ba73ec5a33f2e5a008d04517ea8ba12a7b0c01d/68747470733a2f2f692e696d6775722e636f6d2f634a62304977312e706e67")
+```
 
 ---
 
 # What's next for geocomputation with R?
 
-- Geocomputation with R is not a finished story
+- Geocomputation can be applied to many area and it's not a finished story
 
--- 
+--
 
-- Consolidation
+- Consolidation (Geocomputation workshops on Wednesday)
 
 --
 
 - Growth of cloud services + containerisation
-- Big raster (Edzer's workshop)
+- Big raster (Edzer and Markus's workshops on Thursday)
 - Integration with other languages like Python
 - More bridges
 
 ---
+class: small
 
-# References
+# References + contact
+
+- To contact us about the book - go to [github.com/Robinlovelace/geocompr](https://github.com/Robinlovelace/geocompr)
+- Centralised social media: [#geocompr](https://twitter.com/hashtag/geocompr)
+&lt;!-- - Good old fashioned email: r.lovelace at leeds dot ac dot uk --&gt;
+
 
 Bivand, Roger S, Edzer Pebesma and Virgilio Gomez-Rubio (2013).
 _Applied Spatial Data Analysis with R_. 2nd ed.. New York:
@@ -621,9 +717,21 @@ Springer. 405 pp. ISBN: 978-1-4614-7617-7.
 Chambers, John M. (2016). _Extending R_. En. CRC Press. ISBN:
 978-1-4987-7572-4.
 
+Clark, Peter U, Jeremy D. Shakun, Shaun A. Marcott, et al. (2016).
+"Consequences of Twenty-First-Century Policy for Multi-Millennial
+Climate and Sea-Level Change". In: _Nature Climate Change_. ISSN:
+1758-678X, 1758-6798. DOI:
+[10.1038/nclimate2923](https://doi.org/10.1038/nclimate2923).
+
 Longley, Paul A, Sue M. Brooks, Rachael McDonnell, et al, ed.
 (1998). _Geocomputation: A Primer_. 1 edition. Chichester, Eng. ;
 New York: Wiley. ISBN: 978-0-471-98576-1.
+
+Lovelace, Robin, Anna Goodman, Rachel Aldred, et al. (2017). "The
+Propensity to Cycle Tool: An Open Source Online System for
+Sustainable Transport Planning". En. In: _Journal of Transport and
+Land Use_ 10.1. ISSN: 1938-7849. DOI:
+[10.5198/jtlu.2016.862](https://doi.org/10.5198/jtlu.2016.862).
 
 Lovelace, Robin, Jakub Nowosad and Jannes Muenchow (2018).
 _Geocomputation with R_. The R Series. CRC Press.
@@ -632,10 +740,22 @@ Openshaw, Stan and Robert J. Abrahart, ed. (2000).
 _Geocomputation_. 1 edition. London ; New York: CRC Press. ISBN:
 978-0-7484-0900-6.
 
+Pollard, David, Robert M. DeConto and Richard B. Alley (2015).
+"Potential Antarctic Ice Sheet Retreat Driven by Hydrofracturing
+and Ice Cliff Failure". In: _Earth and Planetary Science Letters_
+412, pp. 112-121. ISSN: 0012-821X. DOI:
+[10.1016/j.epsl.2014.12.035](https://doi.org/10.1016/j.epsl.2014.12.035).
+
 Rowlingson, B. S and P. J Diggle (1993). "Splancs: Spatial Point
 Pattern Analysis Code in S-Plus". In: _Computers &amp; Geosciences_
 19.5, pp. 627-655. ISSN: 0098-3004. DOI:
 [10.1016/0098-3004(93)90099-Q](https://doi.org/10.1016/0098-3004(93)90099-Q).
+
+Steffen, Will, Johan Rockström, Katherine Richardson, et al.
+(2018). "Trajectories of the Earth System in the Anthropocene".
+En. In: _Proceedings of the National Academy of Sciences_, p.
+201810141. ISSN: 0027-8424, 1091-6490. DOI:
+[10.1073/pnas.1810141115](https://doi.org/10.1073/pnas.1810141115).
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
