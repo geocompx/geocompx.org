@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geocomputation with R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow" />
+    <link rel="stylesheet" href="xaringan_stuff/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Geocomputation with R
+## 🗺 <br/> Book Preview / Unlaunch
+### Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+### GeoStat 2018(-08-20)
+
+---
+
+
+&lt;!-- 14:15 - 15:00 - 45 minute talk  --&gt;
+&lt;!-- Aims: show-off the book, provide overview, some useful things in it --&gt;
+
+
+
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# The wider project
+
+See https://geocompr.github.io/
+
+&lt;img src="images/Screenshot_2018-08-22 Geocomputation with R.png" width="4240" /&gt;
+
+---
+
+# What's in the geocompr box?
+
+.pull-left[
+
+- Chapter 1: History + 'philosophy' = important
+
+Foundations
+
+- Starting from nothing
+- Class definitions
+- Spatial/attribute operations
+- Projections 
+- Data IO
+
+Extensions
+
+- Advanced methods
+- How to build your own functions
+
+Applications
+
+- A taster of what you can do
+
+]
+
+.pull-right[
+&lt;img src="images/geocompr-index.png" width="369" height="500" /&gt;
+]
+
+---
+
+# Overview of contents: Part I
+
+- Chapter 1: history, context, motivation
+- Chapter 2: R's main spatial classes (sf/raster)
+- Chapter 3: Attribute data (tidyverse/base R functions)
+- Chapter 4: Spatial data operations (spatial join, spatial subset)
+- Chapter 5: Geometry operations (simplify, buffer etc)
+- Chapter 6: Projections + transformations 
+- Chapter 7: Reading and writing spatial data (I/O)
+
+---
+
+# Overview of contents: Part II
+
+- Chapter 8: Making maps (tmap, interactive maps, etc)
+- Chapter 9: Bridges to dedicated GIS software
+- Chapter 10: Scripts, algorithms and functions (how to build geo-tools)
+- Chapter 11: Statistical learning (mlr)
+
+---
+
+# Overview of contents: Part III
+
+- Chapter 12: Transport 
+- Chapter 13: Geomarketing 
+- Chapter 14: Ecology
+
+---
+
+# Publication plan
+
+- Original deadline: 1st November
+
+--
+
+- We're ahead of schedule: 1st October!
+
+--
+
+Priorities: 
+
+- Robustness testing (try and break our code)
+- Improve exercises (are they too easy/hard?)
+- Refine explanation (anything unclear?)
+
+---
+
+# Contributors over time
+
+- We've had 20+ [contributors](https://github.com/Robinlovelace/geocompr/graphs/contributors) and 150+ [issues](https://github.com/Robinlovelace/geocompr/issues) (questions, answers, learning)
+
+
+```r
+webshot::webshot("https://github.com/jannes-m/RQGIS/issues/66")
+```
+
+&lt;img src="images/rqgis-question.png" width="1323" /&gt;
+
+---
+
+# How to get involved
+
+- Just ask a question (especially if it's got a reprex)
+- Issues with the prose (typos, bits not clear)
+- Issues with the exercises
+- Any content missing? 
+
+---
+
+# Front cover visualisation competition
+
+&lt;img src="images/Screenshot_2018-08-22 GEOSTAT 2018 Prague.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Upstream contributions
+
+&lt;img src="images/Screenshot_2018-08-22 Robinlovelace geocompr.png" width="1947" /&gt;
+
+---
+
+# Thanks
+
+- Thanks to the amazing R and R-spatial communities
+- Everyone who's contributed so far
+- GEOSTAT/OpenGeoHub for the opportunity to present
+
+---
+
+# Next steps
+
+
+- Next stop: beer/finish/relax
+
+&lt;img src="images/team-geocompr-beer.png" width="1227" /&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "4:3",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
