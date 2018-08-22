@@ -1,3 +1,10 @@
+### Presentation "Spatial data and the tidyverse"
+[GEOSTAT/OpenGeoHub2018](http://opengeohub.org/). Prague, 2018-08-22
+
+Slides:
+
+- [Spatial data and the tidyverse](spatial-tidyverse.html)
+
 ### Presentation "Geocomputation with R: An overview of the field and introduction to the book"
 [GEOSTAT2018](https://geostat-course.org/). Prague, Czech Republic, 2018-08-20
 
@@ -17,7 +24,7 @@ Slides:
 
 Slides:
 
-- [Spatial data and the tidyverse](spatial-tidyverse.html)
+- [Spatial data and dplyr](spatial-tidyverse.html)
 
 ### Presentation "**RQGIS** - integrating R with QGIS for statistical geocomputing"
 [UseR!](https://user2017.brussels/), Brussels, Belgium, 2017-07-05
