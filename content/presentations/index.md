@@ -1,5 +1,5 @@
 ### Presentation "Spatial data and the tidyverse"
-[GEOSTAT/OpenGeoHub2018](http://opengeohub.org/). Prague, 2018-08-22
+[GEOSTAT2018](https://geostat-course.org/). Prague, Czech Republic, 2018-08-22
 
 Slides:
 
