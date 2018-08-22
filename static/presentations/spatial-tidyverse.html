@@ -3,34 +3,61 @@
   <head>
     <title>Spatial data and the tidyverse</title>
     <meta charset="utf-8">
-    <meta name="author" content="Robin Lovelace and Jakub Nowosad" />
-    <meta name="date" content="2017-09-04" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
-    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
-    <script src="libs/pymjs/pym.v1.js"></script>
-    <script src="libs/widgetframe-binding/widgetframe.js"></script>
+    <meta name="author" content="Robin Lovelace, Jannes Menchow and Jakub Nowosad" />
+    <script src="xaringan_stuff/libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="xaringan_stuff/libs/pymjs/pym.v1.js"></script>
+    <script src="xaringan_stuff/libs/widgetframe-binding/widgetframe.js"></script>
+    <link rel="stylesheet" href="xaringan_stuff/my-theme.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
 # Spatial data and the tidyverse
-## 🌐<br/> new tools for geocomputation with R
-### Robin Lovelace and Jakub Nowosad
-### 2017-09-04
+## 🌐<br/> combining tidy tools for geocomputation with R
+### Robin Lovelace, Jannes Menchow and Jakub Nowosad
+### GeoStat 2018(-08-22)
 
 ---
 
 
+&lt;!-- msg: Looks like I'll have a second change to demonstrate this code: 55% of people in the poll wanted sea level rise (SLR) to be the example dataset for the dplyr/sf integration workshop tomorrow. Watch this space --&gt;
+&lt;!-- 14:15 - 15:00 - 45 minute talk  --&gt;
+&lt;!-- Aims: show-off the book, provide overview, some useful things in it --&gt;
 
 
 
 
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# 'Team geocompr'
+
+&lt;figure&gt;
+&lt;img align="right" src="xaringan_stuff/img/geocompr_logo.png" width = "60%", height = "60%"/&gt;
+&lt;/figure&gt;
+
+- [Jakub Nowosad](https://nowosad.github.io/): developer of GeoPAT + more. Lecturing 09:00 on Wednesday.
+
+- [Jannes Muenchow](http://www.geographie.uni-jena.de/en/Muenchow.html), creator of **RQGIS**. Lecturing  Weds 13:30 on GIS Bridges and Weds 15:30 on Spatial CV.
+
+--
+
+- [Robin Lovelace](https://www.robinlovelace.net/), creator of **stplanr**, co-author of Efficent R Programming. Lecturing 11:00 Weds on spatial data and the **tidyverse**.
+
+--
+
+- Front cover image competition! Submissions (code / ideas welcome) by Thursday evening. Prize: ~~$100~~ $150 CRC Press book voucher.
+
+---
+
+# Aim
 
 
-
-This mini-workshop will introduce you to recent developments that enable work with spatial data 'in the tidyverse'. By this we mean handling spatial datasets using functions (such as ` %&gt;% ` and `filter()`) and concepts (such as type stability) from R packages that are part of the metapackage **tidyverse**, which can now be installed from CRAN with the following command:
+This workshop will introduce you to working with spatial data 'in the tidyverse'. By this we mean handling spatial datasets using functions (such as ` %&gt;% ` and `filter()`) and concepts (such as type stability) from R packages that are part of the metapackage **tidyverse**, which can now be installed from CRAN with the following command:
 
 
 ```r
@@ -44,14 +71,14 @@ This functionality is possible thanks to **sf**, a recent package (first release
 install.packages("sf")
 ```
 
-The workshop will briefly introduce both packages (which should be installed on your computer before attending) before demonstrating how they can work in harmony using a dataset from the **spData** package, which can be installed with:
+The workshop also uses a dataset from the **spData** package, which can be installed with:
 
 
 ```r
 install.packages("spData")
 ```
 
-The workshop is based on our work on the forthcoming book *Geocomputation with R* - please take a look at the book and its source code prior to the workshop here: [github.com/Robinlovelace/geocompr](https://github.com/Robinlovelace/geocompr). 
+For more on this see: [github.com/Robinlovelace/geocompr](https://github.com/Robinlovelace/geocompr). 
 
 ---
 
@@ -86,6 +113,7 @@ background-size: cover
 That's the topic of this workshop
 
 ---
+
 background-image: url("https://media1.giphy.com/media/Hw5LkPYy9yfVS/giphy.gif")
 
 ## Geocomputation with R
@@ -95,31 +123,156 @@ background-image: url("https://media1.giphy.com/media/Hw5LkPYy9yfVS/giphy.gif")
 
 ---
 
-## Prerequisites
+# Reproducibility + collaboration
 
-- Install the required packages. You need a recent version of the GDAL, GEOS, Proj.4, and UDUNITS libraries installed for this to work on Mac and Linux. More information on that at https://github.com/r-spatial/sf#installling.
+&gt; Collaboration is most important aspect of science (and reprex the most important R package!) (Jakub Nowosad, 2018, GEOSTAT)
+
+&lt;br&gt; Slides: https://geocompr.github.io/presentations/
+&lt;br&gt; Source code: https://github.com/geocompr/geostats_18
+
+To install all packages used in the book:
 
 
 ```r
-devtools::install_github("robinlovelace/geocompr")
+devtools::install_github("geocompr/geocompkg")
 ```
 
-- Load the ones we need:
-
 
 ```r
-library(spData)
-library(dplyr)
 library(sf)
 ```
 
-- Check it's all working, e.g. with this command:
+```
+## Linking to GEOS 3.5.1, GDAL 2.2.2, proj.4 4.9.2
+```
+
+```r
+library(raster)
+```
+
+```
+## Loading required package: sp
+```
+
+
+---
+
+# Conflicting function names
 
 
 ```r
-world %&gt;%
-  plot()
+library(tidyverse)
 ```
+
+```
+## ── Attaching packages ──────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
+## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
+```
+
+```
+## ── Conflicts ─────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ tidyr::extract() masks raster::extract()
+## ✖ dplyr::filter()  masks stats::filter()
+## ✖ dplyr::lag()     masks stats::lag()
+## ✖ dplyr::select()  masks raster::select()
+```
+
+
+---
+
+# Detour: System commands / console
+
+--
+
+- Option 1: use `system()`
+
+
+```r
+system("ls code/", intern = TRUE)
+```
+
+```
+## [1] "geocompr"      "r_gis_bridges" "spatial_cv"
+```
+
+--
+
+- Option 2: use *sh commands directly, e.g.:
+
+
+```zsh
+ls code/
+```
+
+```
+## geocompr
+## r_gis_bridges
+## spatial_cv
+```
+
+---
+
+# System commands are handy
+
+- Important step on path to programming
+- Will help your R programming career
+- Trick: shorten github URLs from the command-line:
+
+
+```zsh
+curl -i https://git.io -F "url=https://github.com/geocompr/geostats_18/releases/download/0.1/data.zip" \
+    -F "code=spatial-tidyvers"
+# Date: Wed, 22 Aug 2018 04:09:48 GMT
+# Status: 201 Created
+# Content-Type: text/html;charset=utf-8
+# Location: https://git.io/spatial-tidyvers
+```
+
+---
+
+# Get the data
+
+Data for the sea level rise code in this presentation: see the releases in [geostats_18](https://github.com/geocompr/geostats_18/releases):
+
+
+
+```r
+download.file("https://git.io/spatial-tidyvers", "data.zip")
+unzip("data.zip")
+file.rename("pres/geocompr/data/", "data/")
+prague = raster::raster("data/prague_elev.tif")
+```
+
+---
+
+# Check it works
+
+
+```r
+prague = raster::raster("data/prague_elev.tif")
+plot(prague)
+p = stplanr::geo_code("Pruhonice") %&gt;% st_point() %&gt;% st_sfc()
+plot(p, add = TRUE, cex = 5, lwd = 3)
+```
+
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+
+# Ready to go?
+
+&gt; Confusion is good (Roger Bivand 2018, GEOSTAT/OpenGeoHub)
+
+--
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
 
 ---
 
@@ -129,29 +282,11 @@ world %&gt;%
 ```r
 library(sf)
 library(spData)
-vector_filepath = system.file("shapes/world.gpkg", package = "spData")
-vector_filepath
+prague_sf = read_sf("data/prague.geojson")
+# same as:  st_read("data/prague.geojson")
 ```
 
-```
-## [1] "/home/jn/R/x86_64-redhat-linux-gnu-library/3.5/spData/shapes/world.gpkg"
-```
-
-```r
-world = st_read(vector_filepath)
-```
-
-```
-## Reading layer `wrld.gpkg' from data source `/home/jn/R/x86_64-redhat-linux-gnu-library/3.5/spData/shapes/world.gpkg' using driver `GPKG'
-## Simple feature collection with 177 features and 10 fields
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-```
-
-Counterpart to `st_read()` is the `st_write` function, e.g. `st_write(world, 'data/new_world.gpkg')`. A full list of supported formats could be found using `sf::st_drivers()`.
+`write_sf()/st_write()` writes data `st_write(prague_sf, 'data/prague_sf.gpkg')`. See supported formats with: `sf::st_drivers()`. Details: Chapter 6 of our book: [geocompr.robinlovelace.net/read-write.html](https://geocompr.robinlovelace.net/read-write.html)
 
 ---
 
@@ -159,98 +294,42 @@ Counterpart to `st_read()` is the `st_write` function, e.g. `st_write(world, 'da
 
 
 ```r
-world
-```
-
-
-```
-## Simple feature collection with 177 features and 10 fields
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-## First 3 features:
-##   iso_a2   name_long continent region_un       subregion              type
-## 1     AF Afghanistan      Asia      Asia   Southern Asia Sovereign country
-## 2     AO      Angola    Africa    Africa   Middle Africa Sovereign country
-## 3     AL     Albania    Europe    Europe Southern Europe Sovereign country
-##    area_km2      pop  lifeExp gdpPercap                           geom
-## 1  652270.1 31627506 60.37446  1844.022 MULTIPOLYGON (((61.21082 35...
-## 2 1245463.7 24227524 52.26688  6955.960 MULTIPOLYGON (((16.32653 -5...
-## 3   29694.8  2893654 77.83046 10698.525 MULTIPOLYGON (((20.59025 41...
+prague_sf
 ```
 
 
 ```r
-class(world)
+class(prague_sf)
 ```
 
 ```
 ## [1] "sf"         "data.frame"
 ```
 
+
+
+
+
 ---
 
-## Structure of the sf objects 
+## sf vs sp in the tidyverse
 
-
-```r
-world$name_long
-```
-
-
-```
-## [1] Afghanistan Angola      Albania    
-## 177 Levels: Afghanistan Albania Algeria Angola Antarctica ... Zimbabwe
-```
-
-
-```r
-world$geom
-```
-
-
-```
-## Geometry set for 177 features 
-## geometry type:  MULTIPOLYGON
-## dimension:      XY
-## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
-## epsg (SRID):    4326
-## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-## First 3 geometries:
-```
-
-```
-## MULTIPOLYGON (((61.21082 35.65007, 62.23065 35....
-```
-
-```
-## MULTIPOLYGON (((16.32653 -5.87747, 16.57318 -6....
-```
-
-```
-## MULTIPOLYGON (((20.59025 41.8554, 20.46318 41.5...
-```
-
----
-## sf vs sp
-
-
-- The **sp** package is a predecessor of the **sf** package 
+- **sp** precedes **sf**  
 - Together with the **rgdal** and **rgeos** package, it creates a powerful tool to works with spatial data
 - Many spatial R packages still depends on the **sp** package, therefore it is important to know how to convert **sp** to and from **sf** objects
 
 
 ```r
-library(sp)
+library(spData)
 world_sp = as(world, "Spatial")
 world_sf = st_as_sf(world_sp)
 ```
 
 - The structures in the **sp** packages are more complicated - `str(world_sf)` vs `str(world_sp)`
   
-- Moreover, many of the **sp** functions are not "pipeable" (it's hard to combine them with the **tidyverse**)
+--
+
+- **sp** doesn't play well with the **tidyverse**:
 
 
 ```r
@@ -263,53 +342,93 @@ world_sp %&gt;%
 
 ---
 
-## Non-spatial operations on the sf objects
+## Attribute operations: filtering
 
 
 ```r
 world %&gt;% 
-  left_join(worldbank_df, by = "iso_a2") %&gt;%
-  select(name_long, pop, pop_growth, area_km2) %&gt;%
-  arrange(area_km2) %&gt;% 
-  mutate(pop_density = pop/area_km2) %&gt;%
-  rename(population = pop)
+  filter(name_long == "United Kingdom")
 ```
 
 ```
-## Simple feature collection with 183 features and 5 fields
+## Simple feature collection with 1 feature and 10 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
-## bbox:           xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## bbox:           xmin: -7.572168 ymin: 49.96 xmax: 1.681531 ymax: 58.635
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-## First 10 features:
-##              name_long population pop_growth  area_km2 pop_density
-## 1           Luxembourg     556319  2.3569787  2416.870   230.18155
-## 2      Northern Cyprus         NA         NA  3786.365          NA
-## 3      Northern Cyprus         NA         NA  3786.365          NA
-## 4      Northern Cyprus         NA         NA  3786.365          NA
-## 5            Palestine    4294682  2.9579950  5037.104   852.60939
-## 6               Cyprus    1153658  0.7327776  6207.006   185.86384
-## 7              Vanuatu     258883  2.2298147  7490.040    34.56363
-## 8  Trinidad and Tobago    1354483  0.4621243  7737.810   175.04734
-## 9          Puerto Rico    3534888 -1.6331283  9224.663   383.19968
-## 10             Lebanon    5612096  6.0164395 10099.003   555.70792
-##                              geom
-## 1  MULTIPOLYGON (((6.043073 50...
-## 2  MULTIPOLYGON (((32.73178 35...
-## 3  MULTIPOLYGON (((32.73178 35...
-## 4  MULTIPOLYGON (((32.73178 35...
-## 5  MULTIPOLYGON (((35.54567 32...
-## 6  MULTIPOLYGON (((33.97362 35...
-## 7  MULTIPOLYGON (((167.8449 -1...
-## 8  MULTIPOLYGON (((-61.68 10.7...
-## 9  MULTIPOLYGON (((-66.28243 1...
-## 10 MULTIPOLYGON (((35.8211 33....
+##   iso_a2      name_long continent region_un       subregion    type
+## 1     GB United Kingdom    Europe    Europe Northern Europe Country
+##   area_km2      pop  lifeExp gdpPercap                           geom
+## 1 249986.4 64613160 81.30488  38251.79 MULTIPOLYGON (((-6.197885 5...
+```
+
+--
+
+Base R equivalent:
+
+
+```r
+world[world$name_long == "United Kingdom", ]
+```
+
+--
+
+Question:
+
+
+```r
+identical(
+  world %&gt;% filter(name_long == "United Kingdom"),
+  world[world$name_long == "United Kingdom", ]
+) # ?
+```
+
+```
+## [1] FALSE
+```
+
+# Detour: Row names
+
+- Usually don't matter but they can bite
+
+
+```r
+u1 = world %&gt;% filter(name_long == "United Kingdom")
+u2 = world[world$name_long == "United Kingdom", ]
+row.names(u2) = 1
+identical(u1, u2)
+```
+
+```
+## [1] FALSE
+```
+
+--
+
+- Advanced challenge: how to make u1 and u2 identical?
+
+
+
+---
+
+# Regex
+
+- What does each of these produce?
+
+
+```r
+world %&gt;% filter(grepl(pattern = "United", x = name_long))
+world[grepl(pattern = "United", x = world$name_long)]
+grepl(pattern = "United", x = world$name_long)
+world %&gt;% filter(grepl(pattern = "^U", x = name_long))
+world %&gt;% filter(grepl(pattern = "m$", x = name_long))
+world %&gt;% filter(grepl(pattern = "Un|om", x = name_long))
 ```
 
 ---
 
-## Non-spatial operations
+## Aggregation
 
 
 ```r
@@ -327,9 +446,9 @@ world_cont = world %&gt;%
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ## # A tibble: 8 x 3
-##   continent    pop_sum                                                geom
-##   &lt;fct&gt;          &lt;dbl&gt;                                  &lt;MULTIPOLYGON [°]&gt;
-## 1 Africa    1147005839 (((49.54352 -12.46983, 49.80898 -12.89528, 50.0565…
+##   continent   pop_sum                                                 geom
+##   &lt;fct&gt;         &lt;dbl&gt;                                   &lt;MULTIPOLYGON [°]&gt;
+## 1 Africa       1.15e9 (((49.54352 -12.46983, 49.80898 -12.89528, 50.05651…
 ## # ... with 7 more rows
 ```
 
@@ -338,7 +457,7 @@ world_cont = world %&gt;%
 
 
 ```r
-world_df =st_set_geometry(world_cont, NULL)
+world_df = st_set_geometry(world_cont, NULL)
 class(world_df)
 ```
 
@@ -375,7 +494,7 @@ near_lnd = world[lnd_buff, ]
 plot(near_lnd$geom)
 ```
 
-![](figs_g17/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 - What is going with the country miles away?
 
@@ -406,13 +525,13 @@ data.frame(near_lnd$name_long,
 
 ```
 ##   near_lnd.name_long sapply.near_lnd.geom..length.
-## 1            Belgium                             1
+## 1             France                             3
 ## 2            Germany                             1
-## 3             France                             3
-## 4     United Kingdom                             2
-## 5            Ireland                             1
-## 6         Luxembourg                             1
-## 7        Netherlands                             1
+## 3         Luxembourg                             1
+## 4            Belgium                             1
+## 5        Netherlands                             1
+## 6            Ireland                             1
+## 7     United Kingdom                             2
 ```
 
 ---
@@ -427,7 +546,7 @@ near_lnd_new = world %&gt;%
 plot(st_geometry(near_lnd_new))
 ```
 
-![](figs_g17/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -457,7 +576,7 @@ row.names(near_lnd)
 ```
 
 ```
-## [1] "13"  "42"  "56"  "58"  "75"  "98"  "118"
+## [1] "44"  "122" "129" "130" "131" "134" "144"
 ```
 
 - Consequences for joining - rownames can be useful! 
@@ -532,7 +651,7 @@ d_sf = st_sf(d, geometry = c(near_lnd$geom, near_lnd$geom))
 plot(d_sf)
 ```
 
-![](figs_g17/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](spatial-tidyverse_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -589,7 +708,7 @@ tm_shape(world, projection = "+proj=moll") +
         tm_style("grey")
 ```
 
-&lt;img src="figs_g17/unnamed-chunk-39-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="spatial-tidyverse_files/figure-html/unnamed-chunk-43-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 ## leaflet
@@ -604,8 +723,8 @@ leaflet(world) %&gt;%
                     popup = paste(round(world$lifeExp, 2)))
 ```
 
-<div id="htmlwidget-3f5cfda2dca58df697dd" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f5cfda2dca58df697dd">{"x":{"url":"figs_g17//widgets/widget_unnamed-chunk-41.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2fbdac1cadff8791eda8" style="width:100%;height:400px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2fbdac1cadff8791eda8">{"x":{"url":"spatial-tidyverse_files/figure-html//widgets/widget_unnamed-chunk-45.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -617,6 +736,53 @@ Raster data is not yet closely connected to the **tidyverse**, however:
 - You can convert vector data to the `Spatial*` form using `as(my_vector, "Spatial")`before working on raster-vector interactions
 - There are some initial efforts to bring raster data closer to the **tidyverse**, such as [tabularaster](https://github.com/hypertidy/tabularaster), [sfraster](https://github.com/mdsumner/sfraster), or [fasterize](https://github.com/ecohealthalliance/fasterize)
 - The development of the [stars](https://github.com/r-spatial/stars), package focused on multidimensional, large datasets should start soon. It will allow pipe-based workflows
+
+---
+
+# Practical exercises
+
+In groups of 2:4,
+
+--
+
+A) Beginner/tidyverse consolidation: Tackle the exercises in Chapter 3 of Geocomputation with R
+
+--
+
+B) Intermediate/advanced: Build on Edzer's [`breweries` analysis](https://edzer.github.io/UseR2017/) and answer the questions using tidyverse functions:
+
+1. which was the earliest founded brewery?
+2. which has the longest name?
+3. group the breweries by the century they were founded: which has, on average, most beer types?
+4. Join the breweries to a 5km buffer around the trails: which trail is the best for number/diversity of breweries?
+
+--
+
+C) Advanced/raster: Find the sea level rise reprex presented on Monday and build on it:
+
+1. To find the % of Sczecin that would be flooded under a 20m scenario of SLR?
+1. What % of Prague area will be flooded by 200m of SLR?!
+2. The % of another low-lying town of your choice that would be flooded by a SLR value of your choice.
+&lt;!-- 3. Devise a research programme to do a 5 year study on geocomputation for sea level rise research. --&gt;
+
+---
+
+# What next
+
+- Who wants to do A, B and C?
+- Get into groups (move around!)
+- Ask at least 1 question or help at least 1 person
+
+--
+
+If (really) bored: check out the science of SLR in refs here: https://geocompr.github.io/presentations/geostat18-geocomputation.html#64
+
+--
+
+Have fun!
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
 
 ---
 
@@ -648,12 +814,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   d.head.appendChild(s);
 })();</script>
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  tex2jax: {
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
   }
-});
+})();
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
