@@ -43,8 +43,8 @@ googleAnalytics = ""
     weight = 5
 
 [[menu.main]]
-    url = "/publicity/"
-    name = "Publicity"
+    url = "/guestbook/"
+    name = "Guestbook"
     weight = 6
 
 # Social icons to be shown on the right-hand side of the navigation bar
