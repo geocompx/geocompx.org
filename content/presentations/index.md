@@ -1,4 +1,4 @@
-### Geocomputation with R: Empower yourself with free software and geo* data [ Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, 2018-10-31
+### Geocomputation with R: Empower yourself with free software and geo* data [Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, 2018-10-31
 
 Slides
 
