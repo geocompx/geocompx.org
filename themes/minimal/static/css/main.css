@@ -125,3 +125,7 @@ img {
 .lefty {
     text-align: left;
 }
+
+.heightSet {
+    max-height: 400px;
+}
