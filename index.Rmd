@@ -1,3 +1,4 @@
 ---
 site: blogdown:::blogdown_site
+description: "Geocomputation, R, GIS, Spatial Data, Spatial Analysis, Geospatial, Geographic information system"
 ---
