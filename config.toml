@@ -1,7 +1,6 @@
 baseURL = "https://geocompr.github.io/"
 languageCode = "en-us"
 title = "Geocomputation with R"
-desc = "Geocomputation with R is for people who want to analyze, visualize and model geographic data with open source software. GIS, Spatial, R, Geospatial, Maps."
 theme = "minimal"
 # disqusShortname = "username" # delete this to disable disqus comments
 googleAnalytics = ""
