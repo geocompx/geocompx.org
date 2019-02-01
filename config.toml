@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "Geocomputation with R"
 theme = "minimal"
 # disqusShortname = "username" # delete this to disable disqus comments
-googleAnalytics = ""
+googleAnalytics = "UA-99618359-2"
 
 [params]
     author = "Robin Lovelace, Jakub Nowosad, Jannes Muenchow"
