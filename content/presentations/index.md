@@ -1,6 +1,6 @@
-- Geocomputation with R: Data science, open source software and geo* data  [Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, 2018-10-31
+### Geocomputation with R: Data science, open source software and geo* data  [Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, 2018-10-31
 
-Slides
+Slides:
 
 - [nurd.html](https://www.robinlovelace.net/presentations/nurd.html#1)
 
