@@ -1,6 +1,6 @@
-<header>
-Workshops
-</header>
+/*
+Title: Workshops
+*/
 
 ### Workshop "Geocomputation with R" 
 [eRum 2018](https://2018.erum.io/). Budapest, Hungary, 2018-05-14
