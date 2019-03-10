@@ -1,5 +1,10 @@
+### Presentation "Reproducible spatial data analysis: An example of transportation analysis for Bristol"
+Collegium Da Vinci. Poznan, Poland, 2019-01-29
+
+- [slides](https://nowosad.github.io/georep_2019/)
+
 ### Presentation "Geocomputation with R: Data science, open source software and geo* data"
-[Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, 2018-10-31
+[Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, UK, 2018-10-31
 
 - [slides](https://www.robinlovelace.net/presentations/nurd.html#1)
 
