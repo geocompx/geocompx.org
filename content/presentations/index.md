@@ -26,7 +26,7 @@ Collegium Da Vinci. Poznan, Poland, 2019-01-29
 ### Presentation "Spatial data and the tidyverse"
 [Geocomputation 2017](http://www.geocomputation.org/2017/conference/). Leeds, UK, 2017-09-04
 
-- [slides](spatial-tidyverse.html)
+- [slides](https://www.robinlovelace.net/presentations/spatial-tidyverse.html#1)
 
 ### Presentation "**RQGIS** - integrating R with QGIS for statistical geocomputing"
 [UseR!](https://user2017.brussels/), Brussels, Belgium, 2017-07-05
