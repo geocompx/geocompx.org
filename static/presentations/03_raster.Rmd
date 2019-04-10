@@ -1,0 +1,440 @@
+---
+title: "Tutorial: Geocomputation with R"
+subtitle: "⚔<br/>Geographic raster data in R"
+author: "Jannes Muenchow, Robin Lovelace"
+date: "EGU Vienna, 2019-04-10"
+output:
+  xaringan::moon_reader:
+    css: "my-theme.css"
+    seal: true
+    lib_dir: libs
+    nature:
+#      highlightStyle: dracula
+      highlightLines: true
+      ratio: '4:3'
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("references.bib", check = FALSE)
+```
+
+layout: true
+background-image: url(img/r_geocomp_background.png)
+background-size: cover
+
+
+---
+# Find the slides and code
+<br>
+<br>
+<br>
+<br>
+https://github.com/geocompr/egu_19
+
+<br>
+<br>
+Please install following packages:
+```{r, eval=FALSE}
+install.packages(c("sf", "raster", "spData", "dplyr", "RQGIS"))
+```
+
+Or from [docker](https://github.com/Robinlovelace/geocompr#running-geocompr-code-in-docker).
+
+---
+
+# Raster data model
+```{r, echo=FALSE, message=FALSE, eval=FALSE}
+library(raster)
+library(grid)
+library(gridExtra)
+library(lattice)
+library(latticeExtra)
+
+
+small_ras = raster(matrix(1:16, 4, 4, byrow = TRUE))
+small_ras_val = raster(matrix(sample.int(100, 16), 4, 4, byrow = TRUE))
+small_ras_val[c(7, 9)] = NA
+
+polys = rasterToPolygons(small_ras, na.rm = FALSE)
+# cell IDs
+p_1 = spplot(small_ras, colorkey = FALSE, col.regions = "white",
+             main = "A. Cell IDs",
+             sp.layout = list(
+               list("sp.polygons", polys, first = FALSE),
+               list("sp.text", xyFromCell(small_ras_val, 1:ncell(small_ras)),
+                    1:ncell(small_ras))
+             )
+)
+# cell values
+p_2 = spplot(small_ras_val, colorkey = FALSE, col.regions = "white",
+             main = "",
+             sp.layout = list(
+               list("sp.polygons", polys, first = FALSE),
+               list("sp.text", xyFromCell(small_ras_val,
+                                          1:ncell(small_ras_val)),
+                    values(small_ras_val))
+             )
+)
+# colored raster
+p_3 = spplot(small_ras_val, 
+             col.regions = 
+               colorRampPalette(c("#a50026", "#ffffbf", "#006837"))(16),
+             colorkey = FALSE)
+png("pres/img/raster.png")
+grid.draw(grobTree(rectGrob(gp = gpar(lwd = 0))))
+grid.draw(arrangeGrob(p_2, p_3, ncol = 1, clip = TRUE))
+dev.off()
+```
+
+<figure>
+<img align="right" src="img/raster.png" width = "50%", height = "50%"/>
+</figure>
+
+- Continous fields represented by pixels (cells)
+--
+
+- One attribute value for one cell
+--
+
+- Especially suitable for continous data without sharp borders (elevation, precipitation)
+--
+
+- Structure: raster header (origin, resolution, ncol, nrow, crs, NAvalue) and matrix containing the data
+--
+
+- Map algebra
+--
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+Further reading: [https://geocompr.robinlovelace.net/spatial-class.html#raster-data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)
+
+
+---
+# Raster data in R
+
+Remember: the geographic raster data model is used to represent continuous surfaces.
+Rasters consist of a **header** and a **matrix** containing the actual values. 
+Let's create a raster from scratch.
+In R we use the popular **raster** package written by Robert J. Hijmans.
+--
+
+```{r, message=FALSE}
+library(raster)
+elev = raster(nrow = 6, ncol = 6, res = 0.5,
+              xmn = -1.5, xmx = 1.5,
+              ymn = -1.5, ymx = 1.5,
+              vals = 1:36)
+```
+
+---
+
+# Raster data in R
+
+```{r}
+elev
+```
+
+---
+
+# Raster data in R
+
+.pull-left[
+```{r, eval=FALSE}
+plot(elev)
+```
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+plot(elev)
+```
+]
+---
+class: inverse, center, middle
+
+# Raster attribute subsetting
+---
+
+# Raster attribute subsetting
+Since a raster is a matrix, subsetting follows the usual `i,j` conventions. Let's select the first and the last value.
+--
+
+```{r}
+elev[1, 1]
+elev[6, 6]
+```
+--
+
+Further reading: [https://geocompr.robinlovelace.net/attr.html#raster-subsetting](https://geocompr.robinlovelace.net/attr.html#raster-subsetting)
+
+???
+or using cell IDs:
+
+```{r, eval=FALSE}
+elev[1]
+elev[36]
+```
+
+---
+class: inverse, center, middle
+
+# Spatial raster operations
+
+---
+
+# Raster spatial operations - subsetting
+
+using coordinates:
+```{r}
+extract(elev, data.frame(x = 0.75, y = 0.75))
+```
+--
+
+using a SpatialObject (`SpatialPointsDataFrame`):
+--
+
+```{r, message=FALSE}
+library(sf)
+library(dplyr)
+pt = st_point(c(0.75, 0.75)) %>%
+  st_sfc %>%
+  st_sf %>% 
+  as(., "Spatial")
+# use the SpatialObject for subsetting
+elev[pt]
+```
+---
+
+using another raster object:
+
+.pull-left[
+```{r}
+clip = 
+  raster(nrow = 3, ncol = 3, 
+         res = 0.3, xmn = 0.6, 
+         xmx = 1.5, ymn = -0.45, 
+         ymx = 0.45, 
+         vals = rep(1, 9))
+elev[clip]
+```
+]
+
+--
+.pull-right[
+```{r, echo=FALSE}
+plot(elev, legend = FALSE)
+plot(rasterToPolygons(clip), add = TRUE)
+```
+]
+
+???
+all raster values are returned when their midpoint is covered by the overlayed object
+---
+
+# Map algebra - local operations
+You may use with raster datasets:
+
+- algebraic operators such as `+`, `-`, `*`, `/`
+- logical operators such as `>`, `>=`, `<`, `==`, `!`
+- functions such as `abs`, `round`, `ceiling`, `floor`, `trunc`, `sqrt`, `log`, `log10`, `exp`, `cos`, `sin`, `max`,  `min`,  `range`,  `prod`,  `sum`,  `any`,  `all`.   
+--
+
+```{r, eval=FALSE}
+elev + 1
+elev^2
+elev / 4
+```
+--
+
+Cell-by-cell operations are also called local operations.
+The calculation of the NDVI is one of the most popular examples.
+
+???
+The calculation of the normalized difference vegetation index (NDVI) is one of the most famous local, i.e. pixel-by-pixel, raster operations.
+It ranges between - 1 and 1 with positive values indicating the presence of living plants (mostly > 0.2).
+To calculate the NDVI, one uses the red and near-infrared bands of remotely sensed imagery (e.g. Landsat or Sentinel imagery) exploiting the fact that vegetation absorbs light heavily in the visible light spectrum, and especially in the red channel, while reflecting it in the near-infrared spectrum.
+---
+
+# Map algebra - focal operations
+While local functions operate on one cell, though possibly from multiple layers, **focal** operations take into account a central cell and its neighbors.
+The neighborhood (also named kernel, filter or moving window) under consideration is typically of size 3-by-3 cells (that is the central cell and its eight surrounding neighbors) but can take on any other (not necessarily rectangular) shape as defined by the user.
+???
+A focal operation applies an aggregation function to all cells within the specified neighborhood, uses the corresponding output as the new value for the the central cell, and moves on to the next central cell.
+Other names for this operation are spatial filtering and convolution.
+
+---
+
+# Map algebra - focal operations
+```{r, elev = FALSE}
+r_focal = focal(elev, w = matrix(1, nrow = 3, ncol = 3), fun = min)
+``` 
+
+<center>
+<figure>
+<img  src="img/04_focal_example.png" width = "100%", height = "100%"/>
+</figure>
+---
+
+# Map algebra - zonal operations
+Zonal operations are similar to focal operations.
+The difference is that zonal filters can take on any shape instead of just a predefined window.
+Let's compute the mean elevation for different soil grain size classes.
+--
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE}
+library(spData)
+library(grid)
+library(gridExtra)
+colfunc = colorRampPalette(c("lightyellow", "rosybrown"))
+colfunc2 = c("clay" = "brown", "silt" = "sandybrown", "sand" = "rosybrown")
+p_1 = spplot(grain, col.regions = colfunc2)
+p_2 = spplot(elev, col.regions = colfunc(16))
+grid.draw(grobTree(rectGrob(gp = gpar(lwd = 0))))
+grid.draw(arrangeGrob(p_1, p_2, ncol = 1, clip = TRUE))
+
+```
+]
+
+--
+
+.pull-right[
+```{r}
+library(spData)
+zonal(elev, grain, fun = "mean") 
+```
+]
+
+
+
+---
+
+# Map algebra - global operations
+Global operations are a special case of zonal operations with the entire raster dataset representing a single zone. The most common global operations are descriptive statistics for the entire raster dataset such as the minimum or maximum.
+
+```{r}
+cellStats(elev, min)
+cellStats(elev, max)
+cellStats(elev, sd)
+```
+
+--
+
+Further reading: [https://geocompr.robinlovelace.net/spatial-operations.html#spatial-ras](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-ras)
+---
+
+# Your turn
+
+- Attach `data("dem", package = "RQGIS")`. Retrieve the altitudinal values of the 10th row.
+- Sample randomly 10 coordinates of `dem` with the help of the `sp::coordinates()`-command, and extract the corresponding altitudinal values.
+- Attach `data("random_points", package = "RQGIS")` and find the corresponding altitudinal values. Plot altitude against `spri`. 
+- Compute the hillshade of `dem` (hint: `?hillShade`). Overlay the hillshade with `dem` while using an appropriate level of transparency.
+---
+
+class: inverse, center, middle
+
+# Geometric operations on raster data
+---
+
+# Intersecting geometry
+If you want the intersecting geometry of two rasters, use the spatial subsetting syntax and set the `drop`-parameter to `FALSE`.
+--
+
+.pull-left[
+```{r, eval=FALSE}
+elev[clip, drop = FALSE]
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+plot(elev[clip, drop = FALSE], legend = FALSE)
+plot(rasterToPolygons(clip), add = TRUE)
+``` 
+]
+
+---
+
+# Intersecting geometry
+which in fact is the same as using `intersect()`:
+
+```{r}
+raster::intersect(elev, clip)
+```
+---
+# Aggregation and disaggregation
+Change the resolution of a raster:
+
+.pull-left[
+```{r, eval=FALSE}
+elev_agg = 
+  aggregate(elev, fact = 2,
+            fun = mean)
+```
+Use `dissaggregate()` for increasing the spatial resolution of a raster
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+elev_agg = aggregate(elev, fact = 2, fun = mean)
+par(mfrow = c(1, 2))
+plot(elev)
+plot(elev_agg)
+```
+]
+---
+
+# Changing the CRS of a raster
+- To change the CRS of a raster use `projectRaster()`.
+- EPSG codes are not accepted, use a proj4string instead.
+--
+
+```{r}
+library(spDataLarge)
+proj4string(nz_elev)
+```
+--
+
+```{r}
+projectRaster(nz_elev, crs = st_crs(4326)$proj4string)
+```
+
+--
+Further reading on geometric raster operations: [https://geocompr.robinlovelace.net/geometric-operations.html#geo-ras](https://geocompr.robinlovelace.net/geometric-operations.html#geo-ras)
+---
+
+# Your turn
+
+- Decrease the resolution of `dem` (`data("dem", package = "RQGIS")`) by a factor of 10. Plot the result.
+- Reproject `dem` into WGS84. Plot the output next to the original object.
+- Randomly select three points of `random_points` (`data("random_points", package = "RQGIS")`). Convert these into a polygon (hint: `st_cast`). Extract all altitudinal values falling inside the created polygon Use the polygon to clip `dem`. What is the difference between `intersect` and `mask`. Hint: `sf` objects might not work as well with **raster** commands as `SpatialObjects`. Assuming your polygon of class `sf` is named `poly`, convert it into a `SpatialObject` with `as(sf_object, "Spatial`)`.
+---
+
+# Recap
+
+We learned about:
+
+- raster attribute operations
+- spatial raster operations
+- geometric raster operations

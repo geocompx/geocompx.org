@@ -1,0 +1,605 @@
+---
+title: "Tutorial: Geocomputation with R"
+subtitle: "⚔<br/>Geographic vector data in R"
+author: "Jannes Muenchow, Robin Lovelace"
+date: "EGU Vienna, 2019-04-10"
+output:
+  xaringan::moon_reader:
+    css: "my-theme.css"
+    seal: true
+    lib_dir: libs
+    nature:
+#      highlightStyle: dracula
+      highlightLines: true
+      ratio: '4:3'
+      countIncrementalSlides: false
+---
+
+layout: true
+background-image: url(img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# Find the slides and the code
+<br>
+<br>
+<br>
+<br>
+https://github.com/geocompr/egu_19
+
+<br>
+<br>
+Please install following packages:
+```{r, eval=FALSE}
+install.packages(c("sf", "raster", "spData", "dplyr", "RQGIS"))
+```
+
+Or from [docker](https://github.com/Robinlovelace/geocompr#running-geocompr-code-in-docker).
+
+---
+# Vector data model
+```{r, echo=FALSE, eval=FALSE}
+library(sf)
+p = st_point(c(1.5, 4.5))
+pts = matrix(data = c(1.4, 4.4, 1.5, 4.6, 1.6, 4.4), ncol = 2, byrow = TRUE)
+l = st_linestring(pts)
+pts = matrix(data = c(1.3, 4.3, 1.4, 4.8, 1.6, 4.8, 1.65, 4.3, 1.3, 4.3),
+             ncol = 2, byrow = TRUE)
+poly = st_polygon(list(pts))
+png("pres/img/vector.png")
+plot(p, cex = 2, pch = 16, col = "salmon")
+plot(l, add = TRUE, col = "darkblue", lwd = 2)
+plot(poly, add = TRUE)
+dev.off()
+```
+
+<figure>
+<img align="right" src="img/vector.png" width = "60%", height = "60%"/>
+</figure>
+
+- Discrete objects represented by points
+--
+
+- Three main subtypes: points, lines and polygons
+--
+
+- Especially suitable for objects with well-defined borders (lakes, houses, streets, etc.)
+--
+
+- Attribute table
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+Further reading: [https://geocompr.robinlovelace.net/spatial-class.html#vector-data](https://geocompr.robinlovelace.net/spatial-class.html#vector-data)
+
+---
+class: inverse, center, middle
+
+# Simple features in R
+
+---
+
+# Simple features in R
+Simple feature access is a widely used [ISO standard](http://www.opengeospatial.org/standards/sfa). Edzer Pebesma implemented simple features in R via the **sf** package.
+--
+
+```{r}
+library(sf)
+```
+
+**sf** automatically links to [GEOS](https://trac.osgeo.org/geos/), [GDAL](http://www.gdal.org/) and [PROJ](https://proj4.org/).
+
+--
+```{r}
+data(random_points, package = "RQGIS")
+class(random_points)
+```
+--
+
+This is a **`data.frame`**, i.e, an S3 object (as opposed to `SpatialObjects`).
+
+???
+spatial databases, GIS, open source libraries, GeoJSON, GeoSPARQL, etc.
+
+---
+# Simple features in R
+
+```{r}
+head(random_points)
+```
+
+---
+
+# Simple features in R
+.pull-left[
+```{r, eval=FALSE}
+plot(random_points)
+```
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+plot(random_points)
+```
+]
+---
+
+# Simple features in R
+.pull-left[
+```{r, eval=FALSE}
+plot(
+* st_geometry(random_points),
+  pch = 16, cex = 2,
+  col = "black"
+  bg = "lightblue"
+  )
+```
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+par(mar = rep(0, 4))
+plot(st_geometry(random_points), pch = 21, cex = 2,
+     col = "black", bg = "lightblue")
+```
+]
+---
+# Simple features in R
+
+```{r, message=FALSE}
+library(dplyr)
+select(random_points, 1:2) %>%
+  head(2)
+```
+
+A few things to note:
+- **sf** works with the **tidyverse**.
+--
+
+- Geometry is **just** another column.
+--
+
+- The geometry column is **sticky**.
+
+---
+Things to note continued:
+- Each observation (row) has a geometry (which can consist of multiple features, think of polygons with holes or multi-part polygons).
+--
+
+- The geometry column is a so-called **list-column**.
+--
+
+- The geometry is build up of **simple** R structures.
+
+---
+
+# Geometries
+
+.pull-left[
+.smaller-code-font75[
+```{r, eval=FALSE}
+# one point (a numeric vector)
+*p = st_point(c(1.25, 1.25))
+# one line (a matrix consisting of at
+# least two points)
+mat = matrix(c(1.5, 1.5, 1.7, 1.7),
+             ncol = 2, byrow = TRUE)
+*l = st_linestring(mat)
+# one polygon
+mat = matrix(c(1, 1, 1, 2, 2, 2, 
+               2, 1, 1, 1), 
+             ncol = 2, byrow = TRUE)
+# a list of one or more matrices 
+# consisting of points
+*poly = st_polygon(list(mat))
+# plot it
+plot(poly)
+plot(p, pch = 16, col = "blue",  
+     cex = 2, add = TRUE)
+plot(l, cex = 2, col = "orange", 
+     lwd = 2, add = TRUE)
+```
+]
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+# one point (a numeric vector)
+p = st_point(c(1.25, 1.25))
+# one line (a matrix consisting of at least two points)
+l = st_linestring(matrix(c(1.5, 1.5, 1.7, 1.7), ncol = 2, byrow = TRUE))
+# one polygon
+mat = matrix(c(1, 1, 1, 2, 2, 2, 2, 1, 1, 1), ncol = 2, byrow = TRUE)
+# a list of one or more matrices consisting of points
+poly = st_polygon(list(mat))
+# plot it
+plot(poly)
+plot(p, pch = 16, col = "blue", cex = 2, add = TRUE)
+plot(l, cex = 2, col = "orange", lwd = 2, add = TRUE)
+```
+]
+
+???
+Package sf puts features in sf tables deriving from data.frame or tbl_df, which have geometries in a list-column of class sfc, where each list element is a single feature’s geometry of class sfg. Feature geometries are represented in R by
+- a numeric vector for a single point (POINT)
+- a numeric matrix (each row a point) for a set of points (MULTIPOINT or LINESTRING)
+- a list of matrices for a set of set of points (MULTIINESTRING, POLYGON)
+- a list of lists of matrices (MULTIPOLYGON)
+- a list of anything mentioned above (GEOMETRYCOLLECTION)
+from: https://edzer.github.io/UseR2017/#a-short-history-of-handling-spatial-data-in-r
+```{r, eval=FALSE}
+# creating an sf-object manually
+library(sf)
+p = st_point(c(1, 1))
+p_2 = st_point(c(1, 2))
+pts = list(p, p_2)
+pts = st_sfc(pts, crs = 4326)
+pts = st_sf(data.frame("id" = 1:2, "geometry" = pts))
+# or using the "tidy" way
+pts = list(p, p_2) %>%
+  st_sfc(crs = 4326) %>%
+  st_sf(data.frame("id" = 1:2), geometry = .)
+```
+---
+
+# Putting it all together
+**sf** uses three classes to represent simple features in R:
+
+- `sf` is the `data.frame` with the attributes and the geometry list-column
+--
+
+- The geometry list column is of class `sfc`.
+
+```{r} 
+lc = random_points %>%
+  st_geometry
+class(lc)
+```
+--
+
+- Each feature of the list column is of class `sfg`.
+
+```{r}
+class(lc[[1]])
+```
+--
+
+For more information, refer to `vignette("sf1", package = "sf")` and [https://geocompr.robinlovelace.net/spatial-class.html#vector-data](https://geocompr.robinlovelace.net/spatial-class.html#vector-data)
+---
+class: inverse, center, middle
+
+# Attribute operations
+
+---
+# Attribute operations
+- `sf` objects are basically dataframes and thus can be handled like any other R object.
+
+--
+
+```{r}
+dim(random_points)
+```
+--
+
+```{r} 
+str(random_points)
+```
+---
+
+# Subsetting
+
+```{r}
+# first 2 rows and first 2 columns
+random_points[1:2, 1:2]
+```
+---
+
+# Tidyverse
+- When **dplyr** is also attached to the global environment, a number of generic methods of the tidyverse become available for `sf`-objects, most notably the one-table verbs `select`, `slice`, `filter`, `arrange`, `mutate`, `summarize` (and `group_by`).
+--
+
+- Piped operations are also supported (`%>%`).
+--
+
+```{r}
+select(random_points, 1:2) %>%
+  slice(1:2)
+```
+
+???
+```{r}
+m1 = attr(methods(class = "sf"), "info")$generic
+library(tidyverse)
+m2 = attr(methods(class = "sf"), "info")$generic
+noquote(setdiff(m2, m1))
+```
+---
+
+# Vector attribute operations
+Further reading: [https://geocompr.robinlovelace.net/attr.html#vector-attribute-manipulation](https://geocompr.robinlovelace.net/attr.html#vector-attribute-manipulation)
+---
+
+# Your turn
+- Select all observations of `random_points` (`data("random_points, package = "RQGIS")`) which have more than 10 species (column `spri`). Plot the geometry of all points and add your selection to the plot in another color.
+- Based on `spri` add a categorical column to `random_points`  with 0-5 corresponding to `low`, 5-10 to `medium` and >10 to `high`. 
+- Optional: create two points of class `sfg` and convert them into an object of class `sf` which has an `id` and a `geometry` column.
+---
+class: inverse, center, middle
+
+# Spatial attribute operations
+
+---
+
+# Spatial attribute operations
+Spatial operations make use of spatial relationship between objects (features). In the following we will address:
+--
+
+- Spatial subsetting
+--
+
+- Topological or neighborhood operations
+--
+
+- Spatial joins (spatial overlay)
+---
+
+# Spatial subsetting
+.pull-left[
+```{r, eval=FALSE}
+# spData makes available
+# nz and nz_height
+library(spData)
+plot(st_geometry(nz))
+plot(st_geometry(nz_height),
+     pch = 16, col = "red"
+     cex = 2, add = TRUE)
+
+```
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+# spData makes available nz and nz_height
+library(spData)
+par(mar = rep(0, 4))
+plot(st_geometry(nz))
+plot(st_geometry(nz_height), pch = 16, 
+     col = "red", cex = 2, add = TRUE)
+
+```
+]
+
+---
+
+# Spatial subsetting
+.pull-left[
+```{r, eval=FALSE}
+canterbury = nz %>%
+  filter(Name == "Canterbury")
+plot(st_geometry(canterbury))
+plot(st_geometry(nz_height), 
+     cex = 2, add = TRUE)
+# spatial subsetting
+sel = nz_height[canterbury, ]
+plot(st_geometry(sel), cex = 2, 
+     col = "red", pch = 16,
+     add = TRUE)
+````
+]
+
+--
+
+.pull-left[
+```{r, echo=FALSE}
+par(mar = rep(0, 4))
+canterbury = nz %>% filter(Name == "Canterbury")
+plot(st_geometry(canterbury))
+plot(st_geometry(nz_height), cex = 2, add = TRUE)
+# spatial subsetting
+sel = nz_height[canterbury, ]
+plot(st_geometry(sel), cex = 2, pch = 16, col = "red", add = TRUE)
+```
+]
+
+---
+
+# Topological relations
+Implicitly our subsetting used `st_intersects`, i.e. it returned all featured that touched or overlapped the `canterbury` polygon.
+
+```{r, eval=FALSE}
+nz_height[canterbury, op = st_intersects]
+# see also
+?st_sf
+```
+--
+
+We can use `st_intersects` individually. This returns a boolean vector if there is an intersection.
+--
+
+```{r}
+st_intersects(nz_height, canterbury, sparse = FALSE) %>% head
+```
+---
+
+aside from `st_intersects` there are further predicates:
+- `st_disjoint`: the opposite of `st_intersects`
+- `st_touches`: just touching
+- ... 
+- have a look at `?st_intersects` for a complete list and description
+???
+```{r}
+st_intersects(nz_height, nz)
+```
+This tells us that the first summit of nz_height has an intersection with polygon number 13 of nz.
+And the same in matrix notation
+```{r}
+st_intersects(nz_height, nz, sparse = FALSE)[1:2, ]
+```
+
+---
+
+# Spatial join
+Transfer the attribute of one spatial object to another spatial object based on intersecting geometries.
+For example, let us add the region name from `nz` to `nz_height` (so far consisting of columns `t50_fid`, `elevation` and `geometry`).
+--
+
+```{r}
+join = st_join(nz_height, select(nz, Name))
+```
+--
+
+```{r}
+slice(join, 1:2)
+```
+---
+
+# Spatial attribute operations on vector data
+Further reading: [https://geocompr.robinlovelace.net/spatial-operations.html#spatial-vec](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-vec)
+
+---
+
+# Your turn
+- Filter the Canterbury region from `nz`, and find all summits of `nz_height` that do not intersect with the Canterbury region (both datasets come with the `spData` package).
+- What happens if we spatially join the elevation column of `nz_height` to `nz`?
+
+---
+class: inverse, center, middle
+
+# Geometric operations
+
+---
+
+# Geometric operations
+What if we want the geometric intersection of two overlapping spatial objects instead of a boolean vector?
+--
+
+<center>
+<figure>
+<img src="img/venn-clip-1.png" width = "100%", height = "100%"/>
+</figure>
+---
+
+# Spatial aggregation (dissolving polygons)
+
+.pull-left[
+```{r, eval=FALSE}
+library(spData)
+us_states %>%
+  select(total_pop_15) %>%
+  plot
+```
+]
+
+--
+
+.pull-left[
+```{r, echo=FALSE}
+library(spData)
+plot(us_states[, "total_pop_15"])
+```
+]
+---
+
+# Spatial aggregation (dissolving polygons)
+
+.pull-left[
+.smaller-code-font75[
+```{r, eval=FALSE}
+regions = us_states %>% 
+  group_by(REGION) %>%
+  summarize(pop = sum(total_pop_15,
+                      na.rm = TRUE))
+regions %>%
+  select(pop) %>%
+  plot
+```
+]
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+regions = us_states %>% 
+  group_by(REGION) %>%
+  summarize(pop = 
+              sum(total_pop_15,
+                  na.rm = TRUE))
+regions %>%
+  select(pop) %>%
+  plot
+```
+]
+
+---
+
+# CRS in sf
+**sf** lets you use CRS and change CRS (reproject) through [PROJ]((https://proj4.org/).
+--
+
+```{r}
+st_crs(4326)
+```
+---
+
+# CRS in sf
+Find out about a projection of a spatial object:
+```{r}
+st_crs(us_states)
+```
+--
+
+Change the CRS with the help of `st_transform()`:
+
+```{r, eval=FALSE}
+st_transform(us_states, crs = 4326)
+```
+
+???
+If one wants to know which position of the Earth we refer to, coordinates of geospatial data require a reference system:
+
+    geodesic/geographic coordinates need an order (long/lat or lat/long?), a unit (rad, arc_degree?) and a datum (a reference ellipsoid: WGS84, ETRS89, NAD27?)
+    cartesian/projected coordinates (e.g. UTM, web Mercator) need also measurement units, and some way of encoding how they relate to geodesic coordinates, in which datum (the Proj.4 string)
+
+To handle coordinate reference systems, to convert coordinates (projections) and do datum transformations, Proj.4 is the code base most widely adopted, and actively maintained, by the open source geospatial community.
+
+Package sf has crs objects that register coordinate reference systems:
+---
+
+# Further reading
+
+[Geometric operations on vector data](https://geocompr.robinlovelace.net/geometric-operations.html#geo-vec)
+---
+
+# Your turn
+- Create two overlapping circles (see below) and compute and plot their geometric intersection. Secondly union the circles.
+```{r, eval=FALSE}
+pts = st_sfc(st_point(c(0, 1)), st_point(c(1, 1))) # create 2 points
+# use the buffer function to create circles from points
+circles = st_buffer(pts, dist = 1) 
+x = circles[1]
+y = circles[2]
+```
+- Compute the average population (`total_pop_15`) for each `REGION` of `us_states`. Plot your result.
+- Find out about the CRS of `nz`, reproject it into a geographic CRS (EPSG: 4326) and plot the original `nz` object next to your transformed `nz` object.
+---
+
+# Recap
+We have learned how to perform with `sf`-objects:
+
+- Attribute operations
+- Spatial attribute operations
+- Geometric operations
