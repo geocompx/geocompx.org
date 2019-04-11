@@ -1,4 +1,5 @@
-### Workshop on Geocomputation with R at the [European Geosciences Union](https://www.egu2019.eu/), 2019-04-10
+### Workshop on Geocomputation with R 
+[European Geosciences Union](https://www.egu2019.eu/). Vienna, Austria, 2019-04-10
 
 Talk and practical workshop introducing packages for handling geographic data, based on chapters [2](https://geocompr.robinlovelace.net/spatial-class.html), [3](https://geocompr.robinlovelace.net/attr.html#exercises-1) and [8](http://geocompr.robinlovelace.net/adv-map.html) in the book
 
