@@ -1,0 +1,169 @@
+---
+title: "Spatial data with R"
+subtitle: '<br/>An Introduction'
+author: "Robin Lovelace, Nick Bearman"
+date: 'University of Leeds, `r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    # css: ["default", "its.css"]
+    # chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+---
+
+```{r, engine='bash', eval=FALSE, echo=FALSE}
+# publish slides
+cp -Rv slides/1hr* ~/geocompr/geocompr.github.io/static/presentations
+cd ~/geocompr/geocompr.github.io
+git status
+git add -A
+git commit -am 'Add slides'
+git push
+hugo
+cd public
+git status
+# git diff
+git add -A
+git commit -am 'Update site'
+git push
+cd ..
+```
+
+```{r setup, include=FALSE}
+# setup
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+
+```{r itsmap, include=FALSE, message=FALSE, echo=FALSE, eval=FALSE}
+## Quick example
+library(leaflet)
+library(osmdata)
+library(tmap)
+lida = opq("Leeds") %>% 
+  add_osm_feature(key = "name", value = "Worsley Building") %>% 
+  osmdata_sf()
+# m = mapview::mapview(lida$osm_polygons, zoom = 16)
+lida_centroid = lida$osm_polygons %>% 
+  sf::st_centroid()
+lon = sf::st_coordinates(lida_centroid)[1]
+lat = sf::st_coordinates(lida_centroid)[2]
+m = tm_shape(lida$osm_polygons) +
+  tm_polygons(col = "red") +
+  tm_view(set.view = c(lon + 0.005, lat - 0.005, 15)) +
+  tm_basemap(server = leaflet::providers$CartoDB.Positron) +
+  tm_minimap(server = leaflet::providers$OpenTopoMap, zoomLevelOffset = -10) +
+  tm_scale_bar()
+tmap_mode("view")
+m
+```
+
+
+```{r, echo=FALSE}
+```
+
+---
+
+## What is geocomputation?
+
+.pull-left[
+
+> GeoComputation is about using the various different types of geodata and about developing relevant geo-tools within the overall context of a 'scientific' approach `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+knitr::include_graphics("http://www.ccg.leeds.ac.uk/people/s.openshaw/s.openshaw.png")
+```
+]
+
+--
+
+- But we do differ from early definitions in one important way:
+
+> At the turn of the 21st Century it was unrealistic to expect readers to be able to reproduce code examples, due to barriers preventing access to the necessary hardware, software and data
+
+---
+
+## Other aspects of the definition
+
+--
+
+> What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications `r Citep(my_bib, "longley_geocomputation_1998", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+It's about doing "practical work that is beneficial or useful" `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+> about harnessing the power of modern computers to *do things* with geographic data.
+
+---
+background-image: url("https://pbs.twimg.com/media/CvzEQcfWIAAIs-N.jpg")
+background-size: cover
+
+---
+
+## Enter sf
+
+- **sf** is a recently developed package for spatial (vector) data
+- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**
+- Has many advantages, including:
+    - Faster data I/O
+    - More geometry types supported
+    - Compatibility with the *tidyverse*
+    
+```{r}
+library(sf)
+```
+
+---
+
+## A brief history of geographic data in R
+
+R's predecesor was S, which was itself inspired by lisp `r Citep(my_bib, "chambers_extending_2016", .opts = list(cite.style = "authoryear"))`.
+
+This is geographic analysis in S `r Citep(my_bib, "rowlingson_splancs_1993", .opts = list(cite.style = "authoryear"))`:
+
+```
+pts <- spoints(scan('cavities'))
+uk()
+pointmap(pts,add=T) 
+zoom()
+uk(add=T) 
+pointmap(pts,add=T)
+poly<-getpoly() 
+```
+
+---
+
+# R code is robust
+
+Still works today, 25 years later:
+
+```{r}
+library(splancs)
+```
+
+---
+
+# Exercises
+
+- See https://github.com/geocompr/geocompkg/releases for courses
+
+- See https://geocompr.github.io/presentations/attr.html for attribut operations
+
+- See https://geocompr.robinlovelace.net/spatial-operations.html
