@@ -1,0 +1,316 @@
+---
+title: "An introduction to R"
+subtitle: "🌐<br/>  Geocomputation with R"
+author: "Robin Lovelace, Jannes Menchow and Jakub Nowosad"
+date: " "
+output:
+  xaringan::moon_reader:
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: refs-geostat.bib
+---
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+## What is R?
+
+"R is an integrated suite of software facilities for data manipulation, calculation and graphical display. Among other things it has
+
+- an effective data handling and storage facility
+- a suite of operators for calculations on arrays, in particular matrices,
+- a large, coherent, integrated collection of intermediate tools for data analysis,
+- graphical facilities for data analysis and display either directly at the computer or on hardcopy, and
+- a well developed, simple and effective programming language [with] conditionals, loops, user defined recursive functions and input and output"
+
+R Core Team (2019)
+
+```{r, eval=FALSE}
+help.start() # get started with R, from in R!
+```
+
+---
+
+## Y R?
+
+Start with broader questions:
+
+- Why use a programming language at all?
+
+- Because it allows you to do more things than monolithic programs driven by a graphical user interface (GUI) such as Microsoft Excel and ESRI's ArcMap.
+
+- Why use a command-line interface (CLI)?
+
+- It lets you get things done faster (once you learn the workflow)
+- Scalability, e.g. the Propensity to Cycle Tool ([PCT](http://www.pct.bike/)) (Lovelace et al. 2019)
+- Reproducibility
+
+---
+
+background-image: url(https://stackoverflow.blog/wp-content/uploads/2017/10/tag_growth_scatter-1-771x675.png)
+background-size: 85%
+
+--
+
+## Which language?
+
+--
+
+
+.pull-left[
+
+- Large user community
+
+- In your area of work
+
+- Spatial, temporal and modelling capabilities
+
+- Visualisation and statistical analysis
+
+]
+
+.pull-right[
+
+
+```{r, echo=FALSE, out.width="100%", eval=FALSE}
+knitr::include_graphics("https://stackoverflow.blog/wp-content/uploads/2017/10/tag_growth_scatter-1-771x675.png")
+```
+
+]
+
+---
+
+## An introduction to R's syntax
+
+Everything that 'exists' is an object
+
+---
+
+## Assignment and style
+
+```{r}
+x = 1  # 'quals assignment'
+x <- 1 # arrow assignment
+```
+
+Which to use?
+
+--
+
+It's a matter of style
+
+--
+
+
+```{r, results='hide'}
+system.time(y <- sqrt(1:1e6))
+system.time({y = sqrt(1:1e6)})
+```
+
+- Assignment inside function call
+
+--
+
+- Good, consistent style helps communicate your work:
+
+```{r}
+sQuare_RootdeC=quantile(y,seq(0,1,0.1))   # bad
+sqrt_deciles = quantile(y, probs = seq(0, 1, by = 0.1)) # good
+```
+
+---
+
+# Vectors
+
+- Creating vectors with `c()`
+
+```{r}
+person_name = c("arron", "bob", "carl")
+n_coffee = c(5, 1, 0)
+likes_herbal_tea = c(TRUE, FALSE, TRUE)
+home_region = c("west-yorkshire", "avon", "london")
+```
+
+- R is vectorised
+
+```{r}
+is.vector(person_name)
+is.vector(1)
+```
+
+---
+
+## Vector classes
+
+What is their class?
+
+```{r}
+class(person_name)
+class(n_coffee)
+```
+
+--
+
+What class is `likes_herbal_tea`?
+
+---
+
+## Class coercion
+
+```{r}
+n_coffee # print the object
+```
+
+
+```{r}
+n_coffee_char = as.character(n_coffee)
+```
+
+```{r}
+n_coffee_char
+```
+
+
+```{r}
+person_name_numeric = as.numeric(person_name)
+person_name_numeric
+```
+
+---
+
+## Vector subsetting
+
+```{r}
+person_name[2]
+person_name[c(FALSE, TRUE, FALSE)]
+```
+
+--
+
+Recycling
+
+```{r}
+person_name[c(TRUE, FALSE)]
+```
+
+--
+
+What just happened?
+
+---
+
+## Data frames
+
+The most common and useful object type for many applications
+
+```{r}
+coffee_df = data.frame(
+  person_name,
+  n_coffee,
+  likes_herbal_tea,
+  home_region
+  )
+coffee_df
+class(coffee_df)
+```
+
+
+---
+
+## tibbles
+
+```{r, echo=TRUE}
+coffee = tibble::tibble(
+  person_name,
+  n_coffee,
+  likes_herbal_tea,
+  home_region
+  )
+coffee
+class(coffee)
+```
+
+---
+
+## Data frame operations - rows
+
+```{r}
+coffee[2, ]
+dplyr::slice(coffee, 2)
+coffee[coffee$likes_herbal_tea, ]
+```
+
+---
+
+## Data fram operations - columns
+
+```{r}
+coffee[, 2]
+dplyr::select(coffee, n_coffee)
+coffee$n_coffee
+```
+
+
+
+---
+
+## Functions
+
+Everything that happens is a function
+
+Functions take arguments
+
+
+```{r}
+quantile(n_coffee)
+quantile(n_coffee, probs = c(0.1, 0.5, 0.9))
+# ?quantile # get help!
+quantile(n_coffee, names = FALSE)
+```
+
+
+---
+
+## Base R plots
+
+```{r}
+plot(coffee$n_coffee)
+```
+
+---
+
+## Next steps and getting help
+
+- R is a language - needs practice
+
+- Frequent use of R's help is recommended, e.g. with `?plot()`
+
+- Check-out online communities such as StackOverflow and the RStudio community
+
+--
+
+Books
+
+- Advanced R programming
+
+- Efficient R programming
+
