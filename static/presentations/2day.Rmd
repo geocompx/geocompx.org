@@ -15,7 +15,7 @@ output:
 
 ```{r, engine='bash', eval=FALSE, echo=FALSE}
 # publish slides
-cp -Rv slides/sat* ~/geocompr/geocompr.github.io/static/presentations
+cp -Rv slides/re* ~/geocompr/geocompr.github.io/static/presentations
 cd ~/geocompr/geocompr.github.io
 git status
 git add -A
@@ -306,21 +306,88 @@ Work through the following sections in Geocomputation with R
 
 ---
 
-# Day 2 GIS, visualisation, modelling
+# Day 2 GIS, visualisation, modelling: recap
+
+--
+
+.pull-left[
+
+### Day 1: Foundations
+
+09:30-11:00 Introduction to the course and software
+
+11:15-12:30: R's spatial ecosystem
+
+**Lunch**
+
+13:30-15:00 The structure of vector geographic data in R and working with attribute data
+
+15:15-16:30 Spatial data operations
+
+]
+
+--
+
+.pull-right[
+
+
+09:30-11:00 Reading and writing geographic data
+
+11:15-12:30: Geometric operations
+
+**Lunch**
+
+13:30-15:00 Visualisation
+
+15:15-16:30 Working on your own data
+
+]
+
+--
+
+**Updated challenges/examples: git.io/geocompr-2-day-course**
 
 ---
 
 # Reading and writing geographic data
 
+- See slides at: https://geocompr.github.io/presentations/read-write.html#1
+
 ---
 
 # Geometric operations
 
-<!-- And example from the PCT -->
+- See Chapter 5 of Geocomputation with R: [Geometry operations](https://geocompr.robinlovelace.net/geometric-operations.html)
+
+- Example:
+
+```{r, eval=FALSE}
+library(osmdata)
+cycleways = opq("leeds") %>% 
+  add_osm_feature(key = "name", value = "Cycle Superhighway 1") %>% 
+  osmdata_sf()
+cycleway_line = cycleways$osm_lines
+cycleway_buffer = cycleway_line %>% 
+  st_transform(27700) %>% 
+  st_buffer(500) %>% 
+  st_transform(4326)
+```
+
+---
+
+## Geometric exercises
+
+- Attempt the questions in Section 6 in the hand-out
+
+- Work through some of the examples of Chapter 6 of Geocomputation with R
+
+- Identify serious road traffic collisions that happened within 500 m of the Cycle Superhighway in 2017 (see [https://git.io/geocompr-2-day-course](https://github.com/geocompr/geocompkg/blob/master/courses/2-day-course.md#section-4))
 
 ---
 
 # Visualisation
+
+- See slides at https://geocompr.github.io/presentations/04_viz.html#1
 
 ---
 
