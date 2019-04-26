@@ -83,11 +83,9 @@ Depends on knowing:
 
 - how to *retrieve* them
 
-
 --
 
 - how to save them
-
 
 ---
 
@@ -125,7 +123,6 @@ Depends on knowing:
 ## 'Geoportals'
 
 
-
 - A vast and ever-increasing amount of geographic data is available on the internet
 
 --
@@ -145,18 +142,120 @@ Depends on knowing:
 - [Copernicus Open Access Hub](https://scihub.copernicus.eu/)
 
 - [EarthExplorer](https://earthexplorer.usgs.gov/)
+
 ---
 
 ## Data packages
+
+&lt;table&gt;
+&lt;caption&gt;Selected R packages for geographic data retrieval.&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; getlandsat &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Provides access to Landsat 8 data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; osmdata &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Download and import of OpenStreetMap data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; raster &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; getData() imports administrative, elevation, WorldClim data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rnaturalearth &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Access to Natural Earth vector and raster data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rnoaa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Imports National Oceanic and Atmospheric Administration (NOAA) climate data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rWBclimate &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Access World Bank climate data. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+Example: `pct` and `stats19` packages
 
 ---
 
 ## Web services
 
+Open Geospatial Consortium (OGC) created specifications for web services (collectively known as OWS, which is short for OGC Web Services)
+
+- Include the Web Feature Service (WFS), Web Map Service (WMS), Web Map Tile Service (WMTS), the Web Coverage Service (WCS) and even a Wep Processing Service (WPS) - example:
+
+
+```r
+base_url = "http://www.fao.org/figis/geoserver/wfs"
+q = list(request = "GetCapabilities")
+res = httr::GET(url = base_url, query = q)
+res$url
+```
+
+```
+## [1] "http://www.fao.org/figis/geoserver/wfs?request=GetCapabilities"
+```
+
+```r
+txt = httr::content(res, "text")
+```
+
+```
+## No encoding supplied: defaulting to UTF-8.
+```
+
+```r
+xml = xml2::read_xml(txt)
+xml
+```
+
+```
+## {xml_document}
+## &lt;WFS_Capabilities version="2.0.0" schemaLocation="http://www.opengis.net/wfs/2.0 http://www.fao.org:80/figis/geoserver/schemas/wfs/2.0/wfs.xsd" updateSequence="50237" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wfs/2.0" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:area="http://www.fao.org/area" xmlns:GeoRelationship="http://www.fao.org/GeoRelationship" xmlns:species="http://www.fao.org/species" xmlns:fsa="http://www.fao.org/fsa" xmlns:firms="http://www.fao.org/firms" xmlns:cwp="http://www.fao.org/cwp" xmlns:GeoIntersection="http://www.fao.org/GeoIntersection" xmlns:fifao="http://www.fao.org/fi" xmlns:rfb="http://www.fao.org/rfb" xmlns:vme="http://www.fao.org/vme"&gt;
+## [1] &lt;ows:ServiceIdentification&gt;\n  &lt;ows:Title&gt;GeoServer WFS of the FAO F ...
+## [2] &lt;ows:ServiceProvider&gt;\n  &lt;ows:ProviderName&gt;Food and Agriculture Orga ...
+## [3] &lt;ows:OperationsMetadata&gt;\n  &lt;ows:Operation name="GetCapabilities"&gt;\n ...
+## [4] &lt;FeatureTypeList&gt;\n  &lt;FeatureType xmlns:fsa="http://www.fao.org/fsa" ...
+## [5] &lt;fes:Filter_Capabilities&gt;\n  &lt;fes:Conformance&gt;\n    &lt;fes:Constraint  ...
+```
+
 
 ---
 
 ## File formats
+
+Many file formats out there
+
+- Worth thinking about which to use
+
+
+```
+## # A tibble: 10 x 5
+##    Name       Extension     Info                         Type      Model   
+##    &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;   
+##  1 ESRI Shap… .shp (the ma… Popular format consisting o… Vector    Partial…
+##  2 GeoJSON    .geojson      Extends the JSON exchange f… Vector    Open    
+##  3 KML        .kml          XML-based format for spatia… Vector    Open    
+##  4 GPX        .gpx          XML schema created for exch… Vector    Open    
+##  5 GeoTIFF    .tiff         Popular raster format simil… Raster    Open    
+##  6 Arc ASCII  .asc          Text format where the first… Raster    Open    
+##  7 R-raster   .gri, .grd    Native raster format of the… Raster    Open    
+##  8 SQLite/Sp… .sqlite       Standalone  relational data… Vector a… Open    
+##  9 ESRI File… .gdb          Spatial and nonspatial obje… Vector a… Proprie…
+## 10 GeoPackage .gpkg         Lightweight database contai… Vector a… Open
+```
+
 
 ---
 
@@ -186,7 +285,7 @@ xy = read.csv(text =
 plot(xy)
 ```
 
-![](read-write_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](read-write_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -202,7 +301,7 @@ plot(world$geom)
 plot(xy_sf1, add = T)
 ```
 
-![](read-write_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](read-write_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -223,7 +322,7 @@ plot(stats19_sf)
 ## plot all
 ```
 
-![](read-write_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](read-write_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -270,8 +369,8 @@ identical(world, world2)
 
 - Not so easy for non R users to read-in
 
---
--
+---
+
 ## Data output
 
 -- Use `write_sf()`

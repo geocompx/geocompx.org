@@ -80,11 +80,9 @@ Depends on knowing:
 
 - how to *retrieve* them
 
-
 --
 
 - how to save them
-
 
 ---
 
@@ -122,7 +120,6 @@ Depends on knowing:
 ## 'Geoportals'
 
 
-
 - A vast and ever-increasing amount of geographic data is available on the internet
 
 --
@@ -142,18 +139,75 @@ Depends on knowing:
 - [Copernicus Open Access Hub](https://scihub.copernicus.eu/)
 
 - [EarthExplorer](https://earthexplorer.usgs.gov/)
+
 ---
 
 ## Data packages
+
+```{r datapackages, echo=FALSE, warning=FALSE}
+datapackages = tibble::tribble(
+  ~`Package`, ~Description,
+  "getlandsat", "Provides access to Landsat 8 data.",
+  "osmdata", "Download and import of OpenStreetMap data.",
+  "raster", "getData() imports administrative, elevation, WorldClim data.",
+  "rnaturalearth", "Access to Natural Earth vector and raster data.",
+  "rnoaa", "Imports National Oceanic and Atmospheric Administration (NOAA) climate data.",
+  "rWBclimate", "Access World Bank climate data."
+)
+knitr::kable(datapackages, format = "html",
+             caption = "Selected R packages for geographic data retrieval.", 
+             caption.short = "Selected R packages for geographic data retrieval.")
+```
+
+--
+
+Example: `pct` and `stats19` packages
 
 ---
 
 ## Web services
 
+Open Geospatial Consortium (OGC) created specifications for web services (collectively known as OWS, which is short for OGC Web Services)
+
+- Include the Web Feature Service (WFS), Web Map Service (WMS), Web Map Tile Service (WMTS), the Web Coverage Service (WCS) and even a Wep Processing Service (WPS) - example:
+
+```{r 07-read-write-plot-8}
+base_url = "http://www.fao.org/figis/geoserver/wfs"
+q = list(request = "GetCapabilities")
+res = httr::GET(url = base_url, query = q)
+res$url
+txt = httr::content(res, "text")
+xml = xml2::read_xml(txt)
+xml
+```
+
 
 ---
 
 ## File formats
+
+Many file formats out there
+
+- Worth thinking about which to use
+
+```{r, echo=FALSE}
+file_formats = tibble::tribble(~Name, ~Extension, ~Info, ~Type, ~Model, 
+                         "ESRI Shapefile", ".shp (the main file)", "Popular format consisting of at least three files. No support for: files > 2GB;  mixed types; names > 10 chars; cols > 255.", "Vector", "Partially open",
+                         "GeoJSON", ".geojson", "Extends the JSON exchange format by including a subset of the simple feature representation.", "Vector", "Open",
+                         "KML", ".kml", "XML-based format for spatial visualization, developed for use with Google Earth. Zipped KML file forms the KMZ format.", "Vector", "Open",
+                         "GPX", ".gpx", "XML schema created for exchange of GPS data.", "Vector", "Open",
+                         "GeoTIFF", ".tiff", "Popular raster format similar to `.tif` format but stores raster header.", "Raster", "Open",
+                         "Arc ASCII", ".asc", "Text format where the first six lines represent the raster header, followed by the raster cell values arranged in rows and columns.", "Raster", "Open",
+                         "R-raster", ".gri, .grd", "Native raster format of the R-package raster.", "Raster", "Open",
+                         "SQLite/SpatiaLite", ".sqlite", "Standalone  relational database, SpatiaLite is the spatial extension of SQLite.", "Vector and raster", "Open",
+                         "ESRI FileGDB", ".gdb", "Spatial and nonspatial objects created by ArcGIS. Allows: multiple feature classes; topology. Limited support from GDAL.", "Vector and raster", "Proprietary",
+                         "GeoPackage", ".gpkg", "Lightweight database container based on SQLite allowing an easy and platform-independent exchange of geodata", "Vector and raster", "Open"
+                         )
+file_formats
+# knitr::kable(file_formats, format = "html",
+#              caption = "Selected spatial file formats.")
+```
+
 
 ---
 
@@ -240,8 +294,8 @@ identical(world, world2)
 
 - Not so easy for non R users to read-in
 
---
--
+---
+
 ## Data output
 
 -- Use `write_sf()`
