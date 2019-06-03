@@ -1,0 +1,394 @@
+---
+title: "Geocomputation with R"
+subtitle: '<br/>Two day course'
+author: "Robin Lovelace"
+date: 'University of Leeds, `r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    # css: ["default", "its.css"]
+    # chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+---
+
+```{r, engine='bash', eval=FALSE, echo=FALSE}
+# publish slides
+cp -Rv slides/re* ~/geocompr/geocompr.github.io/static/presentations
+cd ~/geocompr/geocompr.github.io
+git status
+git add -A
+git commit -am 'Add slides'
+git push
+# hugo
+# cd public
+# git status
+# git diff
+# git add -A
+# git commit -am 'Update site'
+# git push
+cd ~/geocompr/geocompkg
+```
+
+```{r setup, include=FALSE}
+# setup
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+# About the course
+
+---
+
+## About us
+
+**Robin Lovelace**
+
+- Experience: 10 years using R, ~5 years programming + developing R packages
+- Teaching: many workshops, co-author of *Efficient R Programming* and *Geocomputation with R* 
+- Application: energy and transport, e.g. [cycling potential](http://eprints.whiterose.ac.uk/141852/)
+
+--
+
+**Nikée Groot**
+
+- Biologist
+- Researching sustainable futures
+
+--
+
+**You?**
+
+--
+
+**Course home: https://git.io/geocompr-2-day-course **
+
+---
+
+## Housekeeping
+
+- The venue + facilities
+- The agenda + further info can be found at:
+- https://git.io/geocompr-2-day-course
+
+```{r itsmap, include=FALSE, message=FALSE}
+library(leaflet)
+library(osmdata)
+library(tmap)
+lida = opq("Leeds") %>% 
+  add_osm_feature(key = "name", value = "Worsley Building") %>% 
+  osmdata_sf()
+# m = mapview::mapview(lida$osm_polygons, zoom = 16)
+lida_centroid = lida$osm_polygons %>% 
+  sf::st_centroid()
+lon = sf::st_coordinates(lida_centroid)[1]
+lat = sf::st_coordinates(lida_centroid)[2]
+m = tm_shape(lida$osm_polygons) +
+  tm_polygons(col = "red") +
+  tm_view(set.view = c(lon + 0.005, lat - 0.005, 15)) +
+  tm_basemap(server = leaflet::providers$CartoDB.Positron) +
+  tm_minimap(server = leaflet::providers$OpenTopoMap, zoomLevelOffset = -10) +
+  tm_scale_bar()
+tmap_mode("view")
+```
+
+
+```{r, echo=FALSE}
+m
+```
+
+---
+
+## Learning objectives
+
+By the end of the course, you will be able to:
+
+- Be able to use R and RStudio as a powerful Geographic Information System (GIS)
+- Know how R's spatial capabilities fit within the landscape of open source GIS software
+- Be confident with using R's command-line interface (CLI) and scripting capabilities for geographic data processing
+- Understand how to import a range of data sources into R
+- Be able to perform a range of attribute operations such as subsetting and joining
+- Understand how to implement a range of spatial data operations including spatial subsetting and spatial aggregation
+- Have the confidence to output the results of geographic research in the form of static and interactive maps
+
+---
+
+## Agenda
+
+.pull-left[
+
+### Day 1: Foundations
+
+09:30-11:00 Introduction to the course and software
+
+11:15-12:30: R's spatial ecosystem
+
+**Lunch**
+
+13:30-15:00 The structure of vector geographic data in R and working with attribute data
+
+15:15-16:30 Spatial data operations
+
+]
+
+--
+
+.pull-right[
+
+
+### Day 2 GIS, viz, modelling
+
+09:30-11:00 Reading and writing geographic data
+
+11:15-12:30: Geometric operations
+
+**Lunch**
+
+13:30-15:00 Visualisation
+
+15:15-16:30 Working on your own data
+
+]
+
+--
+
+**Updated challenges/examples: git.io/geocompr-2-day-course**
+
+---
+
+## What is geocomputation?
+
+.pull-left[
+
+> GeoComputation is about using the various different types of geodata and about developing relevant geo-tools within the overall context of a 'scientific' approach `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+knitr::include_graphics("http://www.ccg.leeds.ac.uk/people/s.openshaw/s.openshaw.png")
+```
+]
+
+--
+
+- But we do differ from early definitions in one important way:
+
+> At the turn of the 21st Century it was unrealistic to expect readers to be able to reproduce code examples, due to barriers preventing access to the necessary hardware, software and data
+
+---
+
+## Other aspects of the definition
+
+--
+
+> What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications `r Citep(my_bib, "longley_geocomputation_1998", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+It's about doing "practical work that is beneficial or useful" `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+> about harnessing the power of modern computers to *do things* with geographic data.
+
+---
+
+# Introduction to the course and software
+
+<p><a href="https://www.rstudio.com/products/RStudio/?wvideo=520zbd3tij"><img src="https://embedwistia-a.akamaihd.net/deliveries/260e6e980f526abaedf8ef3378270c899da74f08.jpg?image_play_button_size=2x&amp;image_crop_resized=960x540&amp;image_play_button=1&amp;image_play_button_color=71a5d4e0" style="width: 400px; height: 225px;" width="400" height="225"></a></p><p><a href="https://www.rstudio.com/products/RStudio/?wvideo=520zbd3tij">RStudio IDE Overview</a></p>
+
+- Source: [rstudio.com](https://www.rstudio.com/products/RStudio/?wvideo=520zbd3tij)
+
+--
+
+- Key elements: Source, Console, Environment, Plot panes
+
+--
+
+- Projects and short-cuts (e.g. try `Alt-Shift-J`)
+
+---
+
+## An introduction to R
+
+See slides at https://geocompr.github.io/presentations/intro-to-R.html
+
+- Work through Exercises in Section 1 of handouts
+
+<!-- - R installation questions/debugging -->
+<!-- - How to use RStudio (practical in groups of 2) -->
+<!-- - R classes and working with data frames in the **tidyverse** -->
+
+<!-- Idea: get people to say where they are from, how many cups of coffee they drink per week their favourite animal -->
+
+---
+
+# R's spatial ecosystem
+
+- See slides at https://geocompr.github.io/presentations/satRday-newcastle.html#19
+
+
+- Rs capabilities have evolved substantially:
+
+--
+
+- **rgdal**, released in 2003
+
+--
+
+- **sp**, released 2005
+  - **sp**verse: **gstat**, **geosphere**, **adehabitat**
+
+- **raster**, released 2010
+
+---
+
+## Spatial ecosystem: demo and practical
+
+- Live demo: using R as a GIS
+- Spatial data in R
+- R's spatial ecosystem (see section [1.4 of Geocomputation with R - package ecosystem](https://geocompr.robinlovelace.net/intro.html#rs-spatial-ecosystem))
+- Work through Section 2 exercises in hand-out
+- Follow-on practical: [Work through the exercise 1:3 in Chapter 2](https://geocompr.robinlovelace.net/spatial-class.html#ex2)
+    - Advanced: complete exercises in Chapter 2
+    - Bonus: reproduce the results in the `sf` vignette `sf1`
+
+<!-- And example from the PCT -->
+
+---
+
+# Attribute operations
+
+- See slides at https://geocompr.github.io/presentations/attr.html#1
+
+- Work through the following sections in Geocomputation with R:
+
+- Vector attribute subsetting ([3.2.1](https://geocompr.robinlovelace.net/attr.html#vector-attribute-subsetting))
+- Vector attribute aggregation ([3.2.2](https://geocompr.robinlovelace.net/attr.html#vector-attribute-aggregation))
+- Vector attribute joining ([3.2.3](https://geocompr.robinlovelace.net/attr.html#vector-attribute-joining))
+- Creating attributes and removing spatial information ([3.2.4](https://geocompr.robinlovelace.net/attr.html#vec-attr-creation))
+
+- Answer questions in Section 3 in the handouts
+
+- Bonus: try remaining exercises in Chapter [3](https://geocompr.robinlovelace.net/attr.html#exercises-1)
+
+<!--     - Core: Questions 1:3 and question 9 -->
+<!--     - Bonus: complete as many exercises as possible in Chapter 3 -->
+
+---
+  
+# Spatial data operations
+
+- Live demo using stats19 data in Leeds
+
+Work through the following sections in Geocomputation with R
+
+- Spatial subsetting ([4.2.1](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-subsetting))
+- Topological relations ([4.2.2](https://geocompr.robinlovelace.net/spatial-operations.html#topological-relations))
+- Spatial joining ([4.2.3](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-joining))
+
+- Work through section 4 in handouts
+
+- Bonus: Non-overlapping joins ([4.2.4](https://geocompr.robinlovelace.net/spatial-operations.html#non-overlapping-joins))
+- Spatial data aggregation ([4.2.5](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-aggr))
+
+<!-- - Exercises: Chapter 4 -->
+
+---
+
+# Day 2 GIS, visualisation, modelling: recap
+
+--
+
+.pull-left[
+
+### Day 1: Foundations
+
+09:30-11:00 Introduction to the course and software
+
+11:15-12:30: R's spatial ecosystem
+
+**Lunch**
+
+13:30-15:00 The structure of vector geographic data in R and working with attribute data
+
+15:15-16:30 Spatial data operations
+
+]
+
+--
+
+.pull-right[
+
+
+09:30-11:00 Reading and writing geographic data
+
+11:15-12:30: Geometric operations
+
+**Lunch**
+
+13:30-15:00 Visualisation
+
+15:15-16:30 Working on your own data
+
+]
+
+--
+
+**Updated challenges/examples: git.io/geocompr-2-day-course**
+
+---
+
+# Reading and writing geographic data
+
+- See slides at: https://geocompr.github.io/presentations/read-write.html#1
+
+---
+
+# Geometric operations
+
+- See Chapter 5 of Geocomputation with R: [Geometry operations](https://geocompr.robinlovelace.net/geometric-operations.html)
+
+- Example:
+
+```{r, eval=FALSE}
+library(osmdata)
+cycleways = opq("leeds") %>% 
+  add_osm_feature(key = "name", value = "Cycle Superhighway 1") %>% 
+  osmdata_sf()
+cycleway_line = cycleways$osm_lines
+cycleway_buffer = cycleway_line %>% 
+  st_transform(27700) %>% 
+  st_buffer(500) %>% 
+  st_transform(4326)
+```
+
+---
+
+## Geometric exercises
+
+- Attempt the questions in Section 6 in the hand-out
+
+- Work through some of the examples of Chapter 6 of Geocomputation with R
+
+- Identify serious road traffic collisions that happened within 500 m of the Cycle Superhighway in 2017 (see [https://git.io/geocompr-2-day-course](https://github.com/geocompr/geocompkg/blob/master/courses/2-day-course.md#section-4))
+
+---
+
+# Visualisation
+
+- See slides at https://geocompr.github.io/presentations/04_viz.html#1
+
+---
+
+# Working on your own data

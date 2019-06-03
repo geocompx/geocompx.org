@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Attribute operations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Robin Lovelace, Jannes Menchow and Jakub Nowosad" />
+    <link href="attr_files/remark-css/default.css" rel="stylesheet" />
+    <link href="attr_files/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Attribute operations
+## 🌐<br/> Geocomputation with R
+### Robin Lovelace, Jannes Menchow and Jakub Nowosad
+
+---
+
+
+
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+## Packages used
+
+- You can use packages with `packagename::functionname()`
+- But by usually they are loaded at the beginning of an R session:
+
+
+
+```r
+library(sf)
+library(raster)
+library(spData)
+```
+
+---
+
+## The structure of spatial data in sf
+
+- Let's look at a dataset representing the United States:
+
+
+```r
+us_states[1:3, 1:2]
+```
+
+```
+## Simple feature collection with 3 features and 2 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -114.8136 ymin: 30.24971 xmax: -84.89184 ymax: 41.00238
+## epsg (SRID):    4269
+## proj4string:    +proj=longlat +datum=NAD83 +no_defs
+##   GEOID     NAME                       geometry
+## 1    01  Alabama MULTIPOLYGON (((-88.20006 3...
+## 2    04  Arizona MULTIPOLYGON (((-114.7196 3...
+## 3    08 Colorado MULTIPOLYGON (((-109.0501 4...
+```
+
+#---
+
+# Spatial data and the tidyverse
+
+- Works just like normal data in the tidyverse
+
+- Beware of name conflicts though:
+
+
+```r
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ──────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.1.1       ✔ purrr   0.3.2  
+## ✔ tibble  2.1.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ─────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ tidyr::extract() masks raster::extract()
+## ✖ dplyr::filter()  masks stats::filter()
+## ✖ dplyr::lag()     masks stats::lag()
+## ✖ dplyr::select()  masks raster::select()
+```
+
+---
+
+# Data manipulation in the tidyverse (dplyr)
+
+- **dplyr** provides a 'A grammar for data manipulation'
+- It allows arguments to be 'piped', e.g.:
+
+
+```r
+states1 = us_states %&gt;%
+  slice(1)
+states2 = us_states %&gt;% 
+  filter(grepl(pattern = "^A", x = NAME)) %&gt;% 
+  top_n(n = 2, wt = total_pop_15)
+```
+
+---
+
+# Data joining
+
+
+```r
+asia = world %&gt;% 
+  filter(continent == "Asia")
+asia_joined = inner_join(asia, worldbank_df)
+```
+
+```
+## Joining, by = "iso_a2"
+```
+
+```r
+names(asia_joined)
+```
+
+```
+##  [1] "iso_a2"       "name_long"    "continent"    "region_un"   
+##  [5] "subregion"    "type"         "area_km2"     "pop"         
+##  [9] "lifeExp"      "gdpPercap"    "name"         "HDI"         
+## [13] "urban_pop"    "unemployment" "pop_growth"   "literacy"    
+## [17] "geom"
+```
+
+
+---
+
+# Tidyverse pitfall example: binding rows
+
+
+
+```r
+rbind(states1, states2)     # works
+bind_rows(states1, states2) # fails
+```
+
+```
+Error in .subset2(x, i, exact = exact) : 
+  attempt to select less than one element in get1index
+```
+
+Work-around (see article in [geocompr.github.io/geocompkg](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html) for more pitfalls):
+
+
+```r
+us_data = st_set_geometry(us_states, NULL)
+d = bind_rows(us_data, us_data)
+d_sf = st_sf(d, geometry = c(us_states$geom, us_states$geom))
+```
+
+---
+
+# More tidyverse pitfalls
+
+- Harder to subset with dplyr syntax than base R syntax
+
+--
+
+- Changes in row names
+
+--
+
+
+---
+
+# Further reading 
+
+- [Spatial data and the tidyverse: pitfalls to avoid](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html)
+
+--
+
+- Chapter[ 3](https://geocompr.robinlovelace.net/attr.html) of Geocomputation with R
+
+--
+
+- Spatial data operations: See Chapter[ 3](https://geocompr.robinlovelace.net/spatial-operations.html) of Geocomputation with R
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

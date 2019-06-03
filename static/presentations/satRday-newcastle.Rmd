@@ -12,6 +12,11 @@ output:
 bibliography: refs-geostat.bib
 ---
 
+```{r, engine='bash', eval=FALSE, echo=FALSE}
+# publish slides
+```
+
+
 class: large
 
 ## What is this talk about?
@@ -35,6 +40,7 @@ newcastle_geo_talk = list(
 ```{r}
 str(newcastle_geo_talk)
 ```
+
 
 ---
 
@@ -486,7 +492,7 @@ background-image: url(https://user-images.githubusercontent.com/1825120/38543030
 background-size: cover
 class: center, middle
 
-# vizpkgs
+# Geographic data visualisation
 
 --
 
@@ -499,6 +505,16 @@ Source: [Geocomputation with R](https://geocompr.robinlovelace.net/adv-map.html#
 ```{r}
 library(sf)
 # plot(zones[c("car_driver", "foot")])
+```
+
+---
+
+## ggplot2
+
+```{r}
+ggplot(zones) +
+  geom_sf(aes(fill = bicycle)) +
+  scale_fill_viridis_c()
 ```
 
 ---
@@ -541,11 +557,45 @@ tm_shape(zones) +
 
 - A dedicated mapping R package
 
-```{r}
+```{r, message=FALSE}
 tmap_mode("view")
 tm_shape(zones) +
   tm_polygons("foot", palette = "RdYlBu")
 ```
+
+---
+
+## Mapdeck
+
+- See example at [geocompr.robinlovelace.net/adv-map.html](https://geocompr.robinlovelace.net/adv-map.html#other-mapping-packages)
+
+```{r}
+library(mapdeck)
+set_token(Sys.getenv("MAPBOX"))
+mapdeck(data = zones) %>% 
+  mapdeck::add_sf() %>% 
+  add_polygon(elevation = zones$foot^2)
+```
+
+
+---
+
+## Shiny
+
+Here's one I made earlier: www.pct.bike
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/npct/pct-team/master/figures/front-page-leeds-pct-demo.png")
+```
+
+---
+
+## Geoplumber
+
+GitHub package developed by Layik Hama - see [github.com/ATFutures](https://github.com/ATFutures/geoplumber)
+
+![](https://user-images.githubusercontent.com/1825120/46699371-7f79d000-cc11-11e8-9716-e1223296c7d6.gif)
+
 
 ---
 
@@ -576,6 +626,8 @@ raster::plot(spData::elev)
 ## Spatial networks
 
 - Lots of packages out there, including `stplanr`, `dodgr` and `tidygraph`
+
+- Source: https://github.com/spnethack/spnethack
 
 ```{r, echo=FALSE, out.width="80%"}
 knitr::include_graphics("https://raw.githubusercontent.com/spnethack/spnethack/master/README_files/figure-gfm/pway-1.png")
@@ -652,10 +704,15 @@ class: center, middle
 
 # Thanks, links, happy R day travels 🚶, 🚲 +  🚀!
 
-- Reproducible slides: [github.com/Robinlovelace/erum18-transport](https://github.com/Robinlovelace/erum18-transport)
-
-- Geocomputation (feedback welcome):
+- Reproducible slides: [githttps://github.com/geocompr/geocompkgttps://github.com/Robgeocompr/geocompkg- Geocomputation (feedback welcome):
 [geocompr.robinlovelace.net](http://geocompr.robinlovelace.net/transport.html)
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+--
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/55670985-962c7700-5882-11e9-8bef-188854547011.png")
+```
+
 

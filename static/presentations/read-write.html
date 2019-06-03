@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Reading and writing spatial data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Robin Lovelace, Jannes Menchow and Jakub Nowosad" />
+    <link href="read-write_files/remark-css/default.css" rel="stylesheet" />
+    <link href="read-write_files/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Reading and writing spatial data
+## 🌐<br/> Geocomputation with R
+### Robin Lovelace, Jannes Menchow and Jakub Nowosad
+
+---
+
+
+
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# Reading and writing data
+
+--
+
+- Often the first and last stage in projects
+
+--
+
+- Overlooked but vital
+
+--
+
+- If input data is wrong, analysis will be wrong
+
+--
+
+Packages
+
+
+```r
+library(sf)
+```
+
+```
+## Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
+```
+
+```r
+library(spData)
+```
+
+
+---
+
+## Geographic data I/O in context
+
+- Session content based on Chapter 6 of *Geocomputation with R*, [Geographic data I/O](https://geocompr.robinlovelace.net/read-write.html)
+
+--
+
+- Part of a wider process
+
+--
+
+Depends on knowing:
+
+- which datasets are *available*
+
+--
+
+- where they can be *found*
+
+--
+
+- how to *retrieve* them
+
+--
+
+- how to save them
+
+---
+
+## Project planning
+
+![](https://csgillespie.github.io/efficientR/_main_files/figure-html/4-1-1.png)
+
+---
+
+## Components of geographic data I/O
+
+- Retrieving open data (Section [7.2](https://geocompr.robinlovelace.net/read-write.html#retrieving-data) of Geocomputation with R)
+
+--
+
+- Geographic data packages (7.3)
+
+--
+
+- Geographic web services (7.4)
+--
+
+- File formats (7.5)
+
+--
+
+- Data input (I) (7.6)
+
+--
+
+- Data output (O) ([7.7](https://geocompr.robinlovelace.net/read-write.html#data-output))
+
+---
+
+## 'Geoportals'
+
+
+- A vast and ever-increasing amount of geographic data is available on the internet
+
+--
+
+- In some ways there is now *too much* data
+
+--
+
+- Some datasets are of poor quality.
+
+- Various 'geoportals' (web services providing geospatial datasets such as [Data.gov](https://catalog.data.gov/dataset?metadata_type=geospatial)) are a good place to start
+
+- See [Wikipedia Geoportal page](https://en.wikipedia.org/wiki/Geoportal))
+
+- [GEOSS portal](http://www.geoportal.org/)
+
+- [Copernicus Open Access Hub](https://scihub.copernicus.eu/)
+
+- [EarthExplorer](https://earthexplorer.usgs.gov/)
+
+---
+
+## Data packages
+
+&lt;table&gt;
+&lt;caption&gt;Selected R packages for geographic data retrieval.&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Package &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; getlandsat &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Provides access to Landsat 8 data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; osmdata &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Download and import of OpenStreetMap data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; raster &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; getData() imports administrative, elevation, WorldClim data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rnaturalearth &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Access to Natural Earth vector and raster data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rnoaa &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Imports National Oceanic and Atmospheric Administration (NOAA) climate data. &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; rWBclimate &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Access World Bank climate data. &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+Example: `pct` and `stats19` packages
+
+---
+
+## Web services
+
+Open Geospatial Consortium (OGC) created specifications for web services (collectively known as OWS, which is short for OGC Web Services)
+
+- Include the Web Feature Service (WFS), Web Map Service (WMS), Web Map Tile Service (WMTS), the Web Coverage Service (WCS) and even a Wep Processing Service (WPS) - example:
+
+
+```r
+base_url = "http://www.fao.org/figis/geoserver/wfs"
+q = list(request = "GetCapabilities")
+res = httr::GET(url = base_url, query = q)
+res$url
+```
+
+```
+## [1] "http://www.fao.org/figis/geoserver/wfs?request=GetCapabilities"
+```
+
+```r
+txt = httr::content(res, "text")
+```
+
+```
+## No encoding supplied: defaulting to UTF-8.
+```
+
+```r
+xml = xml2::read_xml(txt)
+xml
+```
+
+```
+## {xml_document}
+## &lt;WFS_Capabilities version="2.0.0" schemaLocation="http://www.opengis.net/wfs/2.0 http://www.fao.org:80/figis/geoserver/schemas/wfs/2.0/wfs.xsd" updateSequence="50237" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wfs/2.0" xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:fes="http://www.opengis.net/fes/2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:area="http://www.fao.org/area" xmlns:GeoRelationship="http://www.fao.org/GeoRelationship" xmlns:species="http://www.fao.org/species" xmlns:fsa="http://www.fao.org/fsa" xmlns:firms="http://www.fao.org/firms" xmlns:cwp="http://www.fao.org/cwp" xmlns:GeoIntersection="http://www.fao.org/GeoIntersection" xmlns:fifao="http://www.fao.org/fi" xmlns:rfb="http://www.fao.org/rfb" xmlns:vme="http://www.fao.org/vme"&gt;
+## [1] &lt;ows:ServiceIdentification&gt;\n  &lt;ows:Title&gt;GeoServer WFS of the FAO F ...
+## [2] &lt;ows:ServiceProvider&gt;\n  &lt;ows:ProviderName&gt;Food and Agriculture Orga ...
+## [3] &lt;ows:OperationsMetadata&gt;\n  &lt;ows:Operation name="GetCapabilities"&gt;\n ...
+## [4] &lt;FeatureTypeList&gt;\n  &lt;FeatureType xmlns:fsa="http://www.fao.org/fsa" ...
+## [5] &lt;fes:Filter_Capabilities&gt;\n  &lt;fes:Conformance&gt;\n    &lt;fes:Constraint  ...
+```
+
+
+---
+
+## File formats
+
+Many file formats out there
+
+- Worth thinking about which to use
+
+
+```
+## # A tibble: 10 x 5
+##    Name       Extension     Info                         Type      Model   
+##    &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;   
+##  1 ESRI Shap… .shp (the ma… Popular format consisting o… Vector    Partial…
+##  2 GeoJSON    .geojson      Extends the JSON exchange f… Vector    Open    
+##  3 KML        .kml          XML-based format for spatia… Vector    Open    
+##  4 GPX        .gpx          XML schema created for exch… Vector    Open    
+##  5 GeoTIFF    .tiff         Popular raster format simil… Raster    Open    
+##  6 Arc ASCII  .asc          Text format where the first… Raster    Open    
+##  7 R-raster   .gri, .grd    Native raster format of the… Raster    Open    
+##  8 SQLite/Sp… .sqlite       Standalone  relational data… Vector a… Open    
+##  9 ESRI File… .gdb          Spatial and nonspatial obje… Vector a… Proprie…
+## 10 GeoPackage .gpkg         Lightweight database contai… Vector a… Open
+```
+
+
+---
+
+## Data input
+
+Simplest file format for geographic data: .csv file
+
+.pull-left[
+
+
+
+```r
+xy = read.csv(text = 
+"lon,lat,v1
+0,50,a
+0,60,b
+-30,-20,c")
+# plot(xy)
+```
+
+]
+
+.pull-right[
+
+
+```r
+plot(xy)
+```
+
+![](read-write_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+]
+
+
+---
+
+## Converting xy data to an sf data frame
+
+
+```r
+xy_sf1 = sf::st_as_sf(xy, coords = c("lon", "lat"))
+plot(world$geom)
+plot(xy_sf1, add = T)
+```
+
+![](read-write_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+## Reading-in a .geojson file
+
+
+```r
+# short link for file stats19_sf.geojson 
+# saved at: github.com/geocompr/geocompkg/releases
+# curl -i https://git.io -F "url=https://github.com/geocompr/geocompkg/releases/download/0.1/stats19_sf.geojson"
+u = "https://git.io/fjsKQ"
+stats19_sf = read_sf(u)
+plot(stats19_sf)
+```
+
+```
+## Warning: plotting the first 10 out of 30 attributes; use max.plot = 30 to
+## plot all
+```
+
+![](read-write_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+## Downloading and reading a file
+
+A 2 stage process
+:
+
+
+```r
+u = paste0("https://github.com/geocompr/geocompkg/releases",
+           "/download/0.1/stats19_sf.gpkg")
+download.file(u, "stats19.gpkg") # may need mode = "wb" argument...
+stats19_gpkg = read_sf("stats19.gpkg")
+st_crs(stats19_gpkg) # geojson only works properly with WGS84 CRS
+```
+
+```
+## Coordinate Reference System:
+##   EPSG: 4326 
+##   proj4string: "+proj=longlat +datum=WGS84 +no_defs"
+```
+
+---
+
+## Rds files
+
+R's own compressed binary format
+
+
+```r
+saveRDS(world, "world.Rds")
+world2 = readRDS("world.Rds")
+identical(world, world2)
+```
+
+```
+## [1] TRUE
+```
+
+- Saves all aspects of any R object
+
+--
+
+- Not so easy for non R users to read-in
+
+---
+
+## Data output
+
+-- Use `write_sf()`
+
+
+```r
+write_sf(world, "world.shp")
+write_sf(world, "world.geojson")
+```
+
+
+---
+
+## Exercises
+
+1. Save the object `nz` from the **spData** package to the following 4 file formats: nz.Rds, nz.geojson, nz.gpkg, nz.shp
+
+1. Which is biggest? Which is smallest? Which would you use?
+
+1. Bonus: Use the functions `list.files()` and `file.size()` together to create a data frame of file sizes ranked in order
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

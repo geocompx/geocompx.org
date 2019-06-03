@@ -1,0 +1,146 @@
+---
+title: "Attribute operations"
+subtitle: "🌐<br/>  Geocomputation with R"
+author: "Robin Lovelace, Jannes Menchow and Jakub Nowosad"
+date: " "
+output:
+  xaringan::moon_reader:
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: refs-geostat.bib
+---
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+## Packages used
+
+- You can use packages with `packagename::functionname()`
+- But by usually they are loaded at the beginning of an R session:
+
+
+```{r, message=FALSE}
+library(sf)
+library(raster)
+library(spData)
+```
+
+---
+
+## The structure of spatial data in sf
+
+- Let's look at a dataset representing the United States:
+
+```{r}
+us_states[1:3, 1:2]
+```
+
+#---
+
+# Spatial data and the tidyverse
+
+- Works just like normal data in the tidyverse
+
+- Beware of name conflicts though:
+
+```{r}
+library(tidyverse)
+```
+
+---
+
+# Data manipulation in the tidyverse (dplyr)
+
+- **dplyr** provides a 'A grammar for data manipulation'
+- It allows arguments to be 'piped', e.g.:
+
+```{r}
+states1 = us_states %>%
+  slice(1)
+states2 = us_states %>% 
+  filter(grepl(pattern = "^A", x = NAME)) %>% 
+  top_n(n = 2, wt = total_pop_15)
+```
+
+---
+
+# Data joining
+
+```{r}
+asia = world %>% 
+  filter(continent == "Asia")
+asia_joined = inner_join(asia, worldbank_df)
+names(asia_joined)
+```
+
+
+---
+
+# Tidyverse pitfall example: binding rows
+
+
+```{r, eval=FALSE}
+rbind(states1, states2)     # works
+bind_rows(states1, states2) # fails
+```
+
+```
+Error in .subset2(x, i, exact = exact) : 
+  attempt to select less than one element in get1index
+```
+
+Work-around (see article in [geocompr.github.io/geocompkg](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html) for more pitfalls):
+
+```{r, warning=FALSE}
+us_data = st_set_geometry(us_states, NULL)
+d = bind_rows(us_data, us_data)
+d_sf = st_sf(d, geometry = c(us_states$geom, us_states$geom))
+```
+
+---
+
+# More tidyverse pitfalls
+
+- Harder to subset with dplyr syntax than base R syntax
+
+--
+
+- Changes in row names
+
+--
+
+
+---
+
+# Further reading 
+
+- [Spatial data and the tidyverse: pitfalls to avoid](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html)
+
+--
+
+- Chapter[ 3](https://geocompr.robinlovelace.net/attr.html) of Geocomputation with R
+
+--
+
+- Spatial data operations: See Chapter[ 3](https://geocompr.robinlovelace.net/spatial-operations.html) of Geocomputation with R
+
+

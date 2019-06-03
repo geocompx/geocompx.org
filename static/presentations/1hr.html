@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Spatial data with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Robin Lovelace, Nick Bearman" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Spatial data with R
+## <br/>An Introduction
+### Robin Lovelace, Nick Bearman
+### University of Leeds, 2019-04-23
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## What is geocomputation?
+
+.pull-left[
+
+&gt; GeoComputation is about using the various different types of geodata and about developing relevant geo-tools within the overall context of a 'scientific' approach (Openshaw and Abrahart, 2000).
+
+]
+
+.pull-right[
+![](http://www.ccg.leeds.ac.uk/people/s.openshaw/s.openshaw.png)&lt;!-- --&gt;
+]
+
+--
+
+- But we do differ from early definitions in one important way:
+
+&gt; At the turn of the 21st Century it was unrealistic to expect readers to be able to reproduce code examples, due to barriers preventing access to the necessary hardware, software and data
+
+---
+
+## Other aspects of the definition
+
+--
+
+&gt; What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications (Longley, Brooks, McDonnell, and MacMillan, 1998).
+
+--
+
+It's about doing "practical work that is beneficial or useful" (Openshaw and Abrahart, 2000).
+
+--
+
+&gt; about harnessing the power of modern computers to *do things* with geographic data.
+
+---
+background-image: url("https://pbs.twimg.com/media/CvzEQcfWIAAIs-N.jpg")
+background-size: cover
+
+---
+
+## Enter sf
+
+- **sf** is a recently developed package for spatial (vector) data
+- Combines the functionality of three previous packages: **sp**, **rgeos** and **rgdal**
+- Has many advantages, including:
+    - Faster data I/O
+    - More geometry types supported
+    - Compatibility with the *tidyverse*
+    
+
+```r
+library(sf)
+```
+
+```
+## Linking to GEOS 3.7.0, GDAL 2.4.0, PROJ 5.2.0
+```
+
+---
+
+## A brief history of geographic data in R
+
+R's predecesor was S, which was itself inspired by lisp (Chambers, 2016).
+
+This is geographic analysis in S (Rowlingson and Diggle, 1993):
+
+```
+pts &lt;- spoints(scan('cavities'))
+uk()
+pointmap(pts,add=T) 
+zoom()
+uk(add=T) 
+pointmap(pts,add=T)
+poly&lt;-getpoly() 
+```
+
+---
+
+# R code is robust
+
+Still works today, 25 years later:
+
+
+```r
+library(splancs)
+```
+
+```
+## Loading required package: sp
+```
+
+```
+## 
+## Spatial Point Pattern Analysis Code in S-Plus
+##  
+##  Version 2 - Spatial and Space-Time analysis
+```
+
+---
+
+# Exercises
+
+- See https://github.com/geocompr/geocompkg/releases for courses
+
+- See https://geocompr.github.io/presentations/attr.html for attribut operations
+
+- See https://geocompr.robinlovelace.net/spatial-operations.html
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

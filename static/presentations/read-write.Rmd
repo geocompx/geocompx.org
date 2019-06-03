@@ -1,0 +1,332 @@
+---
+title: "Reading and writing spatial data"
+subtitle: "🌐<br/>  Geocomputation with R"
+author: "Robin Lovelace, Jannes Menchow and Jakub Nowosad"
+date: " "
+output:
+  xaringan::moon_reader:
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+bibliography: refs-geostat.bib
+---
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# Reading and writing data
+
+--
+
+- Often the first and last stage in projects
+
+--
+
+- Overlooked but vital
+
+--
+
+- If input data is wrong, analysis will be wrong
+
+--
+
+Packages
+
+```{r}
+library(sf)
+library(spData)
+```
+
+
+---
+
+## Geographic data I/O in context
+
+- Session content based on Chapter 6 of *Geocomputation with R*, [Geographic data I/O](https://geocompr.robinlovelace.net/read-write.html)
+
+--
+
+- Part of a wider process
+
+--
+
+Depends on knowing:
+
+- which datasets are *available*
+
+--
+
+- where they can be *found*
+
+--
+
+- how to *retrieve* them
+
+--
+
+- how to save them
+
+---
+
+## Project planning
+
+![](https://csgillespie.github.io/efficientR/_main_files/figure-html/4-1-1.png)
+
+---
+
+## Components of geographic data I/O
+
+- Retrieving open data (Section [7.2](https://geocompr.robinlovelace.net/read-write.html#retrieving-data) of Geocomputation with R)
+
+--
+
+- Geographic data packages (7.3)
+
+--
+
+- Geographic web services (7.4)
+--
+
+- File formats (7.5)
+
+--
+
+- Data input (I) (7.6)
+
+--
+
+- Data output (O) ([7.7](https://geocompr.robinlovelace.net/read-write.html#data-output))
+
+---
+
+## 'Geoportals'
+
+
+- A vast and ever-increasing amount of geographic data is available on the internet
+
+--
+
+- In some ways there is now *too much* data
+
+--
+
+- Some datasets are of poor quality.
+
+- Various 'geoportals' (web services providing geospatial datasets such as [Data.gov](https://catalog.data.gov/dataset?metadata_type=geospatial)) are a good place to start
+
+- See [Wikipedia Geoportal page](https://en.wikipedia.org/wiki/Geoportal))
+
+- [GEOSS portal](http://www.geoportal.org/)
+
+- [Copernicus Open Access Hub](https://scihub.copernicus.eu/)
+
+- [EarthExplorer](https://earthexplorer.usgs.gov/)
+
+---
+
+## Data packages
+
+```{r datapackages, echo=FALSE, warning=FALSE}
+datapackages = tibble::tribble(
+  ~`Package`, ~Description,
+  "getlandsat", "Provides access to Landsat 8 data.",
+  "osmdata", "Download and import of OpenStreetMap data.",
+  "raster", "getData() imports administrative, elevation, WorldClim data.",
+  "rnaturalearth", "Access to Natural Earth vector and raster data.",
+  "rnoaa", "Imports National Oceanic and Atmospheric Administration (NOAA) climate data.",
+  "rWBclimate", "Access World Bank climate data."
+)
+knitr::kable(datapackages, format = "html",
+             caption = "Selected R packages for geographic data retrieval.", 
+             caption.short = "Selected R packages for geographic data retrieval.")
+```
+
+--
+
+Example: `pct` and `stats19` packages
+
+---
+
+## Web services
+
+Open Geospatial Consortium (OGC) created specifications for web services (collectively known as OWS, which is short for OGC Web Services)
+
+- Include the Web Feature Service (WFS), Web Map Service (WMS), Web Map Tile Service (WMTS), the Web Coverage Service (WCS) and even a Wep Processing Service (WPS) - example:
+
+```{r 07-read-write-plot-8}
+base_url = "http://www.fao.org/figis/geoserver/wfs"
+q = list(request = "GetCapabilities")
+res = httr::GET(url = base_url, query = q)
+res$url
+txt = httr::content(res, "text")
+xml = xml2::read_xml(txt)
+xml
+```
+
+
+---
+
+## File formats
+
+Many file formats out there
+
+- Worth thinking about which to use
+
+```{r, echo=FALSE}
+file_formats = tibble::tribble(~Name, ~Extension, ~Info, ~Type, ~Model, 
+                         "ESRI Shapefile", ".shp (the main file)", "Popular format consisting of at least three files. No support for: files > 2GB;  mixed types; names > 10 chars; cols > 255.", "Vector", "Partially open",
+                         "GeoJSON", ".geojson", "Extends the JSON exchange format by including a subset of the simple feature representation.", "Vector", "Open",
+                         "KML", ".kml", "XML-based format for spatial visualization, developed for use with Google Earth. Zipped KML file forms the KMZ format.", "Vector", "Open",
+                         "GPX", ".gpx", "XML schema created for exchange of GPS data.", "Vector", "Open",
+                         "GeoTIFF", ".tiff", "Popular raster format similar to `.tif` format but stores raster header.", "Raster", "Open",
+                         "Arc ASCII", ".asc", "Text format where the first six lines represent the raster header, followed by the raster cell values arranged in rows and columns.", "Raster", "Open",
+                         "R-raster", ".gri, .grd", "Native raster format of the R-package raster.", "Raster", "Open",
+                         "SQLite/SpatiaLite", ".sqlite", "Standalone  relational database, SpatiaLite is the spatial extension of SQLite.", "Vector and raster", "Open",
+                         "ESRI FileGDB", ".gdb", "Spatial and nonspatial objects created by ArcGIS. Allows: multiple feature classes; topology. Limited support from GDAL.", "Vector and raster", "Proprietary",
+                         "GeoPackage", ".gpkg", "Lightweight database container based on SQLite allowing an easy and platform-independent exchange of geodata", "Vector and raster", "Open"
+                         )
+file_formats
+# knitr::kable(file_formats, format = "html",
+#              caption = "Selected spatial file formats.")
+```
+
+
+---
+
+## Data input
+
+Simplest file format for geographic data: .csv file
+
+.pull-left[
+
+
+```{r}
+xy = read.csv(text = 
+"lon,lat,v1
+0,50,a
+0,60,b
+-30,-20,c")
+# plot(xy)
+```
+
+]
+
+.pull-right[
+
+```{r}
+plot(xy)
+```
+
+]
+
+
+---
+
+## Converting xy data to an sf data frame
+
+```{r}
+xy_sf1 = sf::st_as_sf(xy, coords = c("lon", "lat"))
+plot(world$geom)
+plot(xy_sf1, add = T)
+```
+
+---
+
+## Reading-in a .geojson file
+
+```{r}
+# short link for file stats19_sf.geojson 
+# saved at: github.com/geocompr/geocompkg/releases
+# curl -i https://git.io -F "url=https://github.com/geocompr/geocompkg/releases/download/0.1/stats19_sf.geojson"
+u = "https://git.io/fjsKQ"
+stats19_sf = read_sf(u)
+plot(stats19_sf)
+```
+
+---
+
+## Downloading and reading a file
+
+A 2 stage process
+:
+
+```{r}
+u = paste0("https://github.com/geocompr/geocompkg/releases",
+           "/download/0.1/stats19_sf.gpkg")
+download.file(u, "stats19.gpkg") # may need mode = "wb" argument...
+stats19_gpkg = read_sf("stats19.gpkg")
+st_crs(stats19_gpkg) # geojson only works properly with WGS84 CRS
+```
+
+---
+
+## Rds files
+
+R's own compressed binary format
+
+```{r}
+saveRDS(world, "world.Rds")
+world2 = readRDS("world.Rds")
+identical(world, world2)
+```
+
+- Saves all aspects of any R object
+
+--
+
+- Not so easy for non R users to read-in
+
+---
+
+## Data output
+
+-- Use `write_sf()`
+
+```{r, eval=FALSE}
+write_sf(world, "world.shp")
+write_sf(world, "world.geojson")
+```
+
+
+---
+
+## Exercises
+
+1. Save the object `nz` from the **spData** package to the following 4 file formats: nz.Rds, nz.geojson, nz.gpkg, nz.shp
+
+1. Which is biggest? Which is smallest? Which would you use?
+
+1. Bonus: Use the functions `list.files()` and `file.size()` together to create a data frame of file sizes ranked in order
+
+
+```{r, eval=FALSE, echo=FALSE}
+library(spData)
+saveRDS(nz, "nz.Rds")
+sf::write_sf(nz, "nz.geojson")
+sf::write_sf(nz, "nz.shp")
+sf::write_sf(nz, "nz.gpkg")
+f = list.files(pattern = "nz")
+fs = file.size(f)
+fs_df = tibble::tibble(f, fs)
+dplyr::arrange(fs_df, desc(fs))
+```
+
+
