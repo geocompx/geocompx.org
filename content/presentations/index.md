@@ -1,3 +1,8 @@
+### Presentation "How to win friends and write an open-source book"
+[useR! 2019](http://user2019.r-project.org/), Toulouse, France, 2019-07-12
+
+- [slides](https://geocompr.github.io/user_19/presentation/)
+
 ### Presentation "Reproducible spatial data analysis: An example of transportation analysis for Bristol"
 Collegium Da Vinci. Poznan, Poland, 2019-01-29
 
