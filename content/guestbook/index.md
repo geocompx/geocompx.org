@@ -1,4 +1,14 @@
-### Tweets:
+
+### Courses using the book
+
+- [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/)
+- [GEOG 4/595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/)
+- [ESPM 288: Reproducible and Collaborative Data Science](https://espm-288.carlboettiger.info/)
+- [Stat 6864 Introduction to Data Science](http://www.sci.csueastbay.edu/~esuess/stat6864/)
+- [11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health](https://www.ebpi.uzh.ch/dam/jcr:6a286571-56c1-4a89-a5bd-a090d84cc9a3/spatial_digital_epi_programm_flyer.pdf)
+- [Data Carpentry: Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
+
+### Tweets ([suggest them here](https://github.com/geocompr/geocompr.github.io/edit/source/content/guestbook/index.md)):
 
 {{< tweet 1103527764035096576 >}}
 {{< tweet 1093646132662566912 >}}
