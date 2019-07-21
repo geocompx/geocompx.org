@@ -2,7 +2,7 @@
 ### Courses using the book
 
 - [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/)
-- [GEOG 4\/595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/)
+- [GEOG 4 / 595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/)
 - [ESPM 288: Reproducible and Collaborative Data Science](https://espm-288.carlboettiger.info/)
 - [Stat 6864 Introduction to Data Science](http://www.sci.csueastbay.edu/~esuess/stat6864/)
 - [ENVR_SCI 390-0 "R Data Science" - Special Topics in Environmental Sciences](https://www.northwestern.edu/class-descriptions/4730/WCAS/ENVR_SCI/390-0/28232.html)
