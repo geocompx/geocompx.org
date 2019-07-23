@@ -1,0 +1,99 @@
+---
+title: 'Geocomputation benchmarks'
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: '2019-08-07'
+slug: geocompr-benchmarks
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - sf
+  - benchmarks
+draft: true
+---
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## Datasets used
+
+The following filepaths datasets will be used:
+
+```{r}
+f1 = system.file("shapes/world.gpkg", package = "spData")
+f2 = "promenade-all.geojson"
+```
+
+To run, this article relies on downloading files onto your computer:
+
+```{r}
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(sf))
+f2 = "promenade-all.geojson"
+u = "https://github.com/spnethack/spnethack/releases/download/0.1/promenade-all.geojson"
+download.file(u, destfile = f2)
+
+system.time({b = read_sf(f2)})
+system.time({d = b  %>% data.table::as.data.table()})
+system.time(d[,geometry:=sf::st_as_text(geometry),])
+system.time(d %>% readr::write_tsv("tmp.tsv"))
+```
+
+# Reading vector data
+
+```{r, message=FALSE}
+library(sf)
+vector_filepath = system.file("shapes/world.gpkg", package = "spData")
+world = st_read(vector_filepath)
+```
+
+To demonstrate this, we will use a function to compare `st_read()` with its **sp** equivalent, `rgdal::readOGR()`:
+
+```{r, message=FALSE}
+b1 = bench::mark(iterations = 3, check = FALSE,
+            sf = st_read(vector_filepath),
+            sp = rgdal::readOGR(vector_filepath)
+)
+b1
+```
+
+The benchmark ran on an input file (`file`) and a number of times.
+It shows that **sf** was `r round(as.numeric(b1$mean[2] / b1$mean[1]))` times faster than **rgdal** at loading this file.
+
+The relative performance of `st_read()` compared with other functions will vary depending on file format and the nature of the data.
+To illustrate this point, we performed the same operation on a geojson file and found a greater speed saving:
+
+```{r, results='hide'}
+vector_filepath = system.file("shapes/cycle_hire_osm.geojson", package = "spData")
+b2 = bench::mark(iterations = 3, check = FALSE,
+            sf = st_read(vector_filepath),
+            sp = rgdal::readOGR(vector_filepath)
+)
+b2
+```
+
+In this case **sf** was around `r round(as.numeric(b2$mean[2] / b2$mean[1]))` times faster than **rgdal**.
+
+# Writing vector data
+
+```{r, message=FALSE}
+library(rgdal)
+world_sp = as(world, "Spatial")
+```
+
+```{r, warning=FALSE}
+system.time(writeOGR(world_sp, dsn = "world_sp.geojson", layer = "world_sp.geojson", driver = "GeoJSON"))
+system.time(writeOGR(world_sp, dsn = ".", layer = "world_sp", driver = "ESRI Shapefile")) 
+system.time(writeOGR(world_sp, dsn = "world_sp.gpkg", layer = "world_sp.gpkg", driver = "GPKG"))
+system.time(st_write(world, "world_sf.geojson", quiet = TRUE))
+system.time(st_write(world, "world_sf.shp", quiet = TRUE)) 
+system.time(st_write(world, "world_sf.gpkg", quiet = TRUE))
+```
+
+```{r, echo=FALSE, results='hide'}
+world_files = list.files(pattern = "world*")
+file.remove(world_files)
+```

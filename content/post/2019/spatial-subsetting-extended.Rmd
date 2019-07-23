@@ -1,0 +1,236 @@
+---
+title: 'Spatial Subsetting: Extended'
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: '2019-08-07'
+slug: spatial-subsetting-extended
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - sf
+  - topological relations
+draft: true
+---
+
+This vignette provides some further detail on the vector attribute subsetting section (see https://geocompr.robinlovelace.net/attr.html#vector-attribute-subsetting ) and the spatial subsetting section (see https://geocompr.robinlovelace.net/spatial-operations.html#spatial-subsetting ) of [the Geocomputation with R book](https://geocompr.github.io/).
+Its goal is to demonstrate some subtleties of spatial subsetting of `sf` objects using base R and **tidyverse** methods.
+
+The starting point is to attach necessary packages:
+
+```{r, message=FALSE}
+library(sf)
+library(spData)
+library(dplyr)
+```
+
+And subsetting canterbury and `nz_height` features in the region:
+
+```{r}
+canterbury = nz %>% filter(Name == "Canterbury")
+canterbury_height = nz_height[canterbury, ]
+```
+
+## Subsetting with intermediary objects
+
+We can see how to get a list representation for subsetting:
+
+```{r}
+sel_sgbp = st_intersects(x = nz_height, y = canterbury)
+class(sel_sgbp)
+sel_logical = lengths(sel_sgbp) > 0
+```
+
+In the above code chunk, an object of class `sgbp` is created and then converted into a logical vector `sel_logical`. 
+Values of TRUE in `sel_logical` represents points from `nz_height` that intersects with the `canterbury` polygon.
+In other words, it returns elevation points located in the Canterbury region.
+
+Use the result using base R:
+
+```{r}
+canterbury_height2 = nz_height[sel_logical, ]
+```
+
+And use the result with the tidyverse:
+
+````{r}
+canterbury_height3 = nz_height %>% filter(sel_logical)
+```
+
+## **dplyr** changes row names
+
+We can test whether the subsetted objects are identical as follows:
+
+```{r}
+identical(x = canterbury_height, y = canterbury_height2)
+identical(x = canterbury_height, y = canterbury_height3)
+```
+
+What is different about `canterbury_height3`?
+The only difference is that `filter()` changed the row names:
+
+```{r}
+row.names(canterbury_height)[1:3]
+row.names(canterbury_height3)[1:3]
+```
+
+If the row names are re-set, the objects become identical:
+
+```{r}
+attr(canterbury_height3, "row.names") = attr(x = canterbury_height, "row.names")
+identical(canterbury_height, canterbury_height3)
+```
+
+```{block type='rmdnote'}
+This discarding of row names is not something that is specific to spatial data, as illustrated in the code chunk below.
+**dplyr** discards row names by design.
+For further discussion of this decision, and some controversy, see the (closed) issue [#366](https://github.com/tidyverse/dplyr/issues/366) in the package's issue tracker.
+```
+
+## Dense matrices from spatial predicates
+
+In the code below a dense matrix is created.
+`sel` is not, as one might imagine, a `logical` `vector` (although it behaves as one as it only has one column) but a `logical` `matrix`:
+
+```{r}
+sel = st_intersects(nz_height, canterbury, sparse = FALSE)
+class(sel)
+typeof(sel)
+dim(sel)
+```
+
+The dimensions of `sel` (returned by the base R command `dim()`) show one row per feature in the target object (`nz_height`) and a column per feature in the subsetting object (`canterbury`).
+The general pattern here is that `sel[i, j]` is `TRUE` if the i^th^ feature in the target object intersects with the j^th^ feature in the subsetting object.
+If there is more than one feature in `y` the resulting selection `matrix` must be converted into a `vector` before it is used for subsetting, e.g. with `rowSums(sel_matrix) > 0`.
+Another solution is to convert the default sparse matrix (`list`) output from `st_intersects()` to a `logical` vector using the function `lengths()`.
+This approach to spatial subsetting, used internally by **sf** (see the source code of `` sf:::`[.sf` ``), is illustrated in the code chunk below:
+
+```{r}
+co = filter(nz, grepl("Canter|Otag", Name))
+sel_sparse = st_intersects(nz_height, co)
+sel_vector = lengths(sel_sparse) > 0
+heights_co = nz_height[sel_vector, ]
+```
+
+The above code chunk results in an object, `heights_co`, that represents the high points that intersect with either Canterbury *or* Otago region (hence the object name `co`).
+It did this in four stages:
+
+1. Subset the regions of `nz` containing "Canter" or "Otago" in their names. This was done using the pattern matching function `grepl()` in combination with the `|` character, which means 'or', resulting in the subsetting object `co`.
+2. Create a sparse geometry binary predicate `sgbp` object, a list representing which features of `nz_height` intersect with the regions in `co`.
+3. Convert the selection list into a `logical` 'selection vector'. `lengths()`  finds the features in `nz_height` matching *any* features in `co`.
+4. Use the result to subset `nz_heights`, creating a new object `heights_co`. 
+
+## More on subsetting in base R
+
+Another spatial subsetting example will use an object representing the countries of Africa, created using attribute subsetting as follows:^[Recall
+attribute subsetting can also be done in base R with `africa_wgs = world[world$continent == "Africa", ]`.]
+
+```{r}
+africa_wgs = world %>% filter(continent == "Africa")
+```
+
+To further prepare the input data, we will reproject the data to the coordinate reference system (CRS) 32630, its EPSG code (explained in [Chapter 6](https://geocompr.robinlovelace.net/reproj-geo-data.html)):
+
+```{r}
+africa = st_transform(africa_wgs, crs = 32630)
+```
+
+We can also use the `[` operator for *Spatial* subsetting.
+The difference is that we use *another spatial object* inside the square brackets instead of an `integer` or `logical` vector.
+This is a concise and consistent syntax, as shown in the next code chunk.
+Let's test it with a hypothetical scenario: we want to subset all countries within 2000 km of the point where the equator (where latitude = 0 degrees) intersects the prime meridian (longitude = 0 degrees), as illustrated in the next figure.
+The subsetting object is created below.
+Note that this must have the same CRS as the target object (set with the `crs` argument):
+
+```{r, warning=FALSE}
+center_wgs = st_sf(geometry = st_sfc(st_point(c(0, 0)), crs = 4326))
+center = st_transform(center_wgs, 32630)
+buff = st_buffer(center, dist = 2e6)
+```
+
+```{r globe, echo=FALSE, fig.cap="Subsetting scenario: which countries intersect with a circle of 2000 km in radius located at zero degrees longitude and zero degrees latitude? Figure created with the **[globe](https://cran.r-project.org/package=globe)** package."}
+knitr::include_graphics("https://github.com/Robinlovelace/geocompr/raw/master/figures/globe.png")
+```
+
+The data to be subset, or 'target layer', is the `africa` object created above, which has a projected CRS (`32630`).
+Subsequently, spatial subsetting can be done with a single, concise command:
+
+```{r}
+africa_buf = africa[buff, ]
+```
+
+**Sidenote:** If we were using geographic ('lon/lat') data the previous command would have emitted a message warning about assuming `planar coordinates`.
+This is because spatial operations (especially distance and area calculations) cannot be assumed to be accurate in a geographic (longitude/latitude) CRS.
+In this case one could justify the use of a lon/lat CRS: the data is close to the equator where there is least distortion caused by the curvature of the earth.
+It is good practice to reproject spatial datasets before performing spatial operations on them.
+
+The spatial subsetting clearly worked: only countries intersecting with the giant circle are returned (see the figure below):
+
+```{r, eval=FALSE}
+plot(africa_buf["pop"], reset = FALSE)
+plot(buff, add = TRUE)
+```
+
+```{r africa-buff, fig.cap="Subset of the `africa` data selected based on their intersection with a circle 2000 km in radius with a center point at 0 degrees longitude and 0 degrees latitude.", echo=FALSE}
+library(leaflet)
+leaflet() %>%
+  addProviderTiles("OpenMapSurfer.Grayscale") %>%
+  addPolygons(data = st_transform(africa_buf, 4326)) %>%
+  addPolygons(data = st_transform(buff, 4326), color = "red")
+```
+
+Note that countries that just touch the giant circle are selected such as Chad (northeast of the circle).
+This is because the default subsetting operator is `st_intersects()`, which returns any type of spatial relation.
+Other spatial subsetting operations such as `st_within()` are more conservative, as shown in [the topological relations section](https://geocompr.robinlovelace.net/spatial-operations.html#topological-relations).
+
+```{r}
+buff_agg = aggregate(x = africa[, "pop"], by = buff, FUN = sum)
+buff_agg
+```
+<!--
+show also tidyverse way, so what you are doing is basically a spatial join and a subsequent aggregation without a grouping variable. Didactically, it might be better to present a grouping variable.
+-->
+
+```{r, echo=FALSE, eval=FALSE}
+st_join(buff, africa[, "pop"]) %>%
+  summarize(pop = sum(pop, na.rm = TRUE))
+summarize(africa[buff, "pop"], pop = sum(pop, na.rm = TRUE))
+```
+
+The result, `buff_agg`, is a spatial object with the same geometry as `by` (the circular buffer in this case) but with an additional variable, `pop` reporting summary statistics for all features in `x` that intersect with `by` (the total population of the countries that touch the buffer in this case).
+Plotting the result (with `plot(buff_agg)`) shows that the operation does not really make sense:
+The figure below shows a population of over half a billion people mostly located in a giant circle floating off the west coast of Africa!  
+
+```{r buff-agg, fig.cap="Result of spatial aggregation showing the total population of countries that intersect with a large circle whose center lies at 0 degrees longitude and latitude.", echo=FALSE, message=FALSE}
+library(tmap)
+pal = tmaptools::get_brewer_pal(palette = "BuPu", n = 4, plot = F)
+breaks = c(0, 1e7, 1e8, 5e8, 1e9)
+bb_buff = tmaptools::bb(buff_agg, ext = 1.5)
+qtm(buff_agg, fill = pal[4], bbox = bb_buff) +
+  tm_shape(africa_buf) +
+  tm_fill("pop", palette = pal, breaks = breaks) +
+  tm_borders() +
+  qtm(africa[st_disjoint(africa, buff, sparse = FALSE), ]) +
+  tm_shape(buff) +
+  tm_borders(lwd = 3, lty = 3) +
+  tm_layout(legend.position = c("left", "bottom"))
+detach("package:tmap", unload = TRUE)
+```
+
+The results of the spatial aggregation exercise presented in this figure are unrealistic for three reasons:
+
+- People do not live in the sea (the geometry of the aggregating object is not appropriate for the geometry target object).
+- This method would 'double count' countries whose borders cross aggregating polygons when multiple, spatially contiguous, features are used as the aggregating object.
+- It is wrong to assume that all the people living in countries that *touch* the buffer reside *within* it (the default spatial operator `st_intersects()` is too 'greedy'). The most extreme example of this is Algeria, the most northerly country selected:
+the spatial aggregation operation assumes that all 39 million Algerian citizens reside in the tiny southerly tip that is within the circular buffer.
+
+A number of methods can be used to overcome these issues, and generate a more realistic population attributed to the circular buffer illustrated in the above figure.
+The simplest of these is to convert the country polygons into points representing their *geographic centroids* before aggregation.
+<!-- Todo: reference section where we demonstrate geographic centroid generation -->
+This would ensure that any spatially contiguous aggregating object covering the target object (the Earth in this case) would result in the same total: there would be no double counting.
+The estimated total population residing within the study area would be more realistic if geographic centroids were used.
+(The centroid of Algeria, for example, is far outside the aggregating buffer.)
+
+Except in cases where the number of target features per aggregating feature is very large, or where the aggregating object is *spatially congruent* with the target, using centroids can also lead to errors due to boundary effects:
+imagine a buffer that covers a large area but contains no centroids.
+These issues can be tackled when aggregating areal target data with areal interpolation.

@@ -1,0 +1,67 @@
+---
+title: 'Coordinate Reference Systems, projections and transformations'
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: '2019-08-07'
+slug: crs-projections-transformations
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - sf
+  - crs
+draft: true
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+# Introduction
+
+This vignette serves as a workbook to outline key concepts and functions related to coordinate reference systems (CRSs), map projections and transformation of geographic data from one CRS to another.
+It is based on the open source book *Geocomputation with R*, and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
+
+# Prerequisites {-}
+
+The solutions assume the following packages are attached (other packages will be attached when needed):
+
+```{r packages, message=FALSE, warning=FALSE}
+library(sf)
+library(raster)
+library(dplyr)
+library(spData)
+```
+
+# Introduction
+
+Geographic data relies on a frame of reference.
+There are two main types of CRS:
+
+- Geographic, where the frame of reference is the globe and how many degrees north or east from the position (0, 0) you are
+- Projected, where the frame of reference is a flat representation of part of the Earth's surface
+
+```{r vectorplots, fig.cap="Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.", out.width="49%", fig.show='hold', echo=FALSE, fig.scap="Illustration of vector (point) data."}
+knitr::include_graphics(c(
+  "https://geocompr.robinlovelace.net/figures/vector_lonlat.png",
+  "https://geocompr.robinlovelace.net/figures/vector_projected.png"))
+```
+
+# Geographic data in R
+
+```{r}
+london_df = data.frame(name = "london", population = 1e7, lon = -0.1, lat = 51.5)
+class(london_df)
+london = st_as_sf(london_df, coords = c("lon", "lat"))
+class(london)
+st_is_longlat(london)
+```
+
+# Further reading
+
+- An introduction to vector geographic data in *Geocomputation with R* (Section [2.2](https://geocompr.robinlovelace.net/spatial-class.html#vector-data))
+- An introduction to CRSs in R (Section [2.4](https://geocompr.robinlovelace.net/spatial-class.html#crs-intro))
+- The contents and exercises of Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html), solutions to which you can find at https://geocompr.github.io/geocompkg/articles/index.html
+
+Check out the questions in the exercises section of Chapter 6 of Geocomputation with R.
+

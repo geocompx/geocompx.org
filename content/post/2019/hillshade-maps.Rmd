@@ -1,0 +1,120 @@
+---
+title: 'Hillshade maps'
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: '2019-08-07'
+slug: hillshade-maps
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - raster
+  - tmap
+  - viz
+  - maps
+draft: true
+---
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+This vignette builds on the [making maps chapter](https://geocompr.robinlovelace.net/adv-map.html) of [the Geocomputation with R book](https://geocompr.github.io/).
+
+## Prerequisites {-}
+
+The example below assume the following packages are attached:
+
+```{r}
+library(raster) # data download
+library(tmap)   # map creation
+```
+
+# Hillshade map
+
+Hillshade maps show the topographical shape of hills and mountains using levels of gray on a map.
+The role of this kind of maps is to display relative slopes, but not absolute height.
+
+## Calculate terrain characteristics 
+
+Elevation data is needed to create a hillshade map.
+The **raster** package provides an easy access to the SRTM 90 m resolution elevation data with the `getData()` function.
+For example, it is possible to download the elevation data for the whole country of Slovenia using the code below:
+
+```{r}
+alt = getData("alt", country = "SVN", path = tempdir())
+```
+
+Hillshade maps are created based on certain terrain characteristics - slope and aspect.
+Both of them can be calculated with the `terrain` function and the `opt` argument set to `"slope"` or `"aspect"`.
+
+```{r}
+slope = terrain(alt, opt = "slope")
+aspect = terrain(alt, opt = "aspect")
+```
+
+Computing of a hillshade can be done using the `hillShade()` function. 
+It requires previously created `slope` and `aspect` objects and setting two new arguments `angle` and `direction`.
+The `angle` argument is the elevation angle of the light source and the `direction` argument is the direction (azimuth) angle of the light source (sun), both in degrees.
+
+```{r}
+hill = hillShade(slope, aspect, angle = 40, direction = 270)
+```
+
+The output object can be plotted with `plot(hill)`, however, it does not give an expected map.
+This is because the hillshade object should be overlayed by another semi-transparent layer to give a proper visualization.
+
+## Create a hillshade map
+
+A hillshade map can be created using the **tmap** package.
+This package builds maps by stacking different data layers.
+In this case, the first layer is the hillshade object (`hill`), colored using different levels of gray.
+
+```{r}
+tm_shape(hill) +
+  tm_raster(palette = gray(0:10 / 10), style = "cont", legend.show = FALSE)
+```
+
+The second layer is the elevation object (`alt`), colored using the `terrain.colors` palette.
+
+```{r}
+tm_shape(alt) +
+  tm_raster(alpha = 0.5, palette = terrain.colors(10), style = "cont",
+            title = "Elevation (m asl)", legend.show = TRUE)
+```
+
+Finally, both layers can be combined to create an expected visualization.
+It could be also improved by placing the legend on the right bottom of the map.
+
+```{r, fig.width=6}
+tm_shape(hill) +
+  tm_raster(palette = gray(0:10 / 10), style = "cont", legend.show = FALSE) +
+  tm_shape(alt) +
+  tm_raster(alpha = 0.5, palette = terrain.colors(10), style = "cont",
+            title = "Elevation (m asl)", legend.show = TRUE) +
+  tm_layout(legend.position = c("RIGHT", "BOTTOM"))
+```
+
+```{r, echo=FALSE, eval=FALSE}
+# https://github.com/neilcharles/geoviz
+library(magrittr)
+library(rayshader)
+
+alt2 = projectRaster(alt, crs = "+proj=tmerc +lat_0=0 +lon_0=15 +k=0.9999 +x_0=500000 +y_0=-5000000 +ellps=bessel +towgs84=682,-203,480,0,0,0,0 +units=m +no_defs")
+
+raster_template = raster(extent(alt2), resolution = 1000, crs = crs(alt2))
+
+alt3 = resample(alt2, raster_template)
+
+elevation_mat = t(raster::as.matrix(alt3))
+shadow_mat = ray_shade(elevation_mat)
+
+elevation_mat %>%
+  sphere_shade(progbar = FALSE, sunangle = 45) %>%
+  add_shadow(shadow_mat)%>%
+   plot_map() # %>%
+  plot_3d(elevation_mat,
+          zscale = 75,
+          phi = 30,
+          theta = 135)
+```
