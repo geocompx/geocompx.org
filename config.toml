@@ -81,3 +81,12 @@ googleAnalytics = "UA-99618359-2"
 #     url = "https://www.stackoverflow.com/username/"
 #     name = "stack-overflow"
 #     weight = 5
+
+[outputs]
+home = [ "RSS", "HTML"]
+section  = ["HTML"]
+
+[outputFormats]
+[outputFormats.RSS]
+mediatype = "application/rss"
+baseName = "feed"
