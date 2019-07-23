@@ -23,10 +23,10 @@ googleAnalytics = "UA-99618359-2"
     name = "Home"
     weight = 1
 
-# [[menu.main]]
-#     url = "/post/"
-#     name = "Posts"
-#     weight = 2
+[[menu.main]]
+    url = "/post/"
+    name = "Posts"
+    weight = 2
 
 [[menu.main]]
     url = "/presentations/"
@@ -66,6 +66,11 @@ googleAnalytics = "UA-99618359-2"
     url = "https://twitter.com/hashtag/geocompr"
     name = "twitter"
     weight = 3
+    
+[[menu.icon]]
+    url = "https://geocompr.github.io/posts/index.xml"
+    name = "rss"
+    weight = 4
 
 # [[menu.icon]]
 #     url = "https://www.linkedin.com/in/username/"
