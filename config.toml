@@ -68,7 +68,7 @@ googleAnalytics = "UA-99618359-2"
     weight = 3
     
 [[menu.icon]]
-    url = "https://geocompr.github.io/posts/index.xml"
+    url = "https://geocompr.github.io/feed.xml"
     name = "rss"
     weight = 4
 
