@@ -2,6 +2,31 @@ language: r
 dist: xenial
 sudo: false
 
+env:
+  global:
+  - MAKEFLAGS="-j 2"
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:opencpu/jq'
+      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+    packages:
+     - ccache
+     - libprotobuf-dev
+     - protobuf-compiler
+     - libv8-dev
+     - libjq-dev
+     - libudunits2-dev
+     - libproj-dev
+     - libgeos-dev
+     - libgdal-dev
+     - libnetcdf-dev
+     - netcdf-bin
+
+r_packages:
+  - remotes
+
 branches:
   only:
     - source
@@ -10,6 +35,11 @@ cache:
   packages: yes
   directories:
     - $HOME/bin
+    
+install:
+  - R -e "install.packages('remotes')"
+  - R -e "install.packages('spDataLarge', repos = 'https://nowosad.github.io/drat/', type = 'source')"
+  - R -e "remotes::install_github('geocompr/geocompkg')"
 
 before_script:
   - "Rscript -e 'blogdown::install_hugo()'"
