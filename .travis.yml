@@ -23,6 +23,11 @@ addons:
      - libgdal-dev
      - libnetcdf-dev
      - netcdf-bin
+     - r-cran-dplyr
+     - r-cran-readr
+     - r-cran-stringi
+     - r-cran-data.table
+     - r-cran-bh
 
 r_packages:
   - remotes
