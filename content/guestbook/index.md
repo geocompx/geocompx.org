@@ -1,5 +1,6 @@
 
-### Courses using the book
+### Courses using the book:
+##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/content/guestbook/index.md))
 
 - [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/)
 - [GEOG 4 / 595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/)
@@ -14,6 +15,7 @@
 ### Tweets:
 ##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/content/guestbook/index.md))
 
+{{< tweet 1153822584166686723 >}}
 {{< tweet 1120870984540725249 >}}
 {{< tweet 1116144237756604416 >}}
 {{< tweet 1103527764035096576 >}}
