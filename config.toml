@@ -90,3 +90,5 @@ section  = ["HTML"]
 [outputFormats.RSS]
 mediatype = "application/rss"
 baseName = "feed"
+
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
