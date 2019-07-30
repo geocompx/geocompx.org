@@ -4,3 +4,6 @@
 .Ruserdata
 public
 geocompr.github.io
+*.html
+*.tif
+*.geojson
