@@ -34,7 +34,7 @@ suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(sf))
 f2 = "promenade-all.geojson"
 u = "https://github.com/spnethack/spnethack/releases/download/0.1/promenade-all.geojson"
-download.file(u, destfile = f2)
+if(!file.exists(f2)) download.file(u, destfile = f2)
 
 system.time({b = read_sf(f2)})
 system.time({d = b  %>% data.table::as.data.table()})

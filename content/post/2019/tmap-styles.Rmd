@@ -17,7 +17,9 @@ number_sections: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
+# eval = FALSE to fix this error (RL):
+# Error: Invalid style value(s)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = FALSE,
                       fig.width = 8, fig.height = 4)
 ```
 

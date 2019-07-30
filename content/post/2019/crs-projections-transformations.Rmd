@@ -10,8 +10,7 @@ tags:
   - rspatial
   - sf
   - crs
-draft: true
-publishDate: 2019-08-16
+publishDate: 2019-07-16
 ---
 
 ```{r setup, echo=FALSE}
@@ -23,8 +22,9 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 This workbook outlines key concepts and functions related to coordinate reference systems (CRSs), map projections and transformation of geographic data from one CRS to another.
 It is based on the open source book *Geocomputation with R*, and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
 
-It was originally put together for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling:
-Skills Workshop and Hackathon for it's full name, but should be of use to anyone interested in projections and CRSs in R.
+It was originally put together for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for it's full name!
+It should be of use to anyone interested in projections and CRSs in R, however, so we posted it on our newly updated [website](https://geocompr.github.io/) for maximum benefit.
+
 
 
 
