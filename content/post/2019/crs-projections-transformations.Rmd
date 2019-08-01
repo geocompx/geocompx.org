@@ -1,5 +1,5 @@
 ---
-title: 'Coordinate Reference Systems, projections and transformations'
+title: 'Geographic projections and transformations'
 author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
 date: '2019-08-07'
 slug: crs-projections-transformations
@@ -19,22 +19,18 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 # Introduction
 
-This workbook outlines key concepts and functions related to coordinate reference systems (CRSs), map projections and transformation of geographic data from one CRS to another.
+This workbook outlines key concepts and functions related to map projections --- also referred to as coordinate reference systems (CRSs) --- and transformation of geographic data from one projection to another.
 It is based on the open source book *Geocomputation with R*, and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
 
-It was originally put together for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for it's full name!
-It should be of use to anyone interested in projections and CRSs in R, however, so we posted it on our newly updated [website](https://geocompr.github.io/) for maximum benefit.
-
-
-
+It was developed for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for it's full name!
+It should be of use to anyone interested in projections, beyond the summer school, so we posted it on our newly updated [website](https://geocompr.github.io/) for maximum benefit.
 
 # Prerequisites {-}
 
-The solutions assume the following packages are attached (other packages will be attached when needed):
+Before you get started, make sure you have the packages installed:
 
 ```{r packages, message=FALSE, warning=FALSE}
 library(sf)
-library(raster)
 library(dplyr)
 library(spData)
 ```
@@ -53,6 +49,159 @@ knitr::include_graphics(c(
   "https://geocompr.robinlovelace.net/figures/vector_projected.png"))
 ```
 
+# TLDR
+
+The 'too long didn't read' (TLDR) take away messages from this lecture are:
+
+- **be aware of projections**
+- **decide an appropriate CRS for your project and ensure everything is in that CRS**
+- **use a projected CRS when doing geometric operations**
+- **there is an officially supported code, called an EPSG code, for most places --- that is often a good option**
+
+In R, you can check, set and transform CRS with `st_crs()` and `st_transform()` as follows:
+
+```{r}
+zones_london = lnd
+st_crs(zones_london)                                         # find out the CRS
+zones_london_projected = st_transform(zones_london, 27700)   # transform CRS
+st_crs(zones_london) = NA                                    # set CRS
+st_crs(zones_london) = 4326                                  # set CRS
+```
+
+If you ignore CRSs, bad things can happen.
+
+# Why are projections needed?
+
+Without a coordinate system, we have no context:
+
+```{r, echo=FALSE}
+canada = world %>% filter(name_long == "Canada")
+canada_points = st_coordinates(canada)
+plot(canada_points[, 1:2], asp = 0.6)
+lines(canada_points[1:274, 1:2])
+```
+
+Which country is it?
+
+Location on Earth is measured in degrees so, even when axes are equal, maps are highly distorted representations of reality far from the equator:
+
+```{r, echo=FALSE}
+plot(canada_points[, 1:2], asp = 1)
+lines(canada_points[1:274, 1:2])
+```
+
+Along which axis is the image over-represented?
+
+Even when we compensate for this, the cylindrical projection is misleading:
+
+```{r, echo=FALSE}
+plot(canada_points[, 1:2], asp = 2)
+lines(canada_points[1:274, 1:2])
+```
+
+By default, most software (including R) uses a cylindrical projection, leading to maps like this:
+
+```{r}
+plot(canada$geom)
+```
+
+Across the whole world, the results look like this:
+
+```{r}
+plot(st_geometry(world), col = "grey")
+```
+
+There is no single 'correct' CRS that can represent everywhere well: it is physically impossible to 'peal' the surface of the Earth onto a flat screen (credit: [Awar Jahfar](https://unsplash.com/@awarnerway)):
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://images.unsplash.com/photo-1564509398619-622e40ad5a5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=633&q=80")
+```
+
+> At best we can comply with two out of three spatial properties (distance, area, direction).
+Therefore, the task at hand determines which projection to choose. 
+For instance, if we are interested in a density (points per grid cell or inhabitants per grid cell) we should use an equal-area projection.
+
+# Which projection to use?
+
+A range of CRSs is available:
+
+- A Lambert azimuthal equal-area ([LAEA](https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection)) projection for a custom local projection (set `lon_0` and `lat_0` to the center of the study area), which is an equal-area projection at all locations but distorts shapes beyond thousands of kilometres.
+-  Azimuthal equidistant ([AEQD](https://en.wikipedia.org/wiki/Azimuthal_equidistant_projection)) projections for a specifically accurate straight-line distance between a point and the centre point of the local projection.
+- Lambert conformal conic ([LCC](https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection)) projections for regions covering thousands of kilometres, with the cone set to keep distance and area properties reasonable between the secant lines.
+- Stereographic ([STERE](https://en.wikipedia.org/wiki/Stereographic_projection)) projections for polar regions, but taking care not to rely on area and distance calculations thousands of kilometres from the center.
+
+This is how it works in R:
+
+```{r, warning=FALSE}
+world_laea1_g = world %>%
+  st_transform("+proj=laea +x_0=0 +y_0=0 +lon_0=0 +lat_0=0") %>% 
+  st_geometry()
+plot(world_laea1_g)
+```
+
+```{r, warning=FALSE}
+world %>%
+  st_transform("+proj=aeqd +x_0=0 +y_0=0 +lon_0=0 +lat_0=0") %>% 
+  st_geometry() %>% 
+  plot()
+```
+
+```{r, warning=FALSE}
+world %>%
+  st_transform("+proj=moll") %>% 
+  st_geometry() %>% 
+  plot()
+```
+
+How to add graticules?
+
+```{r, warning=FALSE}
+world %>%
+  st_transform("+proj=moll") %>% 
+  st_geometry() %>% 
+  plot()
+g = st_graticule(x = world) %>% 
+  st_transform("+proj=moll") %>% 
+  st_geometry()
+plot(g, add = TRUE)
+```
+
+```{r}
+canada_centroid = st_coordinates(st_centroid(canada))
+canada_laea_crs = paste0("+proj=laea +x_0=0 +y_0=0 +lon_0=",
+                         canada_centroid[1],
+                         " +lat_0=",
+                         canada_centroid[2])
+canada_laea = st_transform(canada, crs = canada_laea_crs)
+world_laea = st_transform(world, crs = canada_laea_crs)
+plot(st_geometry(canada_laea))
+plot(world_laea, add = TRUE)
+```
+
+```{r}
+canada_centroid = st_coordinates(st_centroid(canada))
+canada_laea_crs = paste0("+proj=laea +x_0=0 +y_0=0 +lon_0=",
+                         canada_centroid[1],
+                         " +lat_0=",
+                         canada_centroid[2])
+canada_laea = st_transform(canada, crs = canada_laea_crs)
+world_laea = st_transform(world, crs = canada_laea_crs)
+plot(st_geometry(canada_laea))
+plot(world_laea, add = TRUE)
+```
+
+# EPSG codes
+
+EPSG codes are standard codes for projections.
+See them in R with:
+
+```{r}
+epsg_codes = rgdal::make_EPSG()
+# View(epsg_codes) # open in interactive spreadsheet
+```
+
+In the UK, the EPSG code of official data is 27700
+
 # Geographic data in R
 
 ```{r}
@@ -61,13 +210,31 @@ class(london_df)
 london = st_as_sf(london_df, coords = c("lon", "lat"))
 class(london)
 st_is_longlat(london)
+plot(zones_london_projected$geometry)
+plot(london$geometry, add = TRUE, pch = 9)
+```
+
+```{r}
+st_crs(london) = 4326
+london_projected = st_transform(london, 27700)
+st_is_longlat(london_projected)
+plot(zones_london_projected$geometry)
+plot(london_projected$geometry, add = TRUE, pch = 19, cex = 9)
 ```
 
 # Further reading
 
+If you're interested in learning more on this, check out *Geocomputations with R*.
+
+[![](https://geocompr.robinlovelace.net/images/cover.png)](https://geocompr.robinlovelace.net/)
+
+More specific resources on projections include:
+
+- Excellent tutorial on coordinate systems on the Manifold website: http://www.manifold.net/doc/mfd9/projections_tutorial.htm
 - An introduction to vector geographic data in *Geocomputation with R* (Section [2.2](https://geocompr.robinlovelace.net/spatial-class.html#vector-data))
 - An introduction to CRSs in R (Section [2.4](https://geocompr.robinlovelace.net/spatial-class.html#crs-intro))
 - The contents and exercises of Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html), solutions to which you can find at https://geocompr.github.io/geocompkg/articles/index.html
+- For a fun take on projections, see https://xkcd.com/977/
 
 Check out the questions in the exercises section of Chapter 6 of Geocomputation with R.
 
