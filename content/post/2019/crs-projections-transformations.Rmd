@@ -20,7 +20,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 # Introduction
 
 This workbook outlines key concepts and functions related to map projections --- also referred to as coordinate reference systems (CRSs) --- and transformation of geographic data from one projection to another.
-It is based on the open source book *Geocomputation with R*, and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
+It is based on the open source book [*Geocomputation with R*](https://geocompr.robinlovelace.net), and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
 
 It was developed for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for its full name!
 It should be of use to anyone interested in projections, beyond the summer school, so we posted it on our newly updated [website](https://geocompr.github.io/) for maximum benefit.
@@ -40,8 +40,8 @@ library(spData)
 Geographic data relies on a frame of reference.
 There are two main types of CRS:
 
-- Geographic, where the frame of reference is the globe and how many degrees north or east from the position (0, 0) you are
-- Projected, where the frame of reference is a flat representation of part of the Earth's surface
+- **Geographic**, where the frame of reference is the globe and how many degrees north or east from the position (0, 0) you are
+- **Projected**, where the frame of reference is a flat representation of part of the Earth's surface
 
 ```{r vectorplots, fig.cap="Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.", out.width="49%", fig.show='hold', echo=FALSE, fig.scap="Illustration of vector (point) data."}
 knitr::include_graphics(c(
@@ -51,12 +51,12 @@ knitr::include_graphics(c(
 
 # TLDR
 
-The 'too long didn't read' (TLDR) take away messages from this lecture are:
+The 'too long didn't read' (TLDR) take away messages from this text are:
 
-- **be aware of projections**
-- **decide an appropriate CRS for your project and ensure everything is in that CRS**
-- **use a projected CRS when doing geometric operations**
-- **there is an officially supported code, called an EPSG code, for most places --- that is often a good option**
+- **Be aware of projections**
+- **Decide an appropriate CRS for your project and ensure everything is in that CRS**
+- **Use a projected CRS when doing geometric operations**
+- **There is an officially supported code, called an EPSG code, for most places --- that is often a good option**
 
 In R, you can check, set and transform CRS with `st_crs()` and `st_transform()` as follows:
 
@@ -200,12 +200,13 @@ epsg_codes = rgdal::make_EPSG()
 # View(epsg_codes) # open in interactive spreadsheet
 ```
 
-In the UK, the EPSG code of official data is 27700
+In the UK, the EPSG code of official data is [27700](https://epsg.io/27700).
 
 # Geographic data in R
 
 ```{r}
-london_df = data.frame(name = "london", population = 1e7, lon = -0.1, lat = 51.5)
+london_df = data.frame(name = "london", population = 1e7,
+                       lon = -0.1, lat = 51.5)
 class(london_df)
 london = st_as_sf(london_df, coords = c("lon", "lat"))
 class(london)
