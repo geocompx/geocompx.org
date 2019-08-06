@@ -22,7 +22,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 This workbook outlines key concepts and functions related to map projections --- also referred to as coordinate reference systems (CRSs) --- and transformation of geographic data from one projection to another.
 It is based on the open source book *Geocomputation with R*, and Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) in particular.
 
-It was developed for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for it's full name!
+It was developed for the '[CASA Summer School](https://bonnie-buyuklieva.github.io/SS_ASM19/)', or the Doctoral Summer School for Advanced Spatial Modelling: Skills Workshop and Hackathon, 21^st^ to 23^rd^ August 2019, for its full name!
 It should be of use to anyone interested in projections, beyond the summer school, so we posted it on our newly updated [website](https://geocompr.github.io/) for maximum benefit.
 
 # Prerequisites {-}
@@ -119,16 +119,16 @@ knitr::include_graphics("https://images.unsplash.com/photo-1564509398619-622e40a
 
 > At best we can comply with two out of three spatial properties (distance, area, direction).
 Therefore, the task at hand determines which projection to choose. 
-For instance, if we are interested in a density (points per grid cell or inhabitants per grid cell) we should use an equal-area projection.
+For instance, if we are interested in a density (points per grid cell or inhabitants per grid cell), we should use an equal-area projection.
 
 # Which projection to use?
 
 A range of CRSs is available:
 
-- A Lambert azimuthal equal-area ([LAEA](https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection)) projection for a custom local projection (set `lon_0` and `lat_0` to the center of the study area), which is an equal-area projection at all locations but distorts shapes beyond thousands of kilometres.
--  Azimuthal equidistant ([AEQD](https://en.wikipedia.org/wiki/Azimuthal_equidistant_projection)) projections for a specifically accurate straight-line distance between a point and the centre point of the local projection.
-- Lambert conformal conic ([LCC](https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection)) projections for regions covering thousands of kilometres, with the cone set to keep distance and area properties reasonable between the secant lines.
-- Stereographic ([STERE](https://en.wikipedia.org/wiki/Stereographic_projection)) projections for polar regions, but taking care not to rely on area and distance calculations thousands of kilometres from the center.
+- A Lambert azimuthal equal-area ([LAEA](https://en.wikipedia.org/wiki/Lambert_azimuthal_equal-area_projection)) projection for a custom local projection (set `lon_0` and `lat_0` to the center of the study area), which is an equal-area projection at all locations but distorts shapes beyond thousands of kilometers.
+-  Azimuthal equidistant ([AEQD](https://en.wikipedia.org/wiki/Azimuthal_equidistant_projection)) projections for a specifically accurate straight-line distance between a point and the center point of the local projection.
+- Lambert conformal conic ([LCC](https://en.wikipedia.org/wiki/Lambert_conformal_conic_projection)) projections for regions covering thousands of kilometers, with the cone set to keep distance and area properties reasonable between the secant lines.
+- Stereographic ([STERE](https://en.wikipedia.org/wiki/Stereographic_projection)) projections for polar regions, but taking care not to rely on area and distance calculations thousands of kilometers from the center.
 
 This is how it works in R:
 
