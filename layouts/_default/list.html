@@ -4,10 +4,18 @@
 
     <h2>{{ .Title }}</h2>
     
+
+    
     {{ range (.Paginator 5).Pages }} {{ partial "list-item" . }} {{ end }}
 
 </main>
 
+
+
 {{ partial "paginator" . }}
 
+<em>Blog posts are aggregated at <a href="https://www.r-bloggers.com/">R-bloggers</a> and <a href="https://rweekly.org/">RWeekly</a></em>
+
 {{ partial "footer" . }}
+
+
