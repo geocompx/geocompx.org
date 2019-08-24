@@ -9,6 +9,7 @@
 - [ENVR_SCI 390-0 "R Data Science" - Special Topics in Environmental Sciences](https://www.northwestern.edu/class-descriptions/4730/WCAS/ENVR_SCI/390-0/28232.html)
 - [PD-15 - R for Geospatial Analysis and Mapping](https://gistbok.ucgis.org/bok-topics/r-geospatial-analysis-and-mapping)
 - [GEO503: Spatial Data Science](http://adamwilson.us/SpatialDataScience/)
+- [CRD 298: Spatial Methods in Community Research](https://crd230.github.io/index.html)
 - [11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health](http://spatialepidemiology.strikingly.com/)
 - [Data Carpentry: Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
 
