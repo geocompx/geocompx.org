@@ -10,6 +10,7 @@
 - [PD-15 - R for Geospatial Analysis and Mapping](https://gistbok.ucgis.org/bok-topics/r-geospatial-analysis-and-mapping)
 - [GEO503: Spatial Data Science](http://adamwilson.us/SpatialDataScience/)
 - [CRD 298: Spatial Methods in Community Research](https://crd230.github.io/index.html)
+- [CP6521 Advanced GIS](https://rstudio-pubs-static.s3.amazonaws.com/460816_f7e4d237e0334e9887323686041bd762.html)
 - [11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health](http://spatialepidemiology.strikingly.com/)
 - [Data Carpentry: Introduction to Geospatial Raster and Vector Data with R](https://datacarpentry.org/r-raster-vector-geospatial/)
 
