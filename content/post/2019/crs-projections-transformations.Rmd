@@ -1,6 +1,6 @@
 ---
 title: 'Geographic projections and transformations'
-author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+author: Robin Lovelace
 date: '2019-08-21'
 slug: crs-projections-transformations
 categories:
