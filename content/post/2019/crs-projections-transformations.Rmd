@@ -44,7 +44,7 @@ Simple answer: because it works, excels at spatial statistics and visualisation 
 It can be used for a wide range of things such as:
 
 - Book on Geocomputation: https://geocompr.robinlovelace.net/
-- Propensity to Cycle Tool: https://geocompr.robinlovelace.net/
+- Propensity to Cycle Tool: https://pct.bike/
 
 Geographic data relies on a frame of reference.
 There are two main types of CRS:
