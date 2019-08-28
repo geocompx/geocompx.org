@@ -260,6 +260,7 @@ More specific resources on projections include:
 - An introduction to CRSs in R (Section [2.4](https://geocompr.robinlovelace.net/spatial-class.html#crs-intro))
 - The contents and exercises of Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html), solutions to which you can find at https://geocompr.github.io/geocompkg/articles/index.html
 - For a fun take on projections, see https://xkcd.com/977/
+- Chapter in upcoming book on CRSs by Edzer Pebesma and Roger Bivand: https://github.com/edzer/sdsr
 
 Check out the questions in the exercises section of Chapter 6 of Geocomputation with R.
 
