@@ -1,3 +1,7 @@
+---
+hidethedate: true
+---
+
 ### Presentation "How to win friends and write an open-source book"
 [useR! 2019](http://user2019.r-project.org/), Toulouse, France, 2019-07-12
 

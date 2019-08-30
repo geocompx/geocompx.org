@@ -20,9 +20,11 @@
     <div class="post-metadata">
         {{ $.Params.author }}
         <br>
+        {{ if not $.Params.hidethedate }}
         <span class="post-date">
           <time datetime="{{ $.Date }}" itemprop="datePublished">{{ $.Date.Format (default "2 January 2006" (index $.Site.Params "date_format")) }}</time>
         </span>
+        {{ end }}
     </div>
     
     <h5>{{ $.Scratch.Get "subtitle" }}</h5>

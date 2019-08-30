@@ -1,3 +1,6 @@
+---
+hidethedate: true
+---
 
 ### Courses using the book:
 ##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/content/guestbook/index.md))

@@ -1,3 +1,7 @@
+---
+hidethedate: true
+---
+
 ### Workshop on Geocomputation with R 
 [European Geosciences Union](https://www.egu2019.eu/). Vienna, Austria, 2019-04-10
 
