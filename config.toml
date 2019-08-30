@@ -39,7 +39,7 @@ googleAnalytics = "UA-99618359-2"
     weight = 4
     
 [[menu.main]]
-    url = "/geocompkg/articles/"
+    url = "/vignettes/"
     name = "Vignettes and solutions"
     weight = 5
 
