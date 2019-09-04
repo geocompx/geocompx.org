@@ -1,7 +1,7 @@
 ---
 title: 'Grids and graticules in the tmap package'
-author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
-date: '2019-08-07'
+author: Jakub Nowosad
+date: '2019-09-04'
 slug: tmap-grid
 categories:
   - vignette
@@ -11,17 +11,15 @@ tags:
   - tmap
   - maps
   - viz
-draft: true
-toc: true
-number_sections: true
+draft: false
 ---
 
 ```{r setup, include=FALSE}
-# Not building as fails on my computer with: 
-# Error in tm_graticules() : could not find function "tm_graticules"
-
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = FALSE,
-                      fig.width = 6, fig.height = 4)
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE,
+                      fig.width = 6, 
+                      fig.height = 4)
 ```
 
 This vignette builds on the [making maps chapter](https://geocompr.robinlovelace.net/adv-map.html) of [the Geocomputation with R book](https://geocompr.github.io/).
