@@ -1,7 +1,7 @@
 ---
 title: 'Hillshade maps'
-author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
-date: '2019-08-07'
+author: Jakub Nowosad
+date: '2019-10-07'
 slug: hillshade-maps
 categories:
   - vignette
@@ -16,7 +16,7 @@ draft: true
 ---
 
 ```{r setup, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = TRUE)
 ```
 
 This vignette builds on the [making maps chapter](https://geocompr.robinlovelace.net/adv-map.html) of [the Geocomputation with R book](https://geocompr.github.io/).
@@ -46,12 +46,27 @@ alt = getData("alt", country = "SVN", path = tempdir())
 ```
 
 Hillshade maps are created based on certain terrain characteristics - slope and aspect.
-Both of them can be calculated with the `terrain` function and the `opt` argument set to `"slope"` or `"aspect"`.
+Slope represents the steepness at each cell of a raster surface.
+The lower the slope value - the flatter the terrain.
+Aspect is the direction of the maximum slope of the focal cell.
+Slope and aspect can be calculated with the `terrain` function and the `opt` argument set to `"slope"` or `"aspect"`.
+Both values are returned in radians by default.
 
 ```{r}
 slope = terrain(alt, opt = "slope")
 aspect = terrain(alt, opt = "aspect")
 ```
+
+```{r, echo=FALSE, message=FALSE}
+t_slope = tm_shape(slope) + tm_raster(style = "cont") +
+  tm_layout(legend.position = c("right", "bottom"))
+t_aspect = tm_shape(aspect) + tm_raster(style = "cont") + 
+  tm_layout(legend.position = c("right", "bottom"))
+tmap_arrange(t_slope, t_aspect, nrow = 1)
+```
+
+<!-- add plots of slope and as pect -->
+<!-- explain what's that  -->
 
 Computing of a hillshade can be done using the `hillShade()` function. 
 It requires previously created `slope` and `aspect` objects and setting two new arguments `angle` and `direction`.
