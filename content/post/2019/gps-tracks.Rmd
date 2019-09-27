@@ -1,6 +1,6 @@
 ---
 title: 'Loading and analyzing GPS tracks with R'
-author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+author: Robin Lovelace
 date: '2019-08-07'
 slug: gps-tracks
 categories:
@@ -109,7 +109,7 @@ c = st_coordinates(p)
 l1 = sf::st_linestring(c[1:2, ])
 plot(l1)
 lsf = st_sf(st_set_geometry(p[2, ], NULL), st_sfc(l1))
-plot(p$geometry[1:2], add = T)
+plot(p$geometry[1:2], add = TRUE)
 ```
 
 For all points we can do:
