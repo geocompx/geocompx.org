@@ -1,7 +1,7 @@
 ---
 title: 'Map styles available in the tmap package'
-author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
-date: '2019-08-07'
+author: Jakub Nowosad
+date: '2019-10-12'
 slug: tmap-styles
 categories:
   - vignette
@@ -12,14 +12,13 @@ tags:
   - maps
   - viz
 draft: true
-toc: true
 number_sections: true
 ---
 
 ```{r setup, include=FALSE}
 # eval = FALSE to fix this error (RL):
 # Error: Invalid style value(s)
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = FALSE,
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
                       fig.width = 8, fig.height = 4)
 ```
 
