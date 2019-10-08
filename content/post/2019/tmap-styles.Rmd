@@ -1,8 +1,8 @@
 ---
-title: 'Map styles available in the tmap package'
+title: 'Color scale styles available in the tmap package'
 author: Jakub Nowosad
-date: '2019-10-12'
-slug: tmap-styles
+date: '2019-10-14'
+slug: tmap-color-scales
 categories:
   - vignette
 tags:
@@ -16,8 +16,6 @@ number_sections: true
 ---
 
 ```{r setup, include=FALSE}
-# eval = FALSE to fix this error (RL):
-# Error: Invalid style value(s)
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
                       fig.width = 8, fig.height = 4)
 ```
@@ -93,7 +91,8 @@ On a side note, in theory, no more than four colors are required to color the po
 The third use of the `col` argument is by providing the variable (column) name.
 In this case, the map will represent the given variable.
 By default, **tmap** behaves differently depending on the input variable type.
-For example, it will create a categorical map when the provided variable contains characters or factors.^[The `tm_polygons(col = "subregion", style = "cat")` code will be used automatically in this case.]
+For example, it will create a categorical map when the provided variable contains characters or factors.
+The `tm_polygons(col = "subregion", style = "cat")` code will be run automatically in this case.
 
 ```{r}
 tm_shape(world_moll) +
@@ -108,7 +107,8 @@ There are several ways to convert continuous variables to discrete ones implemen
 
 ## Pretty
 
-When the variable provided as the `col` argument is numeric, **tmap** will use the `"pretty"` style as a default^[It runs `tm_polygons(col = "lifeExp", style = "pretty")` invisibly to the user].
+When the variable provided as the `col` argument is numeric, **tmap** will use the `"pretty"` style as a default.
+In other words, it runs `tm_polygons(col = "lifeExp", style = "pretty")` invisibly to the user.
 This style rounds breaks into whole numbers where possible and spaces them evenly.
 
 ```{r}
@@ -120,7 +120,8 @@ tm_shape(world_moll) +
 
 A histogram is added using `legend.hist = TRUE` in this and several next examples to show how the selected map style relates to the distribution of values. 
 
-It is possible to indicate a preferred number of classes using the `n` argument.^[Importantly, not every `n` is possible depending on the range of the values in the data.]
+It is possible to indicate a preferred number of classes using the `n` argument.
+Importantly, not every `n` is possible depending on the range of the values in the data.
 
 ```{r}
 tm_shape(world_moll) +
@@ -273,7 +274,7 @@ tm_shape(world_moll) +
 ## Order
 
 The `"order"` style also presents a large number of colors over the continuous color field. 
-However, this style is suited to visualize skewed distributions.^[Notice that the values on the legend do not change linearly.]
+However, this style is suited to visualize skewed distributions; notice that the values on the legend do not change linearly.
 
 ```{r}
 tm_shape(world_moll) +
@@ -320,3 +321,11 @@ tm_shape(world_moll) +
               style = "log10") +
   tm_layout(legend.outside = TRUE) 
 ```
+
+# Conclusions
+
+Selecting a color scale style is not an easy task. 
+It depends on the type of input variable and its distribution, but also on the intended audience.
+Therefore, it is worth to spend some time and think about your readers (e.g., would they be able to understand the logarithmic scale or should you use the manual breaks instead?) and your data (e.g., how many breaks should there be to show different subgroups?).
+Now you know different color scale styles implemented in **tmap**, so let's try using them for your own projects!
+
