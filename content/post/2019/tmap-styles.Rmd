@@ -1,7 +1,7 @@
 ---
-title: 'Color scale styles available in the tmap package'
+title: 'Map coloring: the color scale styles available in the tmap package'
 author: Jakub Nowosad
-date: '2019-10-14'
+date: '2019-10-17'
 slug: tmap-color-scales
 categories:
   - vignette
@@ -11,7 +11,7 @@ tags:
   - tmap
   - maps
   - viz
-draft: true
+draft: false
 number_sections: true
 ---
 
@@ -325,7 +325,7 @@ tm_shape(world_moll) +
 # Conclusions
 
 Selecting a color scale style is not an easy task. 
-It depends on the type of input variable and its distribution, but also on the intended audience.
+It depends on the type of input variable and its distribution, but also the intended audience.
 Therefore, it is worth to spend some time and think about your readers (e.g., would they be able to understand the logarithmic scale or should you use the manual breaks instead?) and your data (e.g., how many breaks should there be to show different subgroups?).
 Now you know different color scale styles implemented in **tmap**, so let's try using them for your own projects!
 
