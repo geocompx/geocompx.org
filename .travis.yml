@@ -29,9 +29,6 @@ addons:
      - r-cran-data.table
      - r-cran-bh
 
-r_packages:
-  - remotes
-
 branches:
   only:
     - source
@@ -43,6 +40,7 @@ cache:
     
 install:
   - R -e "install.packages('remotes')"
+  - R -e "install.packages('blogdown')"
   - R -e "install.packages('spDataLarge', repos = 'https://nowosad.github.io/drat/', type = 'source')"
   - R -e "remotes::install_github('geocompr/geocompkg')"
 
