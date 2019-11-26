@@ -16,7 +16,7 @@ draft: true
 ---
 
 ```{r setup, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = TRUE)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
 This vignette builds on the [making maps chapter](https://geocompr.robinlovelace.net/adv-map.html) of [the Geocomputation with R book](https://geocompr.github.io/).
