@@ -19,17 +19,19 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
                       fig.width = 8, fig.height = 4)
 ```
 
-[Enrico Spinielli](https://twitter.com/espinielli/) asked about how to create inset maps in R to provide a geographic context:
+Inset maps enable multiple places to be shown in the same geographic data visualisation, as described in the [Inset maps section (8.2.7)](https://geocompr.robinlovelace.net/adv-map.html#inset-maps) of our open source book Geocomputation with R.
+The topic of inset maps has gained attention and recently [Enrico Spinielli](https://twitter.com/espinielli/) asked inset maps could be created for data in unusual coordinate systems:
 
 ```{r echo=FALSE, eval=TRUE}
 blogdown::shortcode("tweet", "1191452410394361863")
 ```
 
-Nowadays, it can be done in R in many ways using different approaches and packages.
+R's flexibility allows inset maps to be created in various ways, using different approaches and packages.
 However, the main idea stays the same: we need to create at least two maps: a larger one, called the main map, that shows the central story and a smaller one, called the inset map, that puts the main map in context.
 
-Here, we use **ggplot2** for visualization.
-We also attach the **sf** package for spatial data reading and handling, **cowplot** to arrange inset maps, and **rcartocolor** for additional color palettes.
+This blog post shows how to create inset maps with **ggplot2** for visualization.
+The approach also uses the **sf** package for spatial data reading and handling, **cowplot** to arrange inset maps, and **rcartocolor** for additional color palettes.
+To reproduce the results on your own computer, after installing them, these packages can be loaded (formally attached) as follows:
 
 ```{r, message = FALSE}
 library(sf)
