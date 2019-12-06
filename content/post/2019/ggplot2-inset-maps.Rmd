@@ -1,7 +1,7 @@
 ---
 title: 'Inset maps with ggplot2'
 author: Jakub Nowosad
-date: '2019-12-06'
+date: '2019-12-08'
 slug: ggplot2-inset-maps
 categories:
   - vignette
@@ -31,7 +31,7 @@ However, the main idea stays the same: we need to create at least two maps: a la
 
 This blog post shows how to create inset maps with **ggplot2** for visualization.
 The approach also uses the **sf** package for spatial data reading and handling, **cowplot** to arrange inset maps, and **rcartocolor** for additional color palettes.
-To reproduce the results on your own computer, after installing them, these packages can be loaded (formally attached) as follows:
+To reproduce the results on your own computer, after installing them, these packages can be attached as follows:
 
 ```{r, message = FALSE}
 library(sf)
