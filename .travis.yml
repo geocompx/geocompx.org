@@ -28,6 +28,7 @@ addons:
      - r-cran-stringi
      - r-cran-data.table
      - r-cran-bh
+     - r-cran-cowplot
 
 branches:
   only:
