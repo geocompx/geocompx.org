@@ -29,6 +29,7 @@ addons:
      - r-cran-data.table
      - r-cran-bh
      - r-cran-cowplot
+     - r-cran-tigris
 
 branches:
   only:
