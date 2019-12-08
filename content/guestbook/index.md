@@ -5,7 +5,7 @@ hidethedate: true
 ### Modules using the book
 
 
-- [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/), [Roger Bivan](https://www.nhh.no/en/employees/faculty/roger-bivand/), Norwegian School of Economics
+- [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/), [Roger Bivand](https://www.nhh.no/en/employees/faculty/roger-bivand/), Norwegian School of Economics
 - [GEOG 495](http://geog.uoregon.edu/bartlein/courses/geog495/readings.html) and [595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/), University of Oregon
 - [ESPM 288: Reproducible and Collaborative Data Science](https://espm-288.carlboettiger.info/), [Berkeley](https://classes.berkeley.edu/content/2018-spring-espm-288-001-lab-001) University of California
 <!-- [Stat 6864 Introduction to Data Science](http://www.sci.csueastbay.edu/~esuess/stat6864/) -->
