@@ -14,6 +14,7 @@ hidethedate: true
 <!-- [GEO503: Spatial Data Science](http://adamwilson.us/SpatialDataScience/) -->
 - [CRD 298: Spatial Methods in Community Research](https://crd230.github.io/index.html),  Professor [Noli Brazil](https://humanecology.ucdavis.edu/people/noli-brazil), University of California, Davis 
 - [CP6521 Advanced GIS](https://rstudio-pubs-static.s3.amazonaws.com/460816_f7e4d237e0334e9887323686041bd762.html), [Yongsun Lee](https://sites.google.com/view/yongsunglee), Georgia Tech
+- [Urban Data Analytics in R](https://sia.planning.unc.edu/teaching/techniques-course/), [Nikhil Kaza](https://sia.planning.unc.edu/), University of North Carolina at Chapel Hill
 
 ### Other teaching courses/lectures/guides using the book
 
