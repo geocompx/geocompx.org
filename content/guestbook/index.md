@@ -28,6 +28,9 @@ hidethedate: true
 ### Tweets:
 ##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/content/guestbook/index.md))
 
+
+{{< tweet 1222565065330700291 >}}
+{{< tweet 1222392518177783811 >}}
 {{< tweet 1202893592009805825 >}}
 {{< tweet 1153822584166686723 >}}
 {{< tweet 1120870984540725249 >}}
