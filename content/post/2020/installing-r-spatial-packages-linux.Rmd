@@ -1,0 +1,23 @@
+---
+title: 'Installing spatial R packages on Linux'
+author: Robin Lovelace
+date: '2020-03-21'
+slug: ggplot2-inset-maps
+categories:
+  - setup
+tags:
+  - geocompr
+  - rspatial
+  - packages
+  - gdal
+  - geos
+  - proj
+  - linux
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
+                      fig.width = 8, fig.height = 4)
+```
+
