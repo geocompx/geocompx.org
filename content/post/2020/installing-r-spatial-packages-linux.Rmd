@@ -21,6 +21,54 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
                       fig.width = 8, fig.height = 4)
 ```
 
+# Introduction
+
+A key feature of successful and popular technologies is ease of use.
+This applies equally to software as it does to hardware.
+This post explains how to easily get key R packages for geographic research installed on Linux machines.
+
+There is much to consider on the topic of installing spatial R packages on Linux, ranging from whether to get close to the bleeding edge to the importance of ease-of-use for technologies more widely.
+However, it is likely that many people who land on this page simply want clear and up-to-date^[
+We, Robin and Jakub, plan to keep this post updated with new developments such as the release of Ubuntu 20.04 (due to be released [2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)) and R 4.0.0 (due to be released the day after, on [2020-04-24](https://developer.r-project.org/)).
+]
+advice on how to get R's key spatial packages up-and-running in a fast and future-proof way.
+This advice comes with a caveat: Linux users are generally encouraged to manage their own set-ups and there is no universally 'right' way of doing things.
+However, we think the pros of this condensed "Too Long Didn't Read" (TLDR) greatly outweigh the cons (see caveats in subsequent sections).
+
+# 2. TLDR: installing spatial R packages on Linux
+
+Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/).
+
+## Ubuntu
+
+## Fedora
+
+## Arch
+
+## Other Linux distros
+
+# 3. Which operating system to use?
+
+If you are in the fortunate position of switching to Linux and being able to choose the distribution that best fits your needs, it's worth thinking about which distribution will be both user-friendly (more on that soon), performant and future-proof.
+My simple, opinionated answer to this question is
+
+> Use Ubuntu.
+
+...
+
+# 4. How close to the bleeding edge should you get?
+
+One of the greatest things about the freedom provided by using Linux is also one of the scariest:
+you can go as deep into the operating system and as close to the 'cutting edge' of computing as you want, with few restrictions.
+This can be exciting but it can also be wasteful, so it's worth considering the stability-bleeding continuum before diving into a particular set-up, if the previous section hasn't already made-up your mind.
+Even if you have decided on a particular OS there are many options that can take you closer to the bleeding edge that you may or may not want to take.
+
+# 5. 
+
+
+
+Cars, which have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use.
+Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523) which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards.
 
 
 
