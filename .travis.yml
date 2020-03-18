@@ -37,9 +37,6 @@ addons:
      - r-cran-magick
      - r-cran-nabor
 
-Installing 93 packages: RcppEigen, dichromat, XML, profmem, packcircles, webshot, R.utils, googlePolylines, spatialwidget, leafem, leafpop, satellite, ParamHelpers, parallelMap, RCurl, RJSONIO, geojsonio, geojsonlint, reticulate, gstat, shapefiles, nabor, RcppArmadillo, leafsync, permute
-
-
 branches:
   only:
     - source
