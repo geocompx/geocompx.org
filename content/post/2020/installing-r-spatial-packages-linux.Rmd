@@ -50,17 +50,18 @@ The lower cost and more environmentally friendly option is to install Ubuntu to 
 
 <!-- ## Ubuntu -->
 
-R's spatial packages can be installed from source on recent (since Ubuntu 19.04) versions of this popular operating system, once the appropriate repository has been set-up, meaning faster install times (only a few minutes including the installation of upstream dependencies).
-The following bash commands should install key geographic R packages on Ubuntu 19.04, 19.10 or 20.04:
+R's spatial packages can be installed from source on the latest version of this popular operating system, once the appropriate repository has been set-up, meaning faster install times (only a few minutes including the installation of upstream dependencies).
+The following bash commands should install key geographic R packages on Ubuntu 19.10:
 
 ```bash
-echo 'deb https://cloud.r-project.org/bin/linux/ubuntu eoan-cran35/' | sudo tee -a /etc/apt/sources.list 
+sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu eoan-cran35/'
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo add-apt-repository ppa:marutter/c2d4u3.5
 sudo apt update
 sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-tmap 
 ```
 
-If you are using an older version of Ubuntu and don't want to upgrade to the next Long Term Support release (20.04), see instructions at [github.com/r-spatial/sf](https://github.com/r-spatial/sf#installing).
+If you are using an older version of Ubuntu and don't want to upgrade to 19.10, which will upgrade to the next Long Term Support release (20.04) by the end of April 2020, see instructions at [github.com/r-spatial/sf](https://github.com/r-spatial/sf#installing).
 
 
 <!-- ## Fedora -->
