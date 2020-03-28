@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
 
 This post explains how to quickly get key R packages for geographic research installed on Linux machines.
 
-![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png)
+<!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
 A recent thread on the [r-spatial GitHub organisation](https://github.com/r-spatial/discuss/issues/35) alludes to many considerations when choosing a Linux set-up for geocomputational work, ranging from whether to get close to the bleeding edge to the choice of Linux distribution (distro) and whether to use binary or compiled versions of packages and upstream libraries (binaries are faster to install). 
 Now is an excellent time to be thinking about the topic because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.

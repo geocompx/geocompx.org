@@ -7,7 +7,7 @@ This post explains how to quickly get key R packages for geographic
 research installed on Linux
 machines.
 
-![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png)
+<!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
 A recent thread on the [r-spatial GitHub
 organisation](https://github.com/r-spatial/discuss/issues/35) alludes to
@@ -100,7 +100,7 @@ should install key geographic R packages on Ubuntu 19.10:
 sudo add-apt-repository ppa:marutter/rrutter3.5
 sudo apt update
 sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
-sudo apt install r-base-dev r-cran-sf r-cran-raster
+sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 ```
 
 If you are using an older version of Ubuntu and don’t want to upgrade to
