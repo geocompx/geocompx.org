@@ -22,6 +22,14 @@ addons:
      - libgdal-dev
      - libnetcdf-dev
      - netcdf-bin
+     - r-cran-dplyr
+     - r-cran-readr
+     - r-cran-stringi
+     - r-cran-data.table
+     - r-cran-bh
+     - r-cran-mlr
+     - r-cran-ranger
+#     - r-cran-ncdf4
 
 branches:
   only:
