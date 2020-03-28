@@ -24,6 +24,8 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
 
 This post explains how to quickly get key R packages for geographic research installed on Linux machines.
 
+![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png)
+
 A recent thread on the [r-spatial GitHub organisation](https://github.com/r-spatial/discuss/issues/35) alludes to many considerations when choosing a Linux set-up for geocomputational work, ranging from whether to get close to the bleeding edge to the choice of Linux distribution (distro) and whether to use binary or compiled versions of packages and upstream libraries (binaries are faster to install). 
 Now is an excellent time to be thinking about the topic because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.
 These imminent changes include:
@@ -69,7 +71,7 @@ The following bash commands should install key geographic R packages on Ubuntu 1
 sudo add-apt-repository ppa:marutter/rrutter3.5
 sudo apt update
 sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
-sudo apt install r-base-dev r-cran-sf r-cran-raster
+sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 ```
 
 If you are using an older version of Ubuntu and don't want to upgrade to 19.10, which will upgrade to (20.04) by the end of April 2020, see instructions at [github.com/r-spatial/sf](https://github.com/r-spatial/sf#installing).
