@@ -1,11 +1,9 @@
 language: r
+cache: packages
+latex: false
 dist: xenial
-sudo: false
+sudo: required
 warnings_are_errors: false
-
-env:
-  global:
-  - MAKEFLAGS="-j 2"
 
 addons:
   apt:
@@ -24,19 +22,6 @@ addons:
      - libgdal-dev
      - libnetcdf-dev
      - netcdf-bin
-     - r-cran-dplyr
-     - r-cran-readr
-     - r-cran-stringi
-     - r-cran-data.table
-     - r-cran-bh
-     - r-cran-cowplot
-     - r-cran-tigris
-     - r-cran-rgdal
-     - r-cran-mlr
-     - r-cran-stars
-     - r-cran-v8
-     - r-cran-magick
-     - r-cran-nabor
 
 branches:
   only:
