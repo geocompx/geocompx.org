@@ -364,7 +364,7 @@ PROJ 7.0.0 for example):
 sudo docker run -it robinlovelace/geocompr:ubuntu
 R
 library(sf)
-Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
 ```
 
 These images do not currently contain all the dependencies needed to

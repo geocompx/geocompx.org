@@ -247,7 +247,7 @@ If you want to use more cutting-edge versions of the geographic libraries, you c
 sudo docker run -it robinlovelace/geocompr:ubuntu
 R
 library(sf)
-Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
 ```
 
 These images do not currently contain all the dependencies needed to reproduce the code in *Geocomputation with R*.
