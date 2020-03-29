@@ -127,7 +127,10 @@ command, for example, will install **tmap** on LTS versions of Ubuntu
 that have the `c2d4u3.5` repository enabled much faster than the
 alternative `install.packages()` approach.
 
-    sudo apt install r-cran-tmap
+``` bash
+# will only work if the c2d4u3.5 repo has been added on an LTS ubuntu release
+sudo apt install r-cran-tmap
+```
 
 To test your installation of R has worked, try running R in an IDE such
 as RStudio or in the terminal by entering `R`. You should be able to run
@@ -139,7 +142,9 @@ library(sf)
 install.packages("tmap")
 ```
 
-<!-- ## Fedora -->
+That set-up should work fine for the vast majority of people, but if you
+want more up-to-date versions of GEOS, GDAL and PROJ than those shown
+above, see Section 4 below. <!-- ## Fedora -->
 
 <!-- The following command should install all the dependencies required: -->
 
@@ -190,8 +195,7 @@ tracker](https://github.com/r-spatial/sf/issues),
 [Debian](https://stat.ethz.ch/pipermail/r-sig-debian/2020-March/thread.html)
 special interest group (SIG) email lists (the latter of which provided
 input into this blog post, thanks to Dirk Eddelbuettel and Michael
-Rutter) and even the geocompr issue tracker, where you’re free to ask
-relevant questions.
+Rutter).
 
 # 3\. Installing geographic R packages on other Linux operating systems
 
@@ -260,20 +264,47 @@ the following command regularly:
 update.packages()
 ```
 
-If you want to test development versions of various packages, you can
-always do so from inside R with commands such as the following (which
-installs the development versions of **tmap** and **tmaptools**):
+If you want more up-to-date upstream geographic libraries on which R’s
+key geographic packages depend, you can add the `ubuntugis` repository
+as follows. This is a pre-requisite on Ubuntu 18.04 and earlier but also
+works on with later versions (warning, adding this repository could
+cause complications if you already have software such as QGIS that uses
+a particular version of GDAL installed):
 
-``` r
-remotes::install_github("mtennekes/tmap")
-remotes::install_github("mtennekes/tmaptools")
+``` bash
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt upgrade
 ```
 
-You can get more recent versions on OSGeo packages on Ubuntu by adding
-the `ubuntugis` repository as follows:
+That will give you more up-to-date versions of GDAL, GEOS and PROJ which
+may offer some performance improvements. You can revert that change with
+the following [little-known
+command](https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli):
 
-    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-    sudo apt-get update
+``` bash
+sudo add-apt-repository --remove ppa:ubuntugis/ubuntugis-unstable
+```
+
+If you also want the bleeding edge versions of key R packages, e.g. to
+test new features and support development efforts, you can install
+development releases from GitHub, e.g. as follows:
+
+``` r
+remotes::install_github("r-spatial/sf")
+remotes::install_github("rspatial/raster")
+remotes::install_github("mtennekes/tmaptools") # required for dev version of tmap
+remotes::install_github("mtennekes/tmap")
+```
+
+Finally, reverting back to older (and potentially more stable) package
+versions is as simple as installing them again, e.g. with:
+
+``` r
+install.packages("sf")
+install.packages("raster")
+install.packages("tmap")
+```
 
 # 5\. Geographic R packages on Docker
 
@@ -324,18 +355,39 @@ library(tmap)
 ```
 
 The previous commands should take you to a terminal inside the docker
-container where you try out the Linux command line and R.
+container where you try out the Linux command line and R. If you want to
+use more cutting-edge versions of the geographic libraries, you can use
+the `ubuntu-bionic` image (note the more recent version numbers, with
+PROJ 7.0.0 for example):
+
+``` bash
+sudo docker run -it robinlovelace/geocompr:ubuntu
+R
+library(sf)
+Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+```
+
+These images do not currently contain all the dependencies needed to
+reproduce the code in *Geocomputation with R*.
+<!-- , if you're looking for a production-ready Docker image that has both RStudio Server and a wide range of geographic packages pre-installed, building from the `rocker/geospatial` image, this could be a good place to start: -->
+
+However, as documented in
+[issue 476](https://github.com/Robinlovelace/geocompr/issues/476) in the
+`geocompr` GitHub repo, there is a plan to provide Docker images with
+this full ‘R-spatial’ stack installed, building on strong foundations
+such as `rocker/geospatial` and the `ubuntugis` repositories, to support
+different versions of GDAL and other dependencies. We welcome any
+comments or tech support to help make this happen.
 
 # 6\. Fin
 
-In summary, R is an open-source language heavily inspired by Unix/Linux
-so it should come as no surprise that it runs well on a variety of Linux
+R is an open-source language heavily inspired by Unix/Linux so it should
+come as no surprise that it runs well on a variety of Linux
 distributions, Ubuntu (covered in this post) in particular. Building on
-[OSGeo](https://www.osgeo.org/) libraries, key geographic R packages are
-also easy to set-up, run and develop on Linux. I hope that this tutorial
-provides some useful pointers and encourages more people to switch from
-proprietary software to open source solutions as the basis of their
-geographic and computational work.
+[OSGeo](https://www.osgeo.org/) libraries, a well set-up Linux machine
+is an ideal platform to install, run and develop key geographic R
+packages in a performance, stable and future-proof way.
+<!-- I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work. -->
 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
 
