@@ -58,7 +58,7 @@ The lower cost and more environmentally friendly option is to install Ubuntu to 
 
 ![](https://www.entroware.com/store/image/cache/catalog/entroware/products/laptops/el07r3/proteus-el07r3-front-left-open-1000x800.jpg)
 
-# 2. Installing spatial R packages on Ubuntu
+# 1. Installing spatial R packages on Ubuntu
 
 <!-- Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/). -->
 
@@ -126,7 +126,7 @@ Useful links on installing R and geographic libraries are provided below for ref
 
 - Installing R on **Fedora/Red Hat** is straightforward, as outlined on [CRAN](https://cran.r-project.org/bin/linux/redhat/README). GDAL and other spatial libraries can be installed from Fedora's `dnf` package manager, e.g. as documented [here](https://github.com/r-spatial/sf#fedora) for **sf**.
 
-- Arch Linux has a growing R community. Information on installing and setting-up R can be found on the [ArchLinux wiki](https://wiki.archlinux.org/index.php/R). Installing upstream dependencies such as [GDAL on Arch](https://www.archlinux.org/packages/community/x86_64/gdal/) is also relatively straightforward. There is also a detailed guide for installing R plus geographic packages by [Patrick Schratz](https://pat-s.me/post/arch-install-guide-for-r/).
+- **Arch Linux** has a growing R community. Information on installing and setting-up R can be found on the [ArchLinux wiki](https://wiki.archlinux.org/index.php/R). Installing upstream dependencies such as [GDAL on Arch](https://www.archlinux.org/packages/community/x86_64/gdal/) is also relatively straightforward. There is also a detailed guide for installing R plus geographic packages by [Patrick Schratz](https://pat-s.me/post/arch-install-guide-for-r/).
 
 # 4. How close to the bleeding edge should you get?
 
