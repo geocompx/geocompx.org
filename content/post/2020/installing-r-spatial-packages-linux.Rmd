@@ -35,12 +35,12 @@ These imminent changes include:
 - Ongoing changes to the OSGeo stack on which key geographic R packages, leading to a huge amount of heroic [r-spatial](https://github.com/r-spatial/) development activity to support the new features, including more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
 This post touches on some of these things but, its main purpose is to **provide advice on getting R's key spatial packages up-and-running on a future-proof Linux operating system** (Ubuntu).^[
-We plan to keep this post updated with new developments such as the release of Ubuntu 20.04 (due to be released [2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)) and R 4.0.0 (due to be released the day after, on [2020-04-24](https://developer.r-project.org/)).
+I plan to keep this post updated with new developments such as the release of Ubuntu 20.04 (due to be released [2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)) and R 4.0.0 (due to be released the day after, on [2020-04-24](https://developer.r-project.org/)).
 ]
 
 The advice in the next sections comes with a caveat: there is no universally 'right' way of doing things (a benefit of Linux operating systems is that they offer choice and prevent 'lock-in').
 There are many other R packages for working with spatial data in R.
-However, we think the concise guide below will be useful, especially beginners and people planning to switch to Linux as the basis of their geographic work (see caveats and details in subsequent sections).
+However, I think the concise guide below will be useful, especially beginners and people planning to switch to Linux as the basis of their geographic work (see caveats and details in subsequent sections).
 
 By 'key packages' I mean the following, which are the basis of much of [Geocomputation with R](https://geocompr.robinlovelace.net/).
 These three packages provide huge power and flexibility, enabling you to do perhaps 80% of day-to-day geographic data processing and visualization tasks:
@@ -171,7 +171,7 @@ As with cars, ease of use is important for the popularity of computer technology
 The history of cars can provide insight into the importance of ease of use of technologies today.
 Cars, have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use.
 Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523), which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards.
-Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions we recommend are easy to set-up and use.
+Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions I recommend are easy to set-up and use.
 ]
 The Ubuntu installation instructions outlined above provide such an easy and future-proof set-up.
 But if you want an even easier way to get the power of key geographic packages running on Linux, and have plenty of RAM and HD space, running R on the '[Docker Engine](https://docs.docker.com/install/)' may be an attractive option.
@@ -180,7 +180,7 @@ Advantages of using Docker include **reproducibility** (code will always run the
 
 For an introduction to using R/RStudio in Docker, see the [Rocker project](https://www.rocker-project.org/).
 
-Using that approach, we recommend the following Docker images for using R as a basis for geographic research:
+Using that approach, I recommend the following Docker images for using R as a basis for geographic research:
 
 - [`rocker/geospatial`](https://hub.docker.com/r/rocker/geospatial) which contains key geographic packages, including those listed above
 - [`robinlovelace/geocompr`](https://hub.docker.com/r/robinlovelace/geocompr/) which contains all the packages needed to reproduce the contents of the [book](https://geocompr.robinlovelace.net/), and which you can run with the following command in a shell in which Docker is installed:
@@ -206,7 +206,7 @@ The previous commands should take you to a terminal inside the docker container 
 
 In summary, R is an open-source language heavily inspired by Unix/Linux so it should come as no surprise that it runs well on a variety of Linux distributions, Ubuntu (covered in this post) in particular.
 Building on [OSGeo](https://www.osgeo.org/) libraries, key geographic R packages are also easy to set-up, run and develop on Linux.
-We hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work.
+I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work.
 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
 
