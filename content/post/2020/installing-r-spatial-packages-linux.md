@@ -10,7 +10,7 @@ machines.
 <!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
 A recent thread on the [r-spatial GitHub
-organisation](https://github.com/r-spatial/discuss/issues/35) alludes to
+organization](https://github.com/r-spatial/discuss/issues/35) alludes to
 many considerations when choosing a Linux set-up for geocomputational
 work, ranging from whether to get close to the bleeding edge to the
 choice of Linux distribution (distro) and whether to use binary or
@@ -45,7 +45,7 @@ future-proof Linux operating system** (Ubuntu).\[1\]
 The advice in the next sections comes with a caveat: there is no
 universally ‘right’ way of doing things (a benefit of Linux operating
 systems is that they offer choice and prevent ‘lock-in’). There are many
-other R packages for working with spatial data in R. However, we think
+other R packages for working with spatial data in R. However, I think
 the concise guide below will be useful, especially beginners and people
 planning to switch to Linux as the basis of their geographic work (see
 caveats and details in subsequent sections).
@@ -53,7 +53,7 @@ caveats and details in subsequent sections).
 By ‘key packages’ I mean the following, which are the basis of much of
 [Geocomputation with R](https://geocompr.robinlovelace.net/). These
 three packages provide huge power and flexibility, enabling you to do
-perhaps 80% of day-to-day geographic data processing and visualisation
+perhaps 80% of day-to-day geographic data processing and visualization
 tasks:
 
   - [**sf**](https://github.com/r-spatial/sf#installing) for reading,
@@ -67,24 +67,24 @@ tasks:
     for making static and interactive maps
 
 The focus is on Ubuntu because that’s what I’ve got most experience with
-and it is well supported by the community. Links for on installing
+and it is well supported by the community. Links for installing
 geographic R packages on other distros are provided in a subsequent.
 
-The pre-requisite for this next section is a computer with an recent
+The pre-requisite for this next section is a computer with a recent
 Ubuntu or Ubuntu-based (such as Mint) operating system. You can buy a
 computer with Ubuntu and other Linux distros installed from [hardware
-company that supports open source
+company that supports open-source
 software](https://itsfoss.com/get-linux-laptops/) such as
 [System 76](https://system76.com/) or
 [Entroware](https://www.entroware.com/) (that supplied to computer on
 which this post was written, shown below). The lower cost and more
 environmentally friendly option is to install Ubuntu to give a new lease
-of life to a pre-exisitng computer by following this [online
+of life to a pre-existing computer by following this [online
 guide](https://ubuntu.com/tutorials/tutorial-install-ubuntu-desktop#1-overview).
 
 ![](https://www.entroware.com/store/image/cache/catalog/entroware/products/laptops/el07r3/proteus-el07r3-front-left-open-1000x800.jpg)
 
-# 2\. Installing spatial R packages on Ubuntu
+# 1\. Installing spatial R packages on Ubuntu
 
 <!-- Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/). -->
 
@@ -136,7 +136,7 @@ install.packages("tmap")
 
 # 2\. Why Linux?
 
-Linux operating systems are free and open source, like R itself, and
+Linux operating systems are free and open-source, like R itself, and
 provide a number of
 [advantages](https://itsfoss.com/linux-better-than-windows/) over
 Windows, including:
@@ -149,10 +149,10 @@ Windows, including:
   - Ideal for learning to program: while Windows (and to some extent
     Mac) tries to reduce the need for computing skills such, Linux
     encourages you to learn to program via access to a powerful
-    command-line interface (which will will use below)
+    command-line interface (which will use below)
   - Freedom: Most Linux distributions are free to download, modify and
     pass-on, so you can install up-to-date operating systems on all your
-    computers without worrying about licencing issues
+    computers without worrying about licensing issues
 
 Like R, you cannot learn to use Linux overnight but distributions
 designed with user-friendliness in mind, such as Ubuntu and Mint, mean
@@ -168,7 +168,7 @@ that soon), performant and future-proof. Ubuntu is a solid choice, with
 a large user community and repositories such as ‘ubuntugis’ providing
 more up-to-date versions of upstream geographic libraries such as GDAL.
 
-QGIS is also well-supported on on Ubuntu.
+QGIS is also well-supported on Ubuntu.
 
 However, you can install R and key geographic packages on other
 operating systems, although it may take longer. Useful links on
@@ -188,8 +188,8 @@ installing R and geographic libraries are provided below for reference:
     package manager, e.g. as documented
     [here](https://github.com/r-spatial/sf#fedora) for **sf**.
 
-  - Arch Linux has a growing R community. Information on installing and
-    setting-up R can be found on the [ArchLinux
+  - **Arch Linux** has a growing R community. Information on installing
+    and setting-up R can be found on the [ArchLinux
     wiki](https://wiki.archlinux.org/index.php/R). Installing upstream
     dependencies such as [GDAL on
     Arch](https://www.archlinux.org/packages/community/x86_64/gdal/) is
@@ -206,7 +206,7 @@ restrictions. This can be exciting but it can also be wasteful if you
 end up spending hours fiddling with your set-up.
 
 It’s worth considering the stability-bleeding continuum before diving
-into a particular set-up, if the previous section hasn’t already made-up
+into a particular set-up if the previous section hasn’t already made-up
 your mind. Even if you have decided on a particular OS there are many
 options that can take you closer to the bleeding edge that you may or
 may not want to take.
@@ -219,7 +219,7 @@ version as follows:
 install.packages("tmap")
 ```
 
-It is good practice to keep you packages up-to-date. To do so you run
+It is good practice to keep your packages up-to-date. To do so you run
 the following command regularly:
 
 ``` r
@@ -259,8 +259,8 @@ across multiple nodes).
 For an introduction to using R/RStudio in Docker, see the [Rocker
 project](https://www.rocker-project.org/).
 
-Using that approach, we recommend the following Docker images for using
-R as a basis for geographic research:
+Using that approach, I recommend the following Docker images for using R
+as a basis for geographic research:
 
   - [`rocker/geospatial`](https://hub.docker.com/r/rocker/geospatial)
     which contains key geographic packages, including those listed
@@ -295,14 +295,14 @@ container where you try out the Linux command line and R.
 
 # 6\. Fin
 
-In summary, R is an open source language heavily inspired by Unix/Linux
+In summary, R is an open-source language heavily inspired by Unix/Linux
 so it should come as no surprise that it runs well on a variety of Linux
 distributions, Ubuntu (covered in this post) in particular. Building on
 [OSGeo](https://www.osgeo.org/) libraries, key geographic R packages are
-also easy to set-up, run and develop on Linux. We hope that this
-tutorial provides some useful pointers and encourages more people to
-switch from proprietary software to open source solutions as the basis
-of their geographic and computational
+also easy to set-up, run and develop on Linux. I hope that this tutorial
+provides some useful pointers and encourages more people to switch from
+proprietary software to open source solutions as the basis of their
+geographic and computational
 work.
 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
@@ -310,7 +310,7 @@ work.
 Be the [FOSS4G](https://wiki.osgeo.org/wiki/FOSS4G) change you want to
 see in the world\!
 
-1.   We plan to keep this post updated with new developments such as the
+1.   I plan to keep this post updated with new developments such as the
     release of Ubuntu 20.04 (due to be released
     [2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/))
     and R 4.0.0 (due to be released the day after, on
@@ -331,5 +331,5 @@ see in the world\!
     [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/)
     and onwards. Like cars, people tend to go for computer technologies
     that are easy to use, that are ‘plug and play’, so it’s important
-    for the future of open source software that the solutions we
+    for the future of open-source software that the solutions I
     recommend are easy to set-up and use.
