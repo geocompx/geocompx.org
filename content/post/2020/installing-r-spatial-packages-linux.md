@@ -4,8 +4,7 @@ Robin Lovelace
 2020-03-30
 
 This post explains how to quickly get key R packages for geographic
-research installed on Linux
-machines.
+research installed on Linux machines.
 
 <!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
@@ -15,10 +14,13 @@ many considerations when choosing a Linux set-up for geocomputational
 work, ranging from whether to get close to the bleeding edge to the
 choice of Linux distribution (distro) and whether to use binary or
 compiled versions of packages and upstream libraries (binaries are
-faster to install). Now is an excellent time to be thinking about the
-topic because changes are in the pipeline and getting set-up (or
-preparing to get set-up) now could save hours in the future. These
-imminent changes include:
+faster to install). This post touches on some of these things but, its
+main purpose is to **provide advice on getting R’s key spatial packages
+up-and-running on a future-proof Linux operating system** (Ubuntu).\[1\]
+
+Now is an excellent time to be thinking about the topic because changes
+are in the pipeline and getting set-up (or preparing to get set-up) now
+could save hours in the future. These imminent changes include:
 
   - The next major release of R
     ([4.0.0](https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html)),
@@ -26,7 +28,7 @@ imminent changes include:
     ([2020-04-24](https://developer.r-project.org/))
   - The next major release of Ubuntu
     ([20.04](https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features)),
-    a Long Term Support ([LTS](https://wiki.ubuntu.com/LTS)) release
+    a Long Term Support ([LTS](https://wiki.ubuntu.com/LTS)) version
     that will be used by millions of servers and research computers
     worldwide for years to come. Coincidentally, Ubuntu 20.04 will be
     released a day earlier than R 4.0.0, on 23<sup>rd</sup> April
@@ -38,17 +40,13 @@ imminent changes include:
     reference system
     definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
-This post touches on some of these things but, its main purpose is to
-**provide advice on getting R’s key spatial packages up-and-running on a
-future-proof Linux operating system** (Ubuntu).\[1\]
-
-The advice in the next sections comes with a caveat: there is no
-universally ‘right’ way of doing things (a benefit of Linux operating
-systems is that they offer choice and prevent ‘lock-in’). There are many
-other R packages for working with spatial data in R. However, I think
-the concise guide below will be useful, especially beginners and people
-planning to switch to Linux as the basis of their geographic work (see
-caveats and details in subsequent sections).
+There many ways of getting Linux OSs set-up for installing and using
+spatial R packages and a benefit of Linux operating systems is that they
+offer choice and prevent ‘lock-in’. However, the guidance in the next
+section should reduce set-up time and improve maintainability (with
+updates managed by Ubuntu) compared with other ways of doing things,
+especially for beginners and people planning to switch to Linux as the
+basis of their geographic work.
 
 By ‘key packages’ I mean the following, which are the basis of much of
 [Geocomputation with R](https://geocompr.robinlovelace.net/). These
@@ -97,8 +95,11 @@ the installation of upstream dependencies). The following bash commands
 should install key geographic R packages on Ubuntu 19.10:
 
 ``` bash
+# add a repository that ships the latest version of R:
 sudo add-apt-repository ppa:marutter/rrutter3.5
+# update the repositories so the software can be found:
 sudo apt update
+# install system dependencies and binary versions of key R packages:
 sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
 sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 ```
@@ -106,7 +107,27 @@ sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 If you are using an older version of Ubuntu and don’t want to upgrade to
 19.10, which will upgrade to (20.04) by the end of April 2020, see
 instructions at
-[github.com/r-spatial/sf](https://github.com/r-spatial/sf#installing).
+[github.com/r-spatial/sf](https://github.com/r-spatial/sf#installing)
+and detailed instructions on the blog
+[rtask.thinkr.fr](https://rtask.thinkr.fr/blog/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/),
+which contains this additional shell command:
+
+``` bash
+# will work on Ubuntu 18.04 and (from May 2020) Ubuntu 20.04
+sudo add-apt-repository ppa:marutter/c2d4u3.5
+```
+
+That adds a repository that ships hundreds of binary versions of R
+packages, meaning faster install times for packages that contain lots
+for C/C++ code that needs to be compiled. The c2d4u3.5 repository only
+supports LTS Ubuntu versions, meaning it is unavailable for Ubuntu
+19.10, but will be available for Ubuntu 20.04, allowing hundreds of
+packages to be installed quickly from the system terminal. The following
+command, for example, will install **tmap** on LTS versions of Ubuntu
+that have the `c2d4u3.5` repository enabled much faster than the
+alternative `install.packages()` approach.
+
+    sudo apt install r-cran-tmap
 
 To test your installation of R has worked, try running R in an IDE such
 as RStudio or in the terminal by entering `R`. You should be able to run
@@ -158,6 +179,19 @@ Like R, you cannot learn to use Linux overnight but distributions
 designed with user-friendliness in mind, such as Ubuntu and Mint, mean
 that Linux is now something you can recommend to your
 [grandmother](https://www.computerworld.com/article/2468094/linux-for-grandma---grandpa.html).
+
+There is also a strong community around Linux and open source more
+generally, and a culture of asking questions and swift answers. If you
+have issues installing geographic R packages on Linux following
+instructions as documented here, you can find a wealth of answers on
+site such as [StackOverflow](https://stackoverflow.com/), the [sf issue
+tracker](https://github.com/r-spatial/sf/issues),
+[r-sig-geo](https://stat.ethz.ch/pipermail/r-sig-geo/) and
+[Debian](https://stat.ethz.ch/pipermail/r-sig-debian/2020-March/thread.html)
+special interest group (SIG) email lists (the latter of which provided
+input into this blog post, thanks to Dirk Eddelbuettel and Michael
+Rutter) and even the geocompr issue tracker, where you’re free to ask
+relevant questions.
 
 # 3\. Installing geographic R packages on other Linux operating systems
 
@@ -263,8 +297,7 @@ Using that approach, I recommend the following Docker images for using R
 as a basis for geographic research:
 
   - [`rocker/geospatial`](https://hub.docker.com/r/rocker/geospatial)
-    which contains key geographic packages, including those listed
-    above
+    which contains key geographic packages, including those listed above
   - [`robinlovelace/geocompr`](https://hub.docker.com/r/robinlovelace/geocompr/)
     which contains all the packages needed to reproduce the contents of
     the [book](https://geocompr.robinlovelace.net/), and which you can
@@ -302,8 +335,7 @@ distributions, Ubuntu (covered in this post) in particular. Building on
 also easy to set-up, run and develop on Linux. I hope that this tutorial
 provides some useful pointers and encourages more people to switch from
 proprietary software to open source solutions as the basis of their
-geographic and computational
-work.
+geographic and computational work.
 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
 
