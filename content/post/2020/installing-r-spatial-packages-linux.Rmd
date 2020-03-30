@@ -30,7 +30,7 @@ This post explains how to quickly get key R packages for geographic research ins
 
 A recent thread on the [r-spatial GitHub organization](https://github.com/r-spatial/discuss/issues/35) alludes to many considerations when choosing a Linux set-up for work with geographic data, ranging from the choice of Linux distribution (distro) to the use of binary vs or compiled versions (binaries are faster to install). This post touches on some of these things but, its main purpose is to provide advice on getting R's key spatial packages up-and-running on a future-proof Linux operating system (Ubuntu).
 
-Now is an excellent time to be thinking about the topic because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.
+Now is a good time to be thinking about the topic because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.
 These imminent changes include:
 
 - The next major release of R ([4.0.0](https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html)), scheduled for the 24^th^ April ([2020-04-24](https://developer.r-project.org/))
@@ -44,8 +44,8 @@ There many ways of getting Ubuntu set-up for spatial R packages.
 A benefit of Linux operating systems is that they offer choice and prevent 'lock-in'.
 However, the guidance in the next section should reduce set-up time and improve maintainability (with updates managed by Ubuntu) compared with other ways of doing things, especially for beginners.
 If you're planning to switch to Linux as the basis of your geographic work, this advice may be particularly useful.
-(The post was written in response to people asking how to set-up R on their new Ubuntu installations.
-For more on getting a computer running Ubuntu, check out [companies that support open source operating systems](https://itsfoss.com/get-linux-laptops/) and [guides installing Ubuntu on an existing machine](https://ubuntu.com/tutorials/tutorial-install-ubuntu-desktop#1-overview).
+(The post was written in response to colleagues asking me how to set-up R on their new Ubuntu computers.
+If you would like a a computer running Ubuntu, check out [companies that support open source operating systems](https://itsfoss.com/get-linux-laptops/) and [guides on installing Ubuntu on an existing machine](https://ubuntu.com/tutorials/tutorial-install-ubuntu-desktop#1-overview)).
 
 By 'key packages' I mean the following, which enable the majority of day-to-day geographic data processing and visualization tasks:
 
