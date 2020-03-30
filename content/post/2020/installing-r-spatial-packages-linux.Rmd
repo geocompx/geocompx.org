@@ -35,9 +35,10 @@ These imminent changes include:
 
 - The next major release of R ([4.0.0](https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html)), scheduled for the 24^th^ April ([2020-04-24](https://developer.r-project.org/))
 - The next major release of Ubuntu ([20.04](https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features)), a Long Term Support ([LTS](https://wiki.ubuntu.com/LTS)) version that will be used by millions of servers and research computers worldwide for years to come. Coincidentally, Ubuntu 20.04 will be released a day earlier than R 4.0.0, on 23^rd^ April ([2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)).
-- Ongoing changes to the OSGeo stack on which key geographic R packages, leading to a huge amount of heroic [r-spatial](https://github.com/r-spatial/) development activity to support the new features, including more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
+- Ongoing changes to the OSGeo stack on which key geographic R packages depend, as documented in [r-spatial](https://github.com/r-spatial/) repos and a recent blog post on how recent versions of PROJ enable more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
-This post will be updated in late April when some of the dust has settled around these changes.
+To keep-up with these changes, this post will be updated in late April when some of the dust has settled around these changes.
+However, the advice presented here should be future-proof, including information on how to upgrade Ubuntu in section 3.
 
 There many ways of getting Linux OSs set-up for installing and using spatial R packages and a benefit of Linux operating systems is that they offer choice and prevent 'lock-in'.
 However, the guidance in the next section should reduce set-up time and improve maintainability (with updates managed by Ubuntu) compared with other ways of doing things, especially for beginners and people planning to switch to Linux as the basis of their geographic work.
@@ -208,7 +209,7 @@ The previous commands should take you to a terminal inside the docker container 
 If you want to use more cutting-edge versions of the geographic libraries, you can use the `ubuntu-bionic` image (note the more recent version numbers, with PROJ 7.0.0 for example):
 
 ```bash
-sudo docker run -it robinlovelace/geocompr:ubuntu
+sudo docker run -it robinlovelace/geocompr:ubuntu-bionic
 R
 library(sf)
 #> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
