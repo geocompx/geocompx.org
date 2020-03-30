@@ -38,7 +38,7 @@ These imminent changes include:
 - Ongoing changes to the OSGeo stack on which key geographic R packages depend, as documented in [r-spatial](https://github.com/r-spatial/) repos and a recent blog post on how recent versions of PROJ enable more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
 To keep-up with these changes, this post will be updated in late April when some of the dust has settled around these changes.
-However, the advice presented here should be future-proof, including information on how to upgrade Ubuntu in section 3.
+However, the advice presented here should be future-proof, including information on how to upgrade Ubuntu in the next section.
 
 There many ways of getting Ubuntu set-up for spatial R packages.
 A benefit of Linux operating systems is that they offer choice and prevent 'lock-in'.
@@ -54,7 +54,7 @@ By 'key packages' I mean the following, which enable the majority of day-to-day 
 - [**tmap**](https://github.com/mtennekes/tmap), a flexible package for making static and interactive maps
 
 The focus is on Ubuntu because that's what I've got most experience with and it is well supported by the community.
-Links for installing geographic R packages on other distros are provided in a subsequent.
+Links for installing geographic R packages on other distros are provided in section 3.
 
 # 1. Installing spatial R packages on Ubuntu
 
@@ -103,27 +103,27 @@ If you have issues with the instructions in this post here, you can find a wealt
 # 2. Updating R packages and upstream dependencies
 
 Linux operating systems allow you to customize your set-up in myriad ways.
-This can be enlightening but it can also be wasteful.
-It's worth considering the stability/cutting-edge continuum before diving into a particular set-up and potentially wasting time (if the previous section hasn't already made-up your mind).
+This can be enlightening but it can also be wasteful, so it's worth considering the stability/cutting-edge continuum before diving into a particular set-up and potentially wasting time (if the previous section hasn't already made-up your mind).
 
 <!-- For me, a good set-up, that means the latest version of Ubuntu plus CRAN versions of most R packages. -->
 <!-- For most people I recommend installing the release version as follows: -->
 
-A reliable way to keep close (but not too close) to the cutting edge on the R side is simply to keep your packages up-to-date.
+A reliable way to keep close (but not too close) to the cutting edge on the R side on any operating system is simply to keep your packages up-to-date.
 Running the following command (or using the Tools menu in RStudio) every week or so will ensure you have up-to-date package versions:
 
 ```{r, eval=FALSE}
 update.packages()
 ```
 
-The following commands will update system dependencies including the 'OSGeo stack' composed of PROJ, GEOS and GDAL:
+Keeping system dependencies, software that R relies on but that is not maintained by R developers, is also important but can be tricky, especially for large and complex libraries like GDAL.
+On Ubuntu dependencies are managed by apt, and the following commands will update the 'OSGeo stack', composed of PROJ, GEOS and GDAL, if changes are detected in the default repositories (from 18.10 onwards):
 
 ```bash
-sudo apt-get update # see if things have changed
+sudo apt update # see if things have changed
 sudo apt upgrade # install changes
 ```
 
-If you want to update Ubuntu to the latest version, you can with the following command (also see instructions [here](https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates)):
+The following commands will upgrade to a newer version of Ubuntu (it may be worth waiting until the [point release](https://ubuntu.com/blog/first-point-release-of-18-04-lts-available-today) of Ubuntu 20.04 --- 20.04.1 --- is released in summer before upgrading if you're currently running Ubuntu 18.04 if high stability and low set-up times are priorities; also see instructions [here](https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates)):
 
 ```bash
 apt-get dist-upgrade
