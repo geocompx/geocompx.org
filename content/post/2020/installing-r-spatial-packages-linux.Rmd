@@ -14,7 +14,9 @@ tags:
   - proj
   - linux
 draft: false
-output: github_document
+output:
+  md_document:
+    preserve_yaml: true
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +37,7 @@ These imminent changes include:
 - The next major release of Ubuntu ([20.04](https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features)), a Long Term Support ([LTS](https://wiki.ubuntu.com/LTS)) version that will be used by millions of servers and research computers worldwide for years to come. Coincidentally, Ubuntu 20.04 will be released a day earlier than R 4.0.0, on 23^rd^ April ([2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)).
 - Ongoing changes to the OSGeo stack on which key geographic R packages, leading to a huge amount of heroic [r-spatial](https://github.com/r-spatial/) development activity to support the new features, including more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
-This post will be updated in late April when the dust has settled.
+This post will be updated in late April when some of the dust has settled around these changes.
 
 There many ways of getting Linux OSs set-up for installing and using spatial R packages and a benefit of Linux operating systems is that they offer choice and prevent 'lock-in'.
 However, the guidance in the next section should reduce set-up time and improve maintainability (with updates managed by Ubuntu) compared with other ways of doing things, especially for beginners and people planning to switch to Linux as the basis of their geographic work.
