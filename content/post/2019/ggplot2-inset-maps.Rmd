@@ -134,6 +134,7 @@ This map will use the US states borders (`states()`) as the source of the inset 
 
 ```{r, message=FALSE, results='hide'}
 library(tigris)
+options(tigris_use_cache = TRUE)
 us_states = states(cb = FALSE, class = "sf")
 ky_districts = state_legislative_districts("KY", house = "upper",
                                            cb = FALSE, class = "sf")
