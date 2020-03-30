@@ -61,7 +61,7 @@ b1
 ```
 
 The benchmark ran on an input file (`file`) and a number of times.
-It shows that **sf** was `r round(as.numeric(b1$mean[2] / b1$mean[1]))` times faster than **rgdal** at loading this file.
+It shows that **sf** was `r # round(as.numeric(b1$mean[2] / b1$mean[1]))` times faster than **rgdal** at loading this file.
 
 The relative performance of `st_read()` compared with other functions will vary depending on file format and the nature of the data.
 To illustrate this point, we performed the same operation on a geojson file and found a greater speed saving:
@@ -75,7 +75,7 @@ b2 = bench::mark(iterations = 3, check = FALSE,
 b2
 ```
 
-In this case **sf** was around `r round(as.numeric(b2$mean[2] / b2$mean[1]))` times faster than **rgdal**.
+In this case **sf** was around `r # round(as.numeric(b2$mean[2] / b2$mean[1]))` times faster than **rgdal**.
 
 # Writing vector data
 
