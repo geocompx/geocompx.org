@@ -219,7 +219,9 @@ We welcome any comments or tech support to help make this happen.
 # 5. Fin
 
 R is an open-source language heavily inspired by Unix/Linux so it should come as no surprise that it runs well on a variety of Linux distributions, Ubuntu (covered in this post) in particular.
-Building on [OSGeo](https://www.osgeo.org/) libraries, a well set-up Linux machine is an ideal platform to install, run and develop key geographic R packages in a performance, stable and future-proof way.
+The guidance in this post should get geographic R packages set-up quickly in a future-proof way, but the only way to ensure you have full control over your system is by sharpening you system administration (sysadmin) and shell coding skills, e.g. with reference to [Ubuntu wiki pages](https://help.ubuntu.com/community/SystemAdministration) and [Chapter 2](https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts) of the open source book [Data Science at the Command Line](https://www.datascienceatthecommandline.com).
+
+This take time but, building on [OSGeo](https://www.osgeo.org/) libraries, a well set-up Linux machine is an ideal platform to install, run and develop key geographic R packages in a performance, stable and future-proof way.
 <!-- I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work. -->
 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
