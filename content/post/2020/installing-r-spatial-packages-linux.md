@@ -14,6 +14,7 @@ tags:
   - proj
   - linux
 draft: false
+output: github_document
 ---
 
 This post explains how to quickly get key R packages for geographic
@@ -257,11 +258,24 @@ installing R and geographic libraries are provided below for reference:
 
 # 4\. Geographic R packages on Docker
 
-As with cars, ease of use is important for the popularity of computer
-technology.\[1\] The Ubuntu installation instructions outlined above
-provide such an easy and future-proof set-up. But if you want an even
-easier way to get the power of key geographic packages running on Linux,
-and have plenty of RAM and HD space, running R on the ‘[Docker
+<!-- As with cars, ease of use is important for the popularity of computer technology. -->
+
+<!-- ^[ -->
+
+<!-- The history of cars can provide insight into the importance of ease of use of technologies today. -->
+
+<!-- Cars, have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use. -->
+
+<!-- Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523), which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards. -->
+
+<!-- Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions I recommend are easy to set-up and use. -->
+
+<!-- ] -->
+
+The Ubuntu installation instructions outlined above provide such an easy
+and future-proof set-up. But if you want an even easier way to get the
+power of key geographic packages running on Linux, and have plenty of
+RAM and HD space, running R on the ‘[Docker
 Engine](https://docs.docker.com/install/)’ may be an attractive option.
 
 Advantages of using Docker include **reproducibility** (code will always
@@ -352,21 +366,3 @@ future-proof way.
 
 Be the [FOSS4G](https://wiki.osgeo.org/wiki/FOSS4G) change you want to
 see in the world\!
-
-1.   The history of cars can provide insight into the importance of ease
-    of use of technologies today. Cars, have arguably transformed our
-    settlements and lifestyles more than any other technology, were
-    initially hard to use. Before they became a consumer product in the
-    1950s (by the end of which 1/6<sup>th</sup> of jobs in the USA were
-    in the [car
-    industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture))
-    relied on a [hand
-    cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them
-    until the proliferation of electric starter motors following U.S.
-    Patent [1,150,523](https://patents.google.com/patent/US1150523),
-    which was subsequently used by Cadillac in
-    [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/)
-    and onwards. Like cars, people tend to go for computer technologies
-    that are easy to use, that are ‘plug and play’, so it’s important
-    for the future of open-source software that the solutions I
-    recommend are easy to set-up and use.
