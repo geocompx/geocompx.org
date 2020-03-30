@@ -1,7 +1,20 @@
-Installing spatial R packages on Ubuntu
-================
-Robin Lovelace
-2020-03-30
+---
+title: 'Installing spatial R packages on Ubuntu'
+author: Robin Lovelace
+date: '2020-03-30'
+slug: installing-r-spatial-ubuntu
+categories:
+  - setup
+tags:
+  - geocompr
+  - rspatial
+  - packages
+  - gdal
+  - geos
+  - proj
+  - linux
+draft: false
+---
 
 This post explains how to quickly get key R packages for geographic
 research installed on [Ubuntu](https://ubuntu.com/), a popular Linux
