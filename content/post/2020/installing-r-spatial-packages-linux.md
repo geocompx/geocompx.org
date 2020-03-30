@@ -183,8 +183,10 @@ sudo apt upgrade
 ```
 
 That will give you more up-to-date versions of GDAL, GEOS and PROJ which
-may offer some performance improvements. You can revert that change with
-the following [little-known
+may offer some performance improvements. Note: if you do update
+dependencies such as GDAL you will need to re-install the relevant
+packages, e.g. with `install.packages("sf")`. You can revert that change
+with the following [little-known
 command](https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli):
 
 ``` bash
