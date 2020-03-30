@@ -2,7 +2,7 @@
 title: 'Installing spatial R packages on Ubuntu'
 author: Robin Lovelace
 date: '2020-03-30'
-slug: installing-r-spatial-linux
+slug: installing-r-spatial-ubuntu
 categories:
   - setup
 tags:
@@ -13,7 +13,7 @@ tags:
   - geos
   - proj
   - linux
-# draft: false
+draft: false
 output: github_document
 ---
 
