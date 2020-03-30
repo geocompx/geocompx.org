@@ -161,7 +161,8 @@ sudo apt upgrade # install changes
 ```
 
 If you want to update Ubuntu to the latest version, you can with the
-following command:
+following command (also see instructions
+[here](https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates)):
 
 ``` bash
 apt-get dist-upgrade
