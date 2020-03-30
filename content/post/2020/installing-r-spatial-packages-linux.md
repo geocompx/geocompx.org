@@ -152,11 +152,27 @@ will ensure you have up-to-date package versions:
 update.packages()
 ```
 
-If you want more up-to-date upstream geographic libraries, you can add
-the `ubuntugis` repository as follows. This is a pre-requisite on Ubuntu
-18.04 and earlier but also works with later versions (warning, adding
-this repository could cause complications if you already have software
-such as QGIS that uses a particular version of GDAL installed):
+The following commands will update system dependencies including the
+‘OSGeo stack’ composed of PROJ, GEOS and GDAL:
+
+``` bash
+sudo apt-get update # see if things have changed
+sudo apt upgrade # install changes
+```
+
+If you want to update Ubuntu to the latest version, you can with the
+following command:
+
+``` bash
+apt-get dist-upgrade
+```
+
+To get more up-to-date upstream geographic libraries than provided in
+the default Ubuntu repositories, you can add the `ubuntugis` repository
+as follows. This is a pre-requisite on Ubuntu 18.04 and earlier but also
+works with later versions (warning, adding this repository could cause
+complications if you already have software such as QGIS that uses a
+particular version of GDAL installed):
 
 ``` bash
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
@@ -173,9 +189,9 @@ command](https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli):
 sudo add-apt-repository --remove ppa:ubuntugis/ubuntugis-unstable
 ```
 
-If you also want the bleeding edge versions of key R packages, e.g. to
-test new features and support development efforts, you can install
-development releases from GitHub, e.g. as follows:
+If you also want the development versions of key R packages, e.g. to
+test new features and support development efforts, you can install them
+from GitHub, e.g. as follows:
 
 ``` r
 remotes::install_github("r-spatial/sf")
