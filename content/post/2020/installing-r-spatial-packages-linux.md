@@ -1,23 +1,7 @@
----
-title: 'Installing spatial R packages on Ubuntu'
-author: Robin Lovelace
-date: '2020-03-30'
-slug: installing-r-spatial-ubuntu
-categories:
-  - setup
-tags:
-  - geocompr
-  - rspatial
-  - packages
-  - gdal
-  - geos
-  - proj
-  - linux
-draft: false
-output:
-  md_document:
-    preserve_yaml: true
----
+Installing spatial R packages on Ubuntu
+================
+Robin Lovelace
+2020-03-30
 
 This post explains how to quickly get key R packages for geographic
 research installed on [Ubuntu](https://ubuntu.com/), a popular Linux
@@ -39,18 +23,18 @@ Now is an excellent time to be thinking about the topic because changes
 are in the pipeline and getting set-up (or preparing to get set-up) now
 could save hours in the future. These imminent changes include:
 
--   The next major release of R
+  - The next major release of R
     ([4.0.0](https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html)),
     scheduled for the 24<sup>th</sup> April
     ([2020-04-24](https://developer.r-project.org/))
--   The next major release of Ubuntu
+  - The next major release of Ubuntu
     ([20.04](https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features)),
     a Long Term Support ([LTS](https://wiki.ubuntu.com/LTS)) version
     that will be used by millions of servers and research computers
     worldwide for years to come. Coincidentally, Ubuntu 20.04 will be
     released a day earlier than R 4.0.0, on 23<sup>rd</sup> April
     ([2020-04-23](https://itsfoss.com/ubuntu-20-04-release-features/)).
--   Ongoing changes to the OSGeo stack on which key geographic R
+  - Ongoing changes to the OSGeo stack on which key geographic R
     packages, leading to a huge amount of heroic
     [r-spatial](https://github.com/r-spatial/) development activity to
     support the new features, including more precise [coordinate
@@ -71,24 +55,24 @@ basis of their geographic work.
 By ‘key packages’ I mean they following, which enable the majority of
 day-to-day geographic data processing and visualization tasks:
 
--   [**sf**](https://github.com/r-spatial/sf#installing) for reading,
+  - [**sf**](https://github.com/r-spatial/sf#installing) for reading,
     writing and working with a range geographic vector file formats and
     geometry types
--   [**raster**](https://github.com/rspatial/raster/), a mature package
+  - [**raster**](https://github.com/rspatial/raster/), a mature package
     for working with geographic raster data (see the
     [**terra**](https://github.com/rspatial/terra/) for an
     in-development replacement for **raster**)
--   [**tmap**](https://github.com/mtennekes/tmap), a flexible package
+  - [**tmap**](https://github.com/mtennekes/tmap), a flexible package
     for making static and interactive maps
 
 The focus is on Ubuntu because that’s what I’ve got most experience with
 and it is well supported by the community. Links for installing
 geographic R packages on other distros are provided in a subsequent.
 
-1. Installing spatial R packages on Ubuntu
-==========================================
+# 1\. Installing spatial R packages on Ubuntu
 
 <!-- Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/). -->
+
 <!-- ## Ubuntu -->
 
 R’s spatial packages can be installed from source on the latest version
@@ -97,21 +81,25 @@ been set-up, meaning faster install times (only a few minutes including
 the installation of upstream dependencies). The following bash commands
 should install key geographic R packages on Ubuntu 19.10:
 
-    # add a repository that ships the latest version of R:
-    sudo add-apt-repository ppa:marutter/rrutter3.5
-    # update the repositories so the software can be found:
-    sudo apt update
-    # install system dependencies and binary versions of key R packages:
-    sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
-    sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
+``` bash
+# add a repository that ships the latest version of R:
+sudo add-apt-repository ppa:marutter/rrutter3.5
+# update the repositories so the software can be found:
+sudo apt update
+# install system dependencies and binary versions of key R packages:
+sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
+```
 
 To test your installation of R has worked, try running R in an IDE such
 as RStudio or in the terminal by entering `R`. You should be able to run
 the following commands without problem:
 
-    library(sf)
-    #> Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0
-    install.packages("tmap")
+``` r
+library(sf)
+#> Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0
+install.packages("tmap")
+```
 
 If you are using an older version of Ubuntu and don’t want to upgrade to
 19.10, which will upgrade to (20.04) by the end of April 2020, see
@@ -121,8 +109,10 @@ and detailed instructions on the blog
 [rtask.thinkr.fr](https://rtask.thinkr.fr/blog/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/),
 which contains this additional shell command:
 
-    # for Ubuntu 18.04
-    sudo add-apt-repository ppa:marutter/c2d4u3.5
+``` bash
+# for Ubuntu 18.04
+sudo add-apt-repository ppa:marutter/c2d4u3.5
+```
 
 That adds a repository that ships hundreds of binary versions of R
 packages, meaning faster install times for packages. An updated
@@ -130,6 +120,7 @@ repository, called c2d4u4.0 or similar, will be available for Ubuntu
 20.04 in late April.
 
 <!-- The c2d4u3.5 repository only supports LTS Ubuntu versions, meaning it is unavailable for Ubuntu 19.10, but will be available for Ubuntu 20.04, allowing hundreds of packages to be installed quickly from the system terminal. -->
+
 <!-- The following command, for example, will install **tmap** on LTS versions of Ubuntu that have the `c2d4u3.5` repository enabled much faster than the alternative `install.packages()` approach. -->
 
 If you have issues with the instructions in this post here, you can find
@@ -142,8 +133,7 @@ special interest group (SIG) email lists (the latter of which provided
 input into this blog post, thanks to Dirk Eddelbuettel and Michael
 Rutter).
 
-2. Updating R packages and upstream dependencies
-================================================
+# 2\. Updating R packages and upstream dependencies
 
 Linux operating systems allow you to customize your set-up in myriad
 ways. This can be enlightening but it can also be wasteful. It’s worth
@@ -152,6 +142,7 @@ particular set-up and potentially wasting time (if the previous section
 hasn’t already made-up your mind).
 
 <!-- For me, a good set-up, that means the latest version of Ubuntu plus CRAN versions of most R packages. -->
+
 <!-- For most people I recommend installing the release version as follows: -->
 
 A reliable way to keep close (but not too close) to the cutting edge on
@@ -159,19 +150,25 @@ the R side is simply to keep your packages up-to-date. Running the
 following command (or using the Tools menu in RStudio) every week or so
 will ensure you have up-to-date package versions:
 
-    update.packages()
+``` r
+update.packages()
+```
 
 The following commands will update system dependencies including the
 ‘OSGeo stack’ composed of PROJ, GEOS and GDAL:
 
-    sudo apt-get update # see if things have changed
-    sudo apt upgrade # install changes
+``` bash
+sudo apt-get update # see if things have changed
+sudo apt upgrade # install changes
+```
 
 If you want to update Ubuntu to the latest version, you can with the
 following command (also see instructions
 [here](https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates)):
 
-    apt-get dist-upgrade
+``` bash
+apt-get dist-upgrade
+```
 
 To get more up-to-date upstream geographic libraries than provided in
 the default Ubuntu repositories, you can add the `ubuntugis` repository
@@ -180,9 +177,11 @@ works with later versions (warning, adding this repository could cause
 complications if you already have software such as QGIS that uses a
 particular version of GDAL installed):
 
-    sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-    sudo apt update
-    sudo apt upgrade
+``` bash
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt upgrade
+```
 
 That will give you more up-to-date versions of GDAL, GEOS and PROJ which
 may offer some performance improvements. Note: if you do update
@@ -191,19 +190,22 @@ packages, e.g. with `install.packages("sf")`. You can revert that change
 with the following [little-known
 command](https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli):
 
-    sudo add-apt-repository --remove ppa:ubuntugis/ubuntugis-unstable
+``` bash
+sudo add-apt-repository --remove ppa:ubuntugis/ubuntugis-unstable
+```
 
 If you also want the development versions of key R packages, e.g. to
 test new features and support development efforts, you can install them
 from GitHub, e.g. as follows:
 
-    remotes::install_github("r-spatial/sf")
-    remotes::install_github("rspatial/raster")
-    remotes::install_github("mtennekes/tmaptools") # required for dev version of tmap
-    remotes::install_github("mtennekes/tmap")
+``` r
+remotes::install_github("r-spatial/sf")
+remotes::install_github("rspatial/raster")
+remotes::install_github("mtennekes/tmaptools") # required for dev version of tmap
+remotes::install_github("mtennekes/tmap")
+```
 
-3. Installing geographic R packages on other Linux operating systems
-====================================================================
+# 3\. Installing geographic R packages on other Linux operating systems
 
 If you are in the fortunate position of switching to Linux and being
 able to choose the distribution that best fits your needs, it’s worth
@@ -218,7 +220,7 @@ However, you can install R and key geographic packages on other
 operating systems, although it may take longer. Useful links on
 installing R and geographic libraries are provided below for reference:
 
--   Installing R on **Debian** is covered on the [CRAN
+  - Installing R on **Debian** is covered on the [CRAN
     website](https://cran.r-project.org/bin/linux/debian/). Upstream
     dependencies such as GDAL can be installed on recent versions of
     Debian, such as [buster](https://www.debian.org/releases/), with
@@ -226,13 +228,13 @@ installing R and geographic libraries are provided below for reference:
     on the
     [rocker/geospatial](https://github.com/rocker-org/geospatial/blob/eaf5e92f90737ce9771753cab48f3a2f1d779216/Dockerfile).
 
--   Installing R on **Fedora/Red Hat** is straightforward, as outlined
+  - Installing R on **Fedora/Red Hat** is straightforward, as outlined
     on [CRAN](https://cran.r-project.org/bin/linux/redhat/README). GDAL
     and other spatial libraries can be installed from Fedora’s `dnf`
     package manager, e.g. as documented
     [here](https://github.com/r-spatial/sf#fedora) for **sf**.
 
--   **Arch Linux** has a growing R community. Information on installing
+  - **Arch Linux** has a growing R community. Information on installing
     and setting-up R can be found on the [ArchLinux
     wiki](https://wiki.archlinux.org/index.php/R). Installing upstream
     dependencies such as [GDAL on
@@ -241,15 +243,20 @@ installing R and geographic libraries are provided below for reference:
     installing R plus geographic packages by [Patrick
     Schratz](https://pat-s.me/post/arch-install-guide-for-r/).
 
-4. Geographic R packages on Docker
-==================================
+# 4\. Geographic R packages on Docker
 
 <!-- As with cars, ease of use is important for the popularity of computer technology. -->
+
 <!-- ^[ -->
+
 <!-- The history of cars can provide insight into the importance of ease of use of technologies today. -->
+
 <!-- Cars, have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use. -->
+
 <!-- Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523), which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards. -->
+
 <!-- Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions I recommend are easy to set-up and use. -->
+
 <!-- ] -->
 
 The Ubuntu installation instructions outlined above provide such an easy
@@ -270,28 +277,32 @@ project](https://www.rocker-project.org/).
 Using that approach, I recommend the following Docker images for using R
 as a basis for geographic research:
 
--   [`rocker/geospatial`](https://hub.docker.com/r/rocker/geospatial)
+  - [`rocker/geospatial`](https://hub.docker.com/r/rocker/geospatial)
     which contains key geographic packages, including those listed above
--   [`robinlovelace/geocompr`](https://hub.docker.com/r/robinlovelace/geocompr/)
+  - [`robinlovelace/geocompr`](https://hub.docker.com/r/robinlovelace/geocompr/)
     which contains all the packages needed to reproduce the contents of
     the [book](https://geocompr.robinlovelace.net/), and which you can
     run with the following command in a shell in which Docker is
     installed:
 
-<!-- -->
+<!-- end list -->
 
-    docker run -e PASSWORD=yourpassword --rm -p 8787:8787 robinlovelace/geocompr
+``` bash
+docker run -e PASSWORD=yourpassword --rm -p 8787:8787 robinlovelace/geocompr
+```
 
 To test-out the Ubuntu 19.10 set-up recommended above I created a
 [Dockerfile](https://github.com/Robinlovelace/geocompr/blob/master/docker/ubuntu-eoan/Dockerfile)
 and associated image on Dockerhub that you can test-out as follows:
 
-    docker run -it robinlovelace/geocompr:ubuntu-eoan
-    R
-    library(sf)
-    #> Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0
-    library(raster)
-    library(tmap) 
+``` bash
+docker run -it robinlovelace/geocompr:ubuntu-eoan
+R
+library(sf)
+#> Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0
+library(raster)
+library(tmap) 
+```
 
 The previous commands should take you to a terminal inside the docker
 container where you try out the Linux command line and R. If you want to
@@ -299,25 +310,26 @@ use more cutting-edge versions of the geographic libraries, you can use
 the `ubuntu-bionic` image (note the more recent version numbers, with
 PROJ 7.0.0 for example):
 
-    sudo docker run -it robinlovelace/geocompr:ubuntu
-    R
-    library(sf)
-    #> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+``` bash
+sudo docker run -it robinlovelace/geocompr:ubuntu
+R
+library(sf)
+#> Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0
+```
 
 These images do not currently contain all the dependencies needed to
 reproduce the code in *Geocomputation with R*.
 <!-- , if you're looking for a production-ready Docker image that has both RStudio Server and a wide range of geographic packages pre-installed, building from the `rocker/geospatial` image, this could be a good place to start: -->
 
-However, as documented in [issue
-476](https://github.com/Robinlovelace/geocompr/issues/476) in the
+However, as documented in
+[issue 476](https://github.com/Robinlovelace/geocompr/issues/476) in the
 `geocompr` GitHub repo, there is a plan to provide Docker images with
 this full ‘R-spatial’ stack installed, building on strong foundations
 such as `rocker/geospatial` and the `ubuntugis` repositories, to support
 different versions of GDAL and other dependencies. We welcome any
 comments or tech support to help make this happen.
 
-5. Fin
-======
+# 5\. Fin
 
 R is an open-source language heavily inspired by Unix/Linux so it should
 come as no surprise that it runs well on a variety of Linux
@@ -327,8 +339,7 @@ future-proof way, but the only way to ensure you have full control over
 your system is by sharpening you system administration (sysadmin) and
 shell coding skills, e.g. with reference to [Ubuntu wiki
 pages](https://help.ubuntu.com/community/SystemAdministration) and
-[Chapter
-2](https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts)
+[Chapter 2](https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts)
 of the open source book [Data Science at the Command
 Line](https://www.datascienceatthecommandline.com).
 
@@ -341,4 +352,4 @@ future-proof way.
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
 
 Be the [FOSS4G](https://wiki.osgeo.org/wiki/FOSS4G) change you want to
-see in the world!
+see in the world\!
