@@ -66,8 +66,9 @@ The following bash commands should install key geographic R packages on Ubuntu 1
 sudo add-apt-repository ppa:marutter/rrutter3.5
 # update the repositories so the software can be found:
 sudo apt update
-# install system dependencies and binary versions of key R packages:
-sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+# install system dependencies:
+sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libfontconfig1-dev
+# binary versions of key R packages:
 sudo apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 ```
 
