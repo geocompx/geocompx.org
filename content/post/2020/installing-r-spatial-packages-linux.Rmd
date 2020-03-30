@@ -28,9 +28,10 @@ This post explains how to quickly get key R packages for geographic research ins
 
 <!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
-A recent thread on the [r-spatial GitHub organization](https://github.com/r-spatial/discuss/issues/35) alludes to many considerations when choosing a Linux set-up for work with geographic data, ranging from the choice of Linux distribution (distro) to the use of binary vs or compiled versions (binaries are faster to install). This post touches on some of these things but, its main purpose is to provide advice on getting R's key spatial packages up-and-running on a future-proof Linux operating system (Ubuntu).
+A recent thread on the [r-spatial GitHub organization](https://github.com/r-spatial/discuss/issues/35) alludes to many considerations when choosing a Linux set-up for work with geographic data, ranging from the choice of Linux distribution (distro) to the use of binary vs or compiled versions (binaries are faster to install). This post touches on some of these things.
+Its main purpose, though, is to provide advice on getting R's key spatial packages up-and-running on a future-proof Linux operating system (Ubuntu).
 
-Now is a good time to be thinking about the topic because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.
+Now is a good time to be thinking about your R set-up because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future.
 These imminent changes include:
 
 - The next major release of R ([4.0.0](https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html)), scheduled for the 24^th^ April ([2020-04-24](https://developer.r-project.org/))
@@ -38,7 +39,8 @@ These imminent changes include:
 - Ongoing changes to the OSGeo stack on which key geographic R packages depend, as documented in [r-spatial](https://github.com/r-spatial/) repos and a recent blog post on how recent versions of PROJ enable more precise [coordinate reference system definitions](https://www.r-spatial.org/r/2020/03/17/wkt.html).
 
 To keep-up with these changes, this post will be updated in late April when some of the dust has settled around these changes.
-However, the advice presented here should be future-proof, including information on how to upgrade Ubuntu in the next section.
+However, the advice presented here should be future-proof.
+Upgrading Ubuntu is covered in the next section.
 
 There many ways of getting Ubuntu set-up for spatial R packages.
 A benefit of Linux operating systems is that they offer choice and prevent 'lock-in'.
@@ -126,7 +128,7 @@ sudo apt upgrade # install changes
 The following commands will upgrade to a newer version of Ubuntu (it may be worth waiting until the [point release](https://ubuntu.com/blog/first-point-release-of-18-04-lts-available-today) of Ubuntu 20.04 --- 20.04.1 --- is released in summer before upgrading if you're currently running Ubuntu 18.04 if high stability and low set-up times are priorities; also see instructions [here](https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates)):
 
 ```bash
-apt-get dist-upgrade
+apt dist-upgrade
 ```
 
 To get more up-to-date upstream geographic libraries than provided in the default Ubuntu repositories, you can add the `ubuntugis` repository as follows.
@@ -167,7 +169,7 @@ QGIS is also well-supported on Ubuntu.
 However, you can install R and key geographic packages on other operating systems, although it may take longer.
 Useful links on installing R and geographic libraries are provided below for reference:
 
-- Installing R on **Debian** is covered on the [CRAN website](https://cran.r-project.org/bin/linux/debian/). Upstream dependencies such as GDAL can be installed on recent versions of Debian, such as [buster](https://www.debian.org/releases/), with commands such as `apt-get install libgdal-dev` as per instructions on the [rocker/geospatial](https://github.com/rocker-org/geospatial/blob/eaf5e92f90737ce9771753cab48f3a2f1d779216/Dockerfile).
+- Installing R on **Debian** is covered on the [CRAN website](https://cran.r-project.org/bin/linux/debian/). Upstream dependencies such as GDAL can be installed on recent versions of Debian, such as [buster](https://www.debian.org/releases/), with commands such as `apt install libgdal-dev` as per instructions on the [rocker/geospatial](https://github.com/rocker-org/geospatial/blob/eaf5e92f90737ce9771753cab48f3a2f1d779216/Dockerfile).
 
 - Installing R on **Fedora/Red Hat** is straightforward, as outlined on [CRAN](https://cran.r-project.org/bin/linux/redhat/README). GDAL and other spatial libraries can be installed from Fedora's `dnf` package manager, e.g. as documented [here](https://github.com/r-spatial/sf#fedora) for **sf**.
 
