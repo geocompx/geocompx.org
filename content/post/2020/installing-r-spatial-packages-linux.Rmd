@@ -225,6 +225,7 @@ These images do not currently contain all the dependencies needed to reproduce t
 
 However, as documented in [issue 476](https://github.com/Robinlovelace/geocompr/issues/476) in the `geocompr` GitHub repo, there is a plan to provide Docker images with this full 'R-spatial' stack installed, building on strong foundations such as `rocker/geospatial` and the `ubuntugis` repositories, to support different versions of GDAL and other dependencies.
 We welcome any comments or tech support to help make this happen.
+Suggested changes to this post are also welcome, see the source code [here](https://github.com/geocompr/geocompr.github.io/blob/source/content/post/2020/installing-r-spatial-packages-linux.Rmd).
 
 # 5. Fin
 
