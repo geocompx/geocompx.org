@@ -92,7 +92,7 @@ If you are using an older version of Ubuntu and don't want to upgrade to 19.10, 
 sudo add-apt-repository ppa:marutter/c2d4u3.5
 ```
 
-That adds a repository that ships hundreds of binary versions of R packages, meaning faster install times for packages.
+That adds a repository that ships hundreds of binary versions of R packages, meaning faster install times for packages (see the [Binary package section of the open source book R Packages](https://r-pkgs.org/package-structure-state.html#binary-package) for more on binary packages).
 An updated repository, called c2d4u4.0 or similar, will be available for Ubuntu 20.04 in late April.
 
 <!-- The c2d4u3.5 repository only supports LTS Ubuntu versions, meaning it is unavailable for Ubuntu 19.10, but will be available for Ubuntu 20.04, allowing hundreds of packages to be installed quickly from the system terminal. -->
