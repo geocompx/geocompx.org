@@ -14,7 +14,7 @@ draft: true
 ---
 
 ```{r setup, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
 ## Datasets used

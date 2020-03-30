@@ -1,10 +1,11 @@
-Installing spatial R packages on Linux
+Installing spatial R packages on Ubuntu
 ================
 Robin Lovelace
 2020-03-30
 
 This post explains how to quickly get key R packages for geographic
-research installed on Linux machines.
+research installed on [Ubuntu](https://ubuntu.com/), a popular Linux
+distribution.
 
 <!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
 
