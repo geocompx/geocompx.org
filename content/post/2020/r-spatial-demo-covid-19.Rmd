@@ -19,17 +19,29 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
                       fig.width = 8, fig.height = 4)
 ```
 
-```{r load-pkgs}
+```{r, message=TRUE}
 library(sf)
+```
+
+
+```{r load-pkgs}
 library(tmap)
 library(spData)
 library(dplyr)
 ```
 
+To get data on official Covid-19 statistics, we will use the [`COVID19`](https://github.com/covid19datahub/COVID19) R package.
+
+![](https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667)
+
+This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels.
+Install it as follows:
 
 ```{r get-data, eval=FALSE}
 install.packages("COVID19")
 ```
+
+To minimise dependencies for reproducing the results in this article, we accessed and uploaded a copy of the data with the following commands:
 
 ```{r, eval=FALSE}
 d = COVID19::covid19()
@@ -37,6 +49,8 @@ readr::write_csv(d, paste0("COVID19-data-", Sys.Date(), ".csv"))
 piggyback::pb_upload(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
 piggyback::pb_download_url(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
 ```
+
+Read-in the Covid19 data from the date this post was written as follows (re-run the code above to get up-to-date data):
 
 ```{r}
 d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-20.csv")
