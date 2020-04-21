@@ -60,6 +60,8 @@ jobs:
         run: |
           install.packages("remotes")
           install.packages('blogdown')
+          install.packages('cowplot')
+          install.packages('tigris')
           install.packages('spDataLarge', repos = 'https://nowosad.github.io/drat/', type = 'source')
           remotes::install_github('geocompr/geocompkg')
           remotes::install_deps(dependencies = TRUE)
