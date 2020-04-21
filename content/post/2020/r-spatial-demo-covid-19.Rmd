@@ -26,7 +26,6 @@ library(sf)
 
 ```{r load-pkgs}
 library(tmap)
-library(spData)
 library(dplyr)
 ```
 
@@ -54,17 +53,11 @@ Read-in the Covid19 data from the date this post was written as follows (re-run 
 
 ```{r}
 d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-20.csv")
+class(d)
+ncol(d)
+nrow(d)
 names(d)
 head(d)
-```
-
-```{r}
-names(world)
-head(world)
-plot(world)
-summary(d$country %in% world$name_long)
-unique(d$country[!d$country %in% world$name_long])
-unique(d$country[!d$country %in% world$name_long])
 ```
 
 ```{r}
@@ -91,13 +84,13 @@ plot(w_today)
 
 ```{r}
 plot(w_today["deaths"])
+b = c(0, 10, 100, 1000, 10000, 100000)
+plot(w_today["deaths"], breaks = b)
+
 w_today %>%
   dplyr::select(deaths, confirmed, tests, recovered) %>% 
   plot()
 # w_today %>% filter(ISO_A2 == "US") # check data for us
-```
-
-```{r}
 ```
 
 ```{r}
@@ -107,7 +100,7 @@ tm_shape(w_today) +
 
 ```{r}
 tm_shape(w_today) +
-  tm_polygons(c("deaths", "recovered"), palette = "viridis") 
+  tm_polygons(c("deaths", "recovered"), palette = "viridis", style = "log10_pretty") 
 ```
 
 ```{r}
@@ -115,7 +108,11 @@ g = st_graticule(w_today)
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
-  tm_polygons(c("deaths", "recovered"), palette = "viridis") +
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) +
   tm_layout(legend.position = c(0.01, 0.25))
 ```
 
@@ -131,23 +128,7 @@ tm_shape(g) +
 ```
 
 ```{r, eval=FALSE}
-# Fails due to issue with date conversion
-tm_shape(g) +
-  tm_lines(col = "grey") +
-  tm_shape(w_today) +
-  tm_polygons(c("deaths"), palette = "viridis") +
-  tm_layout(legend.position = c(0.01, 0.25)) +
-  tm_shape(w) +
-  tm_dots(size = c("deaths"), col = c("red")) +
-  tm_facets("date")
-
-```
-
-
-```{r, eval=FALSE}
-# Fix issue with date conversion
 w$Date = as.character(w$date)
-plot(w$date, w$deaths)
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
@@ -187,7 +168,8 @@ m = tm_shape(g) +
   tm_layout(legend.position = c(0.01, 0.25)) +
   tm_shape(w %>% filter(date > Sys.Date() - 60)) +
   tm_dots(size = c("deaths"), col = c("red")) +
-  tm_facets(along = "Date", free.coords = FALSE)
+  tm_facets(along = "Date", free.coords = FALSE) +
+  tm_layout(legend.outside = TRUE)
 tmap_animation(m, "covid-19-animated-map.gif", width = 1200)
 browseURL("covid-19-animated-map.gif")
 
