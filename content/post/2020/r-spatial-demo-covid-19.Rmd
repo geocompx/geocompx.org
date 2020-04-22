@@ -1,0 +1,185 @@
+---
+title: 'Demo of reproducible geographic data analysis: mapping Covid-19 data with R'
+author: Robin Lovelace
+date: '2020-04-21'
+slug: mapping-covid-19
+categories:
+  - demo
+tags:
+  - geocompr
+  - rspatial
+draft: true
+output:
+  md_document:
+    preserve_yaml: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
+                      fig.width = 8, fig.height = 4)
+```
+
+```{r, message=TRUE}
+library(sf)
+```
+
+
+```{r load-pkgs}
+library(tmap)
+library(dplyr)
+```
+
+To get data on official Covid-19 statistics, we will use the [`COVID19`](https://github.com/covid19datahub/COVID19) R package.
+
+![](https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667)
+
+This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels.
+Install it as follows:
+
+```{r get-data, eval=FALSE}
+install.packages("COVID19")
+```
+
+To minimise dependencies for reproducing the results in this article, we accessed and uploaded a copy of the data with the following commands:
+
+```{r, eval=FALSE}
+d = COVID19::covid19()
+readr::write_csv(d, paste0("COVID19-data-", Sys.Date(), ".csv"))
+piggyback::pb_upload(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
+piggyback::pb_download_url(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
+```
+
+Read-in the Covid19 data from the date this post was written as follows (re-run the code above to get up-to-date data):
+
+```{r}
+d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-22.csv")
+class(d)
+ncol(d)
+nrow(d)
+names(d)
+head(d)
+```
+
+```{r}
+world_rnatural = rnaturalearth::ne_download(returnclass = "sf")
+unique(d$country[!d$id %in% world_rnatural$ISO_A3_EH])
+unique(world_rnatural$NAME[!world_rnatural$ISO_A3_EH %in% d$id])
+d %>% select(id, country) %>% filter(country == "France")
+world_rnatural %>% select(ISO_A3_EH, NAME_LONG) %>% filter(NAME_LONG == "France")
+```
+
+```{r}
+plot(world_rnatural)
+world_projected = world_rnatural %>% 
+  st_transform("+proj=moll")
+plot(world_projected)
+```
+
+
+```{r}
+w = dplyr::left_join(world_projected, d, by = c("ISO_A3_EH"= "id"))
+w_today = w[w$date == Sys.Date() - 1, ]
+plot(w_today)
+```
+
+```{r}
+plot(w_today["deaths"])
+b = c(0, 10, 100, 1000, 10000, 100000)
+plot(w_today["deaths"], breaks = b)
+
+w_today %>%
+  dplyr::select(deaths, confirmed, tests, recovered) %>% 
+  plot()
+# w_today %>% filter(ISO_A2 == "US") # check data for us
+```
+
+```{r}
+tm_shape(w_today) +
+  tm_polygons(c("deaths", "recovered"))
+```
+
+```{r}
+tm_shape(w_today) +
+  tm_polygons(c("deaths", "recovered"), palette = "viridis", style = "log10_pretty") 
+```
+
+```{r}
+g = st_graticule(w_today)
+tm_shape(g) +
+  tm_lines(col = "grey") +
+  tm_shape(w_today) +
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) +
+  tm_layout(legend.position = c(0.01, 0.25))
+```
+
+
+```{r}
+tm_shape(g) +
+  tm_lines(col = "grey") +
+  tm_shape(w_today) +
+  tm_polygons(c("deaths", "recovered"), palette = "viridis") +
+  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_shape(w_today) +
+  tm_dots(size = c("deaths", "recovered"), col = c("red", "green"))
+```
+
+```{r, eval=FALSE}
+w$Date = as.character(w$date)
+tm_shape(g) +
+  tm_lines(col = "grey") +
+  tm_shape(w_today) +
+  tm_polygons(c("deaths"), palette = "viridis") +
+  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_shape(w %>% filter(date > Sys.Date() - 4)) +
+  tm_dots(size = c("deaths"), col = c("red")) +
+  tm_facets("Date")
+```
+
+To create an animated map, following instructions in Chapter [8](https://geocompr.robinlovelace.net/adv-map.html#animated-maps) of *Geocomputation with R*, we need to make some small changes to the code above:
+
+```{r, eval=FALSE}
+m = tm_shape(g) +
+  tm_lines(col = "grey") +
+  tm_shape(w_today) +
+  tm_polygons(c("deaths"), palette = "viridis") +
+  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_shape(w %>% filter(date > Sys.Date() - 4)) +
+  tm_dots(size = c("deaths"), col = c("red")) +
+  tm_facets(along = "Date", free.coords = FALSE)
+tmap_animation(m, "covid-19-animated-map-test.gif", width = 800)
+browseURL("covid-19-animated-map-test.gif")
+```
+
+Not bad, but would benefit from a few adjustments before we plot the results of the whole dataset:
+
+```{r, eval=FALSE}
+world_projected$Area_km = as.numeric(st_area(world_projected)) / 1e6
+world_projected$`Pop/km2` = as.numeric(world_projected$POP_EST) / world_projected$Area_km 
+b = c(0, 100, 200, 400, 800, 16000)
+
+m = tm_shape(g) +
+  tm_lines(col = "grey") +
+  tm_shape(world_projected) +
+  tm_polygons("Pop/km2", palette = "viridis", breaks = b) +
+  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_shape(w %>% filter(date > Sys.Date() - 60)) +
+  tm_dots(size = c("deaths"), col = c("red")) +
+  tm_facets(along = "Date", free.coords = FALSE) +
+  tm_layout(legend.outside = TRUE)
+tmap_animation(m, "covid-19-animated-map.gif", width = 1200)
+browseURL("covid-19-animated-map.gif")
+
+```
+
+![](https://user-images.githubusercontent.com/1825120/79768034-1e60ab80-8322-11ea-9c99-9997b588ee57.gif)
+
+
+
+```{r sessioninfo}
+devtools::session_info()
+```
+
