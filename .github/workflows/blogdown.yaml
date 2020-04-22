@@ -79,8 +79,10 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          user_name: {{secrets.GH_USER}}
-          user_email: ${{secrets.GH_EMAIL}}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          personal_token: ${{ secrets.PERSONAL_TOKEN }}
           publish_dir: ./public
-          publish_branch: master  # deploying branch
+          publish_branch: master  
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy commit: ${{ github.event.head_commit.message }}'
+
