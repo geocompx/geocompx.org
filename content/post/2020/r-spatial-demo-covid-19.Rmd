@@ -8,10 +8,9 @@ categories:
 tags:
   - geocompr
   - rspatial
+  - sf
+  - benchmarks
 draft: true
-output:
-  md_document:
-    preserve_yaml: true
 ---
 
 ```{r setup, include=FALSE}
