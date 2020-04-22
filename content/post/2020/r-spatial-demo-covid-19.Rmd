@@ -8,7 +8,7 @@ categories:
 tags:
   - geocompr
   - rspatial
-draft: false
+draft: true
 output:
   md_document:
     preserve_yaml: true
@@ -52,7 +52,7 @@ piggyback::pb_download_url(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "
 Read-in the Covid19 data from the date this post was written as follows (re-run the code above to get up-to-date data):
 
 ```{r}
-d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-20.csv")
+d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-22.csv")
 class(d)
 ncol(d)
 nrow(d)
