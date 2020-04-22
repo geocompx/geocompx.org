@@ -76,14 +76,11 @@ jobs:
         run: |
           Rscript -e 'blogdown::build_site(TRUE)'
 
-      - name: Setup git
-        run: |
-          git config --global user.name ${{secrets.GH_USER}}
-          git config --global user.email ${{secrets.GH_EMAIL}}
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
+          user_name: {{secrets.GH_USER}}
+          user_email: ${{secrets.GH_EMAIL}}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           publish_branch: master  # deploying branch
