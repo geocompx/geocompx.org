@@ -30,7 +30,7 @@ library(dplyr)
 
 To get data on official Covid-19 statistics, we will use the [`COVID19`](https://github.com/covid19datahub/COVID19) R package.
 
-![](https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667)
+<img src="https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="50%" style="display: block; margin: auto;">
 
 This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels.
 Install it as follows:
@@ -74,7 +74,6 @@ world_projected = world_rnatural %>%
 plot(world_projected)
 ```
 
-
 ```{r}
 w = dplyr::left_join(world_projected, d, by = c("ISO_A3_EH"= "id"))
 w_today = w[w$date == Sys.Date() - 1, ]
@@ -99,11 +98,15 @@ tm_shape(w_today) +
 
 ```{r}
 tm_shape(w_today) +
-  tm_polygons(c("deaths", "recovered"), palette = "viridis", style = "log10_pretty") 
+  tm_polygons(c("deaths", "recovered"), 
+              palette = "viridis", style = "log10_pretty") 
 ```
 
 ```{r}
 g = st_graticule(w_today)
+```
+
+```{r}
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
@@ -120,7 +123,11 @@ tm_shape(g) +
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
-  tm_polygons(c("deaths", "recovered"), palette = "viridis") +
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) +
   tm_layout(legend.position = c(0.01, 0.25)) +
   tm_shape(w_today) +
   tm_dots(size = c("deaths", "recovered"), col = c("red", "green"))
@@ -131,8 +138,11 @@ w$Date = as.character(w$date)
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
-  tm_polygons(c("deaths"), palette = "viridis") +
-  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) +
   tm_shape(w %>% filter(date > Sys.Date() - 4)) +
   tm_dots(size = c("deaths"), col = c("red")) +
   tm_facets("Date")
@@ -144,11 +154,15 @@ To create an animated map, following instructions in Chapter [8](https://geocomp
 m = tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_today) +
-  tm_polygons(c("deaths"), palette = "viridis") +
-  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) +
   tm_shape(w %>% filter(date > Sys.Date() - 4)) +
   tm_dots(size = c("deaths"), col = c("red")) +
-  tm_facets(along = "Date", free.coords = FALSE)
+  tm_facets(along = "Date", free.coords = FALSE) +
+  tm_layout(legend.position = c(0.01, 0.25))
 tmap_animation(m, "covid-19-animated-map-test.gif", width = 800)
 browseURL("covid-19-animated-map-test.gif")
 ```
@@ -158,27 +172,34 @@ Not bad, but would benefit from a few adjustments before we plot the results of 
 ```{r, eval=FALSE}
 world_projected$Area_km = as.numeric(st_area(world_projected)) / 1e6
 world_projected$`Pop/km2` = as.numeric(world_projected$POP_EST) / world_projected$Area_km 
-b = c(0, 100, 200, 400, 800, 16000)
 
 m = tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(world_projected) +
-  tm_polygons("Pop/km2", palette = "viridis", breaks = b) +
-  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_polygons(
+    "Pop/km2",
+    palette = "viridis",
+    style = "log10_pretty",
+    lwd = 0.5
+    ) +
   tm_shape(w %>% filter(date > Sys.Date() - 60)) +
   tm_dots(size = c("deaths"), col = c("red")) +
   tm_facets(along = "Date", free.coords = FALSE) +
   tm_layout(legend.outside = TRUE)
-tmap_animation(m, "covid-19-animated-map.gif", width = 1200)
+tmap_animation(m, "covid-19-animated-map.gif", width = 1200, height = 800)
 browseURL("covid-19-animated-map.gif")
-
 ```
+
+<!--update the file below-->
 
 ![](https://user-images.githubusercontent.com/1825120/79768034-1e60ab80-8322-11ea-9c99-9997b588ee57.gif)
 
+<details>
 
+<summary>Session info</summary>
 
 ```{r sessioninfo}
 devtools::session_info()
 ```
 
+</details>
