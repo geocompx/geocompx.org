@@ -75,7 +75,7 @@ jobs:
 
       - name: Build site
         run: |
-          Rscript -e 'blogdown::build_site(TRUE)'
+          Rscript -e 'blogdown::build_site()'
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
