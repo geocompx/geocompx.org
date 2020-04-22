@@ -75,10 +75,10 @@ jobs:
       - name: Build site
         run: |
           Rscript -e 'blogdown::build_site(TRUE)'
-          
-      - name: eploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: ghmaster The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          publish_dir: ./public
+          publish_branch: master  # deploying branch
