@@ -368,6 +368,12 @@ Although the research did not address any policy issues, it could be extended to
 
 - A [reproducible geographic analysis](https://github.com/paezha/covid19-environmental-correlates#a-spatio-temporal-analysis-of-the-environmental-correlates-of-covid-19-incidence-in-spain) of Covid-19 data in Spain by [Antonio Paez](https://www.science.mcmaster.ca/geo/component/comprofiler/userprofile/paezha.html) and others (challenge: reproduce their findings)
 - The eRum2020 [CovidR competition](https://2020.erum.io/covidr-contest/) (challenge: enter the contest!)
+- Try downloading the the city-level data with this command and exploring the geographic distribution of the outbreak at the city level:
+
+```{r, eval=FALSE}
+d_city = COVID19::covid19(level = 3)
+```
+
 
 For further details on geographic data analysis in R in general, we recommend checkout out in-depth materials such as [*Geocomputation with R*](https://www.amazon.co.uk/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1138304514) and the in-progress open source book [*Spatial Data Science*](https://keen-swartz-3146c4.netlify.app/).
 
