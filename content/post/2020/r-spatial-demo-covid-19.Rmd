@@ -175,6 +175,17 @@ class(w)
 nrow(w)
 ```
 
+# Calculating area
+
+The package `sf` provides a wide range of functions for calculating geographic variables such as object centroid, bounding boxes, lengths and, as demonstrated below, area.
+We use this area data to calculate the population density of each country as follows:
+
+```{r}
+w$Area_km = as.numeric(st_area(w)) / 1e6
+w$`Pop/km2` = as.numeric(w$POP_EST) / w$Area_km 
+```
+
+
 # Plotting international Covid-19 data for a single day
 
 The class of `w` shows that it has geometries for each row.
@@ -271,7 +282,7 @@ One question I have here: make the size legend have `style = "log10_pretty"` als
 The animation at the beginning of this article shows how dynamic graphics can communicate change effectively.
 Animated maps are therefore useful for showing evolving geographic phenomena, such as the spread of Covid-19 worldwide.
 As covered in section [8.3](https://geocompr.robinlovelace.net/adv-map.html#animated-maps) of *Geocomputation with R*, animated maps can be created with `tmap` by extending the `tm_facet()` functionality.
-So let's start by creating a facetted map:
+So let's start by creating a facetted map showing the total number of deaths on the first day of each month in our data:
 
 ```{r, fig.height=4}
 w$Date = as.character(w$date)
@@ -279,10 +290,10 @@ tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_yesterday) +
   tm_polygons(
-    "pop",
+    "Pop/km2",
     palette = "viridis",
     style = "log10_pretty",
-    n = 4
+    n = 3
     ) +
   tm_shape(w %>% filter(grepl(pattern = "01$", date))) +
   tm_dots(size = "deaths", col = "red") +
@@ -300,44 +311,68 @@ m = tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_yesterday) +
   tm_polygons(
-    c("deaths", "recovered"),
+    "Pop/km2",
     palette = "viridis",
-    style = "log10_pretty"
+    style = "log10_pretty",
+    n = 3
     ) +
-  tm_shape(w %>% filter(date > Sys.Date() - 4)) +
-  tm_dots(size = c("deaths"), col = c("red")) +
+  tm_shape(w %>% filter(grepl(pattern = "01$", date))) +
+  tm_dots(size = "deaths", col = "red") +
   tm_facets(along = "Date", free.coords = FALSE) +
-  tm_layout(legend.position = c(0.01, 0.25))
+  tm_layout(legend.outside = TRUE)
 tmap_animation(m, "covid-19-animated-map-test.gif", width = 800)
 browseURL("covid-19-animated-map-test.gif")
 ```
 
-Not bad, but would benefit from a few adjustments before we plot the results of the whole dataset:
+```{r, echo=FALSE, out.width="40%"}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/80087377-e7bda780-8552-11ea-959f-55b154c715fa.gif")
+```
+
+We made an animated map!
+The first version is rarely the best though, and the map above clearly could benefit from some adjustments before we plot the results for the whole dataset:
 
 ```{r, eval=FALSE}
-world_projected$Area_km = as.numeric(st_area(world_projected)) / 1e6
-world_projected$`Pop/km2` = as.numeric(world_projected$POP_EST) / world_projected$Area_km 
+w$Date = paste0("Total deaths from 22nd January 2020 to ", w$date)
 
 m = tm_shape(g) +
   tm_lines(col = "grey") +
-  tm_shape(world_projected) +
+  tm_shape(w) +
   tm_polygons(
     "Pop/km2",
     palette = "viridis",
     style = "log10_pretty",
     lwd = 0.5
     ) +
-  tm_shape(w %>% filter(date > Sys.Date() - 60)) +
-  tm_dots(size = c("deaths"), col = c("red")) +
+  tm_shape(w) +
+  tm_dots(size = "deaths", col = "red") +
   tm_facets(along = "Date", free.coords = FALSE) +
-  tm_layout(legend.outside = TRUE)
-tmap_animation(m, "covid-19-animated-map.gif", width = 1200, height = 800)
+  tm_layout(
+    main.title.size = 0.5,
+    legend.outside = TRUE
+    )
+m
+tmap_animation(m, "covid-19-animated-map.gif", width = 1400, height = 600)
 browseURL("covid-19-animated-map.gif")
 ```
 
 <!--update the file below-->
 
 ![](https://user-images.githubusercontent.com/1825120/79768034-1e60ab80-8322-11ea-9c99-9997b588ee57.gif)
+
+# Conclusion
+
+This article has demonstrated how to work with and map geographic data using the free and open source statistical programming language R.
+It demonstrates that by representing analysis in code, research can be made reproducible and more accessible to others, encouraging transparent and open science.
+This has multiple advantages, from education and citizen engagement with the evidence to increased trust in the evidence on which important, life-or-death, decisions are made.
+
+Although the research did not address any policy issues, it could be extended to do so, and we encourage readers to check-out the following resources for ideas for future research:
+
+- A [reproducible geographic analysis](https://github.com/paezha/covid19-environmental-correlates#a-spatio-temporal-analysis-of-the-environmental-correlates-of-covid-19-incidence-in-spain) of Covid-19 data in Spain by [Antonio Paez](https://www.science.mcmaster.ca/geo/component/comprofiler/userprofile/paezha.html) and others (challenge: reproduce their findings)
+- The eRum2020 [CovidR competition](https://2020.erum.io/covidr-contest/) (challenge: enter the contest!)
+
+For further details on geographic data analysis in R in general, we recommend checkout out in-depth materials such as [*Geocomputation with R*](https://www.amazon.co.uk/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1138304514) and the in-progress open source book [*Spatial Data Science*](https://keen-swartz-3146c4.netlify.app/).
+
+There is also an [online talk](https://www.youtube.com/watch?v=Va0STgco7-4) on the subject on YouTube.
 
 <details>
 
