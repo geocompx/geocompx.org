@@ -18,6 +18,28 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
                       fig.width = 8, fig.height = 4)
 ```
 
+# Introduction
+
+The coronavirus pandemic is a global phenomenon that will affect the lives of the majority of the world's population for years to come.
+Impacts range from physical distancing measures [already affecting more than half of Earth's population](https://en.wikipedia.org/wiki/Social_distancing#2019%E2%80%932020_coronavirus_pandemic) and knock-on impacts such as [changes in air quality](https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Coronavirus_lockdown_leading_to_drop_in_pollution_across_Europe) to potentially life threatening illness, with peer reviewed estimates of [infection fatality rates](https://www.thelancet.com/pdfs/journals/laninf/PIIS1473-3099(20)30243-7.pdf) showing the disease disproportionately affects the elderly and people with underlying health conditions.
+
+Like other global phenomena such as climate change, the impacts of the pandemic vary greatly by geographic location, with effective and early implementation of physical distancing measures and effective contact tracing associated with lower death rates, according to preliminary [research](https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3).
+
+This article demonstrates how to download and map open data on the evolving coronavirus pandemic, using reproducible R code.
+The aim is not to provide scientific analysis of the data, but to demonstrate how 'open science' enables public access to important international datasets.
+It also provides an opportunity to demonstrate how techniques taught in *Geocomputation with R* can be applied to real-world datasets.
+
+Before undertaking geographic analysis of 'rate' data, such as the number Covid-19 infections per unit area, it is worth acknowledging caveats at the outset.
+Simple graphics of complex phenomena can be misleading.
+This is well-illustrated in the figure below, which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.
+
+
+
+The post is intended more as a taster of geographic visualisation in R than as a gateway to scientific analysis of Covid-19 data.
+See resources such as the [eRum2020 CovidR](https://2020.erum.io/covidr-contest/) contest and [lists](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f) of online [resources](https://github.com/HDRUK/covid-19) for pointers on how to usefully contribute to data-driven efforts to tackle the crisis.
+
+# Reproducible example
+
 ```{r, message=TRUE}
 library(sf)
 ```
