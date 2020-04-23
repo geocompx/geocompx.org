@@ -31,11 +31,11 @@ Like other global phenomena such as climate change, the impacts of the pandemic 
 
 This article demonstrates how to download and map open data on the evolving coronavirus pandemic, using reproducible R code.
 The aim is not to provide scientific analysis of the data, but to demonstrate how 'open science' enables public access to important international datasets.
-It also provides an opportunity to demonstrate how techniques taught in *Geocomputation with R* can be applied to real-world datasets.
+It also provides an opportunity to demonstrate how techniques taught in [*Geocomputation with R*](https://geocompr.robinlovelace.net/) can be applied to real-world datasets.
 
 Before undertaking geographic analysis of 'rate' data, such as the number Covid-19 infections per unit area, it is worth acknowledging caveats at the outset.
 Simple graphics of complex phenomena can be misleading.
-This is well-illustrated in the figure below, which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.
+This is well-illustrated in the figure below by [Will Geary](https://github.com/willgeary), which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.
 
 [![](https://raw.githubusercontent.com/willgeary/covid-nyc-dasymetric-map/master/assets/comparison_table_zip_hex_smoothed.png)](https://github.com/willgeary/covid-nyc-dasymetric-map)
 
@@ -44,7 +44,10 @@ The post is intended more as a taster of geographic visualisation in R than as a
 See resources such as the [eRum2020 CovidR](https://2020.erum.io/covidr-contest/) contest and [lists](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f) of online [resources](https://github.com/HDRUK/covid-19) for pointers on how to usefully contribute to data-driven efforts to tackle the crisis.
 
 
-# Reproducible example
+# Set-up
+
+To reproduce the results presented in this article you will need to have an R installation with up-to-date versions of the following packages installed and loaded.
+(See the [geocompr/docker](https://github.com/geocompr/docker) repo and [Installing R on Ubuntu](https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/) article for more on setting up your computer to work with R).
 
 ```{r, message=TRUE}
 library(sf)
@@ -56,9 +59,11 @@ library(tmap)
 library(dplyr)
 ```
 
+# Getting international Covid-19 data
+
 To get data on official Covid-19 statistics, we will use the [`COVID19`](https://github.com/covid19datahub/COVID19) R package.
 
-<img src="https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="50%" style="display: block; margin: auto;">
+<img src="https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="20%" style="display: block; margin: auto;">
 
 This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels.
 Install it as follows:
@@ -67,25 +72,42 @@ Install it as follows:
 install.packages("COVID19")
 ```
 
-To minimise dependencies for reproducing the results in this article, we accessed and uploaded a copy of the data with the following commands:
+After the package is installed, you can get up-to-date country-level data as follows:
 
 ```{r, eval=FALSE}
 d = COVID19::covid19()
-readr::write_csv(d, paste0("COVID19-data-", Sys.Date(), ".csv"))
-piggyback::pb_upload(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
-piggyback::pb_download_url(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
 ```
 
-Read-in the Covid19 data from the date this post was written as follows (re-run the code above to get up-to-date data):
+```{r, eval=FALSE, echo=FALSE}
+readr::write_csv(d, paste0("COVID19-data-", Sys.Date(), ".csv"))
+piggyback::pb_upload(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
+u = piggyback::pb_download_url(paste0("COVID19-data-", Sys.Date(), ".csv"), repo = "robinlovelace/geocompr")
+f = "covid-19-2020-04-23"
+msg = paste0("curl -i https://git.io -F 'url=", u, "' -F 'code=", f, "'")
+system(msg)
+```
+
+To minimise dependencies for reproducing the results in this article, we  uploaded a copy of the data, which can be downloaded as follows (re-run the code above to get up-to-date data):
 
 ```{r}
-d = readr::read_csv("https://github.com/Robinlovelace/geocompr/releases/download/1.2/COVID19-data-2020-04-22.csv")
+d = readr::read_csv("https://git.io/covid-19-2020-04-23")
 class(d)
+```
+
+The previous code chunk read a .csv file from online and confirmed, we have loaded a data frame (we will see how to join this with geographic data in the next section).
+We can get a sense of the contents of the data as follows:
+
+```{r}
 ncol(d)
 nrow(d)
 names(d)
 head(d)
 ```
+
+# Getting geographic data
+
+We will use a dataset representing countries worldwide from the `rnaturalearth` package.
+Assuming you have the package installed you can get the geographic data as follows (see the subsequent code chunk if not):
 
 ```{r, eval=FALSE}
 world_rnatural = rnaturalearth::ne_download(returnclass = "sf")
@@ -118,50 +140,87 @@ The result of the previous code block, an object representing the world and cont
 world_iso = sf::read_sf("https://git.io/JfICT") 
 ```
 
+To see what's in the `world_iso` object we can plot it, with the default setting in `sf` showing the geographic distribution of each variable:
 
 ```{r}
 plot(world_iso)
+```
+
+# Transforming geographic data
+
+An issue with the result from a data visualisation perspective is that this unprojected visualisation distorts the world: countries such as Greenland at high latitudes appear bigger than the actually are.
+To overcome this issue we will project the object as follows (see Chapter [6](https://geocompr.robinlovelace.net/reproj-geo-data.html) of Geocomputation with R and a recent article on the [r-spatial website](https://www.r-spatial.org/r/2020/03/17/wkt.html) for more on coordinate systems):
+
+```{r}
 world_projected = world_iso %>% 
   st_transform("+proj=moll")
-plot(world_projected)
 ```
+
+We can plot just the geometry of the updated object as follows, noting that the result is projected in a way that preserves the true area of countries (noting also that all projections introduce distortions):
+
+```{r}
+plot(st_geometry(world_projected))
+```
+
+# Attribute joins
+
+As outlined in Chapter [3](https://geocompr.robinlovelace.net/attr.html#vector-attribute-joining) of *Geocomputation with R*, attribute joins can be used to add additional variables to geographic data via a 'key variable' shared between the geographic and non-geographic objects.
+In this case the shared variables are `ISO_A3_EH` in the geographic object and `id` in the Covid-19 dataset `d`.
+We will be concise and call the dataset resulting from this join operation `w`.
+
 
 ```{r}
 w = dplyr::left_join(world_projected, d, by = c("ISO_A3_EH"= "id"))
-w_today = w[w$date == Sys.Date() - 1, ]
-plot(w_today)
+class(w)
+nrow(w)
 ```
 
-```{r}
-plot(w_today["deaths"])
-b = c(0, 10, 100, 1000, 10000, 100000)
-plot(w_today["deaths"], breaks = b)
+# Plotting international Covid-19 data for a single day
 
-w_today %>%
+The class of `w` shows that it has geometries for each row.
+Notice that it has many more rows of data than the original world object: geometries are repeated for every year.
+This is not an efficient way to store data, as it means lots of duplicate geometries.
+On a small dataset that doesn't matter, but it's something to be aware of.
+To check that the join has worked, we will take a subset of rows representing the global situation yesterday relative to the date of data access:
+
+```{r}
+w_yesterday = w[w$date == (max(w$date, na.rm = T) - 1), ]
+plot(w_yesterday)
+```
+
+
+
+
+```{r}
+plot(w_yesterday["deaths"])
+b = c(0, 10, 100, 1000, 10000, 100000)
+plot(w_yesterday["deaths"], breaks = b)
+
+w_yesterday %>%
   dplyr::select(deaths, confirmed, tests, recovered) %>% 
   plot()
-# w_today %>% filter(ISO_A2 == "US") # check data for us
+# w_yesterday %>% filter(ISO_A2 == "US") # check data for us
 ```
 
 ```{r}
-tm_shape(w_today) +
+tm_shape(w_yesterday) +
   tm_polygons(c("deaths", "recovered"))
 ```
 
 ```{r}
-tm_shape(w_today) +
+tm_shape(w_yesterday) +
   tm_polygons(c("deaths", "recovered"), 
               palette = "viridis", style = "log10_pretty") 
 ```
 
 ```{r}
-g = st_graticule(w_today)
+g = st_graticule(w_yesterday)
 ```
 
 ```{r}
 tm_shape(g) +
   tm_lines(col = "grey") +
-  tm_shape(w_today) +
+  tm_shape(w_yesterday) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
@@ -174,14 +233,14 @@ tm_shape(g) +
 ```{r}
 tm_shape(g) +
   tm_lines(col = "grey") +
-  tm_shape(w_today) +
+  tm_shape(w_yesterday) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
     style = "log10_pretty"
     ) +
   tm_layout(legend.position = c(0.01, 0.25)) +
-  tm_shape(w_today) +
+  tm_shape(w_yesterday) +
   tm_dots(size = c("deaths", "recovered"), col = c("red", "green"))
 ```
 
@@ -189,7 +248,7 @@ tm_shape(g) +
 w$Date = as.character(w$date)
 tm_shape(g) +
   tm_lines(col = "grey") +
-  tm_shape(w_today) +
+  tm_shape(w_yesterday) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
@@ -205,7 +264,7 @@ To create an animated map, following instructions in Chapter [8](https://geocomp
 ```{r, eval=FALSE}
 m = tm_shape(g) +
   tm_lines(col = "grey") +
-  tm_shape(w_today) +
+  tm_shape(w_yesterday) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
