@@ -184,38 +184,56 @@ On a small dataset that doesn't matter, but it's something to be aware of.
 To check that the join has worked, we will take a subset of rows representing the global situation yesterday relative to the date of data access:
 
 ```{r}
-w_yesterday = w[w$date == (max(w$date, na.rm = T) - 1), ]
+w_yesterday = w %>% 
+  filter(date == max(date, na.rm = T) - 1)
 plot(w_yesterday)
 ```
 
-
+The plot method for `sf` objects is fast and flexible, as documented in [`sf`'s *Plotting Simple Features* vignette](https://r-spatial.github.io/sf/articles/sf5.html), which can be accessed with `vignette("sf5")` from the R console.
+We can set the breaks to better show the difference between countries with no reported deaths and countries with few reported deaths as follows:
 
 
 ```{r}
 plot(w_yesterday["deaths"])
 b = c(0, 10, 100, 1000, 10000, 100000)
 plot(w_yesterday["deaths"], breaks = b)
+```
 
+To plot the other Covid-19 variables, reporting number of confirmed cases, number of tests and number of people who have recovered, we can subset the relevant variables and pipe the result to the `plot()` function (noting the [caveat](https://t.co/NyIrKHQSUy) that code containing pipes may be hard to debug) as follows:
+
+```{r}
 w_yesterday %>%
   dplyr::select(deaths, confirmed, tests, recovered) %>% 
   plot()
-# w_yesterday %>% filter(ISO_A2 == "US") # check data for us
 ```
+
+# Making maps with tmap
+
+The [mapping chapter](https://geocompr.robinlovelace.net/adv-map.html) of *Geocomputation with R* shows how the `tmap` package enables publication-quality maps to be created with concise and relatively commands, such as:
 
 ```{r}
 tm_shape(w_yesterday) +
   tm_polygons(c("deaths", "recovered"))
 ```
 
+We can modify the palette and scale as follows:
+
 ```{r}
 tm_shape(w_yesterday) +
-  tm_polygons(c("deaths", "recovered"), 
-              palette = "viridis", style = "log10_pretty") 
+  tm_polygons(
+    c("deaths", "recovered"),
+    palette = "viridis",
+    style = "log10_pretty"
+    ) 
 ```
+
+The map can be further improved by adding graticules representing the curvature of the Earth, created as follows:
 
 ```{r}
 g = st_graticule(w_yesterday)
 ```
+
+It's also worth moving the legend:
 
 ```{r}
 tm_shape(g) +
@@ -229,34 +247,50 @@ tm_shape(g) +
   tm_layout(legend.position = c(0.01, 0.25))
 ```
 
+A problem with choropleth maps is that they can under-represent small areas.
+To overcome this issue we can use dot size instead of color to represent number:
 
 ```{r}
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_yesterday) +
-  tm_polygons(
-    c("deaths", "recovered"),
-    palette = "viridis",
-    style = "log10_pretty"
-    ) +
-  tm_layout(legend.position = c(0.01, 0.25)) +
+  tm_polygons() +
+  tm_layout(legend.position = c(0.01, 0)) +
   tm_shape(w_yesterday) +
-  tm_dots(size = c("deaths", "recovered"), col = c("red", "green"))
+  tm_dots(
+    col = c("red", "green"),
+    size = c("deaths", "recovered"),
+    palette = "viridis"
+    )
 ```
 
-```{r, eval=FALSE}
+One question I have here: make the size legend have `style = "log10_pretty"` also?
+
+# Making animated maps
+
+The animation at the beginning of this article shows how dynamic graphics can communicate change effectively.
+Animated maps are therefore useful for showing evolving geographic phenomena, such as the spread of Covid-19 worldwide.
+As covered in section [8.3](https://geocompr.robinlovelace.net/adv-map.html#animated-maps) of *Geocomputation with R*, animated maps can be created with `tmap` by extending the `tm_facet()` functionality.
+So let's start by creating a facetted map:
+
+```{r, fig.height=4}
 w$Date = as.character(w$date)
 tm_shape(g) +
   tm_lines(col = "grey") +
   tm_shape(w_yesterday) +
   tm_polygons(
-    c("deaths", "recovered"),
+    "pop",
     palette = "viridis",
-    style = "log10_pretty"
+    style = "log10_pretty",
+    n = 4
     ) +
-  tm_shape(w %>% filter(date > Sys.Date() - 4)) +
-  tm_dots(size = c("deaths"), col = c("red")) +
-  tm_facets("Date")
+  tm_shape(w %>% filter(grepl(pattern = "01$", date))) +
+  tm_dots(size = "deaths", col = "red") +
+  tm_facets("Date", nrow = 1, free.scales.fill = FALSE) +
+  tm_layout(
+    legend.outside.position = "bottom",
+    legend.stack = "horizontal"
+    )
 ```
 
 To create an animated map, following instructions in Chapter [8](https://geocompr.robinlovelace.net/adv-map.html#animated-maps) of *Geocomputation with R*, we need to make some small changes to the code above:
