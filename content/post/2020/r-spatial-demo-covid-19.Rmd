@@ -350,14 +350,13 @@ m = tm_shape(g) +
     main.title.size = 0.5,
     legend.outside = TRUE
     )
-m
 tmap_animation(m, "covid-19-animated-map.gif", width = 1400, height = 600)
 browseURL("covid-19-animated-map.gif")
 ```
 
 <!--update the file below-->
 
-![](https://user-images.githubusercontent.com/1825120/79768034-1e60ab80-8322-11ea-9c99-9997b588ee57.gif)
+![](https://user-images.githubusercontent.com/1825120/80092918-7f26f880-855b-11ea-8017-c4ec6e382209.gif)
 
 # Conclusion
 
