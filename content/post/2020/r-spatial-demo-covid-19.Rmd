@@ -1,7 +1,7 @@
 ---
 title: 'Demo of reproducible geographic data analysis: mapping Covid-19 data with R'
 author: Robin Lovelace
-date: '2020-04-21'
+date: '2020-04-23'
 slug: mapping-covid-19
 categories:
   - demo
@@ -10,8 +10,10 @@ tags:
   - rspatial
   - sf
   - benchmarks
-draft: true
+draft: false
 ---
+
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE,
@@ -23,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, eval = TRUE
 The coronavirus pandemic is a global phenomenon that will affect the lives of the majority of the world's population for years to come.
 Impacts range from physical distancing measures [already affecting more than half of Earth's population](https://en.wikipedia.org/wiki/Social_distancing#2019%E2%80%932020_coronavirus_pandemic) and knock-on impacts such as [changes in air quality](https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Coronavirus_lockdown_leading_to_drop_in_pollution_across_Europe) to potentially life threatening illness, with peer reviewed estimates of [infection fatality rates](https://www.thelancet.com/pdfs/journals/laninf/PIIS1473-3099(20)30243-7.pdf) showing the disease disproportionately affects the elderly and people with underlying health conditions.
 
-Like other global phenomena such as climate change, the impacts of the pandemic vary greatly by geographic location, with effective and early implementation of physical distancing measures and effective contact tracing associated with lower death rates, according to preliminary [research](https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3).
+Like other global phenomena such as climate change, the impacts of the pandemic vary greatly by geographic location, with effective and early implementation of physical distancing measures and effective contact tracing associated with lower death rates, according to preliminary [research](https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3), as illustrated in the animation below (source: [Washington Post](https://www.washingtonpost.com/graphics/2020/world/corona-simulator/)).
+
+[![](https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Katapult_importance_social_distancing.gif/350px-Katapult_importance_social_distancing.gif)](https://www.washingtonpost.com/graphics/2020/world/corona-simulator/)
 
 This article demonstrates how to download and map open data on the evolving coronavirus pandemic, using reproducible R code.
 The aim is not to provide scientific analysis of the data, but to demonstrate how 'open science' enables public access to important international datasets.
@@ -33,10 +37,12 @@ Before undertaking geographic analysis of 'rate' data, such as the number Covid-
 Simple graphics of complex phenomena can be misleading.
 This is well-illustrated in the figure below, which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.
 
+[![](https://raw.githubusercontent.com/willgeary/covid-nyc-dasymetric-map/master/assets/comparison_table_zip_hex_smoothed.png)](https://github.com/willgeary/covid-nyc-dasymetric-map)
 
 
 The post is intended more as a taster of geographic visualisation in R than as a gateway to scientific analysis of Covid-19 data.
 See resources such as the [eRum2020 CovidR](https://2020.erum.io/covidr-contest/) contest and [lists](https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f) of online [resources](https://github.com/HDRUK/covid-19) for pointers on how to usefully contribute to data-driven efforts to tackle the crisis.
+
 
 # Reproducible example
 
@@ -81,17 +87,41 @@ names(d)
 head(d)
 ```
 
-```{r}
+```{r, eval=FALSE}
 world_rnatural = rnaturalearth::ne_download(returnclass = "sf")
-unique(d$country[!d$id %in% world_rnatural$ISO_A3_EH])
-unique(world_rnatural$NAME[!world_rnatural$ISO_A3_EH %in% d$id])
-d %>% select(id, country) %>% filter(country == "France")
-world_rnatural %>% select(ISO_A3_EH, NAME_LONG) %>% filter(NAME_LONG == "France")
+# names(world_iso) # variables available
+world_iso = world_rnatural %>% 
+  select(NAME_LONG, ISO_A3_EH, POP_EST, GDP_MD_EST, CONTINENT)
 ```
 
+```{r, echo=FALSE, eval=FALSE}
+# exploration
+names(world_iso)
+unique(d$country[!d$id %in% world_iso$ISO_A3_EH])
+unique(world_iso$NAME[!world_iso$ISO_A3_EH %in% d$id])
+d %>% select(id, country) %>% filter(country == "France")
+world_iso %>% select(ISO_A3_EH, NAME_LONG) %>% filter(NAME_LONG == "France")
+saveRDS(world_iso, "world_iso.Rds")
+sf::write_sf(world_iso, "world_iso.geojson")
+piggyback::pb_upload("world_iso.geojson")
+piggyback::pb_upload("world_iso.geojson", "geocompr/d")
+u = piggyback::pb_download_url("world_iso.geojson")
+u
+f = "world_iso"
+msg = paste0("curl -i https://git.io -F 'url=", u, "'-F 'code=", f, "'")
+system(msg)
+```
+
+The result of the previous code block, an object representing the world and containing only variables of interest, was uploaded to GitHub and can be loaded from a GeoJSON file as follows:
+
 ```{r}
-plot(world_rnatural)
-world_projected = world_rnatural %>% 
+world_iso = sf::read_sf("https://git.io/JfICT") 
+```
+
+
+```{r}
+plot(world_iso)
+world_projected = world_iso %>% 
   st_transform("+proj=moll")
 plot(world_projected)
 ```
