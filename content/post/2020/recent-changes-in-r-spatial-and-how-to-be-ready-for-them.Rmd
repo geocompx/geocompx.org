@@ -1,0 +1,35 @@
+---
+title: Recent changes in R spatial and how to be ready for them
+author: Jakub Nowosad, Robin Lovelace
+date: '2020-04-24'
+slug: whyr_webinar004
+categories: [announcement]
+tags: [geocompr, sf, raster, tmap, docker, proj, covid19]
+draft: true
+---
+
+Currently, hundreds of R packages are related to spatial data analysis.
+They range from ecology and earth observation, through hydrology and soil science, to transportation and demography.
+These packages support various stages of analysis, including data preparation, visualization, modeling, or communicating the results.
+One common feature of most R spatial packages is that they are built upon some of the main representations of spatial data in R, available in the sf, sp, raster, terra, or stars package. 
+Those packages are also not entirely independent. 
+They are using external libraries, namely GEOS for spatial data operations, GDAL for reading and writing spatial data, and PROJ for conversions of spatial coordinates.
+
+Therefore, R spatial packages are interwoven with each other and depend partially on external software developments. 
+This has several positives, including the ability to use cutting-edge features and algorithms. 
+On the other hand, it also makes R spatial packages vulnerable to changes in the upstream packages and libraries.
+
+In the first part of the talk, we showcase several recent advances in R packages.
+It includes the largest recent change related to the developments in the PROJ library. 
+We explain why the changes happened and how they impact R users.
+The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker.
+We outline important considerations when setting-up operating systems for geographic R packages. 
+To reduce set-up times you can use geographic R packages Docker, a flexible and scalable technology containerization technology. 
+Docker can run on modern computers and on your browser via services such as Binder, greatly reducing set-up times. 
+Discussing these set-up options, and questions of compatibility between geographic R packages and paradigms such as the tidyverse and data.table, ensure that after the talk everyone can empower themselves with open source software for geographic data analysis in a powerful and flexible statistical programming environment.
+
+You can find the slides for the talk at https://nowosad.github.io/whyr_webinar004/.
+
+```{r, eval=TRUE, echo=FALSE}
+blogdown::shortcode("youtube", "Va0STgco7-4")
+```
