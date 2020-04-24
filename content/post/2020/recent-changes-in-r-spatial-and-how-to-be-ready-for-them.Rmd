@@ -5,13 +5,18 @@ date: '2020-04-24'
 slug: whyr_webinar004
 categories: [announcement]
 tags: [geocompr, sf, raster, tmap, docker, proj, covid19]
-draft: true
+draft: false
 ---
 
 Currently, hundreds of R packages are related to spatial data analysis.
-They range from ecology and earth observation, through hydrology and soil science, to transportation and demography.
+They range from ecology and earth observation, hydrology and soil science, to transportation and demography.
 These packages support various stages of analysis, including data preparation, visualization, modeling, or communicating the results.
-One common feature of most R spatial packages is that they are built upon some of the main representations of spatial data in R, available in the sf, sp, raster, terra, or stars package. 
+One common feature of most R spatial packages is that they are built upon some of the main representations of spatial data in R, available in key geographic R packages such as:
+
+- `sf`, which replaces `sp`
+- `terra`, which aims to replace raster
+- `stars` 
+
 Those packages are also not entirely independent. 
 They are using external libraries, namely GEOS for spatial data operations, GDAL for reading and writing spatial data, and PROJ for conversions of spatial coordinates.
 
@@ -22,7 +27,7 @@ On the other hand, it also makes R spatial packages vulnerable to changes in the
 In the first part of the talk, we showcase several recent advances in R packages.
 It includes the largest recent change related to the developments in the PROJ library. 
 We explain why the changes happened and how they impact R users.
-The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker.
+The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker (briefly covered in a previous [post](https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/) and outlined in the new [geocompr/docker](https://github.com/geocompr/docker#geocomputation-with-r-in-docker) repo).
 We outline important considerations when setting-up operating systems for geographic R packages. 
 To reduce set-up times you can use geographic R packages Docker, a flexible and scalable technology containerization technology. 
 Docker can run on modern computers and on your browser via services such as Binder, greatly reducing set-up times. 
