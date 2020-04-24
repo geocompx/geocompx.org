@@ -13,9 +13,9 @@ They range from ecology and earth observation, hydrology and soil science, to tr
 These packages support various stages of analysis, including data preparation, visualization, modeling, or communicating the results.
 One common feature of most R spatial packages is that they are built upon some of the main representations of spatial data in R, available in key geographic R packages such as:
 
-- `sf`, which replaces `sp`
-- `terra`, which aims to replace raster
-- `stars` 
+- **sf**, which replaces **sp**
+- **terra**, which aims to replace **raster**
+- **stars** 
 
 Those packages are also not entirely independent. 
 They are using external libraries, namely GEOS for spatial data operations, GDAL for reading and writing spatial data, and PROJ for conversions of spatial coordinates.
