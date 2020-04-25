@@ -1,7 +1,7 @@
 ---
 title: Recent changes in R spatial and how to be ready for them
 author: Jakub Nowosad, Robin Lovelace
-date: '2020-04-24'
+date: '2020-04-25'
 slug: whyr_webinar004
 categories: [announcement]
 tags: [geocompr, sf, raster, tmap, docker, proj, covid19]
