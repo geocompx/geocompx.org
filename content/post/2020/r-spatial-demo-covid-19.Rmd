@@ -101,7 +101,6 @@ We can get a sense of the contents of the data as follows:
 ncol(d)
 nrow(d)
 names(d)
-head(d)
 ```
 
 # Getting geographic data
