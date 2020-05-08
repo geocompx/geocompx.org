@@ -133,7 +133,7 @@ tm_shape(world_moll) +
 
 ## Fixed
 
-The `"jenks"` style allows for a manual selection of the breaks in conjunction with the `breaks` argument. 
+The `"fixed"` style allows for a manual selection of the breaks in conjunction with the `breaks` argument. 
 
 ```{r}
 tm_shape(world_moll) +
