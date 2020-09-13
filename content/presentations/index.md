@@ -2,6 +2,12 @@
 hidethedate: true
 ---
 
+### Presentation "Recent changes in R spatial and how to be ready for them"
+[Why R? Webinar](https://www.youtube.com/channel/UCwLy_PYrnCEhCU-Ay2F5Drw), remotely, 2020-04-23
+
+- [slides](https://nowosad.github.io/whyr_webinar004/)
+- [video](https://www.youtube.com/watch?v=Va0STgco7-4)
+
 ### Presentation "How to win friends and write an open-source book"
 [useR! 2019](http://user2019.r-project.org/), Toulouse, France, 2019-07-12
 
