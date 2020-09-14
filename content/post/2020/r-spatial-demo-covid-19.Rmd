@@ -383,7 +383,7 @@ There is also an [online talk](https://www.youtube.com/watch?v=Va0STgco7-4) on t
 <summary>Session info</summary>
 
 ```{r sessioninfo}
-devtools::session_info()
+sessioninfo::session_info()
 ```
 
 </details>

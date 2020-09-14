@@ -60,6 +60,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("remotes")
+          install.packages("sessioninfo")
           install.packages('blogdown')
           install.packages('cowplot')
           install.packages('tigris')
