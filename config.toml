@@ -6,6 +6,8 @@ theme = "minimal"
 # disqusShortname = "username" # delete this to disable disqus comments
 googleAnalytics = "UA-99618359-2"
 
+ignoreErrors = ["error-remote-getjson"]
+
 [params]
     author = "Robin Lovelace, Jakub Nowosad, Jannes Muenchow"
     subtitle = "a book on geographic data analysis, visualization and modeling"
