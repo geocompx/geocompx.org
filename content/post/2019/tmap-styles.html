@@ -1,0 +1,277 @@
+---
+title: 'Map coloring: the color scale styles available in the tmap package'
+author: Jakub Nowosad
+date: '2019-10-17'
+slug: tmap-color-scales
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - tmap
+  - maps
+  - viz
+draft: false
+number_sections: true
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>This vignette builds on the <a href="https://geocompr.robinlovelace.net/adv-map.html">making maps chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>.
+Its goal is to demonstrate all possible map styles available in the <strong>tmap</strong> package.</p>
+<div id="prerequisites" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<p>The examples below assume the following packages are attached:</p>
+<pre class="r"><code>library(spData) # example datasets
+library(tmap)   # map creation
+library(sf)     # spatial data reprojection</code></pre>
+<p>The <code>world</code> object containing a world map data from <a href="https://www.naturalearthdata.com/">Natural Earth</a> and information about countries’ names, regions, and subregions they belong to, areas, life expectancies, and populations.
+This object is in geographical coordinates using the WGS84 datum, however, for mapping purposes, the Mollweide projection is a better alternative (learn more in <a href="https://geocompr.robinlovelace.net/reproj-geo-data.html#modifying-map-projections">the modifying map projections section</a>).
+The <code>st_tranform</code> function from the <strong>sf</strong> package allows for quick reprojection to the selected coordinate reference system (e.g., <code>"+proj=moll"</code> represents the Mollweide projection).</p>
+<pre class="r"><code>world_moll = st_transform(world, crs = &quot;+proj=moll&quot;)</code></pre>
+</div>
+<div id="one-color" class="section level1">
+<h1>One color</h1>
+<p>Let’s start with the basics.
+To create a simple world map, we need to specify the data object (<code>world_moll</code>) inside the <code>tm_shape()</code> function, and the way we want to visualize it.
+The <strong>tmap</strong> package offers several visualisation possibilities for polygons, including <code>tm_borders()</code>, <code>tm_fill()</code>, and <code>tm_polygons()</code>.
+The last one draws the filled polygons with borders, where the fill color can be specified with the <code>col</code> argument:</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lightblue&quot;)</code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>The output is a map of world countries, where each country is filled with a light blue color.</p>
+</div>
+<div id="coloring-of-adjacent-polygons" class="section level1">
+<h1>Coloring of adjacent polygons</h1>
+<p>The <code>col</code> argument is very flexible, and its action depends on the value provided.
+In the previous example, we provided a single color value resulting in a map with one color.
+To create a map, where adjacent polygons do not get the same color, we need to provide a keyword <code>"MAP_COLORS"</code>.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;MAP_COLORS&quot;)</code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-4-1.png" width="768" /></p>
+<p>The default color can be changed using the <code>palette</code> argument - run the <code>tmaptools::palette_explorer()</code> function to see possible palettes’ names.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;MAP_COLORS&quot;,
+              palette = &quot;Pastel1&quot;)</code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<!-- Additionally, the number of classes can be set using the `n` argument. -->
+<p>Additionally, in this case, it is possible to use the <code>minimize</code> argument, which triggers the internal algorithm to search for a minimal number of colors for visualization.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;MAP_COLORS&quot;,
+              minimize = TRUE)</code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
+<p>The new map uses five colors<!-- except for Angola (blue color)-->.
+On a side note, in theory, no more than four colors are required to color the polygons of the map so that no two adjacent polygons have the same color (learn more about the four color map theorem on <a href="https://en.wikipedia.org/wiki/Four_color_theorem">Wikipedia</a>).</p>
+</div>
+<div id="categorical-maps" class="section level1">
+<h1>Categorical maps</h1>
+<p>The third use of the <code>col</code> argument is by providing the variable (column) name.
+In this case, the map will represent the given variable.
+By default, <strong>tmap</strong> behaves differently depending on the input variable type.
+For example, it will create a categorical map when the provided variable contains characters or factors.
+The <code>tm_polygons(col = "subregion", style = "cat")</code> code will be run automatically in this case.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;subregion&quot;)+
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+</div>
+<div id="discrete-maps" class="section level1">
+<h1>Discrete maps</h1>
+<p>Discrete maps represents continuous numerical variables using discrete class intervals.
+There are several ways to convert continuous variables to discrete ones implemented in <strong>tmap</strong>.</p>
+<div id="pretty" class="section level2">
+<h2>Pretty</h2>
+<p>When the variable provided as the <code>col</code> argument is numeric, <strong>tmap</strong> will use the <code>"pretty"</code> style as a default.
+In other words, it runs <code>tm_polygons(col = "lifeExp", style = "pretty")</code> invisibly to the user.
+This style rounds breaks into whole numbers where possible and spaces them evenly.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>A histogram is added using <code>legend.hist = TRUE</code> in this and several next examples to show how the selected map style relates to the distribution of values.</p>
+<p>It is possible to indicate a preferred number of classes using the <code>n</code> argument.
+Importantly, not every <code>n</code> is possible depending on the range of the values in the data.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              legend.hist = TRUE,
+              n = 4) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+</div>
+<div id="fixed" class="section level2">
+<h2>Fixed</h2>
+<p>The <code>"fixed"</code> style allows for a manual selection of the breaks in conjunction with the <code>breaks</code> argument.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;fixed&quot;,
+              breaks = c(45, 60, 75, 90),
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p>Additionally, the default labels can be overwritten using the <code>labels</code> argument.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;fixed&quot;,
+              breaks = c(45, 60, 75, 90),
+              labels = c(&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;),
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+</div>
+<div id="breaks-based-on-the-standard-deviation-value" class="section level2">
+<h2>Breaks based on the standard deviation value</h2>
+<p>The <code>"sd"</code> style calculates a standard deviation of a given variable, and next use this value as the break width.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;sd&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE)</code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+</div>
+<div id="fisher-algorithm" class="section level2">
+<h2>Fisher algorithm</h2>
+<p>The <code>"fisher"</code> style creates groups with maximalized homogeneity.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;fisher&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+</div>
+<div id="jenks-natural-breaks" class="section level2">
+<h2>Jenks natural breaks</h2>
+<p>The <code>"jenks"</code> style identifies groups of similar values in the data and maximizes the differences between categories.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;jenks&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+</div>
+<div id="hierarchical-clustering" class="section level2">
+<h2>Hierarchical clustering</h2>
+<p>In the <code>"hclust"</code> style, breaks are created using hierarchical clustering.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;hclust&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+</div>
+<div id="bagged-clustering" class="section level2">
+<h2>Bagged clustering</h2>
+<p>The <code>"bclust"</code> style uses the <code>bclust</code> function to generate the breaks using bagged clustering.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;bclust&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<pre><code>## Committee Member: 1(1) 2(1) 3(1) 4(1) 5(1) 6(1) 7(1) 8(1) 9(1) 10(1)
+## Computing Hierarchical Clustering</code></pre>
+</div>
+<div id="k-means-clustering" class="section level2">
+<h2>k-means clustering</h2>
+<p>The <code>"kmeans"</code> style uses the <code>kmeans</code> function to generate the breaks.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;kmeans&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+</div>
+<div id="quantile-breaks" class="section level2">
+<h2>Quantile breaks</h2>
+<p>The <code>"quantile"</code> style creates breaks with an equal number of features (polygons).</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;quantile&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
+</div>
+<div id="equal-breaks" class="section level2">
+<h2>Equal breaks</h2>
+<p>The <code>"equal"</code> style divides input values into bins of equal range and is appropriate for variables with a uniform distribution.
+It is not recommended for variables with a skewed distribution as the resulting map may end-up having little color diversity.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;, 
+              style = &quot;equal&quot;,
+              legend.hist = TRUE) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<p>Learn more about the implementation of discrete scales in <a href="https://r-spatial.github.io/classInt/index.html">the <strong>classInt</strong> package’s documentation</a>.</p>
+</div>
+</div>
+<div id="continuous-maps" class="section level1">
+<h1>Continuous maps</h1>
+<p>The <strong>tmap</strong> package also allows for creating continuous maps.</p>
+<div id="continuous" class="section level2">
+<h2>Continuous</h2>
+<p>The <code>"cont"</code> style presents a large number of colors over the continuous color field.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;cont&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-20-1.png" width="768" /></p>
+</div>
+<div id="order" class="section level2">
+<h2>Order</h2>
+<p>The <code>"order"</code> style also presents a large number of colors over the continuous color field.
+However, this style is suited to visualize skewed distributions; notice that the values on the legend do not change linearly.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;lifeExp&quot;,
+              style = &quot;order&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-21-1.png" width="768" /></p>
+</div>
+</div>
+<div id="logarithmic-scales" class="section level1">
+<h1>Logarithmic scales</h1>
+<p>The default numeric style, <code>pretty</code>, is easy to understand, but it is not proper for maps of variables with skewed distributions.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;pop&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
+<p>Another possible style, <code>order</code> works better in this case; however, it is not easy to interpret.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;pop&quot;, 
+              style = &quot;order&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+<p>A better alternative, in this case, is to use a common logarithm (the logarithm to base 10) scale.
+The <strong>tmap</strong> package gives two possibilities in this case - <code>"log10_pretty"</code> and <code>"log10"</code>.
+The <code>"log10_pretty"</code> style is a common logarithmic version of the regular <code>pretty</code> style.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;pop&quot;, 
+              style = &quot;log10_pretty&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-24-1.png" width="768" /></p>
+<p>On the other hand, the <code>"log10"</code> style is a version of a continuous scale.</p>
+<pre class="r"><code>tm_shape(world_moll) +
+  tm_polygons(col = &quot;pop&quot;, 
+              style = &quot;log10&quot;) +
+  tm_layout(legend.outside = TRUE) </code></pre>
+<p><img src="/post/2019/tmap-styles_files/figure-html/unnamed-chunk-25-1.png" width="768" /></p>
+</div>
+<div id="conclusions" class="section level1">
+<h1>Conclusions</h1>
+<p>Selecting a color scale style is not an easy task.
+It depends on the type of input variable and its distribution, but also the intended audience.
+Therefore, it is worth to spend some time and think about your readers (e.g., would they be able to understand the logarithmic scale or should you use the manual breaks instead?) and your data (e.g., how many breaks should there be to show different subgroups?).
+Now you know different color scale styles implemented in <strong>tmap</strong>, so let’s try using them for your own projects!</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479" class="uri">https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization" class="uri">https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>See the <code>?hclust</code> documentation for more details.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>See the <code>?bclust</code> documentation for more details.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>See the <code>?kmeans</code> documentation for more details.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

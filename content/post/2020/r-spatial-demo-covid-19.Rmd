@@ -233,7 +233,7 @@ tm_shape(w_yesterday) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
-    style = "log10_pretty"
+    style = "order"
     ) 
 ```
 
@@ -252,7 +252,7 @@ tm_shape(g) +
   tm_polygons(
     c("deaths", "recovered"),
     palette = "viridis",
-    style = "log10_pretty"
+    style = "order"
     ) +
   tm_layout(legend.position = c(0.01, 0.25))
 ```

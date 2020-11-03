@@ -1,0 +1,104 @@
+---
+title: 'Grids and graticules in the tmap package'
+author: Jakub Nowosad
+date: '2019-09-04'
+slug: tmap-grid
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - tmap
+  - maps
+  - viz
+draft: false
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>This vignette builds on the <a href="https://geocompr.robinlovelace.net/adv-map.html">making maps chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>.
+Its goal is to demonstrate how to set and modify grids and graticules in the <strong>tmap</strong> package.</p>
+<div id="prerequisites" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<p>The examples below assume the following packages are attached:</p>
+<pre class="r"><code>library(spData) # example datasets
+library(tmap)   # map creation (&gt;=2.3)
+library(sf)     # spatial data classes</code></pre>
+</div>
+<div id="grids-and-graticules" class="section level1">
+<h1>Grids and graticules</h1>
+<p>The <strong>tmap</strong> package offers two ways to draws coordinate lines - <code>tm_grid()</code> and <code>tm_graticules()</code>.
+The role of <code>tm_grid()</code> is to represent the input data’s coordinates.
+For example, the <code>nz</code> object uses the New Zealand Transverse Mercator projection, with meters as its units.</p>
+<pre class="r"><code>tm_shape(nz) + 
+  tm_polygons() +
+  tm_grid()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<p><code>tm_graticules()</code> shows longitude lines (meridians) and latitude lines (parallels), with degrees as units (note the degree sign in the example below).</p>
+<pre class="r"><code>tm_shape(nz) + 
+  tm_polygons() +
+  tm_graticules()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+</div>
+<div id="layers-order" class="section level1">
+<h1>Layers order</h1>
+<p>Both, <code>tm_grid()</code> and <code>tm_graticules()</code> could be placed above or below the main spatial data.
+Its position on the map depends on its place in the code.
+When <code>tm_grid()</code> or <code>tm_graticules()</code> are placed after the code drawing geometry (e.g. <code>tm_polygons()</code>), the grids or graticules are ploted on the top of the map.
+On the other hand, when <code>tm_grid()</code> or <code>tm_graticules()</code> are placed before the code drawing geometry (e.g. <code>tm_polygons()</code>), the grids or graticules are plotted behind the spatial data.</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_graticules() + 
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+</div>
+<div id="customization" class="section level1">
+<h1>Customization</h1>
+<p>Grids and graticules can be easily customized in <strong>tmap</strong> using several arguments.
+The first one, <code>labels.inside.frame</code> moves the labels inside the map grid (it is set to <code>FALSE</code> as the default).</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_grid(labels.inside.frame = TRUE) + 
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
+<p>The number of horizontal (<code>x</code>) and vertical (<code>y</code>) lines can be set using the <code>n.x</code> and <code>n.y</code> arguments.
+Importantly, <strong>tmap</strong> rounds coordinate values to equally spaced “round” values, so the number of actual labels may be slightly different than set with <code>n.x</code> and <code>n.y</code>.</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_grid(n.x = 4, n.y = 3) + 
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+<p>By default, <code>tm_grid()</code> and <code>tm_graticules()</code> shows ticks and lines.
+They can be disabled using <code>ticks = FALSE</code> and <code>lines = FALSE</code>.</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_grid(ticks = FALSE) +
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p>Especially, <code>lines = FALSE</code> could be useful when presenting raster data.</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_grid(lines = FALSE) +
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
+<p>It is also possible to customize <code>tm_grid()</code> and <code>tm_graticules()</code> apperance, for example by chaning the lines colors (<code>col</code>), width (<code>lwd</code>) or labels size (<code>labels.size</code>).</p>
+<pre class="r"><code>tm_shape(nz) +
+  tm_grid(col = &quot;red&quot;, lwd = 3, labels.size = 0.4) +
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p>The above examples uses <code>tm_grid()</code>, but the same arguments apply to the <code>tm_graticules()</code>.</p>
+</div>
+<div id="layout-settings" class="section level1">
+<h1>Layout settings</h1>
+<p>By default, <strong>tmap</strong> adds small inner margins between the presented data and the map frame.
+It works well in many cases, for example, see the map of New Zealand above.
+However, it does not look perfect for world maps.</p>
+<pre class="r"><code>tm_shape(world) + 
+  tm_graticules() + 
+  tm_polygons()</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p>The way to fix this is to use the <code>tm_layout()</code> function and set its <code>inner.margins</code> argument to <code>0</code>.</p>
+<pre class="r"><code>tm_shape(world) + 
+  tm_graticules() + 
+  tm_polygons() +
+  tm_layout(inner.margins = 0)</code></pre>
+<p><img src="/post/2019/tmap-grid_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+</div>
