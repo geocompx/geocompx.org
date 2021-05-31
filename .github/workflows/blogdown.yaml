@@ -76,7 +76,7 @@ jobs:
 
       - name: Build site
         run: |
-          Rscript -e 'blogdown::build_site(build_rmd = "md5sum")'
+          Rscript -e 'blogdown::build_site(build_rmd = FALSE)'
           
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
