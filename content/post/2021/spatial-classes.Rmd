@@ -1,0 +1,37 @@
+---
+title: "SC"
+author: Jakub Nowosad
+date: "2021-06-11"
+slug: spatial-classes
+categories: [vignette]
+tags: [geocompr, sf, sp, stars, raster, terra]
+draft: true
+---
+
+state the problem
+...
+relate to our webinar
+mention spatial classes/packages/etc
+
+show problems - using my pacakges as examples
+show tmap as an conter-example
+
+mention that each spatial classes packages has some converters
+whis bp summarizes them
+(check if michael sumner package cannot be added here - https://github.com/mdsumner/spbabel)
+
+# vector data
+
+## Classes
+
+## Transformations
+
+# raster data 
+
+## Classes
+
+## Transformations
+
+# summary
+
+mention vectorization/rasterization
