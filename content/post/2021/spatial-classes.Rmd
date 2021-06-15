@@ -15,7 +15,7 @@ knitr::write_bib(c("sp", "sf", "stars", "raster", "terra", "sabre", "tmap",
                  "content/post/2021/refs.bib")
 ```
 
-The R programming language has become a powerful environment for spatial data analysis.
+The R programming language has, over the past two decades, evolved substantial spatial data analysis capabilities, and is now one of the most powerful environments for undertaking geographic research using a reproducible command line interface.
 Currently, dedicated R packages allow to read spatial data and apply a plethora of different kinds of spatial methods in a reproducible fashion.
 
 There are two main^[There are also other spatial data models, including meshes or point clouds.] spatial data models - spatial vector data and spatial raster data.
@@ -195,11 +195,11 @@ kbl(v) %>%
 
 ## Summary
 
-This blog post summarizes how to move between different existing R spatial vector and raster classes.
-All of the functions mentioned above have only one role - to change classes of input objects. 
+This blog post summarizes how to move between different R spatial vector and raster classes.
+All of the functions mentioned above have one role: to change classes of input objects. 
 They do not, however, change geometries or underlining values in the data.
 
-Additionally, the move from the spatial vector data model to the spatial raster data model (and vice versa) is also possible. 
+Additionally, the blog post demonstrates how switching from the spatial vector data model to the spatial raster data model (and vice versa) is also possible. 
 These operations are known as rasterization and vectorization, and they could impact spatial and nonspatial information in the input data.
 To learn more about them, read [the Raster-Vector Interactions section](https://geocompr.robinlovelace.net/geometric-operations.html#raster-vector) in [Geocomputation with R](https://geocompr.robinlovelace.net/).
 
