@@ -1,11 +1,11 @@
 ---
-title: "Spatial classes in R"
+title: "Conversions between different spatial classes in R"
 author: Jakub Nowosad
-date: "2021-06-11"
-slug: spatial-classes
+date: "2021-06-17"
+slug: spatial-classes-conversion
 categories: [vignette]
 tags: [geocompr, sf, sp, stars, raster, terra, sabre, tmap, rstats]
-draft: true
+draft: false
 bibliography: refs.bib
 ---
 
@@ -54,6 +54,10 @@ srtm_stars
 Secondly, other packages with methods we want to use, could only accept one specific spatial class, but not the other.
 For example, the current version of the **sabre** package [@R-sabre] (0.3.2) accepts objects from the **raster** package, but not ones from **terra** or **stars**^[I plan to improve that in a future release.].
 The `partitions1` and `partitions2` objects are of the `RasterLayer` class from **raster**, so the `vmeasure_calc()` function works correctly.
+
+```{r, echo=FALSE, eval=FALSE}
+remotes::install_github("nowosad/sabre@e3c0f18")
+```
 
 ```{r, message=FALSE}
 library(sabre)
@@ -199,7 +203,7 @@ This blog post summarizes how to move between different R spatial vector and ras
 All of the functions mentioned above have one role: to change classes of input objects. 
 They do not, however, change geometries or underlining values in the data.
 
-Additionally, the blog post demonstrates how switching from the spatial vector data model to the spatial raster data model (and vice versa) is also possible. 
+Additionally, switching from the spatial vector data model to the spatial raster data model (and vice versa) is also possible. 
 These operations are known as rasterization and vectorization, and they could impact spatial and nonspatial information in the input data.
 To learn more about them, read [the Raster-Vector Interactions section](https://geocompr.robinlovelace.net/geometric-operations.html#raster-vector) in [Geocomputation with R](https://geocompr.robinlovelace.net/).
 
