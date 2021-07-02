@@ -16,6 +16,7 @@ hidethedate: true
 - [CP6521 Advanced GIS](https://rstudio-pubs-static.s3.amazonaws.com/460816_f7e4d237e0334e9887323686041bd762.html), [Yongsun Lee](https://sites.google.com/view/yongsunglee), Georgia Tech
 - [Urban Data Analytics in R](https://sia.planning.unc.edu/teaching/techniques-course/), [Nikhil Kaza](https://sia.planning.unc.edu/), University of North Carolina at Chapel Hill
 -  [Geospatial Analytics](https://le.ac.uk/modules/2019/gy7707), taught by Dr [Nick Tate](https://www2.le.ac.uk/departments/geography/people/njt9) as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.
+-  [GEOG 28402 & 28403: Geographic Information Science II & III](https://geography.uchicago.edu/content/geographical-sciences-and-gis-courses), [Marynia Kolak](https://makosak.github.io/) at the [Center for Spatial Data Science](https://makosak.github.io/), Unversity of Chicago
 
 ### Other teaching courses/lectures/guides using the book
 
