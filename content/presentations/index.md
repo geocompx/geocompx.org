@@ -2,6 +2,11 @@
 hidethedate: true
 ---
 
+### Presentation "GIS and mapping ecosystem of R"
+Ecole thématique SIGR2021, Saint-Pierre-d'Oléron, 2021-06-29
+
+- [slides](https://nowosad.github.io/SIGR2021/lecture/lecture.html)
+
 ### Presentation "Recent changes in R spatial and how to be ready for them"
 [Why R? Webinar](https://www.youtube.com/channel/UCwLy_PYrnCEhCU-Ay2F5Drw), remotely, 2020-04-23
 

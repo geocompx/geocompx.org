@@ -2,6 +2,11 @@
 hidethedate: true
 ---
 
+### Workshops on "GIS and mapping ecosystem of R" and "Image processing and raster analysis with R"
+Ecole thématique SIGR2021, Saint-Pierre-d'Oléron, 2021-06-29
+
+- [All slides and additional information](https://nowosad.github.io/SIGR2021/)
+
 ### Workshop on Geocomputation with R 
 [European Geosciences Union](https://www.egu2019.eu/). Vienna, Austria, 2019-04-10
 
