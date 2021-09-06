@@ -1,0 +1,29 @@
+---
+title: "Geocomputation with R: Second Edition feedback"
+author: ["Robin Lovelace", "Jakub Nowosad", "Jannes Muenchow"]
+date: "2021-09-06"
+slug: geocompr2-bp1
+categories: [vignette]
+tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, sabre, tmap, rstats]
+draft: true
+---
+
+It's been almost 3 years since the first edition of Geocomputation with R was published back in 2019. 
+It's been an amazing journey for this open source book on geographic data analysis, visualization and modeling since then.
+We have reached almost 500k people via the website at https://geocompr.robinlovelace.net/ and the physical book. 
+The book now contributes to many university courses, lectures, and personal development as outlined at https://geocompr.github.io/guestbook/ - where you can add you own comments.
+
+Building on the success of the first edition, and motivated by the need for the material to adapt as spatial ecosystem evolves, we have decided that it is time for a Second Edition.
+We plan to start work on it over the next few months, aiming for publication around summer 2022.
+Second edition will be available at https://geocompr.robinlovelace.net/, while you can find the first edition at https://bookdown.org/robinlovelace/geocompr/.
+
+We already have plenty of changes, updates, and improvements in mind, as documented in the book's issue tracker.
+However, we want to get feedback from the community, to ensure we're not miss something key and to find out what you most want from a 2nd edition.
+**We're asking for your help in guiding the future of Geocomputation with R!**
+
+The book is already much stronger thanks to community, with 50+ people contributing to the codebase already and many more supporting in the issue tracker and the guestbook. 
+**Please take a few minutes to let us know your thoughts on the current edition, and suggestions for the next one using (the Google form.)[https://forms.gle/nq9RmbxJyZXQgc948].**
+
+Thanks from the Geocomputation with R team,
+
+Robin Lovelace, Jakub Nowosad, and Jannes Muenchow
