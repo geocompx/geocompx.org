@@ -1,6 +1,6 @@
 ---
 title: "Geocomputation with R: Second Edition feedback"
-author: ["Robin Lovelace", "Jakub Nowosad", "Jannes Muenchow"]
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
 date: "2021-09-06"
 slug: geocompr2-bp1
 categories: [announcement]
