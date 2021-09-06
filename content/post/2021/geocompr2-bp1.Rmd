@@ -5,7 +5,7 @@ date: "2021-09-06"
 slug: geocompr2-bp1
 categories: [vignette]
 tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, sabre, tmap, rstats]
-draft: true
+draft: false
 ---
 
 It's been almost 3 years since the first edition of Geocomputation with R was published back in 2019. 
