@@ -3,7 +3,7 @@ title: "Geocomputation with R: Second Edition feedback"
 author: ["Robin Lovelace", "Jakub Nowosad", "Jannes Muenchow"]
 date: "2021-09-06"
 slug: geocompr2-bp1
-categories: [vignette]
+categories: [announcement]
 tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, sabre, tmap, rstats]
 draft: false
 ---
@@ -22,7 +22,7 @@ However, we want to get feedback from the community, to ensure we're not miss so
 **We're asking for your help in guiding the future of Geocomputation with R!**
 
 The book is already much stronger thanks to community, with 50+ people contributing to the codebase already and many more supporting in the issue tracker and the guestbook. 
-**Please take a few minutes to let us know your thoughts on the current edition, and suggestions for the next one using (the Google form.)[https://forms.gle/nq9RmbxJyZXQgc948].**
+**Please take a few minutes to let us know your thoughts on the current edition, and suggestions for the next one using [the Google form](https://forms.gle/nq9RmbxJyZXQgc948).**
 
 Thanks from the Geocomputation with R team,
 
