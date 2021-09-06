@@ -8,6 +8,8 @@ tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, sabre, tmap, rstats]
 draft: false
 ---
 
+TL;DR: Please help us by filling out the survey at https://forms.gle/nq9RmbxJyZXQgc948.
+
 It's been almost 3 years since the first edition of Geocomputation with R was published back in 2019. 
 It's been an amazing journey for this open source book on geographic data analysis, visualization and modeling since then.
 We have reached almost 500k people via the website at https://geocompr.robinlovelace.net/ and the physical book. 
