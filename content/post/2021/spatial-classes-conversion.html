@@ -31,8 +31,10 @@ Of course, having more than one package (with its own spatial class/es) for a ve
 To illustrate this, let’s read the same spatial data, <code>srtm.tif</code> from the <strong>spDataLarge</strong> package <span class="citation">(Nowosad and Lovelace <a href="#ref-R-spDataLarge" role="doc-biblioref">2021</a>)</span>, using <strong>raster</strong> and <strong>stars</strong>.
 The <strong>raster</strong> object:</p>
 <pre class="r"><code>raster_file_path = system.file(&quot;raster/srtm.tif&quot;, package = &quot;spDataLarge&quot;)
-library(raster)
-srtm_raster = raster(raster_file_path)
+library(raster)</code></pre>
+<pre><code>## Warning: no function found corresponding to methods exports from &#39;raster&#39; for:
+## &#39;area&#39;</code></pre>
+<pre class="r"><code>srtm_raster = raster(raster_file_path)
 srtm_raster</code></pre>
 <pre><code>## class      : RasterLayer 
 ## dimensions : 457, 465, 212505  (nrow, ncol, ncell)
@@ -195,12 +197,9 @@ srtm_raster2 = as(srtm_stars1, &quot;Raster&quot;)
 # terra to stars
 srtm_stars2 = st_as_stars(srtm_terra1)
 
-# stars to terra?
-srtm_raster2a = as(srtm_stars1, &quot;Raster&quot;)
-srtm_terra1a = rast(srtm_raster2a)</code></pre>
-<p>As you can see - in most cases, we can just use one function to move from one class to another.
-The only exception is from <strong>stars</strong> to <strong>terra</strong> - currently, there is not a dedicated custom function for that conversion.
-I plan to update this post, if/when this function will be created.</p>
+# stars to terra
+srtm_terra1a = as(srtm_stars1, &quot;SpatRaster&quot;)</code></pre>
+<p>As you can see - in most cases, we can just use one function to move from one class to another.</p>
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -253,7 +252,7 @@ stars
 raster()
 </td>
 <td style="text-align:left;border-right:1px solid;font-style: italic;">
-as(x, “Raster”) + rast()
+as(x, “SpatRaster”)
 </td>
 <td style="text-align:left;font-style: italic;">
 </td>

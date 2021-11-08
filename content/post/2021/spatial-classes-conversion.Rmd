@@ -171,14 +171,11 @@ srtm_raster2 = as(srtm_stars1, "Raster")
 # terra to stars
 srtm_stars2 = st_as_stars(srtm_terra1)
 
-# stars to terra?
-srtm_raster2a = as(srtm_stars1, "Raster")
-srtm_terra1a = rast(srtm_raster2a)
+# stars to terra
+srtm_terra1a = as(srtm_stars1, "SpatRaster")
 ```
 
 As you can see - in most cases, we can just use one function to move from one class to another.
-The only exception is from **stars** to **terra** - currently, there is not a dedicated custom function for that conversion. 
-I plan to update this post, if/when this function will be created.
 
 ```{r, echo=FALSE}
 library(tibble)
@@ -187,7 +184,7 @@ v = tribble(
   ~"FROM/TO", ~raster, ~terra, ~stars,
   "raster", "",  'rast()', "st_as_stars()",
   "terra", "raster()", "", 'st_as_stars()',
-  "stars", "raster()",  'as(x, "Raster") + rast()', ""
+  "stars", "raster()",  'as(x, "SpatRaster")', ""
 )
 kbl(v) %>% 
   column_spec(1:3, border_left = FALSE, border_right = TRUE) %>%
