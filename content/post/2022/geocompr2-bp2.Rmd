@@ -1,0 +1,37 @@
+---
+title: "What's is new in the second edition of Geocomputation with R: part 1"
+author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+date: "2022-01-30"
+slug: geocompr2-bp2
+categories: [updates]
+tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, tmap, rstats]
+draft: true
+---
+
+- Replacement of `raster` with `terra` in Chapters 1 to 7 (see commits related to this update [here](https://github.com/Robinlovelace/geocompr/search?q=terra&type=commits)) 
+- Update of Chapter 8 to include mention alternative ways or reading-in OSM data in [#656](https://github.com/Robinlovelace/geocompr/pull/656)
+- Refactor build settings so the book builds on Docker images in the [geocompr/docker](https://github.com/geocompr/docker) repo
+- Improve the experience of using the book in Binder (ideal for trying out the code before installing or updating the necessary R packages), as documented in issue [#691](https://github.com/Robinlovelace/geocompr/issues/691) (thanks to [yuvipanda](https://github.com/yuvipanda))
+- Improved communication of binary spatial predicates in Chapter 4 (see [#675](https://github.com/Robinlovelace/geocompr/pull/675))
+- New section on the links between subsetting and clipping (see [#698](https://github.com/Robinlovelace/geocompr/pull/698)) in Chapter 5
+- New [section](https://geocompr.robinlovelace.net/spatial-operations.html#de-9im-strings) on the dimensionally extended 9 intersection model (DE-9IM)
+- New [chapter](https://geocompr.robinlovelace.net/raster-vector.html) on raster-vector interactions split out from Chapter 5
+
+- s2 mentioned in ch2
+- info about "This means that anyone still using these packages should "**transition to sf/stars/terra functions using GDAL and PROJ at your earliest convenience**"."
+
+- Adds section R packages for working with raster data
+- terra resampling much improved
+- major improvements to Reprojecting geographic data
+- many improvements to I/O - more data packages, geocoding part, GeoTIFF COG, read_sf <- st_read; write_sf <- st_write, ogr sql, COG reading
+- Recreated several plots using the tmap package
+- Improved the Coordinate Reference Systems section - both prose and figures
+- Saved some R spatial objects to files in both spData and spDataLarge - this way, we can read data using raster/terra/stars, instead of just loading one package's class object into R memory
+- Created external website for solutions
+- Updated history
+- Customize the look of text blocks
+- I would suggest using the authority:code style of specifying CRSs through the book.
+- Many small changes...
+
+
+ask people for their opinions?
