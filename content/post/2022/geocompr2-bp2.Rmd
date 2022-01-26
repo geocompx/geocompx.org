@@ -8,7 +8,6 @@ tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, tmap, rstats]
 draft: true
 ---
 
-<!-- intro -->
 Geocomputation with R is a book on geographic data analysis, visualization, and modeling.
 Its first edition was published in 2019 and reached about 500k people via the website at https://geocompr.robinlovelace.net/ and [the physical book](https://www.routledge.com/9781138304512). 
 The book also contributes to many university courses, lectures, and personal development as outlined at https://geocompr.github.io/guestbook/.
@@ -54,26 +53,31 @@ We also spent some time to show how to [read just a part of vector data file usi
 
 We also decided that the 2nd edition is a good time to improve the book infrastructure, i.e. data packages, storage of the exercises and solutions, automatic book builds, etc.
 
-- new style - Customize the look of text blocks
+The most visible change is the visual theme of the book website. 
+Now it uses the Bootstrap 4 framework through the `bookdown::bs4_book` theme with slightly customized elements, such as font families or a text blocks style.
 
-- Saved some R spatial objects to files in both spData and spDataLarge - this way, we can read data using raster/terra/stars, instead of just loading one package's class object into R memory
-- Created external website for solutions
-- Refactor build settings so the book builds on Docker images in the [geocompr/docker](https://github.com/geocompr/docker) repo
-- Improve the experience of using the book in Binder (ideal for trying out the code before installing or updating the necessary R packages), as documented in issue [#691](https://github.com/Robinlovelace/geocompr/issues/691) (thanks to [yuvipanda](https://github.com/yuvipanda))
+Next, we created an external bookdown-based website for solutions of the Geocomputation with R exercises. 
+You can find its early version at https://geocompr.github.io/solutions/, and we plan to describe it in more details in some future blog post.
 
+The book still uses two external packages, **spData** and **spDataLarge**, to store example datasets.
+However, we made an important change here -- we saved some R spatial objects  to files (e.g., **raster** objects to GeoTIFF) -- this way, we can read data using **raster**/**terra**/**stars**, instead of just loading one package's class object into R memory.
+
+We refactored build settings so the book builds on Docker images in the [geocompr/docker](https://github.com/geocompr/docker) repo, and improved the experience of using the book in Binder (ideal for trying out the code before installing or updating the necessary R packages), as documented in issue [#691](https://github.com/Robinlovelace/geocompr/issues/691) (thanks to [yuvipanda](https://github.com/yuvipanda)).
 
 ## Minor changes
 
-The book received also (almost) countless minor changes, including rephrasing of many concepts and reordering of our prose to make some concepts easier to understand.
-We also reworked several plots using the **tmap** package to improve the visual consistency of the book.
+We reworked several plots using the **tmap** package to improve the visual consistency of the book.
 
 ![](/post/2022/geocompr2-bp2_files/figtmap.png)
 
-- Many small changes...
+The book also received (almost) countless minor changes, including rephrasing of many concepts and reordering of our prose to make some ideas easier to understand.
 
+## Outro
 
-<!-- outro -->
+Our plan is now to move to edits and expansions of the second part of the book called Extensions.
+We will work on enhanced Making maps chapter, updates on Briger to GIS software and Statistical learning.
 
-- issues/suggestions/PRs
-- thanks to some people?
-- ask people for their opinions?
+The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
+We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*,  Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
+We are still actively working on the book and thus -- let us know if you have any [issues or suggestions](https://github.com/Robinlovelace/geocompr/issues) and feel free to create any [Pull Request](https://github.com/Robinlovelace/geocompr/pulls) from fixing typos, clarifying unclear sentences, to changes to the code and prose.
+You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf).
