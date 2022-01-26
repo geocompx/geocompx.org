@@ -18,38 +18,43 @@ The second edition (work in progress) is available at https://geocompr.robinlove
 
 ## Major changes
 
-- Replacement of `raster` with `terra` in Chapters 1 to 7 (see commits related to this update [here](https://github.com/Robinlovelace/geocompr/search?q=terra&type=commits)) 
-- major improvements to Reprojecting geographic data
-- Improved the Coordinate Reference Systems section - both prose and figures
-- I would suggest using the authority:code style of specifying CRSs through the book.
+Several major changes happened to #rspatial since release of the first version of the book.
+Most importantly:^[There are also other important changes, such as retirement of **RQGIS** and **mlr**, but we plan to focus on them while updating the second part of the book.]
 
+- PROJ library was largely refactored, which have had an impact on a plethora of GIS software, including R spatial packages
+- The **raster** package, highlighted in the 1st edition, is now being replaced by its successor **terra**
+
+![](/post/2022/geocompr2-bp2_files/ch2fig.png)
+
+Both of these changes are now addressed in Geocomputation with R. 
+Chapter ["Reprojecting geographic data"](https://geocompr.robinlovelace.net/reproj-geo-data.html) undergone numerous modifications, including explanation of the currently recommend WKT coordinate reference systems representation, information on how to get and set CRSs, or much improved section on creating custom projections.
+Similarly, we already replaced **raster**'s descriptions and functions with **terra** in the first eight chapters of the book.
 
 ## Changes to specific chapters
 
-<!-- ch1 -->
-- Updated history
+Additionally, almost all chapter received significant edits.
+Section [The history of R-spatial](https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial) in 1st chapter was updated with summary of various new #rspatial developments, including **terra**, **stars**, **lidR**, **rayshader**, **ggspatial**, **mapsf**, etc.
+We also used this section to highlight that packages [**rgdal**, **rgeos**, and **maptools** will be retired at the end of 2023](https://stat.ethz.ch/pipermail/r-sig-geo/2021-September/028760.html) and that anyone still using these packages should "**transition to sf/stars/terra functions using GDAL and PROJ at your earliest convenience**"."
 
-<!-- ch2 -->
-- s2 mentioned in ch2
-- Adds section R packages for working with raster data
+Second chapter got an information about **s2**, an interface to spherical geometry library already used by the **sf** package, and a [comparison between **terra** and **stars**](https://geocompr.robinlovelace.net/spatial-class.html#r-packages-for-working-with-raster-data).
 
-<!-- ch4 -->
-- Improved communication of binary spatial predicates in Chapter 4 (see [#675](https://github.com/Robinlovelace/geocompr/pull/675))
-- New [section](https://geocompr.robinlovelace.net/spatial-operations.html#de-9im-strings) on the dimensionally extended 9 intersection model (DE-9IM)
+In Chapter 4, we added [improved communication of binary spatial predicates in Chapter 4](https://geocompr.robinlovelace.net/spatial-operations.html#topological-relations) and a new  [section](https://geocompr.robinlovelace.net/spatial-operations.html#de-9im-strings) on the dimensionally extended 9 intersection model (DE-9IM).
 
-<!-- ch5 -->
-- New section on the links between subsetting and clipping (see [#698](https://github.com/Robinlovelace/geocompr/pull/698)) in Chapter 5
-- terra resampling much improved
+![](/post/2022/geocompr2-bp2_files/ch4fig.png)
 
-<!-- ch6 -->
-- New [chapter](https://geocompr.robinlovelace.net/raster-vector.html) on raster-vector interactions split out from Chapter 5
+The vector part of Chapter 5 received [a new section on the links between subsetting and clipping](https://geocompr.robinlovelace.net/geometric-operations.html#subsetting-and-clipping), while the raster part got a much improved [part on resampling methods](https://geocompr.robinlovelace.net/geometric-operations.html#resampling).
+We also decided to split out the text related raster-vector interactions into [a new 6th chapter](https://geocompr.robinlovelace.net/raster-vector.html).
 
-<!-- ch8 -->
-- many improvements to I/O - more data packages, geocoding part, GeoTIFF COG, read_sf <- st_read; write_sf <- st_write, ogr sql, COG reading
-- Update of Chapter 8 to include mention alternative ways or reading-in OSM data in [#656](https://github.com/Robinlovelace/geocompr/pull/656)
+Finally, [Chapter 8](https://geocompr.robinlovelace.net/read-write.html#read-write) got a bunch of improvements, including mentions of more data packages, alternative ways or reading-in OSM data, a part about geocoding, and information about Cloud Optimized GeoTIFF (COG).
+We also spent some time to show how to [read just a part of vector data file using OGR SQL queries and WKT filters](https://geocompr.robinlovelace.net/read-write.html#iovec), and [extract only a portion of a COG raster file](https://geocompr.robinlovelace.net/read-write.html#raster-data-read). 
 
+![](/post/2022/geocompr2-bp2_files/ch8fig.png)
 
 ## Book infrastructure
+
+We also decided that the 2nd edition is a good time to improve the book infrastructure, i.e. data packages, storage of the exercises and solutions, automatic book builds, etc.
+
+- new style - Customize the look of text blocks
 
 - Saved some R spatial objects to files in both spData and spDataLarge - this way, we can read data using raster/terra/stars, instead of just loading one package's class object into R memory
 - Created external website for solutions
@@ -59,13 +64,16 @@ The second edition (work in progress) is available at https://geocompr.robinlove
 
 ## Minor changes
 
-- Recreated several plots using the tmap package
-- Customize the look of text blocks
+The book received also (almost) countless minor changes, including rephrasing of many concepts and reordering of our prose to make some concepts easier to understand.
+We also reworked several plots using the **tmap** package to improve the visual consistency of the book.
+
+![](/post/2022/geocompr2-bp2_files/figtmap.png)
+
 - Many small changes...
 
 
 <!-- outro -->
-- info about "This means that anyone still using these packages should "**transition to sf/stars/terra functions using GDAL and PROJ at your earliest convenience**"."
+
 - issues/suggestions/PRs
 - thanks to some people?
 - ask people for their opinions?
