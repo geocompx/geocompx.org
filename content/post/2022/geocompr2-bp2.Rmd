@@ -1,5 +1,5 @@
 ---
-title: "What's is new in the second edition of Geocomputation with R: part 1"
+title: "Progress update: Geocomputation with R Second Edition Part 1"
 author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
 date: "2022-01-30"
 slug: geocompr2-bp2
@@ -9,11 +9,15 @@ draft: true
 ---
 
 Geocomputation with R is a book on geographic data analysis, visualization, and modeling.
-Its first edition was published in 2019 and reached about 500k people via the website at https://geocompr.robinlovelace.net/ and [the physical book](https://www.routledge.com/9781138304512). 
-The book also contributes to many university courses, lectures, and personal development as outlined at https://geocompr.github.io/guestbook/.
-Tools and methods for spatial data analysis are still quickly evolving, and thus we decided in September 2021 to start working on the second edition of the book.
-At the time of writing this blog post, we made a lot of alterations to the first part of the book called *Foundations*, and the main role of this document is to list and explain the changes.
+The First Edition was first published as a physical book in 2019 and we have reached 500k people through via the website at https://geocompr.robinlovelace.net/ and [the physical book](https://www.routledge.com/9781138304512) since then. 
+
+The book has also become a key part of many university courses, lectures, and has been endorsed by many people who have found it vital for their work and for learning new geographic skills, as outlined in our [guestbook at  geocompr.github.io/guestbook/](https://geocompr.github.io/guestbook/).
+Tools and methods for geographic data analysis are evolving quickly, especially in the R-Spatial ecosystem.
+Because of these changes, and demand from our readers and the wider community, we decided in September 2021 to start working on the second edition of the book.
 The second edition (work in progress) is available at https://geocompr.robinlovelace.net/, while you can find the first edition at https://bookdown.org/robinlovelace/geocompr/.
+
+At the time of writing (January 2022), we have already made many changes to first part of the book called *Foundations*.
+In this post we list and explain the changes.
 
 ## Major changes
 
@@ -74,7 +78,7 @@ The book also received (almost) countless minor changes, including rephrasing ma
 
 ## Outro
 
-Our plan is to move to edits and expansions of the second part of the book called Extensions.
+Our plan now is to switch attention to the second part of the book called Extensions, while Part 1 is sent for peer review.
 We will work on the enhanced Making maps chapter, updates on Bridges to GIS software and Statistical learning.
 
 The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
