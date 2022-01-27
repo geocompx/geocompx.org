@@ -1,11 +1,11 @@
 ---
 title: "Progress update: Geocomputation with R Second Edition Part 1"
 author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
-date: "2022-01-30"
+date: "2022-01-27"
 slug: geocompr2-bp2
 categories: [updates]
-tags: [geocompr, geocompr2, sf, sp, stars, raster, terra, tmap, rstats]
-draft: true
+tags: [geocompr, geocompr2, sf, rgdal, stars, raster, terra, s2, rstats]
+draft: false
 ---
 
 Geocomputation with R is a book on geographic data analysis, visualization, and modeling.
@@ -82,6 +82,6 @@ Our plan now is to switch attention to the second part of the book called Extens
 We will work on the enhanced Making maps chapter, updates on Bridges to GIS software and Statistical learning.
 
 The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
-We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*,  Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
+We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*, Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
 We are still actively working on the book, and thus -- let us know if you have any [issues or suggestions](https://github.com/Robinlovelace/geocompr/issues) and feel free to create any [Pull Request](https://github.com/Robinlovelace/geocompr/pulls) from fixing typos, clarifying unclear sentences, to changes to the code and prose.
 You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf).

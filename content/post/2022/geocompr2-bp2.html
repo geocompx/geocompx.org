@@ -1,0 +1,80 @@
+---
+title: "Progress update: Geocomputation with R Second Edition Part 1"
+author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+date: "2022-01-27"
+slug: geocompr2-bp2
+categories: [updates]
+tags: [geocompr, geocompr2, sf, rgdal, stars, raster, terra, s2, rstats]
+draft: false
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>Geocomputation with R is a book on geographic data analysis, visualization, and modeling.
+The First Edition was first published as a physical book in 2019 and we have reached 500k people through via the website at <a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a> and <a href="https://www.routledge.com/9781138304512">the physical book</a> since then.</p>
+<p>The book has also become a key part of many university courses, lectures, and has been endorsed by many people who have found it vital for their work and for learning new geographic skills, as outlined in our <a href="https://geocompr.github.io/guestbook/">guestbook at geocompr.github.io/guestbook/</a>.
+Tools and methods for geographic data analysis are evolving quickly, especially in the R-Spatial ecosystem.
+Because of these changes, and demand from our readers and the wider community, we decided in September 2021 to start working on the second edition of the book.
+The second edition (work in progress) is available at <a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a>, while you can find the first edition at <a href="https://bookdown.org/robinlovelace/geocompr/" class="uri">https://bookdown.org/robinlovelace/geocompr/</a>.</p>
+<p>At the time of writing (January 2022), we have already made many changes to first part of the book called <em>Foundations</em>.
+In this post we list and explain the changes.</p>
+<div id="major-changes" class="section level2">
+<h2>Major changes</h2>
+<p>Several major changes have happened to #rspatial since the release of the first version of the book.
+Most importantly:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<ul>
+<li>PROJ library was refactored mainly, which have had an impact on a plethora of GIS software, including R spatial packages</li>
+<li>The <strong>raster</strong> package, highlighted in the 1st edition, is now being replaced by its successor <strong>terra</strong></li>
+</ul>
+<p><img src="/post/2022/geocompr2-bp2_files/ch2fig.png" /></p>
+<p>Both of these changes are now addressed in Geocomputation with R.
+Chapter <a href="https://geocompr.robinlovelace.net/reproj-geo-data.html">“Reprojecting geographic data”</a> has undergone numerous modifications, including an explanation of the currently recommended WKT coordinate reference systems representation, information on how to get and set CRSs, or a much-improved section on creating custom projections.
+Similarly, we already replaced <strong>raster</strong>’s descriptions and functions with <strong>terra</strong> in the book’s first eight chapters.</p>
+</div>
+<div id="changes-to-specific-chapters" class="section level2">
+<h2>Changes to specific chapters</h2>
+<p>Additionally, almost all chapters received significant edits.
+Section <a href="https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial">The history of R-spatial</a> in 1st chapter was updated with summary of various new #rspatial developments, including <strong>terra</strong>, <strong>stars</strong>, <strong>lidR</strong>, <strong>rayshader</strong>, <strong>ggspatial</strong>, <strong>mapsf</strong>, etc.
+We also used this section to highlight that packages <a href="https://stat.ethz.ch/pipermail/r-sig-geo/2021-September/028760.html"><strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> will be retired at the end of 2023</a> and that anyone still using these packages should “<strong>transition to sf/stars/terra functions using GDAL and PROJ at your earliest convenience</strong>”.”</p>
+<p>Second chapter got an information about <strong>s2</strong>, an interface to spherical geometry library already used by the <strong>sf</strong> package, and a <a href="https://geocompr.robinlovelace.net/spatial-class.html#r-packages-for-working-with-raster-data">comparison between <strong>terra</strong> and <strong>stars</strong></a>.</p>
+<p>In Chapter 4, we added <a href="https://geocompr.robinlovelace.net/spatial-operations.html#topological-relations">improved communication of binary spatial predicates in Chapter 4</a> and a new <a href="https://geocompr.robinlovelace.net/spatial-operations.html#de-9im-strings">section</a> on the dimensionally extended 9 intersection model (DE-9IM).</p>
+<p><img src="/post/2022/geocompr2-bp2_files/ch4fig.png" /></p>
+<p>The vector part of Chapter 5 received <a href="https://geocompr.robinlovelace.net/geometric-operations.html#subsetting-and-clipping">a new section on the links between subsetting and clipping</a>, while the raster part got a much improved <a href="https://geocompr.robinlovelace.net/geometric-operations.html#resampling">part on resampling methods</a>.
+We also decided to split out the text related raster-vector interactions into <a href="https://geocompr.robinlovelace.net/raster-vector.html">a new 6th chapter</a>.</p>
+<p>Finally, <a href="https://geocompr.robinlovelace.net/read-write.html#read-write">Chapter 8</a> got a bunch of improvements, including mentions of more data packages, alternative ways of reading-in OSM data, a part about geocoding, and information about Cloud Optimized GeoTIFF (COG).
+We also spent some time to show how to <a href="https://geocompr.robinlovelace.net/read-write.html#iovec">read just a part of vector data file using OGR SQL queries and WKT filters</a>, and <a href="https://geocompr.robinlovelace.net/read-write.html#raster-data-read">extract only a portion of a COG raster file</a>.</p>
+<p><img src="/post/2022/geocompr2-bp2_files/ch8fig.png" /></p>
+</div>
+<div id="book-infrastructure" class="section level2">
+<h2>Book infrastructure</h2>
+<p>We also decided that the 2nd edition is a good time to improve the book infrastructure, i.e., data packages, storage of the exercises and solutions, automatic book builds, etc.</p>
+<p>The most visible change is the visual theme of the book website.
+Now it uses the Bootstrap 4 framework through the <code>bookdown::bs4_book</code> theme with slightly customized elements, such as font families or a text blocks style.</p>
+<p>Next, we created an external bookdown-based website for solutions of the Geocomputation with R exercises.
+You can find its early version at <a href="https://geocompr.github.io/solutions/" class="uri">https://geocompr.github.io/solutions/</a>, and we plan to describe it in more detail in a future blog post.</p>
+<p>The book still uses two external packages, <strong>spData</strong> and <strong>spDataLarge</strong>, to store example datasets.
+However, we made an important change here – we saved some R spatial objects to files (e.g., <strong>raster</strong> objects to GeoTIFF) – this way, we can read data using <strong>raster</strong>/<strong>terra</strong>/<strong>stars</strong>, instead of just loading one package’s class object into R memory.</p>
+<p>We refactored build settings, so the book builds on Docker images in the <a href="https://github.com/geocompr/docker">geocompr/docker</a> repo, and improved the experience of using the book in Binder (ideal for trying out the code before installing or updating the necessary R packages), as documented in issue <a href="https://github.com/Robinlovelace/geocompr/issues/691">#691</a> (thanks to <a href="https://github.com/yuvipanda">yuvipanda</a>).</p>
+</div>
+<div id="minor-changes" class="section level2">
+<h2>Minor changes</h2>
+<p>We reworked several plots using the <strong>tmap</strong> package to improve the visual consistency of the book.</p>
+<p><img src="/post/2022/geocompr2-bp2_files/figtmap.png" /></p>
+<p>The book also received (almost) countless minor changes, including rephrasing many concepts and reordering of our prose to make some ideas easier to understand.</p>
+</div>
+<div id="outro" class="section level2">
+<h2>Outro</h2>
+<p>Our plan now is to switch attention to the second part of the book called Extensions, while Part 1 is sent for peer review.
+We will work on the enhanced Making maps chapter, updates on Bridges to GIS software and Statistical learning.</p>
+<p>The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
+We want to thank all of you, including authors of recent Pull Requests (<em>ec-nebi</em>, <em>e-clin</em>, Oliver Leroy <em>defuneste</em>, Ivan Dubrovin <em>iod-ine</em>, Floris Vanderhaeghe <em>florisvdh</em>, Hasmukh K Mistry <em>hasukmistry</em>, John S. Erickson <em>olyerickson</em>) and people raising new GitHub issues.
+We are still actively working on the book, and thus – let us know if you have any <a href="https://github.com/Robinlovelace/geocompr/issues">issues or suggestions</a> and feel free to create any <a href="https://github.com/Robinlovelace/geocompr/pulls">Pull Request</a> from fixing typos, clarifying unclear sentences, to changes to the code and prose.
+You can also contact us on <a href="https://discord.gg/Te3gWeDwmf">the Geocomputation with R discord channel</a>.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>There are also other significant changes, such as the retirement of <strong>RQGIS</strong> and <strong>mlr</strong>, but we plan to focus on them while updating the second part of the book.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
