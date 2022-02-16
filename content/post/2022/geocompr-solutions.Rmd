@@ -8,6 +8,20 @@ tags: [geocompr2, solutions, rstats]
 draft: true
 ---
 
+[Geocomputation with R](https://geocompr.robinlovelace.net/) is a book on geographic data analysis, visualization, and modeling.
+Each of its chapter^[Except the last one.] ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches. 
+However, exercises are often not enough without their solutions, which provides a way to compare readers' answers with an expected one.
+This creates a technical issue -- how to provide solutions to the exercises without making the book too long? Also, how to test, at the same time, if the solutions are still working?
+
+For [the first edition of the book](https://bookdown.org/robinlovelace/geocompr/) we added solutions as external set of [vignettes](https://geocompr.github.io/vignettes/). 
+This approach had, however, several flaws.
+Most importantly, solutions in the vignettes were detached from the exercises in the book, meaning that if we decided to change an exercise, we would need to go to a different repository and update it there as well.
+Additionally, the solution vignettes had a different style from the book and were harder to find.
+We decided to try a different approach for the second edition of the book. 
+This time, we created an external bookdown-based website for solutions, which you can find at https://geocompr.github.io/solutions/.
+The main goal of this blog post is to explain the new setup in some detail.
+
+
 ##
 
 ##
