@@ -1,6 +1,6 @@
 ---
 title: "Automatic website with bookdown's solutions" #we need to improve the title!!
-author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+author: Jakub Nowosad
 date: "2022-02-27"
 slug: geocompr-solutions
 categories: [vignette]
@@ -22,6 +22,48 @@ This time, we created an external bookdown-based website for solutions, which yo
 The main goal of this blog post is to explain the new setup in some detail.
 
 
-##
+## New solutions website
 
-##
+<!-- https://geocompr.github.io/solutions/ -->
+<!-- https://github.com/geocompr/solutions -->
+
+## Solution files
+
+<!-- https://geocompr.robinlovelace.net/raster-vector.html#exercises-4 -->
+<!-- https://geocompr.github.io/solutions/raster-vector.html -->
+
+````
+```{r setup, echo=FALSE, results='hide'}`r ''`
+ex = tempfile(fileext = ".Rmd")
+on.exit(unlink(ex))
+download.file("https://raw.githubusercontent.com/Robinlovelace/geocompr/main/_06-ex.Rmd", ex)
+```
+
+```{r, echo=FALSE, results='asis'}`r ''`
+res = knitr::knit_child(ex, quiet = TRUE, options = list(include = TRUE))
+cat(res, sep = '\n')
+```
+````
+
+## Exercise files
+
+<!-- https://github.com/Robinlovelace/geocompr/blob/main/06-raster-vector.Rmd -->
+<!-- https://github.com/Robinlovelace/geocompr/blob/main/_06-ex.Rmd -->
+
+````
+## Exercises
+
+```{r, echo=FALSE, results='asis'}`r ''`
+res = knitr::knit_child('_06-ex.Rmd', quiet = TRUE, options = list(include = FALSE, eval = FALSE))
+cat(res, sep = '\n')
+```
+
+````
+
+## GitHub Actions
+
+<!-- https://github.com/geocompr/solutions/blob/main/.github/workflows/main.yaml -->
+
+## Outro
+
+<!-- how to improve it? -->
