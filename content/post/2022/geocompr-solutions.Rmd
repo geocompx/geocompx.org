@@ -1,0 +1,13 @@
+---
+title: "Automatic website with bookdown's solutions" #we need to improve the title!!
+author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+date: "2022-02-27"
+slug: geocompr-solutions
+categories: [vignette]
+tags: [geocompr2, solutions, rstats]
+draft: true
+---
+
+##
+
+##
