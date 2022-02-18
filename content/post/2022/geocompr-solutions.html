@@ -1,7 +1,7 @@
 ---
 title: "Automatic website with bookdown's solutions" #we need to improve the title!!
 author: Jakub Nowosad
-date: "2022-02-27"
+date: "2022-02-24"
 slug: geocompr-solutions
 categories: [vignette]
 tags: [geocompr2, solutions, rstats]
@@ -12,9 +12,9 @@ draft: true
 
 
 <p><a href="https://geocompr.robinlovelace.net/">Geocomputation with R</a> is a book on geographic data analysis, visualization, and modeling.
-Each of its chapter<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches.
+Each chapter<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches.
 However, exercises are often not enough without their solutions, which provides a way to compare readers’ answers with an expected one.
-This creates a technical issue – how to provide solutions to the exercises without making the book too long? Also, how to test, at the same time, if the solutions are still working?</p>
+This leads to technical questions: how to provide solutions to the exercises without making the book too long, and to minimise duplication of words/effort (for the questions and answers)? Also, how to test, at the same time, if the solutions are still working?</p>
 <p>For <a href="https://bookdown.org/robinlovelace/geocompr/">the first edition of the book</a> we added solutions as external set of <a href="https://geocompr.github.io/vignettes/">vignettes</a>.
 This approach had, however, several flaws.
 Most importantly, solutions in the vignettes were detached from the exercises in the book, meaning that if we decided to change an exercise, we would need to go to a different repository and update it there as well.
@@ -33,7 +33,7 @@ Note that the solution website contains the same content as the exercises sectio
 </div>
 <div id="solutions" class="section level2">
 <h2>Solutions</h2>
-<p>Next, let’s dive deeper – how does it work?
+<p>Next, let’s dive deeper to see how it works.
 We can look at the source code of the solution website first – <a href="https://github.com/geocompr/solutions" class="uri">https://github.com/geocompr/solutions</a>, and solutions for chapter 6 are at <a href="https://github.com/geocompr/solutions/blob/main/06-raster-vector.Rmd" class="uri">https://github.com/geocompr/solutions/blob/main/06-raster-vector.Rmd</a>.
 If you open the last link, you should see a code looking like that:</p>
 <pre><code>```{r setup, echo=FALSE, results=&#39;hide&#39;}
@@ -72,8 +72,8 @@ cat(res, sep = &#39;\n&#39;)
 <p>There is only one short code chunk – it knits the same document, <code>_06-ex.Rmd</code>, however using different global options, <code>include = FALSE, eval = FALSE</code>.
 This assures that the book’s readers would not see any solutions’ code chunks or their outputs.</p>
 </div>
-<div id="github-actions" class="section level2">
-<h2>GitHub Actions</h2>
+<div id="workflow" class="section level2">
+<h2>Workflow</h2>
 <p>Now we know all of the pieces of the puzzle.
 The last step is to connect them together with GitHub Actions.</p>
 <p>Our workflow is as follows:</p>
@@ -81,15 +81,14 @@ The last step is to connect them together with GitHub Actions.</p>
 <li>We add/update/modify exercises and their solutions stored in a file per chapter, e.g., <code>_06-ex.Rmd</code></li>
 <li>We push the changes to the main book repository on GitHub (<code>Robinlovelace/geocompr</code>)</li>
 <li>The book is automatically built using a <a href="https://github.com/Robinlovelace/geocompr/actions/workflows/main.yaml">GitHub Actions workflow</a>, including exercises (but not solutions!)</li>
-<li>Once a week, another <a href="https://github.com/geocompr/solutions/actions/workflows/main.yaml">GitHub Actions workflow</a> runs in the solutions repository.
-It creates a simple book with exercises and their solutions.</li>
+<li>Once a week, another <a href="https://github.com/geocompr/solutions/actions/workflows/main.yaml">GitHub Actions workflow</a> runs in the solutions repository.</li>
 </ol>
-</div>
-<div id="outro" class="section level2">
-<h2>Outro</h2>
-<p>Overall, we are happy with the current solution setup.
-However, as always, there may be better ways to provide books’ solutions that we are not aware of, or some parts of our setup could be improved.
-Let us know your comments or suggestions at <a href="https://github.com/geocompr/solutions" class="uri">https://github.com/geocompr/solutions</a>!</p>
+<p>This approach ensures that the solutions are always up-to-date, reproducible, and in sync. with the manuscript.
+It creates a resources dedicated to the exercises and their solutions, helping people learn.
+It should also encourage others to get involved: can you think of another exercise or an alternative solution to existing exercises?
+You have all the info you need to contribute now.
+Let us know your comments or suggestions at <a href="https://github.com/geocompr/solutions" class="uri">https://github.com/geocompr/solutions</a>!
+Pull Requests are also welcome!</p>
 </div>
 <div class="footnotes">
 <hr />

@@ -1,7 +1,7 @@
 ---
 title: "Automatic website with bookdown's solutions" #we need to improve the title!!
 author: Jakub Nowosad
-date: "2022-02-27"
+date: "2022-02-24"
 slug: geocompr-solutions
 categories: [vignette]
 tags: [geocompr2, solutions, rstats]
@@ -80,7 +80,7 @@ cat(res, sep = '\n')
 There is only one short code chunk -- it knits the same document, `_06-ex.Rmd`, however using different global options, `include = FALSE, eval = FALSE`.
 This assures that the book's readers would not see any solutions' code chunks or their outputs.
 
-## GitHub Actions
+## Workflow
 
 Now we know all of the pieces of the puzzle.
 The last step is to connect them together with GitHub Actions.
@@ -95,10 +95,6 @@ Our workflow is as follows:
 This approach ensures that the solutions are always up-to-date, reproducible, and in sync. with the manuscript.
 It creates a resources dedicated to the exercises and their solutions, helping people learn.
 It should also encourage others to get involved: can you think of another exercise or an alternative solution to existing exercises?
-You have all the info you need to contribute now, Pull Requests are welcome!
-
-## Outro
-
-Overall, we are happy with the current solution setup.
-However, as always, there may be better ways to provide books' solutions that we are not aware of, or some parts of our setup could be improved.
+You have all the info you need to contribute now.
 Let us know your comments or suggestions at https://github.com/geocompr/solutions!
+Pull Requests are also welcome!
