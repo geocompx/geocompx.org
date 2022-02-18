@@ -9,9 +9,9 @@ draft: true
 ---
 
 [Geocomputation with R](https://geocompr.robinlovelace.net/) is a book on geographic data analysis, visualization, and modeling.
-Each of its chapter^[Except the last one.] ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches. 
+Each chapter^[Except the last one.] ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches. 
 However, exercises are often not enough without their solutions, which provides a way to compare readers' answers with an expected one.
-This creates a technical issue -- how to provide solutions to the exercises without making the book too long? Also, how to test, at the same time, if the solutions are still working?
+This leads to technical questions: how to provide solutions to the exercises without making the book too long, and to minimise duplication of words/effort (for the questions and answers)? Also, how to test, at the same time, if the solutions are still working?
 
 For [the first edition of the book](https://bookdown.org/robinlovelace/geocompr/) we added solutions as external set of [vignettes](https://geocompr.github.io/vignettes/). 
 This approach had, however, several flaws.
@@ -32,7 +32,7 @@ Note that the solution website contains the same content as the exercises sectio
 
 ## Solutions
 
-Next, let's dive deeper -- how does it work?
+Next, let's dive deeper to see how it works.
 We can look at the source code of the solution website first -- https://github.com/geocompr/solutions, and solutions for chapter 6 are at https://github.com/geocompr/solutions/blob/main/06-raster-vector.Rmd.
 If you open the last link, you should see a code looking like that:
 
@@ -91,7 +91,11 @@ Our workflow is as follows:
 2. We push the changes to the main book repository on GitHub (`Robinlovelace/geocompr`)
 3. The book is automatically built using a [GitHub Actions workflow](https://github.com/Robinlovelace/geocompr/actions/workflows/main.yaml), including exercises (but not solutions!)
 4. Once a week, another [GitHub Actions workflow](https://github.com/geocompr/solutions/actions/workflows/main.yaml) runs in the solutions repository.
-It creates a simple book with exercises and their solutions.
+
+This approach ensures that the solutions are always up-to-date, reproducible, and in sync. with the manuscript.
+It creates a resources dedicated to the exercises and their solutions, helping people learn.
+It should also encourage others to get involved: can you think of another exercise or an alternative solution to existing exercises?
+You have all the info you need to contribute now, Pull Requests are welcome!
 
 ## Outro
 
