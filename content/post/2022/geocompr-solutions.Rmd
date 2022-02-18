@@ -21,16 +21,20 @@ We decided to try a different approach for the second edition of the book.
 This time, we created an external bookdown-based website for solutions, which you can find at https://geocompr.github.io/solutions/.
 The main goal of this blog post is to explain the new setup in some detail.
 
-
 ## New solutions website
 
-<!-- https://geocompr.github.io/solutions/ -->
-<!-- https://github.com/geocompr/solutions -->
+Firstly, let's take a look at the bigger picture.
+Exercises are shown at the end of the book chapters, for example, exercises for chapter 6 can be seen at https://geocompr.robinlovelace.net/raster-vector.html#exercises-4.
+You may notice that this exercises section starts with a description of prerequisites, and then several questions are listed.
+However, what to do when I want to find solutions to these problems or compare my results with those provided by the book authors?
+Then, we can visit the corresponding chapter in the solution website at https://geocompr.github.io/solutions/raster-vector.html.
+Note that the solution website contains the same content as the exercises section, and extends it with the solution code, code results, and newly created figures.
 
-## Solution files
+## Solutions
 
-<!-- https://geocompr.robinlovelace.net/raster-vector.html#exercises-4 -->
-<!-- https://geocompr.github.io/solutions/raster-vector.html -->
+Next, let's dive deeper -- how does it work?
+We can look at the source code of the solution website first -- https://github.com/geocompr/solutions, and solutions for chapter 6 are at https://github.com/geocompr/solutions/blob/main/06-raster-vector.Rmd.
+If you open the last link, you should see a code looking like that:
 
 ````
 ```{r setup, echo=FALSE, results='hide'}`r ''`
@@ -45,10 +49,23 @@ cat(res, sep = '\n')
 ```
 ````
 
-## Exercise files
+What is going on here?
+In short, we have two code chunks.
+The first (hidden) code chunk downloads a `_06-ex.Rmd` file from the `Robinlovelace/geocompr` repository.
+Ok, but how does this `_06-ex.Rmd` document looks like?
+You can see its content at https://raw.githubusercontent.com/Robinlovelace/geocompr/main/_06-ex.Rmd.
+It is a mix of text (mainly exercises questions) and R code chunks. 
+Note here that most code chunks do not have any code chunks options set, except the first one. 
+We wanted the first code chunk to be visible on the main book and the solution websites, so we used `include = TRUE`.
 
-<!-- https://github.com/Robinlovelace/geocompr/blob/main/06-raster-vector.Rmd -->
-<!-- https://github.com/Robinlovelace/geocompr/blob/main/_06-ex.Rmd -->
+The second code chunk takes the downloaded document and knits it with a new global option, `include = TRUE`. 
+This option make sure that we will show all possible outputs from `_06-ex.Rmd`, including numerical results and plots.
+
+## Exercises
+
+The above section explained how we could see exercises and solutions on the solution website. 
+However, how is it possible that we can only see the exercise text in the book?
+Let's look at the bottom of the source code of the 6th chapter at https://github.com/Robinlovelace/geocompr/blob/main/06-raster-vector.Rmd:
 
 ````
 ## Exercises
@@ -59,6 +76,9 @@ cat(res, sep = '\n')
 ```
 
 ````
+
+There is only one short code chunk -- it knits the same document, `_06-ex.Rmd`, however using different global options, `include = FALSE, eval = FALSE`.
+This assures that the book's readers would not see any solutions' code chunks or their outputs.
 
 ## GitHub Actions
 
