@@ -82,8 +82,19 @@ This assures that the book's readers would not see any solutions' code chunks or
 
 ## GitHub Actions
 
-<!-- https://github.com/geocompr/solutions/blob/main/.github/workflows/main.yaml -->
+Now we know all of the pieces of the puzzle.
+The last step is to connect them together with GitHub Actions.
+
+Our workflow is as follows:
+
+1. We add/update/modify exercises and their solutions stored in a file per chapter, e.g., `_06-ex.Rmd`
+2. We push the changes to the main book repository on GitHub (`Robinlovelace/geocompr`)
+3. The book is automatically built using a [GitHub Actions workflow](https://github.com/Robinlovelace/geocompr/actions/workflows/main.yaml), including exercises (but not solutions!)
+4. Once a week, another [GitHub Actions workflow](https://github.com/geocompr/solutions/actions/workflows/main.yaml) runs in the solutions repository.
+It creates a simple book with exercises and their solutions.
 
 ## Outro
 
-<!-- how to improve it? -->
+Overall, we are happy with the current solution setup.
+However, as always, there may be better ways to provide books' solutions that we are not aware of, or some parts of our setup could be improved.
+Let us know your comments or suggestions at https://github.com/geocompr/solutions!
