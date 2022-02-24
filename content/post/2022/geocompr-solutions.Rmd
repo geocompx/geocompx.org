@@ -1,11 +1,11 @@
 ---
-title: "Automatic website with bookdown's solutions" #we need to improve the title!!
+title: "Automatic website with the Geocomputation with R solutions" 
 author: Jakub Nowosad
 date: "2022-02-24"
 slug: geocompr-solutions
 categories: [vignette]
 tags: [geocompr2, solutions, rstats]
-draft: true
+draft: false
 ---
 
 [Geocomputation with R](https://geocompr.robinlovelace.net/) is a book on geographic data analysis, visualization, and modeling.
