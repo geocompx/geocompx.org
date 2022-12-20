@@ -1,0 +1,21 @@
+# Options specified here will apply to all posts in this folder
+
+# freeze computational output
+freeze: true
+
+# Enable banner style title blocks
+title-block-banner: false
+
+# Enable CC licence appendix
+license: "CC BY"
+
+# Author name of all blog posts
+
+# Table of content settings
+toc: true
+toc-depth: 3
+
+# Default fields for citation
+citation: true
+
+page-layout: article

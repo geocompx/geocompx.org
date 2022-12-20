@@ -1,0 +1,15 @@
+---
+page-layout: full
+---
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+geocompx
+:::
+
+::: {.g-col-12 .g-col-md-6}
+website
+:::
+
+:::

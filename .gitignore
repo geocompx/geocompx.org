@@ -7,3 +7,4 @@ geocompr.github.io
 index.html
 *.tif
 *.geojson
+/.quarto/
