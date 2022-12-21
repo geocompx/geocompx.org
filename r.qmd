@@ -7,6 +7,10 @@ title: "R resources"
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
+<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover.jpg"/></a>
+:::
+
+::: {.g-col-12 .g-col-md-6}
 **Geocomputation with R** (*geocompr*) is for people who want to analyze, visualize and model geographic data with open source software.
 It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. 
 The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. 
@@ -17,10 +21,6 @@ You can buy it from:
 - [Routledge.com](https://www.routledge.com/9781138304512)
 - [Amazon.com](https://www.amazon.com/Geocomputation-R-Robin-Lovelace-dp-0367670577/dp/0367670577/)
 - [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-R-Robin-Lovelace/dp/0367670577/)
-:::
-
-::: {.g-col-12 .g-col-md-6}
-<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover.jpg"/></a>
 :::
 
 :::

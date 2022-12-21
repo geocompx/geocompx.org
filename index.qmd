@@ -5,11 +5,13 @@ page-layout: full
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-geocompx
+<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover.jpg"/></a>
+**Geocomputation with R**
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-website
+<a href="https://py.geocompx.org/"><img width=80% src="static/img/book_cover_py_tmp_small.png"/></a>
+**Geocomputation with Python**
 :::
 
 :::

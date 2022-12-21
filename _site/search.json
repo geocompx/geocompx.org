@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "geocompx",
     "section": "",
-    "text": "geocompx\n\n\nwebsite"
+    "text": "Geocomputation with R\n\n\n Geocomputation with Python"
   },
   {
     "objectID": "post.html",
@@ -355,5 +355,12 @@
     "title": "R resources",
     "section": "Translations",
     "text": "Translations\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore)."
+  },
+  {
+    "objectID": "py.html",
+    "href": "py.html",
+    "title": "Python resources",
+    "section": "",
+    "text": "Geocomputation with Python (geocompy) is motivated by the need for an introductory, yet rigorous and up-to-date, resource geographic data with the most popular programming language in the world. A unique selling point of the book is its cohesive and joined-up coverage of both vector and raster geographic data models and consistent learning curve. We aim to minimize surprises, with each section and chapter building on the previous. If you’re just starting out with Python for working with geographic data, this book is an excellent place to start.\nInspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book. Find the code underlying the geocompy project on GitHub, ensuring that the content is reproducible, transparent, and accessible. Making the book open source allows you or anyone else, to interact with the project by opening issues, making typo fixes and more, for the benefit of everyone.\nThe online version of the book is hosted at py.geocompx.org/."
   }
 ]
