@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2022-02-24">
+
+<title>geocompx - Automatic website with the Geocomputation with R solutions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">geocompx</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompr/geocompr.github.io"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompr"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../feed.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#new-solutions-website" id="toc-new-solutions-website" class="nav-link active" data-scroll-target="#new-solutions-website">New solutions website</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow">Workflow</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Automatic website with the Geocomputation with R solutions</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">vignette</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Nowosad </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 24, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="https://geocompr.robinlovelace.net/">Geocomputation with R</a> is a book on geographic data analysis, visualization, and modeling. Each chapter<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches. However, exercises are often not enough without their solutions, which provides a way to compare readers’ answers with an expected one. This leads to technical questions: how to provide solutions to the exercises without making the book too long, and to minimise duplication of words/effort (for the questions and answers)? Also, how to test, at the same time, if the solutions are still working?</p>
+<p>For <a href="https://bookdown.org/robinlovelace/geocompr/">the first edition of the book</a> we added solutions as external set of <a href="https://geocompr.github.io/vignettes/">vignettes</a>. This approach had, however, several flaws. Most importantly, solutions in the vignettes were detached from the exercises in the book, meaning that if we decided to change an exercise, we would need to go to a different repository and update it there as well. Additionally, the solution vignettes had a different style from the book and were harder to find. We decided to try a different approach for the second edition of the book. This time, we created an external bookdown-based website for solutions, which you can find at https://geocompr.github.io/solutions/. The main goal of this blog post is to explain the new setup in some detail.</p>
+<section id="new-solutions-website" class="level2">
+<h2 class="anchored" data-anchor-id="new-solutions-website">New solutions website</h2>
+<p>Firstly, let’s take a look at the bigger picture. Exercises are shown at the end of the book chapters, for example, exercises for chapter 6 can be seen at https://geocompr.robinlovelace.net/raster-vector.html#exercises-4. You may notice that this exercises section starts with a description of prerequisites, and then several questions are listed. However, what to do when I want to find solutions to these problems or compare my results with those provided by the book authors? Then, we can visit the corresponding chapter in the solution website at https://geocompr.github.io/solutions/raster-vector.html. Note that the solution website contains the same content as the exercises section, and extends it with the solution code, code results, and newly created figures.</p>
+</section>
+<section id="solutions" class="level2">
+<h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
+<p>Next, let’s dive deeper to see how it works. We can look at the source code of the solution website first – https://github.com/geocompr/solutions, and solutions for chapter 6 are at https://github.com/geocompr/solutions/blob/main/06-raster-vector.Rmd. If you open the last link, you should see a code looking like that:</p>
+<pre><code>```{r setup, echo=FALSE, results='hide'}
+ex = tempfile(fileext = ".Rmd")
+on.exit(unlink(ex))
+download.file("https://raw.githubusercontent.com/Robinlovelace/geocompr/main/_06-ex.Rmd", ex)
+```
+
+```{r, echo=FALSE, results='asis'}
+res = knitr::knit_child(ex, quiet = TRUE, options = list(include = TRUE))
+cat(res, sep = '\n')
+```</code></pre>
+<p>What is going on here? In short, we have two code chunks. The first (hidden) code chunk downloads a <code>_06-ex.Rmd</code> file from the <code>Robinlovelace/geocompr</code> repository. Ok, but how does this <code>_06-ex.Rmd</code> document looks like? You can see its content at https://raw.githubusercontent.com/Robinlovelace/geocompr/main/_06-ex.Rmd. It is a mix of text (mainly exercises questions) and R code chunks. Note here that most code chunks do not have any code chunks options set, except the first one. We wanted the first code chunk to be visible on the main book and the solution websites, so we used <code>include = TRUE</code>.</p>
+<p>The second code chunk takes the downloaded document and knits it with a new global option, <code>include = TRUE</code>. This option make sure that we will show all possible outputs from <code>_06-ex.Rmd</code>, including numerical results and plots.</p>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<p>The above section explained how we could see exercises and solutions on the solution website. However, how is it possible that we can only see the exercise text in the book? Let’s look at the bottom of the source code of the 6th chapter at https://github.com/Robinlovelace/geocompr/blob/main/06-raster-vector.Rmd:</p>
+<pre><code>## Exercises
+
+```{r, echo=FALSE, results='asis'}
+res = knitr::knit_child('_06-ex.Rmd', quiet = TRUE, options = list(include = FALSE, eval = FALSE))
+cat(res, sep = '\n')
+```
+</code></pre>
+<p>There is only one short code chunk – it knits the same document, <code>_06-ex.Rmd</code>, however using different global options, <code>include = FALSE, eval = FALSE</code>. This assures that the book’s readers would not see any solutions’ code chunks or their outputs.</p>
+</section>
+<section id="workflow" class="level2">
+<h2 class="anchored" data-anchor-id="workflow">Workflow</h2>
+<p>Now we know all of the pieces of the puzzle. The last step is to connect them together with GitHub Actions.</p>
+<p>Our workflow is as follows:</p>
+<ol type="1">
+<li>We add/update/modify exercises and their solutions stored in a file per chapter, e.g., <code>_06-ex.Rmd</code></li>
+<li>We push the changes to the main book repository on GitHub (<code>Robinlovelace/geocompr</code>)</li>
+<li>The book is automatically built using a <a href="https://github.com/Robinlovelace/geocompr/actions/workflows/main.yaml">GitHub Actions workflow</a>, including exercises (but not solutions!)</li>
+<li>Once a week, another <a href="https://github.com/geocompr/solutions/actions/workflows/main.yaml">GitHub Actions workflow</a> runs in the solutions repository.</li>
+</ol>
+<p>This approach ensures that the solutions are always up-to-date, reproducible, and in sync. with the manuscript. It creates a resources dedicated to the exercises and their solutions, helping people learn. It should also encourage others to get involved: can you think of another exercise or an alternative solution to existing exercises? You have all the info you need to contribute now. Let us know your comments or suggestions at https://github.com/geocompr/solutions! Pull Requests are also welcome!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Except the last one.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2022,
+  author = {Jakub Nowosad},
+  title = {Automatic Website with the {Geocomputation} with {R}
+    Solutions},
+  date = {2022-02-24},
+  url = {https://geocompx.org//post/2022/geocompr-solutions},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2022" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Jakub Nowosad. 2022. <span>“Automatic Website with the Geocomputation
+with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//post/2022/geocompr-solutions">https://geocompx.org//post/2022/geocompr-solutions</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

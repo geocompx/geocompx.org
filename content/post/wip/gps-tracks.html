@@ -1,0 +1,168 @@
+---
+title: 'Loading and analyzing GPS tracks with R'
+author: Robin Lovelace
+date: '2019-08-07'
+slug: gps-tracks
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - sf
+  - gps
+  - tracks
+draft: true
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Perhaps the most ubiquitous type of geographic information is the continuous stream of data produced by GPS devices.
+Global Positioning System (GPS) devices are now in everything from watches to cars and, of course, smartphones.
+This means that GPS datasets have the ability to track a large proportion of the world’s population.
+Although there are privacy concerns, when appropriately anonymized and aggregated, GPS datasets have the potential to help tackle the issues raised in <a href="https://geocompr.robinlovelace.net/transport.html">the Transportation chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>:
+to design healthy transport systems in which walking and cycling overtake cars as the main travel modes.</p>
+</div>
+<div id="loading-gps-data" class="section level2">
+<h2>Loading GPS data</h2>
+<p>The standard format of GPS data is the <a href="https://en.wikipedia.org/wiki/GPS_Exchange_Format">.gpx file</a>.
+GPS traces are vector datasets that are well-support by <strong>sf</strong> (see Chapter <a href="https://geocompr.robinlovelace.net/spatial-class.html">2</a> of the book), so we’ll use this package to process them:</p>
+<pre class="r"><code>library(sf)
+#&gt; Linking to GEOS 3.8.1, GDAL 3.0.4, PROJ 6.3.2</code></pre>
+<p>As with any dataset the first stage is to identify the source.
+A great source of GPS data is OpenStreetMap (OSM).
+We’ll use publicly available .gpx files uploaded to OSM as the basis of this tutorial.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+For the purpose of this tutorial we will use a .gpx file uploaded to OSM, that represents travel to the <a href="https://www.uni-muenster.de/Geoinformatics/en/">Institute for Geoinformatics, Universität Münster</a>:</p>
+<pre class="r"><code>u = &quot;https://www.openstreetmap.org/trace/2886173/data&quot;
+download.file(url = u, destfile = &quot;trace.gpx&quot;)
+st_layers(&quot;trace.gpx&quot;)
+#&gt; Driver: GPX 
+#&gt; Available layers:
+#&gt;     layer_name     geometry_type features fields
+#&gt; 1    waypoints             Point        0     23
+#&gt; 2       routes       Line String        0     12
+#&gt; 3       tracks Multi Line String        1     13
+#&gt; 4 route_points             Point        0     25
+#&gt; 5 track_points             Point      225     26</code></pre>
+<p>The previous code chunk downloads the trace from OSM and queries the ‘layers’ that can be imported (note there are 5, but only ‘tracks’ and ‘track_points’ are available).
+The following code chunk imports and plots the ‘tracks’ layer, which is a MULTILINESTRING geometry in sf, and only 1 row of data:</p>
+<pre class="r"><code>r = st_read(&quot;trace.gpx&quot;, layer = &quot;tracks&quot;)
+#&gt; Reading layer `tracks&#39; from data source `/home/jn/Science/geocompr_book/geocompr.github.io/content/post/2020/trace.gpx&#39; using driver `GPX&#39;
+#&gt; Simple feature collection with 1 feature and 13 fields
+#&gt; geometry type:  MULTILINESTRING
+#&gt; dimension:      XY
+#&gt; bbox:           xmin: 7.595836 ymin: 51.95356 xmax: 7.640715 ymax: 51.96967
+#&gt; geographic CRS: WGS 84
+class(r)
+#&gt; [1] &quot;sf&quot;         &quot;data.frame&quot;
+st_geometry_type(r)
+#&gt; [1] MULTILINESTRING
+#&gt; 18 Levels: GEOMETRY POINT LINESTRING POLYGON MULTIPOINT ... TRIANGLE
+nrow(r)
+#&gt; [1] 1
+plot(r$geometry)</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Other than the geometry, this object has limited information about the route in the fields.
+The richest field is ‘Description’, which contains the following summary data:</p>
+<pre class="r"><code>class(r$desc)</code></pre>
+<p>[1] “character”</p>
+<pre class="r"><code>as.character(r$desc)</code></pre>
+[1] "
+<p>
+Start time: 01/07/2019 10:03<br/>Finish time: 01/07/2019 10:34<br/>Distance: 5.1 km (00:30)<br/>Moving time: 00:21<br/>Average speed: 10.08 km/h<br/>Avg. Speed Mov.: 14.07 km/h<br/>Max. speed: 35.06 km/h<br/>Minimum altitude: 32 m<br/>Maximum altitude: 68 m<br/>Ascent speed: 469.6 m/h<br/>Descent speed: -889.1 m/h<br/>Elevation gain: 139 m<br/>Elevation loss: -113 m<br/>Ascent time: 00:17<br/>Descent time: 00:07<br/>
+</p>
+<hr align=\"center\" width=\"480\" style=\"height: 2px; width: 517px\"/>
+<p>"</p>
+<p>The data can also be imported as points, as follows:</p>
+<pre class="r"><code>p = read_sf(&quot;trace.gpx&quot;, layer = &quot;track_points&quot;)
+plot(p)
+#&gt; Warning: plotting the first 9 out of 26 attributes; use max.plot = 26 to plot
+#&gt; all
+#&gt; Warning in min(x): no non-missing arguments to min; returning Inf
+#&gt; Warning in max(x): no non-missing arguments to max; returning -Inf
+#&gt; Warning in min(x): no non-missing arguments to min; returning Inf
+#&gt; Warning in max(x): no non-missing arguments to max; returning -Inf</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="time-series" class="section level2">
+<h2>Time series</h2>
+<p>When did the track take place?</p>
+<pre class="r"><code>summary(p$time)
+#&gt;                  Min.               1st Qu.                Median 
+#&gt; &quot;2019-01-07 10:03:22&quot; &quot;2019-01-07 10:15:31&quot; &quot;2019-01-07 10:19:29&quot; 
+#&gt;                  Mean               3rd Qu.                  Max. 
+#&gt; &quot;2019-01-07 10:20:02&quot; &quot;2019-01-07 10:24:24&quot; &quot;2019-01-07 10:34:01&quot;</code></pre>
+<p>It started from just after 9:00 in the morning and ended just after 09:30.
+Let’s check if they happened at regular intervals:</p>
+<pre class="r"><code>plot(p$time, 1:nrow(p))</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>And the temporal resolution:</p>
+<pre class="r"><code>difftime(p$time[11], p$time[10])
+#&gt; Time difference of 4 secs</code></pre>
+</div>
+<div id="converting-points-to-lines" class="section level2">
+<h2>Converting points to lines</h2>
+<p>The plot of points is useful, but it would be better to have a line representation <em>that contains the rich point-level data</em>.
+This can be done by converting the points to lines, as follows for the the first 2 points:</p>
+<pre class="r"><code>c = st_coordinates(p)
+l1 = sf::st_linestring(c[1:2, ])
+plot(l1)
+lsf = st_sf(st_set_geometry(p[2, ], NULL), st_sfc(l1))
+plot(p$geometry[1:2], add = TRUE)</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>For all points we can do:</p>
+<pre class="r"><code>points2line_trajectory = function(p) {
+  c = st_coordinates(p)
+  i = seq(nrow(p) - 2)
+  l = purrr::map(i, ~ sf::st_linestring(c[.x:(.x + 1), ]))
+  s = purrr::map_dbl(i, function(x) {
+    geosphere::distHaversine(c[x, ], c[(x + 1), ]) /
+      as.numeric(p$time[x + 1] - p$time[x])
+  }
+  )
+  lfc = sf::st_sfc(l)
+  a = seq(length(lfc)) + 1 # sequence to subset
+  p_data = cbind(sf::st_set_geometry(p[a, ], NULL), s)
+  sf::st_sf(p_data, geometry = lfc)
+}</code></pre>
+<p>Let’s test it out:</p>
+<pre class="r"><code>l = points2line_trajectory(p)
+plot(l)
+#&gt; Warning: plotting the first 10 out of 27 attributes; use max.plot = 27 to plot
+#&gt; all
+#&gt; Warning in min(x): no non-missing arguments to min; returning Inf
+#&gt; Warning in max(x): no non-missing arguments to max; returning -Inf
+#&gt; Warning in min(x): no non-missing arguments to min; returning Inf
+#&gt; Warning in max(x): no non-missing arguments to max; returning -Inf</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>We now have lots more variables to play with and, unlike with the point dataset, the look good (and like traces) when plotted.
+Note that in the previous function definition we calculated speed.
+Plot the resulting ‘speed profile trace’ as follows:</p>
+<pre class="r"><code>plot(l[&quot;s&quot;], lwd = l$s)</code></pre>
+<p><img src="/post/2020/gps-tracks_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="further-resources" class="section level2">
+<h2>Further resources</h2>
+<ul>
+<li>Content on trajectories by Edzer Pebesma: <a href="http://edzer.github.io/astd/lec8.html" class="uri">http://edzer.github.io/astd/lec8.html</a></li>
+<li>The <strong>trajectories</strong> package:
+<a href="https://cran.r-project.org/package=trajectories" class="uri">https://cran.r-project.org/package=trajectories</a></li>
+<li>The <strong>trajr</strong> package: <a href="https://cran.rstudio.com/web/packages/trajr/vignettes/trajr-vignette.html" class="uri">https://cran.rstudio.com/web/packages/trajr/vignettes/trajr-vignette.html</a></li>
+<li>The <strong>trackeR</strong> package: <a href="https://github.com/trackerproject/trackeR" class="uri">https://github.com/trackerproject/trackeR</a></li>
+<li>The SpatioTemporal task view: <a href="https://cran.r-project.org/web/views/SpatioTemporal.html" class="uri">https://cran.r-project.org/web/views/SpatioTemporal.html</a></li>
+</ul>
+<!-- # Larger track datasets -->
+<!-- 6 MB -->
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>
+For saving your own GPS data, we recommend using an open source Android apps such as <a href="https://www.oruxmaps.com/cs/en/">Orux</a>, <a href="https://github.com/owntracks/android">owntracks</a> or <a href="https://osmand.net/features/trip-recording-plugin">osmand</a>.
+These can then be transferred onto your computer and, if you want to support the community, uploaded to OSM.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

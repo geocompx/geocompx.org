@@ -1,0 +1,77 @@
+---
+title: 'Hillshade maps'
+author: Jakub Nowosad
+date: '2019-10-07'
+slug: hillshade-maps
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - raster
+  - tmap
+  - viz
+  - maps
+draft: true
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>This vignette builds on the <a href="https://geocompr.robinlovelace.net/adv-map.html">making maps chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>.</p>
+<div id="prerequisites" class="section level2 unnumbered">
+<h2>Prerequisites</h2>
+<p>The example below assume the following packages are attached:</p>
+<pre class="r"><code>library(raster) # data download
+library(tmap)   # map creation</code></pre>
+</div>
+<div id="hillshade-map" class="section level1">
+<h1>Hillshade map</h1>
+<p>Hillshade maps show the topographical shape of hills and mountains using levels of gray on a map.
+The role of this kind of maps is to display relative slopes, but not absolute height.</p>
+<div id="calculate-terrain-characteristics" class="section level2">
+<h2>Calculate terrain characteristics</h2>
+<p>Elevation data is needed to create a hillshade map.
+The <strong>raster</strong> package provides an easy access to the SRTM 90 m resolution elevation data with the <code>getData()</code> function.
+For example, it is possible to download the elevation data for the whole country of Slovenia using the code below:</p>
+<pre class="r"><code>alt = getData(&quot;alt&quot;, country = &quot;SVN&quot;, path = tempdir())</code></pre>
+<p>Hillshade maps are created based on certain terrain characteristics - slope and aspect.
+Slope represents the steepness at each cell of a raster surface.
+The lower the slope value - the flatter the terrain.
+Aspect is the direction of the maximum slope of the focal cell.
+Slope and aspect can be calculated with the <code>terrain</code> function and the <code>opt</code> argument set to <code>"slope"</code> or <code>"aspect"</code>.
+Both values are returned in radians by default.</p>
+<pre class="r"><code>slope = terrain(alt, opt = &quot;slope&quot;)
+aspect = terrain(alt, opt = &quot;aspect&quot;)</code></pre>
+<!-- add plots of slope and as pect -->
+<!-- explain what's that  -->
+<p>Computing of a hillshade can be done using the <code>hillShade()</code> function.
+It requires previously created <code>slope</code> and <code>aspect</code> objects and setting two new arguments <code>angle</code> and <code>direction</code>.
+The <code>angle</code> argument is the elevation angle of the light source and the <code>direction</code> argument is the direction (azimuth) angle of the light source (sun), both in degrees.</p>
+<pre class="r"><code>hill = hillShade(slope, aspect, angle = 40, direction = 270)</code></pre>
+<p>The output object can be plotted with <code>plot(hill)</code>, however, it does not give an expected map.
+This is because the hillshade object should be overlayed by another semi-transparent layer to give a proper visualization.</p>
+</div>
+<div id="create-a-hillshade-map" class="section level2">
+<h2>Create a hillshade map</h2>
+<p>A hillshade map can be created using the <strong>tmap</strong> package.
+This package builds maps by stacking different data layers.
+In this case, the first layer is the hillshade object (<code>hill</code>), colored using different levels of gray.</p>
+<pre class="r"><code>tm_shape(hill) +
+  tm_raster(palette = gray(0:10 / 10), style = &quot;cont&quot;, legend.show = FALSE)</code></pre>
+<p>The second layer is the elevation object (<code>alt</code>), colored using the <code>terrain.colors</code> palette.</p>
+<pre class="r"><code>tm_shape(alt) +
+  tm_raster(alpha = 0.5, palette = terrain.colors(10), style = &quot;cont&quot;,
+            title = &quot;Elevation (m asl)&quot;, legend.show = TRUE)</code></pre>
+<p>Finally, both layers can be combined to create an expected visualization.
+It could be also improved by placing the legend on the right bottom of the map.</p>
+<pre class="r"><code>tm_shape(hill) +
+  tm_raster(palette = gray(0:10 / 10), style = &quot;cont&quot;, legend.show = FALSE) +
+  tm_shape(alt) +
+  tm_raster(alpha = 0.5, palette = terrain.colors(10), style = &quot;cont&quot;,
+            title = &quot;Elevation (m asl)&quot;, legend.show = TRUE) +
+  tm_layout(legend.position = c(&quot;RIGHT&quot;, &quot;BOTTOM&quot;))</code></pre>
+</div>
+</div>

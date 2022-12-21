@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Robin Lovelace">
+<meta name="dcterms.date" content="2020-04-23">
+
+<title>geocompx - Demo of reproducible geographic data analysis: mapping Covid-19 data with R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">geocompx</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompr/geocompr.github.io"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompr"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../feed.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set-up</a></li>
+  <li><a href="#getting-international-covid-19-data" id="toc-getting-international-covid-19-data" class="nav-link" data-scroll-target="#getting-international-covid-19-data">Getting international Covid-19 data</a></li>
+  <li><a href="#getting-geographic-data" id="toc-getting-geographic-data" class="nav-link" data-scroll-target="#getting-geographic-data">Getting geographic data</a></li>
+  <li><a href="#transforming-geographic-data" id="toc-transforming-geographic-data" class="nav-link" data-scroll-target="#transforming-geographic-data">Transforming geographic data</a></li>
+  <li><a href="#attribute-joins" id="toc-attribute-joins" class="nav-link" data-scroll-target="#attribute-joins">Attribute joins</a></li>
+  <li><a href="#calculating-area" id="toc-calculating-area" class="nav-link" data-scroll-target="#calculating-area">Calculating area</a></li>
+  <li><a href="#plotting-international-covid-19-data-for-a-single-day" id="toc-plotting-international-covid-19-data-for-a-single-day" class="nav-link" data-scroll-target="#plotting-international-covid-19-data-for-a-single-day">Plotting international Covid-19 data for a single day</a></li>
+  <li><a href="#making-maps-with-tmap" id="toc-making-maps-with-tmap" class="nav-link" data-scroll-target="#making-maps-with-tmap">Making maps with tmap</a></li>
+  <li><a href="#making-animated-maps" id="toc-making-animated-maps" class="nav-link" data-scroll-target="#making-animated-maps">Making animated maps</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Demo of reproducible geographic data analysis: mapping Covid-19 data with R</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">demo</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Robin Lovelace </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 23, 2020</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The coronavirus pandemic is a global phenomenon that will affect the lives of the majority of the world’s population for years to come. Impacts range from physical distancing measures <a href="https://en.wikipedia.org/wiki/Social_distancing#2019%E2%80%932020_coronavirus_pandemic">already affecting more than half of Earth’s population</a> and knock-on impacts such as <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Coronavirus_lockdown_leading_to_drop_in_pollution_across_Europe">changes in air quality</a> to potentially life threatening illness, with peer reviewed estimates of <a href="https://www.thelancet.com/pdfs/journals/laninf/PIIS1473-3099(20)30243-7.pdf">infection fatality rates</a> showing the disease disproportionately affects the elderly and people with underlying health conditions.</p>
+<p>Like other global phenomena such as climate change, the impacts of the pandemic vary greatly by geographic location, with effective and early implementation of physical distancing measures and effective contact tracing associated with lower death rates, according to preliminary <a href="https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3">research</a>, as illustrated in the animation below (source: <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">Washington Post</a>).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Katapult_importance_social_distancing.gif/350px-Katapult_importance_social_distancing.gif" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<p>This article demonstrates how to download and map open data on the evolving coronavirus pandemic, using reproducible R code. The aim is not to provide scientific analysis of the data, but to demonstrate how ‘open science’ enables public access to important international datasets. It also provides an opportunity to demonstrate how techniques taught in <a href="https://geocompr.robinlovelace.net/"><em>Geocomputation with R</em></a> can be applied to real-world datasets.</p>
+<p>Before undertaking geographic analysis of ‘rate’ data, such as the number Covid-19 infections per unit area, it is worth acknowledging caveats at the outset. Simple graphics of complex phenomena can be misleading. This is well-illustrated in the figure below by <a href="https://github.com/willgeary">Will Geary</a>, which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://github.com/willgeary/covid-nyc-dasymetric-map"><img src="https://raw.githubusercontent.com/willgeary/covid-nyc-dasymetric-map/master/assets/comparison_table_zip_hex_smoothed.png" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<p>The post is intended more as a taster of geographic visualisation in R than as a gateway to scientific analysis of Covid-19 data. See resources such as the <a href="https://2020.erum.io/covidr-contest/">eRum2020 CovidR</a> contest and <a href="https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f">lists</a> of online <a href="https://github.com/HDRUK/covid-19">resources</a> for pointers on how to usefully contribute to data-driven efforts to tackle the crisis.</p>
+</section>
+<section id="set-up" class="level1">
+<h1>Set-up</h1>
+<p>To reproduce the results presented in this article you will need to have an R installation with up-to-date versions of the following packages installed and loaded. (See the <a href="https://github.com/geocompr/docker">geocompr/docker</a> repo and <a href="https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/">Installing R on Ubuntu</a> article for more on setting up your computer to work with R).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.11.0, GDAL 3.5.2, PROJ 9.0.1; sf_use_s2() is TRUE</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="getting-international-covid-19-data" class="level1">
+<h1>Getting international Covid-19 data</h1>
+<p>To get data on official Covid-19 statistics, we will use the <a href="https://github.com/covid19datahub/COVID19"><code>COVID19</code></a> R package.</p>
+<p><img src="https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="20%" style="display: block; margin: auto;"></p>
+<p>This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels. Install it as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"COVID19"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After the package is installed, you can get up-to-date country-level data as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> COVID19<span class="sc">::</span><span class="fu">covid19</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<p>To minimise dependencies for reproducing the results in this article, we uploaded a copy of the data, which can be downloaded as follows (re-run the code above to get up-to-date data):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"https://git.io/covid-19-2020-04-23"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame" </code></pre>
+</div>
+</div>
+<p>The previous code chunk read a .csv file from online and confirmed, we have loaded a data frame (we will see how to join this with geographic data in the next section). We can get a sense of the contents of the data as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17572</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "id"             "date"           "deaths"         "confirmed"     
+ [5] "tests"          "recovered"      "hosp"           "icu"           
+ [9] "vent"           "driving"        "walking"        "transit"       
+[13] "country"        "state"          "city"           "lat"           
+[17] "lng"            "pop"            "pop_14"         "pop_15_64"     
+[21] "pop_65"         "pop_age"        "pop_density"    "pop_death_rate"</code></pre>
+</div>
+</div>
+</section>
+<section id="getting-geographic-data" class="level1">
+<h1>Getting geographic data</h1>
+<p>We will use a dataset representing countries worldwide from the <code>rnaturalearth</code> package. Assuming you have the package installed you can get the geographic data as follows (see the subsequent code chunk if not):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>world_rnatural <span class="ot">=</span> rnaturalearth<span class="sc">::</span><span class="fu">ne_download</span>(<span class="at">returnclass =</span> <span class="st">"sf"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># names(world_iso) # variables available</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>world_iso <span class="ot">=</span> world_rnatural <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(NAME_LONG, ISO_A3_EH, POP_EST, GDP_MD_EST, CONTINENT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+
+</div>
+<p>The result of the previous code block, an object representing the world and containing only variables of interest, was uploaded to GitHub and can be loaded from a GeoJSON file as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>world_iso <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">"https://git.io/JfICT"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To see what’s in the <code>world_iso</code> object we can plot it, with the default setting in <code>sf</code> showing the geographic distribution of each variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(world_iso)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+<section id="transforming-geographic-data" class="level1">
+<h1>Transforming geographic data</h1>
+<p>An issue with the result from a data visualisation perspective is that this unprojected visualisation distorts the world: countries such as Greenland at high latitudes appear bigger than the actually are. To overcome this issue we will project the object as follows (see Chapter <a href="https://geocompr.robinlovelace.net/reproj-geo-data.html">6</a> of Geocomputation with R and a recent article on the <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html">r-spatial website</a> for more on coordinate systems):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>world_projected <span class="ot">=</span> world_iso <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">"+proj=moll"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can plot just the geometry of the updated object as follows, noting that the result is projected in a way that preserves the true area of countries (noting also that all projections introduce distortions):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(world_projected))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+<section id="attribute-joins" class="level1">
+<h1>Attribute joins</h1>
+<p>As outlined in Chapter <a href="https://geocompr.robinlovelace.net/attr.html#vector-attribute-joining">3</a> of <em>Geocomputation with R</em>, attribute joins can be used to add additional variables to geographic data via a ‘key variable’ shared between the geographic and non-geographic objects. In this case the shared variables are <code>ISO_A3_EH</code> in the geographic object and <code>id</code> in the Covid-19 dataset <code>d</code>. We will be concise and call the dataset resulting from this join operation <code>w</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">left_join</span>(world_projected, d, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"ISO_A3_EH"</span><span class="ot">=</span> <span class="st">"id"</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sf"         "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14919</code></pre>
+</div>
+</div>
+</section>
+<section id="calculating-area" class="level1">
+<h1>Calculating area</h1>
+<p>The package <code>sf</code> provides a wide range of functions for calculating geographic variables such as object centroid, bounding boxes, lengths and, as demonstrated below, area. We use this area data to calculate the population density of each country as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>w<span class="sc">$</span>Area_km <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">st_area</span>(w)) <span class="sc">/</span> <span class="fl">1e6</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>w<span class="sc">$</span><span class="st">`</span><span class="at">Pop/km2</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">as.numeric</span>(w<span class="sc">$</span>POP_EST) <span class="sc">/</span> w<span class="sc">$</span>Area_km </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-international-covid-19-data-for-a-single-day" class="level1">
+<h1>Plotting international Covid-19 data for a single day</h1>
+<p>The class of <code>w</code> shows that it has geometries for each row. Notice that it has many more rows of data than the original world object: geometries are repeated for every year. This is not an efficient way to store data, as it means lots of duplicate geometries. On a small dataset that doesn’t matter, but it’s something to be aware of. To check that the join has worked, we will take a subset of rows representing the global situation yesterday relative to the date of data access:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>w_yesterday <span class="ot">=</span> w <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(date <span class="sc">==</span> <span class="fu">max</span>(date, <span class="at">na.rm =</span> T) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(w_yesterday)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>The plot method for <code>sf</code> objects is fast and flexible, as documented in <a href="https://r-spatial.github.io/sf/articles/sf5.html"><code>sf</code>’s <em>Plotting Simple Features</em> vignette</a>, which can be accessed with <code>vignette("sf5")</code> from the R console. We can set the breaks to better show the difference between countries with no reported deaths and countries with few reported deaths as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(w_yesterday[<span class="st">"deaths"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(w_yesterday[<span class="st">"deaths"</span>], <span class="at">breaks =</span> b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>To plot the other Covid-19 variables, reporting number of confirmed cases, number of tests and number of people who have recovered, we can subset the relevant variables and pipe the result to the <code>plot()</code> function (noting the <a href="https://t.co/NyIrKHQSUy">caveat</a> that code containing pipes may be hard to debug) as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>w_yesterday <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(deaths, confirmed, tests, recovered) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+<section id="making-maps-with-tmap" class="level1">
+<h1>Making maps with tmap</h1>
+<p>The <a href="https://geocompr.robinlovelace.net/adv-map.html">mapping chapter</a> of <em>Geocomputation with R</em> shows how the <code>tmap</code> package enables publication-quality maps to be created with concise and relatively commands, such as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="fu">c</span>(<span class="st">"deaths"</span>, <span class="st">"recovered"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>We can modify the palette and scale as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"deaths"</span>, <span class="st">"recovered"</span>),</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"order"</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>The map can be further improved by adding graticules representing the curvature of the Earth, created as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">st_graticule</span>(w_yesterday)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It’s also worth moving the legend:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(g) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">"deaths"</span>, <span class="st">"recovered"</span>),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"order"</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>A problem with choropleth maps is that they can under-represent small areas. To overcome this issue we can use dot size instead of color to represent number:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(g) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green"</span>),</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fu">c</span>(<span class="st">"deaths"</span>, <span class="st">"recovered"</span>),</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>One question I have here: make the size legend have <code>style = "log10_pretty"</code> also?</p>
+</section>
+<section id="making-animated-maps" class="level1">
+<h1>Making animated maps</h1>
+<p>The animation at the beginning of this article shows how dynamic graphics can communicate change effectively. Animated maps are therefore useful for showing evolving geographic phenomena, such as the spread of Covid-19 worldwide. As covered in section <a href="https://geocompr.robinlovelace.net/adv-map.html#animated-maps">8.3</a> of <em>Geocomputation with R</em>, animated maps can be created with <code>tmap</code> by extending the <code>tm_facet()</code> functionality. So let’s start by creating a facetted map showing the total number of deaths on the first day of each month in our data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>w<span class="sc">$</span>Date <span class="ot">=</span> <span class="fu">as.character</span>(w<span class="sc">$</span>date)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(g) <span class="sc">+</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pop/km2"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"log10_pretty"</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">3</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="at">pattern =</span> <span class="st">"01$"</span>, date))) <span class="sc">+</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">size =</span> <span class="st">"deaths"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_facets</span>(<span class="st">"Date"</span>, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">free.scales.fill =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.stack =</span> <span class="st">"horizontal"</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>To create an animated map, following instructions in Chapter <a href="https://geocompr.robinlovelace.net/adv-map.html#animated-maps">8</a> of <em>Geocomputation with R</em>, we need to make some small changes to the code above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">tm_shape</span>(g) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w_yesterday) <span class="sc">+</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pop/km2"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"log10_pretty"</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">3</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="at">pattern =</span> <span class="st">"01$"</span>, date))) <span class="sc">+</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">size =</span> <span class="st">"deaths"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_facets</span>(<span class="at">along =</span> <span class="st">"Date"</span>, <span class="at">free.coords =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_animation</span>(m, <span class="st">"covid-19-animated-map-test.gif"</span>, <span class="at">width =</span> <span class="dv">800</span>)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">browseURL</span>(<span class="st">"covid-19-animated-map-test.gif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="https://user-images.githubusercontent.com/1825120/80087377-e7bda780-8552-11ea-959f-55b154c715fa.gif" class="img-fluid" style="width:40.0%"></p>
+</div>
+</div>
+<p>We made an animated map! The first version is rarely the best though, and the map above clearly could benefit from some adjustments before we plot the results for the whole dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>w<span class="sc">$</span>Date <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"Total deaths from 22nd January 2020 to "</span>, w<span class="sc">$</span>date)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">tm_shape</span>(g) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pop/km2"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette =</span> <span class="st">"viridis"</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"log10_pretty"</span>,</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd =</span> <span class="fl">0.5</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(w) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_dots</span>(<span class="at">size =</span> <span class="st">"deaths"</span>, <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_facets</span>(<span class="at">along =</span> <span class="st">"Date"</span>, <span class="at">free.coords =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">main.title.size =</span> <span class="fl">0.5</span>,</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.outside =</span> <span class="cn">TRUE</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_animation</span>(m, <span class="st">"covid-19-animated-map.gif"</span>, <span class="at">width =</span> <span class="dv">1400</span>, <span class="at">height =</span> <span class="dv">600</span>)</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a><span class="fu">browseURL</span>(<span class="st">"covid-19-animated-map.gif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!--update the file below-->
+<p><img src="https://user-images.githubusercontent.com/1825120/80092918-7f26f880-855b-11ea-8017-c4ec6e382209.gif" class="img-fluid"></p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>This article has demonstrated how to work with and map geographic data using the free and open source statistical programming language R. It demonstrates that by representing analysis in code, research can be made reproducible and more accessible to others, encouraging transparent and open science. This has multiple advantages, from education and citizen engagement with the evidence to increased trust in the evidence on which important, life-or-death, decisions are made.</p>
+<p>Although the research did not address any policy issues, it could be extended to do so, and we encourage readers to check-out the following resources for ideas for future research:</p>
+<ul>
+<li>A <a href="https://github.com/paezha/covid19-environmental-correlates#a-spatio-temporal-analysis-of-the-environmental-correlates-of-covid-19-incidence-in-spain">reproducible geographic analysis</a> of Covid-19 data in Spain by <a href="https://www.science.mcmaster.ca/geo/component/comprofiler/userprofile/paezha.html">Antonio Paez</a> and others (challenge: reproduce their findings)</li>
+<li>The eRum2020 <a href="https://2020.erum.io/covidr-contest/">CovidR competition</a> (challenge: enter the contest!)</li>
+<li>Try downloading the the city-level data with this command and exploring the geographic distribution of the outbreak at the city level:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>d_city <span class="ot">=</span> COVID19<span class="sc">::</span><span class="fu">covid19</span>(<span class="at">level =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For further details on geographic data analysis in R in general, we recommend checkout out in-depth materials such as <a href="https://www.amazon.co.uk/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1138304514"><em>Geocomputation with R</em></a> and the in-progress open source book <a href="https://keen-swartz-3146c4.netlify.app/"><em>Spatial Data Science</em></a>.</p>
+<p>There is also an <a href="https://www.youtube.com/watch?v=Va0STgco7-4">online talk</a> on the subject on YouTube.</p>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.2 (2022-10-31)
+ os       Fedora Linux 37 (Thirty Seven)
+ system   x86_64, linux-gnu
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/Warsaw
+ date     2022-12-20
+ pandoc   2.19.2 @ /usr/lib/rstudio/bin/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ ! package      * version   date (UTC) lib source
+ P abind          1.4-5     2016-07-21 [?] CRAN (R 4.2.2)
+ P base64enc      0.1-3     2015-07-28 [?] CRAN (R 4.2.2)
+ P bit            4.0.5     2022-11-15 [?] CRAN (R 4.2.2)
+ P bit64          4.0.5     2020-08-30 [?] CRAN (R 4.2.2)
+ P class          7.3-20    2022-01-16 [?] CRAN (R 4.2.2)
+ P classInt       0.4-8     2022-09-29 [?] CRAN (R 4.2.2)
+ P cli            3.4.1     2022-09-23 [?] CRAN (R 4.2.2)
+ P codetools      0.2-18    2020-11-04 [?] CRAN (R 4.2.2)
+ P crayon         1.5.2     2022-09-29 [?] CRAN (R 4.2.2)
+ P crosstalk      1.2.0     2021-11-04 [?] CRAN (R 4.2.2)
+ P curl           4.3.3     2022-10-06 [?] CRAN (R 4.2.2)
+ P DBI            1.1.3     2022-06-18 [?] CRAN (R 4.2.2)
+ P dichromat      2.0-0.1   2022-05-02 [?] CRAN (R 4.2.2)
+ P digest         0.6.31    2022-12-11 [?] CRAN (R 4.2.2)
+ P dplyr        * 1.0.10    2022-09-01 [?] CRAN (R 4.2.2)
+ P e1071          1.7-12    2022-10-24 [?] CRAN (R 4.2.2)
+ P ellipsis       0.3.2     2021-04-29 [?] CRAN (R 4.2.2)
+ P evaluate       0.19      2022-12-13 [?] CRAN (R 4.2.2)
+ P fansi          1.0.3     2022-03-24 [?] CRAN (R 4.2.2)
+ P fastmap        1.1.0     2021-01-25 [?] CRAN (R 4.2.2)
+ P generics       0.1.3     2022-07-05 [?] CRAN (R 4.2.2)
+ P glue           1.6.2     2022-02-24 [?] CRAN (R 4.2.2)
+ P hms            1.1.2     2022-08-19 [?] CRAN (R 4.2.2)
+ P htmltools      0.5.4     2022-12-07 [?] CRAN (R 4.2.2)
+ P htmlwidgets    1.6.0     2022-12-15 [?] CRAN (R 4.2.2)
+ P jsonlite       1.8.4     2022-12-06 [?] CRAN (R 4.2.2)
+ P KernSmooth     2.23-20   2021-05-03 [?] CRAN (R 4.2.2)
+ P knitr          1.41      2022-11-18 [?] CRAN (R 4.2.2)
+ P lattice        0.20-45   2021-09-22 [?] CRAN (R 4.2.2)
+ P leafem         0.2.0     2022-04-16 [?] CRAN (R 4.2.2)
+ P leaflet        2.1.1     2022-03-23 [?] CRAN (R 4.2.2)
+ P leafsync       0.1.0     2019-03-05 [?] CRAN (R 4.2.2)
+ P lifecycle      1.0.3     2022-10-07 [?] CRAN (R 4.2.2)
+ P lwgeom         0.2-10    2022-11-19 [?] CRAN (R 4.2.2)
+ P magrittr       2.0.3     2022-03-30 [?] CRAN (R 4.2.2)
+ P pillar         1.8.1     2022-08-19 [?] CRAN (R 4.2.2)
+ P pkgconfig      2.0.3     2019-09-22 [?] CRAN (R 4.2.2)
+ P png            0.1-8     2022-11-29 [?] CRAN (R 4.2.2)
+ P proxy          0.4-27    2022-06-09 [?] CRAN (R 4.2.2)
+ P R6             2.5.1     2021-08-19 [?] CRAN (R 4.2.2)
+ P raster         3.6-11    2022-11-28 [?] CRAN (R 4.2.2)
+ P RColorBrewer   1.1-3     2022-04-03 [?] CRAN (R 4.2.2)
+ P Rcpp           1.0.9     2022-07-08 [?] CRAN (R 4.2.2)
+ P readr          2.1.3     2022-10-01 [?] CRAN (R 4.2.2)
+   renv           0.16.0    2022-09-29 [2] CRAN (R 4.2.2)
+ P rlang          1.0.6     2022-09-24 [?] CRAN (R 4.2.2)
+ P rmarkdown      2.19      2022-12-15 [?] CRAN (R 4.2.2)
+ P rstudioapi     0.14      2022-08-22 [?] CRAN (R 4.2.2)
+ P sessioninfo    1.2.2     2021-12-06 [?] CRAN (R 4.2.2)
+ P sf           * 1.0-9     2022-11-08 [?] CRAN (R 4.2.2)
+ P sp             1.5-1     2022-11-07 [?] CRAN (R 4.2.2)
+ P stars          0.6-0     2022-11-21 [?] CRAN (R 4.2.2)
+ P stringi        1.7.8     2022-07-11 [?] CRAN (R 4.2.2)
+ P stringr        1.5.0     2022-12-02 [?] CRAN (R 4.2.2)
+ P terra          1.6-47    2022-12-02 [?] CRAN (R 4.2.2)
+ P tibble         3.1.8     2022-07-22 [?] CRAN (R 4.2.2)
+ P tidyselect     1.2.0     2022-10-10 [?] CRAN (R 4.2.2)
+ P tmap         * 3.3-3     2022-03-02 [?] CRAN (R 4.2.2)
+ P tmaptools      3.1-1     2021-01-19 [?] CRAN (R 4.2.2)
+ P tzdb           0.3.0     2022-03-28 [?] CRAN (R 4.2.2)
+ P units          0.8-1     2022-12-10 [?] CRAN (R 4.2.2)
+ P utf8           1.2.2     2021-07-24 [?] CRAN (R 4.2.2)
+ P vctrs          0.5.1     2022-11-16 [?] CRAN (R 4.2.2)
+ P viridisLite    0.4.1     2022-08-22 [?] CRAN (R 4.2.2)
+ P vroom          1.6.0     2022-09-30 [?] CRAN (R 4.2.2)
+ P withr          2.5.0     2022-03-03 [?] CRAN (R 4.2.2)
+ P xfun           0.35      2022-11-16 [?] CRAN (R 4.2.2)
+ P XML            3.99-0.13 2022-12-04 [?] CRAN (R 4.2.2)
+ P yaml           2.3.6     2022-10-18 [?] CRAN (R 4.2.2)
+
+ [1] /tmp/Rtmp2F9iQn/renv-library-6dbab52f30514
+ [2] /home/jn/Science/geocompr/geocompr.github.io/renv/library/R-4.2/x86_64-redhat-linux-gnu
+ [3] /home/jn/Science/geocompr/geocompr.github.io/renv/sandbox/R-4.2/x86_64-redhat-linux-gnu/60c4e220
+
+ P ── Loaded and on-disk path mismatch.
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
+  author = {Robin Lovelace},
+  title = {Demo of Reproducible Geographic Data Analysis: Mapping
+    {Covid-19} Data with {R}},
+  date = {2020-04-23},
+  url = {https://geocompx.org//post/2020/r-spatial-demo-covid-19},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2020" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Robin Lovelace. 2020. <span>“Demo of Reproducible Geographic Data
+Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https://geocompx.org//post/2020/r-spatial-demo-covid-19">https://geocompx.org//post/2020/r-spatial-demo-covid-19</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

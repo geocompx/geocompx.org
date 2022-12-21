@@ -2,9 +2,4 @@
 .Rhistory
 .RData
 .Ruserdata
-public
-geocompr.github.io
-index.html
-*.tif
-*.geojson
 /.quarto/

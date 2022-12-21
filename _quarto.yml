@@ -9,6 +9,12 @@ website:
     left:
       - href: post.qmd
         text: Posts
+      - href: r.qmd
+        text: R resources
+      - href: py.qmd
+        text: Python resources
+      - href: guestbook.qmd
+        text: Guestbook
     right:
       - icon: github
         href: https://github.com/geocompr/geocompr.github.io
@@ -22,3 +28,6 @@ format:
     theme: lumen
     css: styles.css
     toc: true
+
+execute: 
+  freeze: auto

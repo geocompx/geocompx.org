@@ -1,0 +1,72 @@
+---
+title: 'Geocomputation benchmarks'
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: '2019-08-07'
+slug: geocompr-benchmarks
+categories:
+  - vignette
+tags:
+  - geocompr
+  - rspatial
+  - sf
+  - benchmarks
+draft: true
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<div id="datasets-used" class="section level2">
+<h2>Datasets used</h2>
+<p>The following filepaths datasets will be used:</p>
+<pre class="r"><code>f1 = system.file(&quot;shapes/world.gpkg&quot;, package = &quot;spData&quot;)
+f2 = &quot;promenade-all.geojson&quot;</code></pre>
+<p>To run, this article relies on downloading files onto your computer:</p>
+<pre class="r"><code>suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(data.table))
+suppressPackageStartupMessages(library(sf))
+f2 = &quot;promenade-all.geojson&quot;
+u = &quot;https://github.com/spnethack/spnethack/releases/download/0.1/promenade-all.geojson&quot;
+if(!file.exists(f2)) download.file(u, destfile = f2)
+
+system.time({b = read_sf(f2)})
+system.time({d = b  %&gt;% data.table::as.data.table()})
+system.time(d[,geometry:=sf::st_as_text(geometry),])
+system.time(d %&gt;% readr::write_tsv(&quot;tmp.tsv&quot;))</code></pre>
+</div>
+<div id="reading-vector-data" class="section level1">
+<h1>Reading vector data</h1>
+<pre class="r"><code>library(sf)
+vector_filepath = system.file(&quot;shapes/world.gpkg&quot;, package = &quot;spData&quot;)
+world = st_read(vector_filepath)</code></pre>
+<p>To demonstrate this, we will use a function to compare <code>st_read()</code> with its <strong>sp</strong> equivalent, <code>rgdal::readOGR()</code>:</p>
+<pre class="r"><code>b1 = bench::mark(iterations = 3, check = FALSE,
+            sf = st_read(vector_filepath),
+            sp = rgdal::readOGR(vector_filepath)
+)
+b1</code></pre>
+<p>The benchmark ran on an input file (<code>file</code>) and a number of times.
+It shows that <strong>sf</strong> was times faster than <strong>rgdal</strong> at loading this file.</p>
+<p>The relative performance of <code>st_read()</code> compared with other functions will vary depending on file format and the nature of the data.
+To illustrate this point, we performed the same operation on a geojson file and found a greater speed saving:</p>
+<pre class="r"><code>vector_filepath = system.file(&quot;shapes/cycle_hire_osm.geojson&quot;, package = &quot;spData&quot;)
+b2 = bench::mark(iterations = 3, check = FALSE,
+            sf = st_read(vector_filepath),
+            sp = rgdal::readOGR(vector_filepath)
+)
+b2</code></pre>
+<p>In this case <strong>sf</strong> was around times faster than <strong>rgdal</strong>.</p>
+</div>
+<div id="writing-vector-data" class="section level1">
+<h1>Writing vector data</h1>
+<pre class="r"><code>library(rgdal)
+world_sp = as(world, &quot;Spatial&quot;)</code></pre>
+<pre class="r"><code>system.time(writeOGR(world_sp, dsn = &quot;world_sp.geojson&quot;, layer = &quot;world_sp.geojson&quot;, driver = &quot;GeoJSON&quot;))
+system.time(writeOGR(world_sp, dsn = &quot;.&quot;, layer = &quot;world_sp&quot;, driver = &quot;ESRI Shapefile&quot;)) 
+system.time(writeOGR(world_sp, dsn = &quot;world_sp.gpkg&quot;, layer = &quot;world_sp.gpkg&quot;, driver = &quot;GPKG&quot;))
+system.time(st_write(world, &quot;world_sf.geojson&quot;, quiet = TRUE))
+system.time(st_write(world, &quot;world_sf.shp&quot;, quiet = TRUE)) 
+system.time(st_write(world, &quot;world_sf.gpkg&quot;, quiet = TRUE))</code></pre>
+</div>

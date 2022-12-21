@@ -1,0 +1,95 @@
+---
+title: 
+author: Jakub Nowosad
+date: '2021-01-25'
+slug: whyr_webinar004
+categories: [vignette]
+tags: [tmap]
+draft: true
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<!-- intro -->
+<!-- arranging maps/plots -->
+<!-- tmap has been great for maps -->
+<!-- additionally, arrange help in simple cases -->
+<!-- however, there was a limitaion for more complex cases -->
+<!-- link to previous examples -->
+<!-- tmap 3.3 introduces tmap_grob -->
+<!-- this opens many possibilities -->
+<!-- this This vignette shows... -->
+<div id="section" class="section level1">
+<h1></h1>
+<pre class="r"><code>library(tmap)
+data(World)
+
+tm1 = tm_shape(World) + tm_polygons(&quot;well_being&quot;, 
+                                    title = &quot;Well-being&quot;,
+                                    palette = &quot;RdYlGn&quot;)
+tm2 = tm_shape(World) + tm_polygons(&quot;inequality&quot;, 
+                                    title = &quot;Inequality&quot;,
+                                    palette = &quot;-RdYlGn&quot;)</code></pre>
+<pre class="r"><code>tmap_arrange(tm1, tm2, ncol = 2)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+</div>
+<div id="grobs" class="section level1">
+<h1>grobs</h1>
+<pre class="r"><code>tm1_grob = tmap_grob(tm1)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<pre class="r"><code>tm2_grob = tmap_grob(tm2)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+</div>
+<div id="section-1" class="section level1">
+<h1></h1>
+<pre class="r"><code>library(gridExtra)</code></pre>
+<pre class="r"><code>grid.arrange(tm1_grob, tm2_grob, 
+             top = &quot;Two separate maps&quot;, ncol = 2)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+</div>
+<div id="section-2" class="section level1">
+<h1></h1>
+<pre class="r"><code>library(cowplot)
+pg1 = plot_grid(tm1_grob, tm2_grob, 
+          labels = c(&quot;A&quot;, &quot;B&quot;),
+          nrow = 1)
+pg1</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
+</div>
+<div id="section-3" class="section level1">
+<h1></h1>
+<pre class="r"><code>library(ggplot2)
+gg1 = ggplot(World, aes(well_being, inequality)) +
+  geom_point() +
+  labs(x = &quot;Well-being&quot;, y = &quot;Inequality&quot;)
+
+plot_grid(pg1, gg1, 
+          labels = c(&quot;A&quot;, &quot;B&quot;),
+          nrow = 1) </code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+</div>
+<div id="inset-maps" class="section level1">
+<h1>Inset maps</h1>
+<pre class="r"><code>tm3 = tm_shape(World) + 
+  tm_polygons(&quot;well_being&quot;, 
+                                    title = &quot;Well-being&quot;,
+                                    palette = &quot;RdYlGn&quot;, lwd = 0.2) +
+  tm_layout(legend.show = FALSE)
+tm4 = tm_shape(World, bbox = &quot;Europe&quot;) + 
+  tm_polygons(&quot;well_being&quot;, 
+                                    title = &quot;Well-being&quot;,
+                                    palette = &quot;RdYlGn&quot;) 
+
+tm3_grob = tmap_grob(tm3)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<pre class="r"><code>tm4_grob = tmap_grob(tm4)</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-9-2.png" width="576" /></p>
+<pre class="r"><code>pg2 = ggdraw() +
+  draw_plot(tm4_grob) +
+  draw_plot(tm3_grob,
+            width = 0.2, height = 0.2,
+            x = 0.25, y = 0.75)
+pg2</code></pre>
+<p><img src="/post/2022/tmap-arranging-maps_files/figure-html/unnamed-chunk-9-3.png" width="576" /></p>
+</div>

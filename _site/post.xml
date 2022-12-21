@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>toDo</description>
-<generator>quarto-1.1.189</generator>
+<generator>quarto-1.2.269</generator>
 <lastBuildDate>Wed, 23 Feb 2022 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Automatic website with the Geocomputation with R solutions</title>
@@ -76,7 +76,6 @@ cat(res, sep = '\n')
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2022,
   author = {Jakub Nowosad},
-  editor = {},
   title = {Automatic Website with the {Geocomputation} with {R}
     Solutions},
   date = {2022-02-24},
@@ -152,7 +151,6 @@ with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//po
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,robinlovelace,jannesmuenchow2022,
   author = {Jakub Nowosad, Robin Lovelace, Jannes Muenchow},
-  editor = {},
   title = {Progress Update: {Geocomputation} with {R} {Second} {Edition}
     {Part} 1},
   date = {2022-01-27},
@@ -189,7 +187,6 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace,jakubnowosad,jannesmuenchow2021,
   author = {Robin Lovelace, Jakub Nowosad, Jannes Muenchow},
-  editor = {},
   title = {Geocomputation with {R:} {Second} {Edition} Feedback},
   date = {2021-09-06},
   url = {https://geocompx.org//post/2021/geocompr2-bp1},
@@ -472,7 +469,6 @@ Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.c
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
   author = {Jakub Nowosad},
-  editor = {},
   title = {Conversions Between Different Spatial Classes in {R}},
   date = {2021-06-17},
   url = {https://geocompx.org//post/2021/spatial-classes-conversion},
@@ -504,13 +500,12 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/
 <p>Therefore, R spatial packages are interwoven with each other and depend partially on external software developments. This has several positives, including the ability to use cutting-edge features and algorithms. On the other hand, it also makes R spatial packages vulnerable to changes in the upstream packages and libraries.</p>
 <p>In the first part of the talk, we showcase several recent advances in R packages. It includes the largest recent change related to the developments in the PROJ library. We explain why the changes happened and how they impact R users. The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker (briefly covered in a previous <a href="https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/">post</a> and outlined in the new <a href="https://github.com/geocompr/docker#geocomputation-with-r-in-docker">geocompr/docker</a> repo). We outline important considerations when setting-up operating systems for geographic R packages. To reduce set-up times you can use geographic R packages Docker, a flexible and scalable technology containerization technology. Docker can run on modern computers and on your browser via services such as Binder, greatly reducing set-up times. Discussing these set-up options, and questions of compatibility between geographic R packages and paradigms such as the tidyverse and data.table, ensure that after the talk everyone can empower themselves with open source software for geographic data analysis in a powerful and flexible statistical programming environment.</p>
 <p>You can find the slides for the talk at https://nowosad.github.io/whyr_webinar004/.</p>
-<p>{{&lt; video https://www.youtube.com/embed/Va0STgco7-4}}</p>
+<div class="quarto-video ratio ratio-16x9"><iframe src="https://www.youtube.com/embed/Va0STgco7-4" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,robinlovelace2020,
   author = {Jakub Nowosad, Robin Lovelace},
-  editor = {},
   title = {Recent Changes in {R} Spatial and How to Be Ready for Them},
   date = {2020-04-25},
   url = {https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them},
@@ -959,7 +954,6 @@ Session info
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
   author = {Robin Lovelace},
-  editor = {},
   title = {Demo of Reproducible Geographic Data Analysis: Mapping
     {Covid-19} Data with {R}},
   date = {2020-04-23},
@@ -1110,7 +1104,6 @@ Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
   author = {Robin Lovelace},
-  editor = {},
   title = {Installing Spatial {R} Packages on {Ubuntu}},
   date = {2020-03-30},
   url = {https://geocompx.org//post/2020/installing-r-spatial-packages-linux},
@@ -1324,7 +1317,6 @@ Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org//post/2020/insta
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Jakub Nowosad},
-  editor = {},
   title = {Inset Maps with Ggplot2},
   date = {2019-12-08},
   url = {https://geocompx.org//post/2019/ggplot2-inset-maps},
@@ -1680,7 +1672,6 @@ Computing Hierarchical Clustering</code></pre>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Jakub Nowosad},
-  editor = {},
   title = {Map Coloring: The Color Scale Styles Available in the Tmap
     Package},
   date = {2019-10-17},
@@ -1828,7 +1819,6 @@ Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geoc
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Jakub Nowosad},
-  editor = {},
   title = {Grids and Graticules in the Tmap Package},
   date = {2019-09-04},
   url = {https://geocompx.org//post/2019/tmap-grid},
@@ -2156,7 +2146,6 @@ Package.”</span> September 4, 2019. <a href="https://geocompx.org//post/2019/t
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2019,
   author = {Robin Lovelace},
-  editor = {},
   title = {Geographic Projections and Transformations},
   date = {2019-08-21},
   url = {https://geocompx.org//post/2019/crs-projections-transformations},

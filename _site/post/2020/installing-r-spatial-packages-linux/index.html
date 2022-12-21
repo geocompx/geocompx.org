@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Robin Lovelace">
+<meta name="dcterms.date" content="2020-03-30">
+
+<title>geocompx - Installing spatial R packages on Ubuntu</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">geocompx</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompr/geocompr.github.io"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompr"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../feed.xml"><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installing-spatial-r-packages-on-ubuntu" id="toc-installing-spatial-r-packages-on-ubuntu" class="nav-link active" data-scroll-target="#installing-spatial-r-packages-on-ubuntu">1. Installing spatial R packages on Ubuntu</a></li>
+  <li><a href="#updating-r-packages-and-upstream-dependencies" id="toc-updating-r-packages-and-upstream-dependencies" class="nav-link" data-scroll-target="#updating-r-packages-and-upstream-dependencies">2. Updating R packages and upstream dependencies</a></li>
+  <li><a href="#installing-geographic-r-packages-on-other-linux-operating-systems" id="toc-installing-geographic-r-packages-on-other-linux-operating-systems" class="nav-link" data-scroll-target="#installing-geographic-r-packages-on-other-linux-operating-systems">3. Installing geographic R packages on other Linux operating systems</a></li>
+  <li><a href="#geographic-r-packages-on-docker" id="toc-geographic-r-packages-on-docker" class="nav-link" data-scroll-target="#geographic-r-packages-on-docker">4. Geographic R packages on Docker</a></li>
+  <li><a href="#fin" id="toc-fin" class="nav-link" data-scroll-target="#fin">5. Fin</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Installing spatial R packages on Ubuntu</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">setup</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Robin Lovelace </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 30, 2020</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This post explains how to quickly get key R packages for geographic research installed on <a href="https://ubuntu.com/">Ubuntu</a>, a popular Linux distribution.</p>
+<!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
+<p>A recent thread on the <a href="https://github.com/r-spatial/discuss/issues/35">r-spatial GitHub organization</a> alludes to many considerations when choosing a Linux set-up for work with geographic data, ranging from the choice of Linux distribution (distro) to the use of binary vs or compiled versions (binaries are faster to install). This post touches on some of these things. Its main purpose, though, is to provide advice on getting R’s key spatial packages up-and-running on a future-proof Linux operating system (Ubuntu).</p>
+<p>Now is a good time to be thinking about your R set-up because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future. These imminent changes include:</p>
+<ul>
+<li>The next major release of R (<a href="https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html">4.0.0</a>), scheduled for the 24<sup>th</sup> April (<a href="https://developer.r-project.org/">2020-04-24</a>)</li>
+<li>The next major release of Ubuntu (<a href="https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features">20.04</a>), a Long Term Support (<a href="https://wiki.ubuntu.com/LTS">LTS</a>) version that will be used by millions of servers and research computers worldwide for years to come. Coincidentally, Ubuntu 20.04 will be released a day earlier than R 4.0.0, on 23<sup>rd</sup> April (<a href="https://itsfoss.com/ubuntu-20-04-release-features/">2020-04-23</a>).</li>
+<li>Ongoing changes to the OSGeo stack on which key geographic R packages depend, as documented in <a href="https://github.com/r-spatial/">r-spatial</a> repos and a recent blog post on how recent versions of PROJ enable more precise <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html">coordinate reference system definitions</a>.</li>
+</ul>
+<p>To keep-up with these changes, this post will be updated in late April when some of the dust has settled around these changes. However, the advice presented here should be future-proof. Upgrading Ubuntu is covered in the next section.</p>
+<p>There many ways of getting Ubuntu set-up for spatial R packages. A benefit of Linux operating systems is that they offer choice and prevent ‘lock-in’. However, the guidance in the next section should reduce set-up time and improve maintainability (with updates managed by Ubuntu) compared with other ways of doing things, especially for beginners. If you’re planning to switch to Linux as the basis of your geographic work, this advice may be particularly useful. (The post was written in response to colleagues asking me how to set-up R on their new Ubuntu computers. If you would like a a computer running Ubuntu, check out <a href="https://itsfoss.com/get-linux-laptops/">companies that support open source operating systems</a> and <a href="https://ubuntu.com/tutorials/tutorial-install-ubuntu-desktop#1-overview">guides on installing Ubuntu on an existing machine</a>).</p>
+<p>By ‘key packages’ I mean the following, which enable the majority of day-to-day geographic data processing and visualization tasks:</p>
+<ul>
+<li><a href="https://github.com/r-spatial/sf#installing"><strong>sf</strong></a> for reading, writing and working with a range geographic vector file formats and geometry types</li>
+<li><a href="https://github.com/rspatial/raster/"><strong>raster</strong></a>, a mature package for working with geographic raster data (see the <a href="https://github.com/rspatial/terra/"><strong>terra</strong></a> for an in-development replacement for <strong>raster</strong>)</li>
+<li><a href="https://github.com/mtennekes/tmap"><strong>tmap</strong></a>, a flexible package for making static and interactive maps</li>
+</ul>
+<p>The focus is on Ubuntu because that’s what I’ve got most experience with and it is well supported by the community. Links for installing geographic R packages on other distros are provided in section 3.</p>
+<section id="installing-spatial-r-packages-on-ubuntu" class="level1">
+<h1>1. Installing spatial R packages on Ubuntu</h1>
+<!-- Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/). -->
+<!-- ## Ubuntu -->
+<p>R’s spatial packages can be installed from source on the latest version of this popular operating system, once the appropriate repository has been set-up, meaning faster install times (only a few minutes including the installation of upstream dependencies). The following bash commands should install key geographic R packages on Ubuntu 19.10:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add a repository that ships the latest version of R:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:marutter/rrutter3.5</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># update the repositories so the software can be found:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># install system dependencies:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libfontconfig1-dev</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># binary versions of key R packages:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To test your installation of R has worked, try running R in an IDE such as RStudio or in the terminal by entering <code>R</code>. You should be able to run the following commands without problem:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tmap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you are using an older version of Ubuntu and don’t want to upgrade to 19.10, which will upgrade to (20.04) by the end of April 2020, see instructions at <a href="https://github.com/r-spatial/sf#installing">github.com/r-spatial/sf</a> and detailed instructions on the blog <a href="https://rtask.thinkr.fr/blog/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/">rtask.thinkr.fr</a>, which contains this additional shell command:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># for Ubuntu 18.04</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:marutter/c2d4u3.5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That adds a repository that ships hundreds of binary versions of R packages, meaning faster install times for packages (see the <a href="https://r-pkgs.org/package-structure-state.html#binary-package">Binary package section of the open source book R Packages</a> for more on binary packages). An updated repository, called c2d4u4.0 or similar, will be available for Ubuntu 20.04 in late April.</p>
+<!-- The c2d4u3.5 repository only supports LTS Ubuntu versions, meaning it is unavailable for Ubuntu 19.10, but will be available for Ubuntu 20.04, allowing hundreds of packages to be installed quickly from the system terminal. -->
+<!-- The following command, for example, will install **tmap** on LTS versions of Ubuntu that have the `c2d4u3.5` repository enabled much faster than the alternative `install.packages()` approach. -->
+<p>If you have issues with the instructions in this post here, you can find a wealth of answers on site such as <a href="https://stackoverflow.com/">StackOverflow</a>, the <a href="https://github.com/r-spatial/sf/issues">sf issue tracker</a>, <a href="https://stat.ethz.ch/pipermail/r-sig-geo/">r-sig-geo</a> and <a href="https://stat.ethz.ch/pipermail/r-sig-debian/2020-March/thread.html">Debian</a> special interest group (SIG) email lists (the latter of which provided input into this blog post, thanks to Dirk Eddelbuettel and Michael Rutter).</p>
+</section>
+<section id="updating-r-packages-and-upstream-dependencies" class="level1">
+<h1>2. Updating R packages and upstream dependencies</h1>
+<p>Linux operating systems allow you to customize your set-up in myriad ways. This can be enlightening but it can also be wasteful, so it’s worth considering the stability/cutting-edge continuum before diving into a particular set-up and potentially wasting time (if the previous section hasn’t already made-up your mind).</p>
+<!-- For me, a good set-up, that means the latest version of Ubuntu plus CRAN versions of most R packages. -->
+<!-- For most people I recommend installing the release version as follows: -->
+<p>A reliable way to keep close (but not too close) to the cutting edge on the R side on any operating system is simply to keep your packages up-to-date. Running the following command (or using the Tools menu in RStudio) every week or so will ensure you have up-to-date package versions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">update.packages</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Keeping system dependencies, software that R relies on but that is not maintained by R developers, is also important but can be tricky, especially for large and complex libraries like GDAL. On Ubuntu dependencies are managed by apt, and the following commands will update the ‘OSGeo stack’, composed of PROJ, GEOS and GDAL, if changes are detected in the default repositories (from 18.10 onwards):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="co"># see if things have changed</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt upgrade <span class="co"># install changes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following commands will upgrade to a newer version of Ubuntu (it may be worth waiting until the <a href="https://ubuntu.com/blog/first-point-release-of-18-04-lts-available-today">point release</a> of Ubuntu 20.04 — 20.04.1 — is released in summer before upgrading if you’re currently running Ubuntu 18.04 if high stability and low set-up times are priorities; also see instructions <a href="https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates">here</a>):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt</span> dist-upgrade</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To get more up-to-date upstream geographic libraries than provided in the default Ubuntu repositories, you can add the <code>ubuntugis</code> repository as follows. This is a pre-requisite on Ubuntu 18.04 and earlier but also works with later versions (warning, adding this repository could cause complications if you already have software such as QGIS that uses a particular version of GDAL installed):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt upgrade</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>That will give you more up-to-date versions of GDAL, GEOS and PROJ which may offer some performance improvements. Note: if you do update dependencies such as GDAL you will need to re-install the relevant packages, e.g.&nbsp;with <code>install.packages("sf")</code>. You can revert that change with the following <a href="https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli">little-known command</a>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="at">--remove</span> ppa:ubuntugis/ubuntugis-unstable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you also want the development versions of key R packages, e.g.&nbsp;to test new features and support development efforts, you can install them from GitHub, e.g.&nbsp;as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"r-spatial/sf"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rspatial/raster"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"mtennekes/tmaptools"</span>) <span class="co"># required for dev version of tmap</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"mtennekes/tmap"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="installing-geographic-r-packages-on-other-linux-operating-systems" class="level1">
+<h1>3. Installing geographic R packages on other Linux operating systems</h1>
+<p>If you are in the fortunate position of switching to Linux and being able to choose the distribution that best fits your needs, it’s worth thinking about which distribution will be both user-friendly (more on that soon), performant and future-proof. Ubuntu is a solid choice, with a large user community and repositories such as ‘ubuntugis’ providing more up-to-date versions of upstream geographic libraries such as GDAL.</p>
+<p>QGIS is also well-supported on Ubuntu.</p>
+<p>However, you can install R and key geographic packages on other operating systems, although it may take longer. Useful links on installing R and geographic libraries are provided below for reference:</p>
+<ul>
+<li><p>Installing R on <strong>Debian</strong> is covered on the <a href="https://cran.r-project.org/bin/linux/debian/">CRAN website</a>. Upstream dependencies such as GDAL can be installed on recent versions of Debian, such as <a href="https://www.debian.org/releases/">buster</a>, with commands such as <code>apt install libgdal-dev</code> as per instructions on the <a href="https://github.com/rocker-org/geospatial/blob/eaf5e92f90737ce9771753cab48f3a2f1d779216/Dockerfile">rocker/geospatial</a>.</p></li>
+<li><p>Installing R on <strong>Fedora/Red Hat</strong> is straightforward, as outlined on <a href="https://cran.r-project.org/bin/linux/redhat/README">CRAN</a>. GDAL and other spatial libraries can be installed from Fedora’s <code>dnf</code> package manager, e.g.&nbsp;as documented <a href="https://github.com/r-spatial/sf#fedora">here</a> for <strong>sf</strong>.</p></li>
+<li><p><strong>Arch Linux</strong> has a growing R community. Information on installing and setting-up R can be found on the <a href="https://wiki.archlinux.org/index.php/R">ArchLinux wiki</a>. Installing upstream dependencies such as <a href="https://www.archlinux.org/packages/community/x86_64/gdal/">GDAL on Arch</a> is also relatively straightforward. There is also a detailed guide for installing R plus geographic packages by <a href="https://pat-s.me/post/arch-install-guide-for-r/">Patrick Schratz</a>.</p></li>
+</ul>
+</section>
+<section id="geographic-r-packages-on-docker" class="level1">
+<h1>4. Geographic R packages on Docker</h1>
+<!-- As with cars, ease of use is important for the popularity of computer technology. -->
+<!-- ^[ -->
+<!-- The history of cars can provide insight into the importance of ease of use of technologies today. -->
+<!-- Cars, have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use. -->
+<!-- Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523), which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards. -->
+<!-- Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions I recommend are easy to set-up and use. -->
+<!-- ] -->
+<p>The Ubuntu installation instructions outlined above provide such an easy and future-proof set-up. But if you want an even easier way to get the power of key geographic packages running on Linux, and have plenty of RAM and HD space, running R on the ‘<a href="https://docs.docker.com/install/">Docker Engine</a>’ may be an attractive option.</p>
+<p>Advantages of using Docker include <strong>reproducibility</strong> (code will always run the same on any given image, and images can be saved), <strong>portability</strong> (Docker can run on Linux, Windows and Mac) and <strong>scalability</strong> (Docker provides a platform for scaling-up computations across multiple nodes).</p>
+<p>For an introduction to using R/RStudio in Docker, see the <a href="https://www.rocker-project.org/">Rocker project</a>.</p>
+<p>Using that approach, I recommend the following Docker images for using R as a basis for geographic research:</p>
+<ul>
+<li><a href="https://hub.docker.com/r/rocker/geospatial"><code>rocker/geospatial</code></a> which contains key geographic packages, including those listed above</li>
+<li><a href="https://hub.docker.com/r/robinlovelace/geocompr/"><code>robinlovelace/geocompr</code></a> which contains all the packages needed to reproduce the contents of the <a href="https://geocompr.robinlovelace.net/">book</a>, and which you can run with the following command in a shell in which Docker is installed:</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-e</span> PASSWORD=yourpassword <span class="at">--rm</span> <span class="at">-p</span> 8787:8787 robinlovelace/geocompr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To test-out the Ubuntu 19.10 set-up recommended above I created a <a href="https://github.com/Robinlovelace/geocompr/blob/master/docker/ubuntu-eoan/Dockerfile">Dockerfile</a> and associated image on Dockerhub that you can test-out as follows:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> robinlovelace/geocompr:ubuntu-eoan</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">sf</span><span class="kw">)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">raster</span><span class="kw">)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">tmap</span><span class="kw">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The previous commands should take you to a terminal inside the docker container where you try out the Linux command line and R. If you want to use more cutting-edge versions of the geographic libraries, you can use the <code>ubuntu-bionic</code> image (note the more recent version numbers, with PROJ 7.0.0 for example):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker run <span class="at">-it</span> robinlovelace/geocompr:ubuntu-bionic</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="ex">library</span><span class="er">(</span><span class="ex">sf</span><span class="kw">)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>These images do not currently contain all the dependencies needed to reproduce the code in <em>Geocomputation with R</em>. <!-- , if you're looking for a production-ready Docker image that has both RStudio Server and a wide range of geographic packages pre-installed, building from the `rocker/geospatial` image, this could be a good place to start: --></p>
+<p>However, as documented in <a href="https://github.com/Robinlovelace/geocompr/issues/476">issue 476</a> in the <code>geocompr</code> GitHub repo, there is a plan to provide Docker images with this full ‘R-spatial’ stack installed, building on strong foundations such as <code>rocker/geospatial</code> and the <code>ubuntugis</code> repositories, to support different versions of GDAL and other dependencies. We welcome any comments or tech support to help make this happen. Suggested changes to this post are also welcome, see the source code <a href="https://github.com/geocompr/geocompr.github.io/blob/source/content/post/2020/installing-r-spatial-packages-linux.Rmd">here</a>.</p>
+</section>
+<section id="fin" class="level1">
+<h1>5. Fin</h1>
+<p>R is an open-source language heavily inspired by Unix/Linux so it should come as no surprise that it runs well on a variety of Linux distributions, Ubuntu (covered in this post) in particular. The guidance in this post should get geographic R packages set-up quickly in a future-proof way. A sensible next step is to sharpen you system administration (sysadmin) and shell coding skills, e.g.&nbsp;with reference to <a href="https://help.ubuntu.com/community/SystemAdministration">Ubuntu wiki pages</a> and <a href="https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts">Chapter 2</a> of the open source book <a href="https://www.datascienceatthecommandline.com">Data Science at the Command Line</a>.</p>
+<p>This will take time but, building on <a href="https://www.osgeo.org/">OSGeo</a> libraries, a well set-up Linux machine is an ideal platform to install, run and develop key geographic R packages in a performant, stable and future-proof way. <!-- I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work. --></p>
+<p><img src="https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg" class="img-fluid"></p>
+<p>Be the <a href="https://wiki.osgeo.org/wiki/FOSS4G">FOSS4G</a> change you want to see in the world!</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
+  author = {Robin Lovelace},
+  title = {Installing Spatial {R} Packages on {Ubuntu}},
+  date = {2020-03-30},
+  url = {https://geocompx.org//post/2020/installing-r-spatial-packages-linux},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2020" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
+Robin Lovelace. 2020. <span>“Installing Spatial R Packages on
+Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org//post/2020/installing-r-spatial-packages-linux">https://geocompx.org//post/2020/installing-r-spatial-packages-linux</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
