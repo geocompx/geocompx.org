@@ -317,22 +317,43 @@
   {
     "objectID": "r.html#presentations",
     "href": "r.html#presentations",
-    "title": "geocompx",
+    "title": "R resources",
     "section": "Presentations",
     "text": "Presentations"
   },
   {
     "objectID": "r.html#workshops",
     "href": "r.html#workshops",
-    "title": "geocompx",
+    "title": "R resources",
     "section": "Workshops",
     "text": "Workshops"
   },
   {
     "objectID": "r.html#vignettes",
     "href": "r.html#vignettes",
-    "title": "geocompx",
+    "title": "R resources",
     "section": "Vignettes",
     "text": "Vignettes"
+  },
+  {
+    "objectID": "r.html",
+    "href": "r.html",
+    "title": "R resources",
+    "section": "",
+    "text": "Geocomputation with R (geocompr) is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. The online version of the book is hosted at r.geocompx.org/.\nYou can buy it from:\n\nRoutledge.com\nAmazon.com\nAmazon.co.uk"
+  },
+  {
+    "objectID": "r.html#solutions",
+    "href": "r.html#solutions",
+    "title": "R resources",
+    "section": "Solutions",
+    "text": "Solutions\nYou can find all the solutions to the book’s exercises at r.geocompx.org/solutions."
+  },
+  {
+    "objectID": "r.html#translations",
+    "href": "r.html#translations",
+    "title": "R resources",
+    "section": "Translations",
+    "text": "Translations\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore)."
   }
 ]
