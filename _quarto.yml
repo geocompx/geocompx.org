@@ -2,6 +2,9 @@ project:
   type: website
 
 website:
+  # favicon: logo.png
+  # twitter-card: true
+  # open-graph: true
   title: "geocompx"
   site-url: https://geocompx.org/
   description: "toDo"
@@ -16,12 +19,15 @@ website:
       - href: guestbook.qmd
         text: Guestbook
     right:
-      - icon: github
-        href: https://github.com/geocompr/geocompr.github.io
       - icon: twitter
         href: https://twitter.com/hashtag/geocompr
       - icon: rss
         href: post.xml
+  page-footer: 
+     left: "geocompx, 2023" 
+     right:
+      - icon: github
+        href: https://github.com/geocompx/geocompx.github.io
 
 format:
   html:
