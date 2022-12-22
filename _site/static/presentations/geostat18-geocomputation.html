@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geocomputation with R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Robin Lovelace" />
+    <link rel="stylesheet" href="xaringan_stuff/my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Geocomputation with R
+## 🗺 <br/> An overview of the field and introduction to the book
+### Robin Lovelace
+### GeoStat 2018(-08-20)
+
+---
+
+
+&lt;!-- 14:15 - 15:00 - 45 minute talk  --&gt;
+&lt;!-- Aims: show-off the book, provide overview, some useful things in it --&gt;
+
+
+
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# 'Team geocompr'
+
+&lt;figure&gt;
+&lt;img align="right" src="xaringan_stuff/img/geocompr_logo.png" width = "60%", height = "60%"/&gt;
+&lt;/figure&gt;
+
+- [Jakub Nowosad](https://nowosad.github.io/): developer of GeoPAT + more. Lecturing 09:00 on Wednesday.
+
+- [Jannes Muenchow](http://www.geographie.uni-jena.de/en/Muenchow.html), creator of **RQGIS**. Lecturing  Weds 13:30 on GIS Bridges and Weds 15:30 on Spatial CV.
+
+--
+
+- [Robin Lovelace](https://www.robinlovelace.net/), creator of **stplanr**, co-author of Efficent R Programming. Lecturing 11:00 Weds on spatial data and the **tidyverse**.
+
+--
+
+- Front cover image competition! Submissions (code / ideas welcome) by Thursday evening. Prize: ~~$100~~ $150 CRC Press book voucher.
+
+---
+
+# Find the slides and the code
+
+&lt;br&gt; Slides: https://geocompr.github.io/presentations/
+&lt;br&gt; Source code: https://github.com/geocompr/geostats_18
+
+To install all packages used in the book:
+
+
+```r
+devtools::install_github("geocompr/geocompkg")
+```
+
+Data for the sea level rise code in this presentation: see the releases in [geostats_18](https://github.com/geocompr/geostats_18/releases):
+
+
+```r
+download.file("https://github.com/geocompr/geostats_18/releases/download/0.1/pres.2fgeocompr.2fdata.zip",
+              destfile = "data.zip")
+unzip("data.zip")
+```
+
+
+---
+
+# Origins of the book I
+
+
+```r
+webshot::webshot("https://bookdown.org/nowosad/Geostatystyka/")
+```
+
+&lt;img src="images/geostatystyka.png" width="1323" /&gt;
+
+---
+
+# Origins of the book II
+
+
+```r
+webshot::webshot("https://github.com/Robinlovelace/Creating-maps-in-R")
+```
+
+&lt;img src="images/creating.png" width="2152" /&gt;
+
+---
+
+# Origins of the book III
+
+
+```r
+webshot::webshot("https://rjournal.github.io/archive/2017/RJ-2017-067/")
+```
+
+&lt;img src="images/rqgis-rjournal.png" width="1323" /&gt;
+
+---
+
+# Contributing 'upstream' - questions
+
+- Comment on a random github issue -&gt; new author!
+
+
+```r
+webshot::webshot("https://github.com/jannes-m/RQGIS/issues/66")
+```
+
+&lt;img src="images/rqgis-question.png" width="1323" /&gt;
+
+---
+
+# First commits by Jannes
+
+
+```bash
+cd ~/repos/geocompr
+git log --author=jannes | tail -n 20
+```
+
+```
+##     
+##     Former-commit-id: a2768b74d68ecb0bb51663c3be4db492205e1d01
+## 
+## commit ea68cf967dd908112142707c4f12dca9f37abb45
+## Author: jannes-m &lt;malnamalja@gmx.de&gt;
+## Date:   Sun Jun 11 17:10:53 2017 +0200
+## 
+##     starting to write the intro and the RQGIS section
+##     
+##     
+##     Former-commit-id: 60ac14832557f51563e427b2795fa3eac5285e19
+## 
+## commit 84d6dd5e0418f7a32ca49d8c67e3a3ee905dfef9
+## Author: jannes-m &lt;malnamalja@gmx.de&gt;
+## Date:   Sun Jun 11 13:47:00 2017 +0200
+## 
+##     rearranging the last sf-example
+##     
+##     
+##     Former-commit-id: 69e4caa44569e7ec0e94669f02120d9cae5f72d0
+```
+
+&lt;!-- point: Anyone can get involved --&gt;
+
+---
+
+
+# Contributions to other pkgs
+
+
+```r
+library(tidyverse)
+d = read_csv("~/repos/geocompr/our-impact.csv"); nrow(d)
+```
+
+```
+## [1] 71
+```
+
+```r
+d %&gt;% slice(1:2) %&gt;% select(date, description, creator) %&gt;% knitr::kable(format = "html")
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; date &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; description &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; creator &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2016-11-06 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; st_write arguments &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Nowosad &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2016-11-07 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Set CRS in a pipe - idea &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Nowosad &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+```r
+d %&gt;% group_by(type) %&gt;%
+  summarise(n = n(), comms = sum(comments, na.rm = T)) %&gt;% 
+  arrange(desc(n)) %&gt;% top_n(4, n) %&gt;% knitr::kable(format = "html")
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; type &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; comms &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; bug &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 133 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; enhancement &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 106 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; issue &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; pr &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- d = read_csv("https://raw.githubusercontent.com/Robinlovelace/geocompr/master/our-impact.csv") --&gt;
+
+---
+
+# Why Geocomputation with R?
+
+.pull-left[
+
+Why geocomputation?
+
+- 'Does what it says on the tin'
+- Emphasis on 'tools' + flexibility
+- Link to Leeds (Jakub and Robin joined forces at the [GeoComputation 2017](http://www.geocomputation.org/2017/conference/) conference)
+
+Why R?
+
+- We all speak R!
+- It's good for academic research (statistical rigour, reproducibility)
+- It's a good bridge/interface language (see Chapter [9 on bridges](http://geocompr.robinlovelace.net/gis.html))
+
+- It's got an awesome community!
+
+]
+
+.pull-right[
+![](https://pbs.twimg.com/media/CkgvW4ZXEAAxumw.jpg:large)&lt;!-- --&gt;
+]
+
+---
+
+# What is Geocomputation?
+
+
+.pull-left[
+
+&gt; GeoComputation is about using the various different types of geodata and about developing relevant geo-tools within the overall context of a 'scientific' approach (Openshaw and Abrahart, 2000).
+
+]
+
+.pull-right[
+![](http://www.ccg.leeds.ac.uk/people/s.openshaw/s.openshaw.png)&lt;!-- --&gt;
+]
+
+--
+
+- But we do differ from early definitions in one important way:
+
+&gt; At the turn of the 21st Century it was unrealistic to expect readers to be able to reproduce code examples, due to barriers preventing access to the necessary hardware, software and data
+
+---
+
+# Other aspects of the definition
+
+--
+
+&gt; What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications (Longley, Brooks, McDonnell, et al., 1998).
+
+--
+
+It's about doing "practical work that is beneficial or useful" (Openshaw and Abrahart, 2000).
+
+--
+
+&gt; about harnessing the power of modern computers to *do things* with geographic data.
+
+---
+
+# What's in the geocompr box?
+
+.pull-left[
+
+- Chapter 1: History + 'philosophy' = important
+
+Foundations
+
+- Starting from nothing
+- Class definitions
+- Spatial/attribute operations
+- Projections 
+- Data IO
+
+Extensions
+
+- Advanced methods
+- How to build your own functions
+
+Applications
+
+- A taster of what you can do
+
+]
+
+.pull-right[
+&lt;img src="images/geocompr-index.png" width="369" height="500" /&gt;
+]
+
+
+---
+
+# Just do it!
+
+--
+
+"A little less conversation a little more action"
+
+--
+
+- "The sky is the limit with R" (Tom Hengl, 2018)
+
+--
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
+
+
+---
+
+# A brief history of geographic data in R
+
+R's predecesor was S, which was itself inspired by lisp (Chambers, 2016).
+
+This is geographic analysis in S (Rowlingson and Diggle, 1993):
+
+```
+pts &lt;- spoints(scan('cavities'))
+uk()
+pointmap(pts,add=T) 
+zoom()
+uk(add=T) 
+pointmap(pts,add=T)
+poly&lt;-getpoly() 
+```
+
+Still works today, 25 years later:
+
+
+```r
+library(splancs)
+#&gt; Spatial Point Pattern Analysis Code in S-Plus
+#&gt; Version 2 - Spatial and Space-Time analysis
+```
+
+---
+
+# Live demo (try this)!
+
+
+```r
+# install.packages("splancs"); library(splancs)
+# example, interactive! (commented bits)
+data(bodmin)
+plot(bodmin$poly, asp=1, type="n")
+pointmap(as.points(bodmin), add=TRUE)
+```
+
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+```r
+# zoom()
+# pointmap(as.points(bodmin), add=TRUE)
+```
+
+---
+
+# Observations
+- R' is robust and future-proof 
+
+- See a [video](https://www.youtube.com/watch?v=Luxllb_WAqY) of Roger Bivand's talk on the subject (live demo of R 0.49) + GitHub [repo](https://github.com/rsbivand/eRum18/blob/master/eRum_keynote_18.Rmd)
+
+- Rs capabilities have evolved substantially since then!
+
+---
+
+
+# Case study: Geographic data visualization
+
+- An area that illustrates the pace of development
+- Rapid growth in number and diversity of packages
+- Consolidation, but still many packages to choose from
+- `plot()` still best for many tasks
+
+--
+
+- Vital for understanding geographic data. 
+
+--
+
+- Empower youselves with maps!
+
+---
+
+# A brief history of geographic vizualisation I
+
+- Neo Babylonian (626 BC - 539 BC) temple plan
+Source:
+
+
+&lt;img src="https://raw.githubusercontent.com/jannes-m/erum18_geocompr/master/pres/rmd/img/neo-babylon-temple-map-circa-600-bc.png" width="50%" /&gt;
+
+---
+
+# A brief history of geographic vizualisation II
+
+- Neo Babylonian (626 BC - 539 BC) map of the world
+Source:
+
+
+&lt;img src="https://raw.githubusercontent.com/jannes-m/erum18_geocompr/master/pres/rmd/img/babylon-map.png" width="50%" /&gt;
+
+---
+
+# A brief history of geographic vizualisation III
+
+- Humboldt's Naturgemälde (1807, *Geography of Plants*)
+
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Zentralbibliothek_Z%C3%BCrich_-_Ideen_zu_einer_Geographie_der_Pflanzen_nebst_einem_Naturgem%C3%A4lde_der_Tropenl%C3%A4nder_-_000012142.jpg/2560px-Zentralbibliothek_Z%C3%BCrich_-_Ideen_zu_einer_Geographie_der_Pflanzen_nebst_einem_Naturgem%C3%A4lde_der_Tropenl%C3%A4nder_-_000012142.jpg)&lt;!-- --&gt;
+
+
+&lt;!-- - The mappa mundi - largest Mediaval map surviving (~1300 **AD**) --&gt;
+&lt;!-- knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/4/48/Hereford-Karte.jpg?download") --&gt;
+
+---
+
+# A brief history of geographic data viz in R
+
+"The core R engine was not designed specifically for the display and analysis
+of maps, and the limited interactive facilities it offers have drawbacks in this
+area" (Bivand, Pebesma, and Gomez-Rubio, 2013).
+
+--
+
+Five years later...
+
+--
+
+"An example showing R's flexibility and evolving geographic capabilities is **leaflet**
+,
+a package for making interactive maps that has been extended by the R community, as we'll see in Chapter 9" 
+(Lovelace, Nowosad, and Muenchow, 2018).
+
+---
+
+# R's 'base' graphics: sp
+
+
+
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+
+# Base R graphics: sp code
+
+Credit: [asdar-book.org/](http://asdar-book.org/), reproducible code accompanying the book Applied Spatial Data Analysis with R (Pebesma et al. 2013).
+
+
+```r
+library(sp)
+library(spData)
+nz_sp = as(nz, "Spatial")
+plot(nz_height_sp, cex = 2)
+title("points")
+plot(nz_sp, col = "grey")
+plot(nz_height, add = TRUE, col = "red")
+```
+
+--
+
+## Observations
+
+- Passes arguments (e.g `cex` for symbol size) to `graphics::plot()`
+- New command for each additional 'layer' (e.g. `title()`, `plot(..., add = TRUE)`)
+- Black and white default output style
+- Fast
+
+---
+
+# Base R graphics: sf 
+
+
+```r
+plot(nz)
+```
+
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+
+--
+
+# tmap
+
+- A diverse dedicated mapping R package
+
+
+```r
+library(tmap)
+tm_shape(nz) +
+  tm_polygons("Median_income", palette = "RdYlBu")
+```
+
+![](geostat18-geocomputation_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+
+# Why tmap?
+
+- It is powerful and flexible.
+- Concise syntax, attractive maps with minimal code, familiar to **ggplot2** users.
+- Unique capability: same code -&gt; static + interactive maps with switch `tmap_mode()`.
+- Wide range of spatial classes (including `raster` objects) supported.
+- Well documented + developed --- see [`tmap-nutshell`](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html) and JSS paper
+.
+
+
+
+
+
+---
+
+# Animations
+
+- Are easy with **tmap** (section [9.3](http://geocompr.robinlovelace.net/adv-map.html#animated-maps) of geocompr)
+
+&lt;img src="https://user-images.githubusercontent.com/1825120/38543030-5794b6f0-3c9b-11e8-9da9-10ec1f3ea726.gif" width="80%" /&gt;
+
+---
+
+# Interactive maps with mapview
+
+- Lives at https://github.com/r-spatial/mapview
+
+
+```r
+m = mapview::mapview(nz)
+m@map
+```
+
+--
+
+- See Tim Applehans's talk Tomorrow
+
+---
+
+# Just do it! II
+
+--
+
+&gt; Geographic data can save the world ([Robin Lovelace 2018, Jena](https://twitter.com/robinlovelace/status/983978278569553920))
+
+--
+
+&gt; One of the most intriguing things about spatial data problems is that things which appear to be trivially easy to a human being can be surprisingly difficult on a computer (Wise 2001, from [geocompr.robinlovelace.net/algorithms.html](http://geocompr.robinlovelace.net/algorithms.html)).
+
+--
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
+---
+
+# Finding a problem that is "beneficial or useful"
+
+- With so much data emerging, more options than ever, including:
+
+--
+
+- Earth: how to replenish topsoil?
+- Water: how to deal with aquifer depletion?
+- Fire: how to encourage fire-resistent ecosystems?
+
+---
+
+## (Retrospective) justification
+
+--
+
+- It's supported by evidence! (see previous figure):
+
+
+
+--
+
+- Why study it? (are there 'bigger fish to fry'?)
+&lt;!-- what you're studying? Scientific justifications abound. --&gt;
+
+--
+
+&gt; We are headed for "much higher global average temperature than any interglacial in the past 1.2 million years and to sea levels significantly higher than at any time in the Holocene" 
+(Steffen, Rockström, Richardson, et al., 2018)
+
+&gt; Melting at the base of floating ice shelves [of the West Antarctic Ice Sheet (WAIS)] can lead to runaway retreat ... WAIS + Greenland have contributed at most ∼3 to 10 m
+(Pollard, DeConto, and Alley, 2015)
+
+--
+
+- Retrospective justifications like "I like bikes" 
+(Lovelace, Goodman, Aldred, et al., 2017)
+❎
+
+--
+
+- Pre-emptive justification like "it's the number one area I can make a difference" (you can always change direction) ✔️
+
+---
+
+# A case study of doing something useful I
+
+- Motivation: I like bikes!
+- Tech: **shiny** + `leaflet::leafletOutput()` -&gt; [pct.bike](http://www.pct.bike/)
+(Lovelace, Goodman, Aldred, et al., 2017).
+
+
+![](https://raw.githubusercontent.com/npct/pct-team/master/figures/pct-frontpage.png)&lt;!-- --&gt;
+
+---
+
+
+# Sea level rise: a global geo* issue
+
+- How to prepare for future sea level rise 
+(Clark, Shakun, Marcott, et al., 2016)?
+
+&lt;img src="images/slr-long-clark-et-al-2016.png" width="2563" /&gt;
+
+---
+
+# A case study of 'doing' something useful II
+
+- Sea level rise could change the course of humanity
+- See code: https://github.com/geocompr/geostats_18/blob/master/code/geocompr/slr.R
+- Live demo, leading to this (to be continued Weds, see geostats_18):
+
+
+```r
+knitr::include_graphics("https://camo.githubusercontent.com/9ba73ec5a33f2e5a008d04517ea8ba12a7b0c01d/68747470733a2f2f692e696d6775722e636f6d2f634a62304977312e706e67")
+```
+
+![](https://camo.githubusercontent.com/9ba73ec5a33f2e5a008d04517ea8ba12a7b0c01d/68747470733a2f2f692e696d6775722e636f6d2f634a62304977312e706e67)&lt;!-- --&gt;
+
+---
+
+# What's next for geocomputation with R?
+
+- Geocomputation can be applied to many area and it's not a finished story
+
+--
+
+- Consolidation (Geocomputation workshops on Wednesday)
+
+--
+
+- Growth of cloud services + containerisation
+- Big raster (Edzer and Markus's workshops on Thursday)
+- Integration with other languages like Python
+- More bridges
+
+---
+class: small
+
+# References + contact
+
+- To contact us about the book - go to [github.com/Robinlovelace/geocompr](https://github.com/Robinlovelace/geocompr)
+- Social media: [#geocompr](https://twitter.com/hashtag/geocompr)
+&lt;!-- - Good old fashioned email: r.lovelace at leeds dot ac dot uk --&gt;
+--
+
+Bivand, Roger S, Edzer Pebesma and Virgilio Gomez-Rubio (2013).
+_Applied Spatial Data Analysis with R_. 2nd ed.. New York:
+Springer. 405 pp. ISBN: 978-1-4614-7617-7.
+
+Chambers, John M. (2016). _Extending R_. En. CRC Press. ISBN:
+978-1-4987-7572-4.
+
+Clark, Peter U, Jeremy D. Shakun, Shaun A. Marcott, et al. (2016).
+"Consequences of Twenty-First-Century Policy for Multi-Millennial
+Climate and Sea-Level Change". In: _Nature Climate Change_. ISSN:
+1758-678X, 1758-6798. DOI:
+[10.1038/nclimate2923](https://doi.org/10.1038/nclimate2923).
+
+Longley, Paul A, Sue M. Brooks, Rachael McDonnell, et al, ed.
+(1998). _Geocomputation: A Primer_. 1 edition. Chichester, Eng. ;
+New York: Wiley. ISBN: 978-0-471-98576-1.
+
+Lovelace, Robin, Anna Goodman, Rachel Aldred, et al. (2017). "The
+Propensity to Cycle Tool: An Open Source Online System for
+Sustainable Transport Planning". En. In: _Journal of Transport and
+Land Use_ 10.1. ISSN: 1938-7849. DOI:
+[10.5198/jtlu.2016.862](https://doi.org/10.5198/jtlu.2016.862).
+
+Lovelace, Robin, Jakub Nowosad and Jannes Muenchow (2018).
+_Geocomputation with R_. The R Series. CRC Press.
+
+Openshaw, Stan and Robert J. Abrahart, ed. (2000).
+_Geocomputation_. 1 edition. London ; New York: CRC Press. ISBN:
+978-0-7484-0900-6.
+
+Pollard, David, Robert M. DeConto and Richard B. Alley (2015).
+"Potential Antarctic Ice Sheet Retreat Driven by Hydrofracturing
+and Ice Cliff Failure". In: _Earth and Planetary Science Letters_
+412, pp. 112-121. ISSN: 0012-821X. DOI:
+[10.1016/j.epsl.2014.12.035](https://doi.org/10.1016/j.epsl.2014.12.035).
+
+Rowlingson, B. S and P. J Diggle (1993). "Splancs: Spatial Point
+Pattern Analysis Code in S-Plus". In: _Computers &amp; Geosciences_
+19.5, pp. 627-655. ISSN: 0098-3004. DOI:
+[10.1016/0098-3004(93)90099-Q](https://doi.org/10.1016/0098-3004(93)90099-Q).
+
+Steffen, Will, Johan Rockström, Katherine Richardson, et al.
+(2018). "Trajectories of the Earth System in the Anthropocene".
+En. In: _Proceedings of the National Academy of Sciences_, p.
+201810141. ISSN: 0027-8424, 1091-6490. DOI:
+[10.1073/pnas.1810141115](https://doi.org/10.1073/pnas.1810141115).
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "4:3",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introducing the RQGIS package</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Jannes Muenchow, Robin Lovelace" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introducing the RQGIS package
+### Jannes Muenchow, Robin Lovelace
+### ERUM Budapest, 2018-05-14
+
+---
+
+
+
+
+
+layout: true
+background-image: url(img/rqgis_background.png)
+background-size: cover
+
+
+---
+
+# Find the slides and the code
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+https://github.com/jannes-m/erum18_geocompr
+
+---
+
+# Installing QGIS
+
+- &lt;font color = "darkblue"&gt;**Follow**&lt;/font&gt; the steps described in `vignette(install_guide, package = "RQGIS")`!
+--
+
+- Windows users: Use the [OSGeo-network-installer](http://trac.osgeo.org/osgeo4w/) (also described in the vignette)!
+
+---
+
+# Installing RQGIS 
+
+You can either install the developer... 
+
+```r
+devtools::install_github("jannes-m/RQGIS")
+```
+
+--
+... or the CRAN version
+
+```r
+install.packages("RQGIS")
+```
+
+--
+
+&lt;br&gt;
+&lt;br&gt;
+.footnote[
+For more information and a short introduction by example refer to:
+
+[https://github.com/jannes-m/RQGIS](https://github.com/jannes-m/RQGIS)
+]
+---
+
+# RQGIS by example
+
+To introduce the RQGIS package, let's find the intersection between two polygons.
+For this we create two polygons using the `sf`-package.
+
+
+
+.pull-left[
+.smaller-code-font60[
+
+```r
+library(sf)
+coords_1 =  
+  matrix(data =
+           c(0, 0, 1, 0, 1, 1,0, 1, 0, 0),
+         ncol = 2, byrow = TRUE)
+coords_2 =
+  matrix(data = 
+           c(-0.5, -0.5, 0.5, -0.5, 0.5, 
+             0.5,-0.5, 0.5, -0.5, -0.5),
+         ncol = 2, byrow = TRUE)
+
+poly_1 = st_polygon(list((coords_1))) %&gt;%
+  st_sfc %&gt;%
+  st_sf
+poly_2 = st_polygon(list((coords_2))) %&gt;%
+  st_sfc %&gt;%
+  st_sf
+plot(poly_1$geometry, xlim = c(-1, 1), ylim = c(-1, 1))
+plot(poly_2$geometry, add = TRUE)
+```
+]
+]
+
+.pull-right[
+![](05_rqgis_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+???
+create a geometry set with two features
+st_sf(geometry = st_sfc(st_polygon(list(coords_1)), st_polygon(list(coords_2))))
+
+---
+# Find a QGIS algorithm
+Now we would like to know which QGIS geoalgorithm we can use for this task. We assume that the word `intersec` will be part of the short description of the searched geoalgorithm
+
+```r
+library(RQGIS)
+set_env(dev = FALSE)
+find_algorithms("intersec", name_only = TRUE)
+```
+---
+
+# How to use it
+To find out the parameter names and corresponding default values, use `get_usage`.
+
+
+```r
+get_usage("qgis:intersection")
+```
+
+--
+Here, we only have three function arguments, and automatic parameter collection is not necessary, but when I first looked at...
+
+```r
+get_usage("grass7:r.slope.aspect")
+```
+
+---
+class: middle
+
+```
+ALGORITHM: r.slope.aspect - Generates raster layers of slope, aspect, curvatures and partial derivatives from a elevation raster layer.
+	elevation &lt;ParameterRaster&gt;
+	format &lt;ParameterSelection&gt;
+	precision &lt;ParameterSelection&gt;
+	-a &lt;ParameterBoolean&gt;
+	zscale &lt;ParameterNumber&gt;
+	min_slope &lt;ParameterNumber&gt;
+	GRASS_REGION_PARAMETER &lt;ParameterExtent&gt;
+	GRASS_REGION_CELLSIZE_PARAMETER &lt;ParameterNumber&gt;
+	slope &lt;OutputRaster&gt;
+	aspect &lt;OutputRaster&gt;
+	pcurvature &lt;OutputRaster&gt;
+	tcurvature &lt;OutputRaster&gt;
+	dx &lt;OutputRaster&gt;
+	dy &lt;OutputRaster&gt;
+	dxx &lt;OutputRaster&gt;
+	dyy &lt;OutputRaster&gt;
+	dxy &lt;OutputRaster&gt;
+
+format(Format for reporting the slope)
+	0 - degrees
+	1 - percent
+precision(Type of output aspect and slope layer)
+	0 - FCELL
+	1 - CELL
+	2 - DCELL
+```
+
+???
+When I first saw this output I knew nobody would use RQGIS if one had to collect all function arguments manually.
+
+---
+
+# But looking at the QGIS GUI...
+
+&lt;figure&gt;
+&lt;center&gt;
+&lt;img src="img/qgis_gui.PNG" width = "85%", height = "85%"/&gt;
+&lt;/center&gt;
+&lt;/figure&gt;
+
+???
+But looking at the QGIS GUI I realized that internally QGIS must somehow collect the arguments of all geoalgorithms. So again, I skimmed through thousands of lines of Python code, stumbled a bit, tried this and that, and finally it worked. The function get_args_man basically mimics the GUI behaviour on the command line, i.e. it automatically collects the arguments of a specific geoalgorithm and its default values.
+
+---
+
+# Convenience function .small[`get_args_man`]
+
+
+```r
+params = get_args_man(alg = "grass7:r.slope.aspect")
+params[1:10]
+```
+
+
+---
+# Access the online help
+
+By the way, use `open_help` to access the online help and possibly find out more about a specific geoalgorithm:
+
+
+```r
+library(RQGIS)
+open_help(alg = "grass7:r.slope.aspect")
+```
+
+---
+class: middle
+
+&lt;figure&gt;
+&lt;center&gt;
+&lt;img src="img/grass_help.PNG" width = "85%", height = "85%"/&gt;
+&lt;/center&gt;
+&lt;/figure&gt;
+
+---
+# Back to our use case
+.pull-left[
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+We have created two polygons using `sf`, and would like to find the intersection between the two.
+]
+
+.pull-right[
+![](05_rqgis_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+
+---
+# Back to our use case
+
+We also know the name of the geoalgorithm (`qgis:intersection`), and its parameters
+
+
+
+--
+Hence, we have to specify `INPUT`, `INPUT2` and `OUTPUT`. We can do so using R named arguments.
+
+---
+
+# Run QGIS from within R
+
+
+```r
+int = run_qgis("qgis:intersection",
+                INPUT = poly_1,
+                INPUT2 = poly_2,
+                OUTPUT = file.path(tempdir(), "out.shp"),
+                load_output = TRUE)
+```
+
+???
+Highlight INPUT and INPUT2 also showing that RQGIS accepts spatial objects as input arguments. Equally, one could use a path to a spatial object stored on disk.
+Hightlight "out.shp", and that it is loaded back into R if the QGIS algorithm was successfully executed. Mention that if one does not specify an output file, QGIS stores it into a temporary folder created by QGIS.
+---
+
+# Spatial objects as inputs
+
+
+```r
+int = run_qgis("qgis:intersection",
+*              INPUT = poly_1,
+               INPUT2 = poly_2,
+               OUTPUT = file.path(tempdir(), "out.shp"),
+               load_output = TRUE)
+```
+---
+
+# Load QGIS output into R
+
+
+```r
+int = run_qgis("qgis:intersection",
+               INPUT = poly_1,
+               INPUT2 = poly_2,
+               OUTPUT = file.path(tempdir(), "out.shp"),
+*              load_output = TRUE)
+```
+---
+
+# Visualizing the result
+.pull-left[
+
+```r
+plot(poly_1$geometry,
+     xlim = c(-1, 1), 
+     ylim = c(-1, 1))
+plot(poly_2$geometry, 
+     add = TRUE)
+plot(int$geometry, 
+     col = "lightblue",
+     add = TRUE)
+```
+]
+
+.pull-right[
+
+]
+
+---
+
+# Further reading
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+- [RQGIS R journal paper](https://journal.r-project.org/archive/2017/RJ-2017-067/RJ-2017-067.pdf)
+- [https://geocompr.robinlovelace.net/gis.html](https://geocompr.robinlovelace.net/gis.html)
+---
+
+# Your turn
+
+1. Let us (together) reproduce the `qgis:intersection` example (download code).
+
+--
+2. Since we could also use **sf** to do the intersection (see also task 3), we will now compute the SAGA wetness index - an geoalgorithm unavailable in R. Calculate the SAGA wetness index of `data(dem)` using RQGIS. If you are faster than the others or if you have trouble using SAGA, calculate the slope, the aspect (and the curvatures) of `data(dem)` using GRASS through RQGIS.
+
+--
+3. Optional: calculate the intersection of `poly_1` and `poly_2` with the help of `sf`, SAGA and/or GRASS (hint: overlay and `open_help`).
+
+--
+4. Optional: Select randomly a point from `random_points` and find all `dem` pixels that can be seen from this point (hint: viewshed). Visualize your result. Plot a hillshade, and on top of it the digital elevation model, your viewshed output and the point. Additionally, give `mapview` a try.
+
+???
+Plan curvature decribes the rate of aspect change alone a contour, as well as profile curvature describes the rate of slope change down a flow line. In addition, tangential curvature was proposed as an improvement of plan curvture becuase it is more approperiate to study flow convergence and divergence (Wilson and Gallant, 2000). It is the plan curvature multiplied the sine of the slope angle.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "4:3",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

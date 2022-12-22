@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction to geocomputation with R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Jakub Nowosad   (https://nowosad.github.io)" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/ionicons/css/ionicons.min.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/leaflet/leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet/leaflet.js"></script>
+    <link href="libs/leafletfix/leafletfix.css" rel="stylesheet" />
+    <script src="libs/Proj4Leaflet/proj4-compressed.js"></script>
+    <script src="libs/Proj4Leaflet/proj4leaflet.js"></script>
+    <link href="libs/rstudio_leaflet/rstudio_leaflet.css" rel="stylesheet" />
+    <script src="libs/leaflet-binding/leaflet.js"></script>
+    <script src="libs/leaflet-providers/leaflet-providers.js"></script>
+    <script src="libs/leaflet-providers-plugin/leaflet-providers-plugin.js"></script>
+    <script src="libs/mapPane/map-pane.js"></script>
+    <link href="libs/HomeButton/home-button.css" rel="stylesheet" />
+    <script src="libs/HomeButton/home-button.js"></script>
+    <script src="libs/HomeButton/easy-button-src.min.js"></script>
+    <link href="libs/PopupTable/popup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to geocomputation with R
+## <i class="ion  ion-android-globe "></i>
+### Jakub Nowosad <br/> (<a href="https://nowosad.github.io" class="uri">https://nowosad.github.io</a>)
+### CinDay RUG, 2018-05-22
+
+---
+
+
+
+
+### Geocomputation
+
+- **GIS** - A **G**eographic **I**nformation **S**ystem - analysis, manipulation and visualization of geographical data (Longley, Goodchild, Maguire, and Rhind, 2015)
+- GIS software - GRASS GIS, SAGA GIS, QGIS, ArcGIS (commercial)
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Attribute &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; GIS &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Geocomputation &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Home disciplines &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Geography &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Geography, Computing, Statistics &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Software focus &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Graphical User Interface &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Code &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Reproduciblility &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Minimal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Maximal &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Geographic data is represented by **spatial coordinates**
+- There are many **Coordinate Reference Systems (CRS)**, which defines how the spatial elements of the data relate to the surface of the Earth (or other bodies)
+- There are two main models for representing geographic data - the **vector** and the **raster** data model
+
+---
+### Spatial R history
+
+- Spatial packages already available in the S language since the 1990s (Bivand and Gebhardt, 2000)
+- By 2000, modifications of these became R packages for point pattern analysis, geostatistics, exploratory - spatial data analysis and spatial econometrics
+- R-GIS bridges (Bivand, 2000)
+- Bivand (2003) proposed a spatial data class system for R which eventually led to the packages **rgdal** (first released in 2003; Bivand, Keitt, and Rowlingson, 2018) and **sp** (first released in 2005; Bivand, Pebesma, and Gomez-Rubio, 2013)
+- 2008: *Applied Spatial Data Analysis with R* (Bivand, Pebesma, and Gomez-Rubio, 2013)
+- 2010: **raster** package (Hijmans, 2017)
+- 2011: **rgeos** package (Bivand and Rundel, 2017)
+- 2014-15: Spatial visualization - **tmap** (Tennekes, 2018), **rasterVis** (Lamigueiro, 2014), **leaflet** (Cheng, Karambelkar, and Xie, 2018)
+- 2016-17: **sf** - simple features for R (Pebesma, 2018a)
+- 2017-18: **stars** - spatiotemporal tidy arrays for R (Pebesma, 2018b) 
+
+---
+### Spatial R
+
+![](figs/vecras-1.png)&lt;!-- --&gt;
+
+- **sf** and **sp** are the most important R packages to handle vector data; **sf** is a successor of **sp** but its still evolving. Moreover, many other R packages depend on the functions and classes for the **sp** package
+- **raster** is an extension of spatial data classes to work with rasters
+- It is also easy to connect R with a GIS software - GRASS GIS (**rgrass7**), SAGA GIS (**RSAGA**), QGIS (**RQGIS** and **qgisremote**), and ArcGIS (**arcgisbinding**)
+
+
+---
+### The **sf** package
+
+The **sf** package in an R implementation of [Simple Features](https://en.wikipedia.org/wiki/Simple_Features). This package incorporates:
+- A relatively new spatial data class system in R
+- Functions for reading and writing data
+- Tools for spatial operations on vectors
+
+Most of the functions in this package start with a prefix `st_`.
+
+
+```r
+devtools::install_github("r-spatial/sf") # development version
+```
+
+or
+
+
+```r
+install.packages("sf") # stable version
+```
+
+You need a recent version of the GDAL, GEOS, Proj.4, and UDUNITS libraries installed for this to work on Mac and Linux. More information on that at https://github.com/r-spatial/sf.
+
+---
+### How to put this data on the map?
+
+- I've got some non-spatial data
+- How can I **add spatial information to my data**?
+- How to visualize my locations on a map?
+
+
+
+
+```r
+library(readr)
+my_df = read_csv("breweries.csv")
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; brewery &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; no_of_beers &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; revenue &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; profit &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Listermann Brewing Company &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 999 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7986 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 513 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Rhinegeist Brewery &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5155 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4651 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 651 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Woodburn Brewery &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3111 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5156 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 879 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Urban Artifact &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 710 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8847 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 634 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&gt; Note: All the data presented here (except the names) are artificial!
+
+---
+### Spatial data
+
+- Usually, spatial files are stored in special data formats, such as ESRI Shapefile (.shp) or **GeoPackage (.gpkg)**
+- Vector data can be represented by areas (**polygons**), **lines**, or **points**
+
+
+
+
+```r
+library(sf)
+breweries_sf1 = st_read("breweries_sf1.gpkg", quiet = TRUE)
+breweries_sf1
+```
+
+```
+## Simple feature collection with 2 features and 1 field
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1327662 ymin: -529531.6 xmax: 1331125 ymax: -525580
+## epsg (SRID):    NA
+## proj4string:    +proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs
+##                         name                      geom
+## 1 Listermann Brewing Company   POINT (1331125 -525580)
+## 2         Rhinegeist Brewery POINT (1327662 -529531.6)
+```
+
+---
+### Geocode
+
+- Only two of my locations exist in my spatial file
+- How can I get coordinates of my missing breweries? 
+- The answer is **geocoding** - converting names/addresses into spatial coordinates
+
+
+```r
+library(tibble)
+library(ggmap)
+breweries_df2 = data_frame(name = c("The Woodburn Brewery",
+                                    "Urban Artifact"))
+breweries_df2 = mutate_geocode(breweries_df2, name)
+```
+
+
+
+
+```r
+breweries_df2
+```
+
+```
+## # A tibble: 2 x 3
+##   name                   lon   lat
+##   &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt;
+## 1 The Woodburn Brewery -84.5  39.1
+## 2 Urban Artifact       -84.5  39.2
+```
+
+- Also try the **opencage** package - https://github.com/ropensci/opencage 
+
+
+---
+### Convert to spatial object
+
+
+```r
+breweries_df2
+```
+
+```
+## # A tibble: 2 x 3
+##   name                   lon   lat
+##   &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt;
+## 1 The Woodburn Brewery -84.5  39.1
+## 2 Urban Artifact       -84.5  39.2
+```
+
+```r
+breweries_sf2 = st_as_sf(breweries_df2,
+                         coords = c("lon", "lat"), crs = 4326)
+breweries_sf2
+```
+
+```
+## Simple feature collection with 2 features and 1 field
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -84.542 ymin: 39.12895 xmax: -84.47681 ymax: 39.16068
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## # A tibble: 2 x 2
+##   name                             geometry
+##   &lt;chr&gt;                         &lt;POINT [°]&gt;
+## 1 The Woodburn Brewery (-84.47681 39.12895)
+## 2 Urban Artifact         (-84.542 39.16068)
+```
+
+---
+### Unify and combine
+
+- Transform to the same spatial projection (`st_transform`) and unify the columns names (`rename`):
+
+
+```r
+breweries_sf1 = st_transform(breweries_sf1,
+                             crs = st_crs(breweries_sf2))
+breweries_sf1 = dplyr::rename(breweries_sf1, geometry = geom)
+```
+
+- Bind the spatial datasets (`rbind`):
+
+
+```r
+breweries_sf = rbind(breweries_sf1, breweries_sf2)
+breweries_sf
+```
+
+```
+## Simple feature collection with 4 features and 1 field
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -84.542 ymin: 39.11727 xmax: -84.4724 ymax: 39.16068
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+##                         name                   geometry
+## 1 Listermann Brewing Company  POINT (-84.4724 39.14628)
+## 2         Rhinegeist Brewery  POINT (-84.5201 39.11727)
+## 3       The Woodburn Brewery POINT (-84.47681 39.12895)
+## 4             Urban Artifact   POINT (-84.542 39.16068)
+```
+
+---
+### Join
+
+- Join the spatial and non-spatial datasets:
+
+
+```r
+library(dplyr)
+my_breweries = left_join(breweries_sf, my_df, 
+                         by = c("name" = "brewery"))
+my_breweries
+```
+
+```
+## Simple feature collection with 4 features and 4 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -84.542 ymin: 39.11727 xmax: -84.4724 ymax: 39.16068
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+##                         name no_of_beers revenue profit
+## 1 Listermann Brewing Company         999    7986    513
+## 2         Rhinegeist Brewery        5155    4651    651
+## 3       The Woodburn Brewery        3111    5156    879
+## 4             Urban Artifact         710    8847    634
+##                     geometry
+## 1  POINT (-84.4724 39.14628)
+## 2  POINT (-84.5201 39.11727)
+## 3 POINT (-84.47681 39.12895)
+## 4   POINT (-84.542 39.16068)
+```
+
+---
+### Plot
+
+- There are several ways to visualize spatial data in R - as a static map (*plot()*, **ggplot2**, **tmap**) and interactive one (**leaflet**, **mapview**, **tmap**)
+
+
+```r
+library(mapview)
+mapview(my_breweries)
+```
+
+<div id="htmlwidget-707f1d0b538edaa2c012" style="width:792px;height:360px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-707f1d0b538edaa2c012">{"x":{"options":{"minZoom":1,"maxZoom":100,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",1,"CartoDB.Positron",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter",2,"CartoDB.DarkMatter",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenStreetMap",3,"OpenStreetMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["Esri.WorldImagery",4,"Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenTopoMap",5,"OpenTopoMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"createMapPane","args":["point",440]},{"method":"addCircleMarkers","args":[[39.1462838100849,39.1172671302615,39.1289451,39.160679],[-84.4724037223176,-84.5201045830219,-84.4768059,-84.541999],6,null,"my_breweries",{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"pane":"point","stroke":true,"color":"#333333","weight":2,"opacity":0.9,"fill":true,"fillColor":"#6666FF","fillOpacity":0.6},null,null,["<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"lib/popup/popup.css\"><\/head><body><div class=\"scrollableContainer\"><table class=\"popup scrollable\"><table id=\"popup\"><tr class='coord'><td><\/td><td><b>Feature ID<\/b><\/td><td align='right'>1&emsp;<\/td><\/tr><tr class='alt'><td>1<\/td><td><b>name&emsp;<\/b><\/td><td align='right'>Listermann Brewing Company&emsp;<\/td><\/tr><tr><td>2<\/td><td><b>no_of_beers&emsp;<\/b><\/td><td align='right'>999&emsp;<\/td><\/tr><tr class='alt'><td>3<\/td><td><b>revenue&emsp;<\/b><\/td><td align='right'>7986&emsp;<\/td><\/tr><tr><td>4<\/td><td><b>profit&emsp;<\/b><\/td><td align='right'>513&emsp;<\/td><\/tr><tr class='alt'><td>5<\/td><td><b>geometry&emsp;<\/b><\/td><td align='right'>sfc_POINT&emsp;<\/td><\/tr><\/table><\/body><\/html>","<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"lib/popup/popup.css\"><\/head><body><div class=\"scrollableContainer\"><table class=\"popup scrollable\"><table id=\"popup\"><tr class='coord'><td><\/td><td><b>Feature ID<\/b><\/td><td align='right'>2&emsp;<\/td><\/tr><tr class='alt'><td>1<\/td><td><b>name&emsp;<\/b><\/td><td align='right'>Rhinegeist Brewery&emsp;<\/td><\/tr><tr><td>2<\/td><td><b>no_of_beers&emsp;<\/b><\/td><td align='right'>5155&emsp;<\/td><\/tr><tr class='alt'><td>3<\/td><td><b>revenue&emsp;<\/b><\/td><td align='right'>4651&emsp;<\/td><\/tr><tr><td>4<\/td><td><b>profit&emsp;<\/b><\/td><td align='right'>651&emsp;<\/td><\/tr><tr class='alt'><td>5<\/td><td><b>geometry&emsp;<\/b><\/td><td align='right'>sfc_POINT&emsp;<\/td><\/tr><\/table><\/body><\/html>","<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"lib/popup/popup.css\"><\/head><body><div class=\"scrollableContainer\"><table class=\"popup scrollable\"><table id=\"popup\"><tr class='coord'><td><\/td><td><b>Feature ID<\/b><\/td><td align='right'>3&emsp;<\/td><\/tr><tr class='alt'><td>1<\/td><td><b>name&emsp;<\/b><\/td><td align='right'>The Woodburn Brewery&emsp;<\/td><\/tr><tr><td>2<\/td><td><b>no_of_beers&emsp;<\/b><\/td><td align='right'>3111&emsp;<\/td><\/tr><tr class='alt'><td>3<\/td><td><b>revenue&emsp;<\/b><\/td><td align='right'>5156&emsp;<\/td><\/tr><tr><td>4<\/td><td><b>profit&emsp;<\/b><\/td><td align='right'>879&emsp;<\/td><\/tr><tr class='alt'><td>5<\/td><td><b>geometry&emsp;<\/b><\/td><td align='right'>sfc_POINT&emsp;<\/td><\/tr><\/table><\/body><\/html>","<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"lib/popup/popup.css\"><\/head><body><div class=\"scrollableContainer\"><table class=\"popup scrollable\"><table id=\"popup\"><tr class='coord'><td><\/td><td><b>Feature ID<\/b><\/td><td align='right'>4&emsp;<\/td><\/tr><tr class='alt'><td>1<\/td><td><b>name&emsp;<\/b><\/td><td align='right'>Urban Artifact&emsp;<\/td><\/tr><tr><td>2<\/td><td><b>no_of_beers&emsp;<\/b><\/td><td align='right'>710&emsp;<\/td><\/tr><tr class='alt'><td>3<\/td><td><b>revenue&emsp;<\/b><\/td><td align='right'>8847&emsp;<\/td><\/tr><tr><td>4<\/td><td><b>profit&emsp;<\/b><\/td><td align='right'>634&emsp;<\/td><\/tr><tr class='alt'><td>5<\/td><td><b>geometry&emsp;<\/b><\/td><td align='right'>sfc_POINT&emsp;<\/td><\/tr><\/table><\/body><\/html>"],{"maxWidth":800,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"closeOnClick":true,"className":""},["1","2","3","4"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-84.541999,39.1172671302615,-84.4724037223176,39.160679,"Zoom to my_breweries","<strong> my_breweries <\/strong>","bottomright"]},{"method":"addLayersControl","args":[["CartoDB.Positron","CartoDB.DarkMatter","OpenStreetMap","Esri.WorldImagery","OpenTopoMap"],"my_breweries",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]}],"limits":{"lat":[39.1172671302615,39.160679],"lng":[-84.541999,-84.4724037223176]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n\n        // get the leaflet map\n        var map = this; //HTMLWidgets.find('#' + el.id);\n\n        // we need a new div element because we have to handle\n        // the mouseover output separately\n        // debugger;\n        function addElement () {\n          // generate new div Element\n         var newDiv = $(document.createElement('div'));\n          // append at end of leaflet htmlwidget container\n          $(el).append(newDiv);\n          //provide ID and style\n          newDiv.addClass('lnlt');\n          newDiv.css({\n            'position': 'relative',\n            'bottomleft':  '0px',\n            'background-color': 'rgba(255, 255, 255, 0.7)',\n            'box-shadow': '0 0 2px #bbb',\n            'background-clip': 'padding-box',\n            'margin': '0',\n            'padding-left': '5px',\n            'color': '#333',\n            'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n            'z-index': '700',\n          });\n          return newDiv;\n        }\n\n        // check for already existing lnlt class to not duplicate\n        var lnlt = $(el).find('.lnlt');\n\n        if(!lnlt.length) {\n          lnlt = addElement();\n          //$(el).keypress(function (e) {\n          //  if (e.which == 32 || event.keyCode == 32) {\n          //    alert('space key is pressed');\n          //  }\n          //});\n          // grab the special div we generated in the beginning\n          // and put the mousmove output there\n          map.on('mousemove', function (e) {\n            lnlt.text(\n                           ' x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ' +\n                           ' | lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() + ' ');\n          });\n        };\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
+
+---
+class: middle
+
+![](figs/geocompr.png)
+
+The online version of the book is at http://geocompr.robinlovelace.net/ and its source code at https://github.com/robinlovelace/geocompr.
+
+We encourage contributions on any part of the book, including:
+
+- Improvements to the text, e.g. clarifying unclear sentences, fixing typos (see guidance from [Yihui Xie](https://yihui.name/en/2013/06/fix-typo-in-documentation/))
+- Changes to the code, e.g. to do things in a more efficient way
+- Suggestions on content (see the projects [issue tracker](https://github.com/Robinlovelace/geocompr/issues)
+
+Please see [our-style.md](https://github.com/Robinlovelace/geocompr/blob/master/our-style.md) for the book's style.
+
+---
+class: middle
+
+# Thanks!
+
+<i class="ion  ion-social-twitter "></i> jakub_nowosad
+
+<i class="ion  ion-ios-book "></i> https://geocompr.robinlovelace.net/
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -5,6 +5,7 @@ date: '2020-04-23'
 slug: mapping-covid-19
 categories:
   - demo
+  - rstats
 tags:
   - geocompr
   - rspatial

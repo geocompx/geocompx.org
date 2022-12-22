@@ -11,7 +11,7 @@
     "href": "post.html",
     "title": "geocompx",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nAutomatic website with the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n3 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n1 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n1 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n9 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n11 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n8 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n2 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n6 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nAutomatic website with the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n3 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n1 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n1 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n9 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n11 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n8 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n2 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n6 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "post/2019/crs-projections-transformations/index.html",
@@ -319,21 +319,21 @@
     "href": "r.html#presentations",
     "title": "R resources",
     "section": "Presentations",
-    "text": "Presentations"
+    "text": "Presentations\n\n“GIS and mapping ecosystem of R”\nEcole thématique SIGR2021, Saint-Pierre-d’Oléron, 2021-06-29\n\nslides\n\n\n\n“Recent changes in R spatial and how to be ready for them”\nWhy R? Webinar, remotely, 2020-04-23\n\nslides\nvideo\n\n\n\n“How to win friends and write an open-source book”\nuseR! 2019, Toulouse, France, 2019-07-12\n\nslides\n\n\n\n“Reproducible spatial data analysis: An example of transportation analysis for Bristol”\nCollegium Da Vinci. Poznan, Poland, 2019-01-29\n\nslides\n\n\n\n“Geocomputation with R: Data science, open source software and geo* data”\nNorthwest Universities R Day. Manchester, UK, 2018-10-31\n\nslides\n\n\n\n“Spatial data and the tidyverse”\nGEOSTAT2018. Prague, Czech Republic, 2018-08-22\n\nslides\n\n\n\n“Geocomputation with R: An overview of the field and introduction to the book”\nGEOSTAT2018. Prague, Czech Republic, 2018-08-20\n\nslides\n\n\n\n“Introduction to geocomputation with R”\nCinDay RUG. Mason, Ohio, 2018-05-22\n\nslides\n\n\n\n“Spatial data and the tidyverse”\nGeocomputation 2017. Leeds, UK, 2017-09-04\n\nslides"
   },
   {
     "objectID": "r.html#workshops",
     "href": "r.html#workshops",
     "title": "R resources",
     "section": "Workshops",
-    "text": "Workshops"
+    "text": "Workshops\n\n“GIS and mapping ecosystem of R” and “Image processing and raster analysis with R”\nEcole thématique SIGR2021, Saint-Pierre-d’Oléron, 2021-06-29\n\nAll slides and additional information\n\n\n\nGeocomputation with R –\nEuropean Geosciences Union. Vienna, Austria, 2019-04-10\nTalk and practical workshop introducing packages for handling geographic data, based on chapters 2, 3 and 8 in the book\n\nIntroductory slides\nGeographic vector data in R\nGeographic raster data in R\nMaking maps with R: from static maps towards web applications\n\n\n\n“Geocomputation with R” –\neRum 2018. Budapest, Hungary, 2018-05-14\nSlides:\n\nBasics\nVector\nRaster\nViz\nrqgis\n\n\n\n“GIS with R: how to start?”\nGIS Learning Community. Cincinnati, Ohio, 2017-11-01\n\nGitHub repo"
   },
   {
     "objectID": "r.html#vignettes",
     "href": "r.html#vignettes",
     "title": "R resources",
     "section": "Vignettes",
-    "text": "Vignettes"
+    "text": "Vignettes\n\nThese vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R\n\nSpatial Joins Extended\nMaking inset maps of the USA\nAlgorithms Extended\nPoint Pattern analysis, spatial interpolation and heatmaps\nDesire Lines Extended\nSpatial data and the tidyverse: pitfalls to avoid"
   },
   {
     "objectID": "r.html",
@@ -362,5 +362,54 @@
     "title": "Python resources",
     "section": "",
     "text": "Geocomputation with Python (geocompy) is motivated by the need for an introductory, yet rigorous and up-to-date, resource geographic data with the most popular programming language in the world. A unique selling point of the book is its cohesive and joined-up coverage of both vector and raster geographic data models and consistent learning curve. We aim to minimize surprises, with each section and chapter building on the previous. If you’re just starting out with Python for working with geographic data, this book is an excellent place to start.\nInspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book. Find the code underlying the geocompy project on GitHub, ensuring that the content is reproducible, transparent, and accessible. Making the book open source allows you or anyone else, to interact with the project by opening issues, making typo fixes and more, for the benefit of everyone.\nThe online version of the book is hosted at py.geocompx.org/."
+  },
+  {
+    "objectID": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/presentations/libs/leaflet-providers/rstudio_install.html",
+    "href": "static/presentations/libs/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/workshops/libs/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/libs/leaflet-providers/rstudio_install.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "guestbook.html#geocomputation-with-r",
+    "href": "guestbook.html#geocomputation-with-r",
+    "title": "Guestbook",
+    "section": "Geocomputation with R",
+    "text": "Geocomputation with R\n\nModules using the book\n\nCASA0005 Geographic Information Systems and Science, Andy MacLachlan and Adam Dennett, Centre for Advanced Spatial Analysis, Univeristy College London\nECS530 Analysing spatial data, Roger Bivand, Norwegian School of Economics\nGEOG 495 and 595: Geographic Data Analysis, University of Oregon\nESPM 288: Reproducible and Collaborative Data Science, Berkeley University of California \nENVR_SCI 390-0 “R Data Science” - Special Topics in Environmental Sciences Northwestern University\nPD-15 - R for Geospatial Analysis and Mapping, University Consortium for Geographic Information Science \nCRD 298: Spatial Methods in Community Research, Professor Noli Brazil, University of California, Davis\nCP6521 Advanced GIS, Yongsun Lee, Georgia Tech\nUrban Data Analytics in R, Nikhil Kaza, University of North Carolina at Chapel Hill\nGeospatial Analytics, taught by Dr Nick Tate as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.\nGEOG 28402 & 28403: Geographic Information Science II & III, Marynia Kolak at the Center for Spatial Data Science, Unversity of Chicago\n\n\n\nOther teaching courses/lectures/guides using the book\n\nData Science for Economists, EC 607\n11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health\nData Carpentry: Introduction to Geospatial Raster and Vector Data with R\nR: Mapping and Geospatial guide, Duke University\n\n\n\nBook reviews\n\nI first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought “this is great! but need to move on!”. A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.\nSee the rest of this review and maybe add your own review here.\n\n\n\nSocial media"
   }
 ]

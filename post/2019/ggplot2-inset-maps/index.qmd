@@ -4,6 +4,7 @@ author: Jakub Nowosad
 date: '2019-12-08'
 categories:
   - vignette
+  - rstats
 tags:
   - geocompr
   - rspatial

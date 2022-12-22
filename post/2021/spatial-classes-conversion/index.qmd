@@ -3,7 +3,9 @@ title: "Conversions between different spatial classes in R"
 author: Jakub Nowosad
 date: "2021-06-17"
 slug: spatial-classes-conversion
-categories: [vignette]
+categories: 
+  - vignette
+  - rstats
 tags: [geocompr, sf, sp, stars, raster, terra, sabre, tmap, rstats]
 draft: false
 bibliography: refs.bib

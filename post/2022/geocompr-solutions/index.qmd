@@ -3,7 +3,9 @@ title: "Automatic website with the Geocomputation with R solutions"
 author: Jakub Nowosad
 date: "2022-02-24"
 slug: geocompr-solutions
-categories: [vignette]
+categories: 
+  - vignette
+  - rstats
 tags: [geocompr2, solutions, rstats]
 draft: false
 ---

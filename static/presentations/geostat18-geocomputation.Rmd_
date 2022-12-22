@@ -1,0 +1,546 @@
+---
+title: "Geocomputation with R"
+subtitle: "🗺 <br/> An overview of the field and introduction to the book"
+author: "Robin Lovelace"
+date: "GeoStat 2018(-08-20)"
+output:
+  xaringan::moon_reader:
+    css: xaringan_stuff/my-theme.css
+    seal: true
+    lib_dir: ../..//xaringan_stuff/libs
+    nature:
+#      highlightStyle: dracula
+      highlightLines: true
+      ratio: '4:3'
+      countIncrementalSlides: false
+# for use with citr (allows auto-updates)
+bibliography: refs-geostat.bib
+---
+
+<!-- 14:15 - 15:00 - 45 minute talk  -->
+<!-- Aims: show-off the book, provide overview, some useful things in it -->
+
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+library(RefManageR)
+BibOptions(check.entries = FALSE, 
+           bib.style = "authoryear", 
+           cite.style = 'alphabetic', 
+           style = "markdown",
+           first.inits = FALSE,
+           hyperlink = FALSE, 
+           dashed = FALSE)
+my_bib = ReadBib("refs-geostat.bib", check = FALSE)
+```
+
+
+layout: true
+background-image: url(xaringan_stuff/img/r_geocomp_background.png)
+background-size: cover
+
+---
+
+# 'Team geocompr'
+
+<figure>
+<img align="right" src="xaringan_stuff/img/geocompr_logo.png" width = "60%", height = "60%"/>
+</figure>
+
+- [Jakub Nowosad](https://nowosad.github.io/): developer of GeoPAT + more. Lecturing 09:00 on Wednesday.
+
+- [Jannes Muenchow](http://www.geographie.uni-jena.de/en/Muenchow.html), creator of **RQGIS**. Lecturing  Weds 13:30 on GIS Bridges and Weds 15:30 on Spatial CV.
+
+--
+
+- [Robin Lovelace](https://www.robinlovelace.net/), creator of **stplanr**. Lecturing 11:00 Weds on spatial data and the **tidyverse**.
+
+--
+
+- Front cover image competition! Submissions (code / ideas welcome) by Thursday evening. Prize: $100 CRC Press book voucher.
+
+---
+
+# Find the slides and the code
+
+<br>
+<br>
+https://github.com/geocompr/geostats_18
+
+To install all packages used in the book:
+
+```{r, eval=FALSE}
+devtools::install_github("geocompr/geocompkg")
+```
+
+Data for the sea level rise code in this presentation: see the releases in [geostats_18](https://github.com/geocompr/geostats_18/releases):
+
+```{r, eval=FALSE}
+download.file("https://github.com/geocompr/geostats_18/releases/download/0.1/pres.2fgeocompr.2fdata.zip",
+              destfile = "data.zip")
+unzip("data.zip")
+```
+
+
+---
+
+# Origins of the book I
+
+```{r, eval=FALSE}
+webshot::webshot("https://bookdown.org/nowosad/Geostatystyka/")
+```
+
+```{r, echo=FALSE}
+# webshot::webshot("https://bookdown.org/nowosad/Geostatystyka/", file = "images/geostatystyka.png")
+# i = magick::image_read("images/geostatystyka.png")
+# print(i)
+knitr::include_graphics("images/geostatystyka.png")
+```
+
+---
+
+# Origins of the book II
+
+```{r, eval=FALSE}
+webshot::webshot("https://github.com/Robinlovelace/Creating-maps-in-R")
+```
+
+```{r, echo=FALSE}
+# i = magick::image_read("images/creating.png")
+# i
+# i = magick::image_resize(i, "992x")
+# i
+# magick::image_write(i, "images/creating.png")
+knitr::include_graphics("images/creating.png")
+```
+
+---
+
+# Origins of the book III
+
+```{r, eval=FALSE}
+webshot::webshot("https://rjournal.github.io/archive/2017/RJ-2017-067/")
+```
+
+```{r, echo=FALSE}
+# webshot::webshot("https://rjournal.github.io/archive/2017/RJ-2017-067/", file = "images/rqgis-rjournal.png")
+# magick::image_read("images/rqgis-rjournal.png")
+knitr::include_graphics("images/rqgis-rjournal.png")
+```
+
+---
+
+# Contributing 'upstream' - questions
+
+- Comment on a random github issue -> new author!
+
+```{r, eval=FALSE}
+webshot::webshot("https://github.com/jannes-m/RQGIS/issues/66")
+```
+
+```{r, echo=FALSE}
+# webshot::webshot("https://github.com/jannes-m/RQGIS/issues/66#issuecomment-304788979", file = "images/rqgis-question.png")
+# i = magick::image_read("images/rqgis-question.png")
+# i = magick::image_crop(image = i, "992x+0+1500")
+# magick::image_write(i, "images/rqgis-question.png")
+knitr::include_graphics("images/rqgis-question.png")
+```
+
+---
+
+# First commits by Jannes
+
+```{r, engine='bash'}
+cd ~/repos/geocompr
+git log --author=jannes | tail -n 20
+```
+
+<!-- point: Anyone can get involved -->
+
+---
+
+
+# Contributions to other pkgs
+
+```{r, message=FALSE}
+library(tidyverse)
+d = read_csv("~/repos/geocompr/our-impact.csv"); nrow(d)
+d %>% slice(1:2) %>% select(date, description, creator) %>% knitr::kable(format = "html")
+d %>% group_by(type) %>%
+  summarise(n = n(), comms = sum(comments, na.rm = T)) %>% 
+  arrange(desc(n)) %>% top_n(4, n) %>% knitr::kable(format = "html")
+```
+
+<!-- d = read_csv("https://raw.githubusercontent.com/Robinlovelace/geocompr/master/our-impact.csv") -->
+
+---
+
+# Why Geocomputation with R?
+
+.pull-left[
+
+Why geocomputation?
+
+- 'Does what it says on the tin'
+- Emphasis on 'tools' + flexibility
+- Link to Leeds (Jakub and Robin joined forces at the [GeoComputation 2017](http://www.geocomputation.org/2017/conference/) conference)
+
+Why R?
+
+- We all speak R!
+- It's good for academic research (statistical rigour, reproducibility)
+- It's a good bridge/interface language (see Chapter [9 on bridges](http://geocompr.robinlovelace.net/gis.html))
+
+- It's got an awesome community!
+
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+knitr::include_graphics("https://pbs.twimg.com/media/CkgvW4ZXEAAxumw.jpg:large")
+```
+]
+
+---
+
+# What is Geocomputation?
+
+
+.pull-left[
+
+> GeoComputation is about using the various different types of geodata and about developing relevant geo-tools within the overall context of a 'scientific' approach `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+knitr::include_graphics("http://www.ccg.leeds.ac.uk/people/s.openshaw/s.openshaw.png")
+```
+]
+
+--
+
+- But we do differ from early definitions in one important way:
+
+> At the turn of the 21st Century it was unrealistic to expect readers to be able to reproduce code examples, due to barriers preventing access to the necessary hardware, software and data
+
+---
+
+# Other aspects of the definition
+
+--
+
+> What distinguishes geocomputation from the older quantitative geography, is its emphasis on "creative and experimental" GIS applications `r Citep(my_bib, "longley_geocomputation_1998", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+It's about doing "practical work that is beneficial or useful" `r Citep(my_bib, "openshaw_geocomputation_2000", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+> about harnessing the power of modern computers to *do things* with geographic data.
+
+---
+
+# A little less conversation...
+
+![](https://media.giphy.com/media/OMeGDxdAsMPzW/giphy.gif)
+
+
+
+---
+
+# A brief history of geographic data in R
+
+R's predecesor was S, which was itself inspired by lisp `r Citep(my_bib, "chambers_extending_2016", .opts = list(cite.style = "authoryear"))`.
+
+This is geographic analysis in S `r Citep(my_bib, "rowlingson_splancs_1993", .opts = list(cite.style = "authoryear"))`:
+
+```
+pts <- spoints(scan('cavities'))
+uk()
+pointmap(pts,add=T) 
+zoom()
+uk(add=T) 
+pointmap(pts,add=T)
+poly<-getpoly() 
+```
+
+Still works today, 25 years later:
+
+```{r}
+library(splancs)
+#> Spatial Point Pattern Analysis Code in S-Plus
+#> Version 2 - Spatial and Space-Time analysis
+```
+
+---
+
+```{r, fig.height=4}
+# example, interactive! (commented bits)
+data(bodmin)
+plot(bodmin$poly, asp=1, type="n")
+pointmap(as.points(bodmin), add=TRUE)
+# zoom()
+# pointmap(as.points(bodmin), add=TRUE)
+```
+
+---
+
+# Observations
+- R' is robust and future-proof 
+
+- See a [video](https://www.youtube.com/watch?v=Luxllb_WAqY) of Roger Bivand's talk on the subject (live demo of R 0.49) + GitHub [repo](https://github.com/rsbivand/eRum18/blob/master/eRum_keynote_18.Rmd)
+
+- Rs capabilities have evolved substantially since then!
+
+---
+
+
+# Case study: Geographic data visualization
+
+- An area that illustrates the pace of development
+- Rapid growth in number and diversity of packages
+- Consolidation, but still many packages to choose from
+- `plot()` still best for many tasks
+
+--
+
+- Vital for understanding geographic data. 
+
+--
+
+- Empower youselves with maps!
+
+---
+
+# A brief history of geographic vizualisation I
+
+- Neo Babylonian (626 BC - 539 BC) temple plan
+Source:
+`r Citep(my_bib, "talbert_ancient_2014", .opts = list(cite.style = "authoryear"))`
+
+```{r, echo=FALSE, out.width="50%"}
+knitr::include_graphics("https://raw.githubusercontent.com/jannes-m/erum18_geocompr/master/pres/rmd/img/neo-babylon-temple-map-circa-600-bc.png")
+```
+
+---
+
+# A brief history of geographic vizualisation II
+
+- Neo Babylonian (626 BC - 539 BC) map of the world
+Source:
+`r Citep(my_bib, "talbert_ancient_2014", .opts = list(cite.style = "authoryear"))`
+
+```{r, echo=FALSE, out.width="50%"}
+knitr::include_graphics("https://raw.githubusercontent.com/jannes-m/erum18_geocompr/master/pres/rmd/img/babylon-map.png")
+```
+
+---
+
+# A brief history of geographic vizualisation III
+
+- Humboldt's Naturgemälde (1807, *Geography of Plants*)
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Zentralbibliothek_Z%C3%BCrich_-_Ideen_zu_einer_Geographie_der_Pflanzen_nebst_einem_Naturgem%C3%A4lde_der_Tropenl%C3%A4nder_-_000012142.jpg/2560px-Zentralbibliothek_Z%C3%BCrich_-_Ideen_zu_einer_Geographie_der_Pflanzen_nebst_einem_Naturgem%C3%A4lde_der_Tropenl%C3%A4nder_-_000012142.jpg")
+```
+
+
+<!-- - The mappa mundi - largest Mediaval map surviving (~1300 **AD**) -->
+<!-- knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/4/48/Hereford-Karte.jpg?download") -->
+
+---
+
+# A brief history of geographic data viz in R
+
+"The core R engine was not designed specifically for the display and analysis
+of maps, and the limited interactive facilities it offers have drawbacks in this
+area" `r Citep(my_bib, "bivand_applied_2013", .opts = list(cite.style = "authoryear"))`.
+
+--
+
+Five years later...
+
+--
+
+"An example showing R's flexibility and evolving geographic capabilities is **leaflet**
+`r Citep(my_bib, "R-leaflet", .opts = list(cite.style = "authoryear"))`,
+a package for making interactive maps that has been extended by the R community, as we'll see in Chapter 9" 
+`r Citep(my_bib, "lovelace_geocomputation_2018", .opts = list(cite.style = "authoryear"))`.
+
+---
+
+# R's 'base' graphics: sp
+
+```{r, echo=FALSE, eval=FALSE}
+# from asdar:
+library(sp)
+data(meuse)
+coordinates(meuse) = c("x", "y")
+#layout(matrix(1:4, 2, 2, byrow = TRUE))
+layout(matrix(1:4, 1, 4, byrow = TRUE))
+par(mar = c(0,0,1,0))
+plot(meuse, cex = 0.6)
+title("points")
+
+cc = coordinates(meuse)
+m.sl = SpatialLines(list(Lines(list(Line(cc)), "mess")))
+plot(m.sl)
+title("lines")
+
+data(meuse.riv)
+meuse.lst = list(Polygons(list(Polygon(meuse.riv)), "meuse.riv"))
+meuse.pol = SpatialPolygons(meuse.lst)
+plot(meuse.pol, col = "grey")
+title("polygons")
+
+data(meuse.grid)
+coordinates(meuse.grid) = c("x", "y")
+meuse.grid <- as(meuse.grid, "SpatialPixels")
+image(meuse.grid, col = "grey")
+title("grid")
+```
+
+```{r, echo=FALSE, message=FALSE}
+library(sp)
+library(sf)
+library(spData)
+layout(matrix(1:3, 1, 3, byrow = TRUE))
+nz_sp = as(nz, "Spatial")
+nz_height_sp = as(nz_height, "Spatial")
+plot(nz_height_sp, cex = 2)
+title("points")
+plot(nz_sp, col = "grey")
+plot(nz_sp)
+plot(nz_height_sp, add = TRUE, col = "red")
+```
+
+---
+
+# Base R graphics: sp code
+
+Credit: [asdar-book.org/](http://asdar-book.org/), reproducible code accompanying the book Applied Spatial Data Analysis with R (Pebesma et al. 2013).
+
+```{r, eval=FALSE}
+library(sp)
+library(spData)
+nz_sp = as(nz, "Spatial")
+plot(nz_height_sp, cex = 2)
+title("points")
+plot(nz_sp, col = "grey")
+plot(nz_height, add = TRUE, col = "red")
+```
+
+--
+
+## Observations
+
+- Passes arguments (e.g `cex` for symbol size) to `graphics::plot()`
+- New command for each additional 'layer' (e.g. `title()`, `plot(..., add = TRUE)`)
+- Black and white default output style
+- Fast
+
+---
+
+# Base R graphics: sf 
+
+```{r}
+plot(nz)
+```
+
+
+--
+
+# tmap
+
+- A diverse dedicated mapping R package
+
+```{r}
+library(tmap)
+tm_shape(nz) +
+  tm_polygons("Median_income", palette = "RdYlBu")
+```
+
+---
+
+# Why tmap?
+
+- It is powerful and flexible.
+- Concise syntax, attractive maps with minimal code, familiar to **ggplot2** users.
+- Unique capability: same code -> static + interactive maps with switch `tmap_mode()`.
+- Wide range of spatial classes (including `raster` objects) supported.
+- Well documented + developed --- see [`tmap-nutshell`](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html) and JSS paper
+`r Citep(my_bib, "tennekes_tmap_2018", .opts = list(cite.style = "authoryear"))`.
+
+
+-
+
+
+# tmap basics
+
+```{r, fig.cap="tmap basics", out.width="32%", fig.show='hold'}
+# Add fill layer to nz shape
+tm_shape(nz) + tm_fill() 
+# Add border layer to nz shape
+tm_shape(nz) + tm_borders() 
+# Add fill and border layers to nz shape
+tm_shape(nz) + tm_fill() + tm_borders() 
+```
+
+---
+
+# Animations
+
+- Are easy with **tmap** (section [9.3](http://geocompr.robinlovelace.net/adv-map.html#animated-maps) of geocompr)
+
+```{r, echo=FALSE, out.width="80%"}
+knitr::include_graphics("https://user-images.githubusercontent.com/1825120/38543030-5794b6f0-3c9b-11e8-9da9-10ec1f3ea726.gif")
+```
+
+---
+
+# Interactive maps with mapview
+
+```{r, eval=FALSE}
+m = mapview::mapview(nz)
+m@map
+```
+
+---
+
+# Web mapping applications
+
+- Leaflet integrates with **shiny** via `leaflet::leafletOutput()`, enabling web mapping applications built on R
+- These can be set-up to scale nationally, as illustrated by [pct.bike](http://www.pct.bike/)
+`r Citep(my_bib, "lovelace_propensity_2017", .opts = list(cite.style = "authoryear"))`.
+
+
+```{r, echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/npct/pct-team/master/figures/pct-frontpage.png")
+```
+
+---
+
+# A case study of 'doing' something useful
+
+- Sea level rise could change the course of humanity
+- See code: https://github.com/geocompr/geostats_18/blob/master/code/geocompr/slr.R
+
+Todo: improve this section, add refs + image!
+
+```{r}
+
+```
+
+
+---
+
+# References
+
+```{r, 'refs', results="asis", echo=FALSE}
+PrintBibliography(my_bib)
+# RefManageR::WriteBib(my_bib, "refs-geostat.bib")
+```
+
+

@@ -4,6 +4,7 @@ author: Robin Lovelace
 date: '2019-08-21'
 categories:
   - vignette
+  - rstats
 tags:
   - geocompr
   - rspatial

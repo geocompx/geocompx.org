@@ -38,9 +38,94 @@ The Geocomputation with R book has a few community translations:
 
 Additionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore).
 
-<!-- ## Presentations -->
+## Presentations
 
-<!-- ## Workshops -->
+#### "GIS and mapping ecosystem of R"
+Ecole thématique SIGR2021, Saint-Pierre-d'Oléron, 2021-06-29
 
-<!-- ## Vignettes -->
+- [slides](https://nowosad.github.io/SIGR2021/lecture/lecture.html)
 
+#### "Recent changes in R spatial and how to be ready for them"
+[Why R? Webinar](https://www.youtube.com/channel/UCwLy_PYrnCEhCU-Ay2F5Drw), remotely, 2020-04-23
+
+- [slides](https://nowosad.github.io/whyr_webinar004/)
+- [video](https://www.youtube.com/watch?v=Va0STgco7-4)
+
+#### "How to win friends and write an open-source book"
+[useR! 2019](http://user2019.r-project.org/), Toulouse, France, 2019-07-12
+
+- [slides](https://geocompr.github.io/user_19/presentation/)
+
+#### "Reproducible spatial data analysis: An example of transportation analysis for Bristol"
+Collegium Da Vinci. Poznan, Poland, 2019-01-29
+
+- [slides](https://nowosad.github.io/georep_2019/)
+
+#### "Geocomputation with R: Data science, open source software and geo* data"
+[Northwest Universities R Day](https://twitter.com/hashtag/NWURday?src=hash). Manchester, UK, 2018-10-31
+
+- [slides](https://www.robinlovelace.net/presentations/nurd.html#1)
+
+#### "Spatial data and the tidyverse"
+GEOSTAT2018. Prague, Czech Republic, 2018-08-22
+
+- [slides](static/presentations/spatial-tidyverse.html)
+
+#### "Geocomputation with R: An overview of the field and introduction to the book"
+GEOSTAT2018. Prague, Czech Republic, 2018-08-20
+
+- [slides](static/presentations/geostat18-geocomputation.html)
+
+#### "Introduction to geocomputation with R"
+[CinDay RUG](https://www.meetup.com/CinDay-RUG/). Mason, Ohio, 2018-05-22
+
+- [slides](static/presentations/geocompr_cinday.html)
+
+#### "Spatial data and the tidyverse"
+[Geocomputation 2017](http://www.geocomputation.org/2017/conference/). Leeds, UK, 2017-09-04
+
+- [slides](https://www.robinlovelace.net/presentations/spatial-tidyverse.html#1)
+
+## Workshops
+
+#### "GIS and mapping ecosystem of R" and "Image processing and raster analysis with R"
+Ecole thématique SIGR2021, Saint-Pierre-d'Oléron, 2021-06-29
+
+- [All slides and additional information](https://nowosad.github.io/SIGR2021/)
+
+#### Geocomputation with R --
+[European Geosciences Union](https://www.egu2019.eu/). Vienna, Austria, 2019-04-10
+
+Talk and practical workshop introducing packages for handling geographic data, based on chapters [2](https://geocompr.robinlovelace.net/spatial-class.html), [3](https://geocompr.robinlovelace.net/attr.html#exercises-1) and [8](http://geocompr.robinlovelace.net/adv-map.html) in the book
+
+- Introductory [slides](static/workshops/01_intro.html)
+- [Geographic vector data in R](static/workshops/02_vector.html)
+- [Geographic raster data in R](static/workshops/03_raster.html)
+- [Making maps with R: from static maps towards web applications](static/workshops/04_viz.html)
+
+#### "Geocomputation with R" --
+[eRum 2018](https://2018.erum.io/). Budapest, Hungary, 2018-05-14
+
+Slides:
+
+1. [Basics](static/workshops/erum2018/01_basics.html)
+1. [Vector](static/workshops/erum2018/02_vector.html)
+1. [Raster](static/workshops/erum2018/03_raster.html)
+1. [Viz](static/workshops/erum2018/04_viz.html)
+1. [rqgis](static/workshops/erum2018/05_rqgis.html)
+
+#### "GIS with R: how to start?"
+GIS Learning Community. Cincinnati, Ohio, 2017-11-01
+
+- [GitHub repo](https://github.com/Nowosad/gis_with_r_how_to_start/)
+
+## Vignettes
+
+#### These vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R
+
+- [Spatial Joins Extended](https://geocompr.github.io/geocompkg/articles/join.html)
+- [Making inset maps of the USA](https://geocompr.github.io/geocompkg/articles/us-map.html)
+- [Algorithms Extended](https://geocompr.github.io/geocompkg/articles/algorithm.html)
+- [Point Pattern analysis, spatial interpolation and heatmaps](https://geocompr.github.io/geocompkg/articles/point-pattern.html)
+- [Desire Lines Extended](https://geocompr.github.io/geocompkg/articles/linevia.html)
+- [Spatial data and the tidyverse: pitfalls to avoid](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html)

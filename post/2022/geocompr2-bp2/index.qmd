@@ -3,7 +3,9 @@ title: "Progress update: Geocomputation with R Second Edition Part 1"
 author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
 date: "2022-01-27"
 slug: geocompr2-bp2
-categories: [updates]
+categories:
+  - updates
+  - rstats
 tags: [geocompr, geocompr2, sf, rgdal, stars, raster, terra, s2, rstats]
 draft: false
 ---

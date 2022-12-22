@@ -16,6 +16,10 @@ jobs:
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+        
+      - name: Install extensions
+        run: |
+          quarto install extension sellorm/quarto-social-embeds
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2

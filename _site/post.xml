@@ -87,6 +87,7 @@ Jakub Nowosad. 2022. <span>“Automatic Website with the Geocomputation
 with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//post/2022/geocompr-solutions">https://geocompx.org//post/2022/geocompr-solutions</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2022/geocompr-solutions/index.html</guid>
   <pubDate>Wed, 23 Feb 2022 23:00:00 GMT</pubDate>
 </item>
@@ -163,6 +164,7 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 2022. <a href="https://geocompx.org//post/2022/geocompr2-bp2">https://geocompx.org//post/2022/geocompr2-bp2</a>.
 </div></div></section></div> ]]></description>
   <category>updates</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2022/geocompr2-bp2/index.html</guid>
   <pubDate>Wed, 26 Jan 2022 23:00:00 GMT</pubDate>
   <media:content url="https://geocompx.org/post/2022/geocompr2-bp2/ch2fig.png" medium="image" type="image/png" height="91" width="144"/>
@@ -198,6 +200,7 @@ Robin Lovelace, Jakub Nowosad, Jannes Muenchow. 2021.
 6, 2021. <a href="https://geocompx.org//post/2021/geocompr2-bp1">https://geocompx.org//post/2021/geocompr2-bp1</a>.
 </div></div></section></div> ]]></description>
   <category>announcement</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2021/geocompr2-bp1/index.html</guid>
   <pubDate>Sun, 05 Sep 2021 22:00:00 GMT</pubDate>
 </item>
@@ -479,6 +482,7 @@ Jakub Nowosad. 2021. <span>“Conversions Between Different Spatial
 Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/spatial-classes-conversion">https://geocompx.org//post/2021/spatial-classes-conversion</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</guid>
   <pubDate>Wed, 16 Jun 2021 22:00:00 GMT</pubDate>
 </item>
@@ -516,6 +520,7 @@ Jakub Nowosad, Robin Lovelace. 2020. <span>“Recent Changes in R Spatial
 and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them">https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them</a>.
 </div></div></section></div> ]]></description>
   <category>announcement</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</guid>
   <pubDate>Fri, 24 Apr 2020 22:00:00 GMT</pubDate>
 </item>
@@ -965,6 +970,7 @@ Robin Lovelace. 2020. <span>“Demo of Reproducible Geographic Data
 Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https://geocompx.org//post/2020/r-spatial-demo-covid-19">https://geocompx.org//post/2020/r-spatial-demo-covid-19</a>.
 </div></div></section></div> ]]></description>
   <category>demo</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2020/r-spatial-demo-covid-19/index.html</guid>
   <pubDate>Wed, 22 Apr 2020 22:00:00 GMT</pubDate>
   <media:content url="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Katapult_importance_social_distancing.gif/350px-Katapult_importance_social_distancing.gif" medium="image" type="image/gif"/>
@@ -1114,6 +1120,7 @@ Robin Lovelace. 2020. <span>“Installing Spatial R Packages on
 Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org//post/2020/installing-r-spatial-packages-linux">https://geocompx.org//post/2020/installing-r-spatial-packages-linux</a>.
 </div></div></section></div> ]]></description>
   <category>setup</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</guid>
   <pubDate>Sun, 29 Mar 2020 22:00:00 GMT</pubDate>
   <media:content url="https://geocompx.org/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png" medium="image" type="image/png"/>
@@ -1327,6 +1334,7 @@ Jakub Nowosad. 2019. <span>“Inset Maps with Ggplot2.”</span> December 8,
 2019. <a href="https://geocompx.org//post/2019/ggplot2-inset-maps">https://geocompx.org//post/2019/ggplot2-inset-maps</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</guid>
   <pubDate>Sat, 07 Dec 2019 23:00:00 GMT</pubDate>
 </item>
@@ -1683,6 +1691,7 @@ Jakub Nowosad. 2019. <span>“Map Coloring: The Color Scale Styles
 Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geocompx.org//post/2019/tmap-styles">https://geocompx.org//post/2019/tmap-styles</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2019/tmap-styles/index.html</guid>
   <pubDate>Wed, 16 Oct 2019 22:00:00 GMT</pubDate>
 </item>
@@ -1829,6 +1838,7 @@ Jakub Nowosad. 2019. <span>“Grids and Graticules in the Tmap
 Package.”</span> September 4, 2019. <a href="https://geocompx.org//post/2019/tmap-grid">https://geocompx.org//post/2019/tmap-grid</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2019/tmap-grid/index.html</guid>
   <pubDate>Tue, 03 Sep 2019 22:00:00 GMT</pubDate>
 </item>
@@ -2156,6 +2166,7 @@ Robin Lovelace. 2019. <span>“Geographic Projections and
 Transformations.”</span> August 21, 2019. <a href="https://geocompx.org//post/2019/crs-projections-transformations">https://geocompx.org//post/2019/crs-projections-transformations</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
+  <category>rstats</category>
   <guid>https://geocompx.org/post/2019/crs-projections-transformations/index.html</guid>
   <pubDate>Tue, 20 Aug 2019 22:00:00 GMT</pubDate>
   <media:content url="https://geocompr.robinlovelace.net/images/cover.png" medium="image" type="image/png"/>
