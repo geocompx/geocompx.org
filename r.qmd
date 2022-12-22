@@ -1,5 +1,6 @@
 ---
 title: "R resources"
+page-layout: full
 ---
 
 ## Book

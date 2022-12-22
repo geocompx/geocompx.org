@@ -1,5 +1,6 @@
 ---
 title: "Guestbook"
+page-layout: full
 ---
 
 ##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/guestbook.qmd))

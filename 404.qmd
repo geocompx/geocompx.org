@@ -1,2 +1,6 @@
+---
+page-layout: full
+---
+
 <h1>¯\_(ツ)_/¯</h1>
 <h2>Now you are lost</h2>
