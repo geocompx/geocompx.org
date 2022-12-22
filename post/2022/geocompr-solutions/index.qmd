@@ -1,5 +1,5 @@
 ---
-title: "Automatic website with the Geocomputation with R solutions" 
+title: "Automatic website for the Geocomputation with R solutions" 
 author: Jakub Nowosad
 date: "2022-02-24"
 slug: geocompr-solutions

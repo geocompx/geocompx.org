@@ -76,14 +76,14 @@ cat(res, sep = '\n')
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2022,
   author = {Jakub Nowosad},
-  title = {Automatic Website with the {Geocomputation} with {R}
+  title = {Automatic Website for the {Geocomputation} with {R}
     Solutions},
   date = {2022-02-24},
   url = {https://geocompx.org//post/2022/geocompr-solutions},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2022" class="csl-entry quarto-appendix-citeas">
-Jakub Nowosad. 2022. <span>“Automatic Website with the Geocomputation
+Jakub Nowosad. 2022. <span>“Automatic Website for the Geocomputation
 with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//post/2022/geocompr-solutions">https://geocompx.org//post/2022/geocompr-solutions</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
