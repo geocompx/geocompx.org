@@ -19,6 +19,8 @@ website:
       - href: guestbook.qmd
         text: Guestbook
     right:
+      - href: about.qmd
+        text: About us
       - icon: twitter
         href: https://twitter.com/hashtag/geocompr
       - icon: mastodon

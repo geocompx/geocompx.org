@@ -1,0 +1,28 @@
+---
+title: "About us"
+page-layout: full
+---
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+[Robin Lovelace](https://www.robinlovelace.net/)
+
+[Jannes Muenchow](https://github.com/jannes-m)
+
+[Anita Grasser](https://anitagraser.com/)
+
+[Olivier Leroy](https://www.branchtwigleaf.com/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+[Jakub Nowosad](https://jakubnowosad.com/)
+
+[Michael Dorman](https://geobgu.xyz/)
+
+[Mireia Camacho](https://github.com/DataMirai)
+
+[...](https://github.com/Robinlovelace/geocompr/graphs/contributors)
+:::
+
+:::
