@@ -36,6 +36,7 @@ The Geocomputation with R book has a few community translations:
 
 - [Geocomputación con R (in Spanish)](https://r.geocompx.org/es). Translation lead: Mireia Camacho
 - [Geocomputation avec R (in French)](https://r.geocompx.org/fr). Translation lead: Olivier Leroy
+- [Geocomputation with R (in Japanese)](http://babayoshihiko.ddns.net/geo/). Translation lead: Yoshihiko Baba
 
 Additionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore).
 
