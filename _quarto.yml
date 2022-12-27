@@ -19,12 +19,12 @@ website:
       - href: guestbook.qmd
         text: Guestbook
     right:
-      - icon: discord
-        href: https://discord.gg/PMztXYgNxp
-      - icon: mastodon
-        href: https://fosstodon.org/tags/rspatial
       - icon: twitter
         href: https://twitter.com/hashtag/geocompr
+      - icon: mastodon
+        href: https://fosstodon.org/tags/geocompr
+      - icon: discord
+        href: https://discord.gg/PMztXYgNxp
       - icon: rss
         href: post.xml
   page-footer: 
