@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://geocompx.org/index.html</loc>
-    <lastmod>2022-12-27T16:41:07.020Z</lastmod>
+    <lastmod>2022-12-28T09:49:24.176Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post.html</loc>
-    <lastmod>2022-12-27T16:54:36.406Z</lastmod>
+    <lastmod>2022-12-28T09:49:44.721Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/crs-projections-transformations/index.html</loc>
@@ -54,15 +54,15 @@
   </url>
   <url>
     <loc>https://geocompx.org/r.html</loc>
-    <lastmod>2022-12-27T16:54:30.093Z</lastmod>
+    <lastmod>2022-12-28T09:49:47.339Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/py.html</loc>
-    <lastmod>2022-12-27T16:54:32.513Z</lastmod>
+    <lastmod>2022-12-28T09:49:49.357Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/guestbook.html</loc>
-    <lastmod>2022-12-27T16:54:39.215Z</lastmod>
+    <lastmod>2022-12-28T09:49:58.260Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
@@ -90,6 +90,6 @@
   </url>
   <url>
     <loc>https://geocompx.org/about.html</loc>
-    <lastmod>2022-12-27T16:53:03.049Z</lastmod>
+    <lastmod>2022-12-27T17:06:35.654Z</lastmod>
   </url>
 </urlset>

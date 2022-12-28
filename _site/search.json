@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "geocompx",
     "section": "",
-    "text": "Geocomputation with R\n\n\n Geocomputation with Python"
+    "text": "Here you will find content, including books and beyond, on reproducible geographic data analysis, modeling, and visualization with open source software. The project and this website evolved from the website originally created to host content around Geocomputation with R. Since the publication of that book in 2019, the community around the book has grown and now includes a nascent ‘geocompy’ community and the associated Geocomputation with Python open source book project. It became clear that the ‘geocompr’ name was no longer appropriate for the more multi-lingual nature of the project.\nAfter community consultations and much debate, we settled on geocompx as a name that captured the essence of the project: eXchanging information about geocomputation, cross (X) pollination of ideas from one programming language for working with geographic data to another, and the possibility that this website could host additional content on geocomputation with (X) other languages.\n\n\n\n\n\nGeocomputation with R\n\n\n\n\n\nGeocomputation with Python"
   },
   {
     "objectID": "post.html",
@@ -354,7 +354,7 @@
     "href": "r.html#translations",
     "title": "R resources",
     "section": "Translations",
-    "text": "Translations\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore)."
+    "text": "Translations\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\nGeocomputation with R (in Japanese). Translation lead: Yoshihiko Baba\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore)."
   },
   {
     "objectID": "py.html",
@@ -417,6 +417,6 @@
     "href": "about.html",
     "title": "About us",
     "section": "",
-    "text": "Robin Lovelace\nJannes Muenchow\nAnita Grasser\nOlivier Leroy\n\n\nJakub Nowosad\nMichael Dorman\nMireia Camacho"
+    "text": "Robin Lovelace\nJannes Muenchow\nAnita Grasser\nOlivier Leroy\n\n\nJakub Nowosad\nMichael Dorman\nMireia Camacho\n…"
   }
 ]

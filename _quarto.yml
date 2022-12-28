@@ -7,7 +7,7 @@ website:
   # open-graph: true
   title: "geocompx"
   site-url: https://geocompx.org/
-  description: "toDo"
+  description: "geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software"
   navbar:
     left:
       - href: post.qmd
