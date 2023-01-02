@@ -33,7 +33,7 @@ website:
       - icon: rss
         href: post.xml
   page-footer: 
-     left: "geocompx, 2023" 
+     left: "geocompx, 2016 - 2023" 
      right:
       - icon: github
         href: https://github.com/geocompx/geocompx.github.io
