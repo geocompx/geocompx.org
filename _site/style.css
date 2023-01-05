@@ -3,3 +3,7 @@
   width: 170.7px;
   height: 60px;
 }
+
+@font-face {
+  font-display: swap;
+}
