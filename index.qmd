@@ -20,7 +20,7 @@ After community consultations and much debate, we settled on **geocompx** as a n
 
 ::: {.g-col-12 .g-col-md-6}
 <center>
-<a href="https://r.geocompx.org/"><img alt="Geocomputation with R" width=50% src="static/img/book_cover.jpg"/></a>
+<a href="https://r.geocompx.org/"><img width="435" height="648" alt="Geocomputation with R" width=50% src="static/img/book_cover.jpg"/></a>
 
 **Geocomputation with R**
 </center>
@@ -28,7 +28,7 @@ After community consultations and much debate, we settled on **geocompx** as a n
 
 ::: {.g-col-12 .g-col-md-6}
 <center>
-<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=50% src="static/img/book_cover_py_tmp_small.png"/></a>
+<a href="https://py.geocompx.org/"><img width="435" height="648" alt="Geocomputation with Python" width=50% src="static/img/book_cover_py_tmp_small.png"/></a>
 
 **Geocomputation with Python**
 </center>
