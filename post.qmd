@@ -1,4 +1,5 @@
 ---
+title-prefix: "geocompx"
 listing:
   contents: post/**/**/*.qmd
   sort: "date desc"
