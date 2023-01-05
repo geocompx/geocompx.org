@@ -3,7 +3,7 @@ title: "Guestbook"
 page-layout: full
 ---
 
-##### ([suggest more here](https://github.com/geocompr/geocompr.github.io/edit/source/guestbook.qmd))
+##### ([suggest more here](https://github.com/geocompx/geocompx.org/edit/main/guestbook.qmd))
 
 ## Geocomputation with R
 
