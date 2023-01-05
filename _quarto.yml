@@ -25,9 +25,9 @@ website:
       - href: about.qmd
         text: About us
       - icon: twitter
-        href: https://twitter.com/hashtag/geocompr
+        href: https://twitter.com/hashtag/geocompx
       - icon: mastodon
-        href: https://fosstodon.org/tags/geocompr
+        href: https://fosstodon.org/tags/geocompx
       - icon: discord
         href: https://discord.gg/PMztXYgNxp
       - icon: rss
@@ -36,7 +36,7 @@ website:
      left: "geocompx, 2016 - 2023" 
      right:
       - icon: github
-        href: https://github.com/geocompx/geocompx.github.io
+        href: https://github.com/geocompx/geocompx.org
 
 format:
   html:
