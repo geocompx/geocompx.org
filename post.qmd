@@ -12,3 +12,10 @@ listing:
 page-layout: full
 title-block-banner: false
 ---
+
+<div class="quarto-margin-sidebar">
+  Posts related to R are aggregated at
+  <a href="https://www.r-bloggers.com/" target="_blank">R-bloggers</a>
+  and
+  <a href="https://rweekly.org/" target="_blank">RWeekly</a>
+</div>
