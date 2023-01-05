@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tutorial: Geocomputation with R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Jannes Muenchow, Robin Lovelace" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Tutorial: Geocomputation with R
+## ⚔<br/>Geographic raster data in R
+### Jannes Muenchow, Robin Lovelace
+### EGU Vienna, 2019-04-10
+
+---
+
+
+
+
+
+layout: true
+background-image: url(img/r_geocomp_background.png)
+background-size: cover
+
+
+---
+# Find the slides and code
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+https://github.com/geocompr/egu_19
+
+&lt;br&gt;
+&lt;br&gt;
+Please install following packages:
+
+```r
+install.packages(c("sf", "raster", "spData", "dplyr", "RQGIS"))
+```
+
+Or from [docker](https://github.com/Robinlovelace/geocompr#running-geocompr-code-in-docker).
+
+---
+
+# Raster data model
+
+
+&lt;figure&gt;
+&lt;img align="right" src="img/raster.png" width = "50%", height = "50%"/&gt;
+&lt;/figure&gt;
+
+- Continous fields represented by pixels (cells)
+--
+
+- One attribute value for one cell
+--
+
+- Especially suitable for continous data without sharp borders (elevation, precipitation)
+--
+
+- Structure: raster header (origin, resolution, ncol, nrow, crs, NAvalue) and matrix containing the data
+--
+
+- Map algebra
+--
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+Further reading: [https://geocompr.robinlovelace.net/spatial-class.html#raster-data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)
+
+
+---
+# Raster data in R
+
+Remember: the geographic raster data model is used to represent continuous surfaces.
+Rasters consist of a **header** and a **matrix** containing the actual values. 
+Let's create a raster from scratch.
+In R we use the popular **raster** package written by Robert J. Hijmans.
+--
+
+
+```r
+library(raster)
+elev = raster(nrow = 6, ncol = 6, res = 0.5,
+              xmn = -1.5, xmx = 1.5,
+              ymn = -1.5, ymx = 1.5,
+              vals = 1:36)
+```
+
+---
+
+# Raster data in R
+
+
+```r
+elev
+```
+
+```
+## class      : RasterLayer 
+## dimensions : 6, 6, 36  (nrow, ncol, ncell)
+## resolution : 0.5, 0.5  (x, y)
+## extent     : -1.5, 1.5, -1.5, 1.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : layer 
+## values     : 1, 36  (min, max)
+```
+
+---
+
+# Raster data in R
+
+.pull-left[
+
+```r
+plot(elev)
+```
+]
+
+--
+
+.pull-right[
+![](03_raster_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+---
+class: inverse, center, middle
+
+# Raster attribute subsetting
+---
+
+# Raster attribute subsetting
+Since a raster is a matrix, subsetting follows the usual `i,j` conventions. Let's select the first and the last value.
+--
+
+
+```r
+elev[1, 1]
+```
+
+```
+## [1] 1
+```
+
+```r
+elev[6, 6]
+```
+
+```
+## [1] 36
+```
+--
+
+Further reading: [https://geocompr.robinlovelace.net/attr.html#raster-subsetting](https://geocompr.robinlovelace.net/attr.html#raster-subsetting)
+
+???
+or using cell IDs:
+
+
+```r
+elev[1]
+elev[36]
+```
+
+---
+class: inverse, center, middle
+
+# Spatial raster operations
+
+---
+
+# Raster spatial operations - subsetting
+
+using coordinates:
+
+```r
+extract(elev, data.frame(x = 0.75, y = 0.75))
+```
+
+```
+## [1] 11
+```
+--
+
+using a SpatialObject (`SpatialPointsDataFrame`):
+--
+
+
+```r
+library(sf)
+library(dplyr)
+pt = st_point(c(0.75, 0.75)) %&gt;%
+  st_sfc %&gt;%
+  st_sf %&gt;% 
+  as(., "Spatial")
+# use the SpatialObject for subsetting
+elev[pt]
+```
+
+```
+## [1] 11
+```
+---
+
+using another raster object:
+
+.pull-left[
+
+```r
+clip = 
+  raster(nrow = 3, ncol = 3, 
+         res = 0.3, xmn = 0.6, 
+         xmx = 1.5, ymn = -0.45, 
+         ymx = 0.45, 
+         vals = rep(1, 9))
+elev[clip]
+```
+
+```
+## [1] 17 18 23 24
+```
+]
+
+--
+.pull-right[
+![](03_raster_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+???
+all raster values are returned when their midpoint is covered by the overlayed object
+---
+
+# Map algebra - local operations
+You may use with raster datasets:
+
+- algebraic operators such as `+`, `-`, `*`, `/`
+- logical operators such as `&gt;`, `&gt;=`, `&lt;`, `==`, `!`
+- functions such as `abs`, `round`, `ceiling`, `floor`, `trunc`, `sqrt`, `log`, `log10`, `exp`, `cos`, `sin`, `max`,  `min`,  `range`,  `prod`,  `sum`,  `any`,  `all`.   
+--
+
+
+```r
+elev + 1
+elev^2
+elev / 4
+```
+--
+
+Cell-by-cell operations are also called local operations.
+The calculation of the NDVI is one of the most popular examples.
+
+???
+The calculation of the normalized difference vegetation index (NDVI) is one of the most famous local, i.e. pixel-by-pixel, raster operations.
+It ranges between - 1 and 1 with positive values indicating the presence of living plants (mostly &gt; 0.2).
+To calculate the NDVI, one uses the red and near-infrared bands of remotely sensed imagery (e.g. Landsat or Sentinel imagery) exploiting the fact that vegetation absorbs light heavily in the visible light spectrum, and especially in the red channel, while reflecting it in the near-infrared spectrum.
+---
+
+# Map algebra - focal operations
+While local functions operate on one cell, though possibly from multiple layers, **focal** operations take into account a central cell and its neighbors.
+The neighborhood (also named kernel, filter or moving window) under consideration is typically of size 3-by-3 cells (that is the central cell and its eight surrounding neighbors) but can take on any other (not necessarily rectangular) shape as defined by the user.
+???
+A focal operation applies an aggregation function to all cells within the specified neighborhood, uses the corresponding output as the new value for the the central cell, and moves on to the next central cell.
+Other names for this operation are spatial filtering and convolution.
+
+---
+
+# Map algebra - focal operations
+
+```r
+r_focal = focal(elev, w = matrix(1, nrow = 3, ncol = 3), fun = min)
+```
+
+&lt;center&gt;
+&lt;figure&gt;
+&lt;img  src="img/04_focal_example.png" width = "100%", height = "100%"/&gt;
+&lt;/figure&gt;
+---
+
+# Map algebra - zonal operations
+Zonal operations are similar to focal operations.
+The difference is that zonal filters can take on any shape instead of just a predefined window.
+Let's compute the mean elevation for different soil grain size classes.
+--
+
+.pull-left[
+![](03_raster_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+library(spData)
+zonal(elev, grain, fun = "mean") 
+```
+
+```
+##      zone  mean
+## [1,]    1 17.75
+## [2,]    2 18.50
+## [3,]    3 19.25
+```
+]
+
+
+
+---
+
+# Map algebra - global operations
+Global operations are a special case of zonal operations with the entire raster dataset representing a single zone. The most common global operations are descriptive statistics for the entire raster dataset such as the minimum or maximum.
+
+
+```r
+cellStats(elev, min)
+```
+
+```
+## [1] 1
+```
+
+```r
+cellStats(elev, max)
+```
+
+```
+## [1] 36
+```
+
+```r
+cellStats(elev, sd)
+```
+
+```
+## [1] 10.53565
+```
+
+--
+
+Further reading: [https://geocompr.robinlovelace.net/spatial-operations.html#spatial-ras](https://geocompr.robinlovelace.net/spatial-operations.html#spatial-ras)
+---
+
+# Your turn
+
+- Attach `data("dem", package = "RQGIS")`. Retrieve the altitudinal values of the 10th row.
+- Sample randomly 10 coordinates of `dem` with the help of the `sp::coordinates()`-command, and extract the corresponding altitudinal values.
+- Attach `data("random_points", package = "RQGIS")` and find the corresponding altitudinal values. Plot altitude against `spri`. 
+- Compute the hillshade of `dem` (hint: `?hillShade`). Overlay the hillshade with `dem` while using an appropriate level of transparency.
+---
+
+class: inverse, center, middle
+
+# Geometric operations on raster data
+---
+
+# Intersecting geometry
+If you want the intersecting geometry of two rasters, use the spatial subsetting syntax and set the `drop`-parameter to `FALSE`.
+--
+
+.pull-left[
+
+```r
+elev[clip, drop = FALSE]
+```
+]
+
+.pull-right[
+![](03_raster_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Intersecting geometry
+which in fact is the same as using `intersect()`:
+
+
+```r
+raster::intersect(elev, clip)
+```
+
+```
+## class      : RasterLayer 
+## dimensions : 2, 2, 4  (nrow, ncol, ncell)
+## resolution : 0.5, 0.5  (x, y)
+## extent     : 0.5, 1.5, -0.5, 0.5  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : layer 
+## values     : 17, 24  (min, max)
+```
+---
+# Aggregation and disaggregation
+Change the resolution of a raster:
+
+.pull-left[
+
+```r
+elev_agg = 
+  aggregate(elev, fact = 2,
+            fun = mean)
+```
+Use `dissaggregate()` for increasing the spatial resolution of a raster
+]
+
+--
+
+.pull-right[
+![](03_raster_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+---
+
+# Changing the CRS of a raster
+- To change the CRS of a raster use `projectRaster()`.
+- EPSG codes are not accepted, use a proj4string instead.
+--
+
+
+```r
+library(spDataLarge)
+proj4string(nz_elev)
+```
+
+```
+## [1] "+proj=tmerc +lat_0=0 +lon_0=173 +k=0.9996 +x_0=1600000 +y_0=10000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+```
+--
+
+
+```r
+projectRaster(nz_elev, crs = st_crs(4326)$proj4string)
+```
+
+```
+## class      : RasterLayer 
+## dimensions : 1483, 1248, 1850784  (nrow, ncol, ncell)
+## resolution : 0.0119, 0.00901  (x, y)
+## extent     : 164.9573, 179.8085, -47.53651, -34.17468  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      : elevation 
+## values     : 0, 3195.908  (min, max)
+```
+
+--
+Further reading on geometric raster operations: [https://geocompr.robinlovelace.net/geometric-operations.html#geo-ras](https://geocompr.robinlovelace.net/geometric-operations.html#geo-ras)
+---
+
+# Your turn
+
+- Decrease the resolution of `dem` (`data("dem", package = "RQGIS")`) by a factor of 10. Plot the result.
+- Reproject `dem` into WGS84. Plot the output next to the original object.
+- Randomly select three points of `random_points` (`data("random_points", package = "RQGIS")`). Convert these into a polygon (hint: `st_cast`). Extract all altitudinal values falling inside the created polygon Use the polygon to clip `dem`. What is the difference between `intersect` and `mask`. Hint: `sf` objects might not work as well with **raster** commands as `SpatialObjects`. Assuming your polygon of class `sf` is named `poly`, convert it into a `SpatialObject` with `as(sf_object, "Spatial`)`.
+---
+
+# Recap
+
+We learned about:
+
+- raster attribute operations
+- spatial raster operations
+- geometric raster operations
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"ratio": "4:3",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
