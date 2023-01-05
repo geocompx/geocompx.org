@@ -9,7 +9,7 @@
   {
     "objectID": "post.html",
     "href": "post.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nAutomatic website for the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n3 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n1 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n1 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n9 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n11 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n8 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n2 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n6 min\n\n\n\n\n\n\nNo matching items"
   },
@@ -366,42 +366,42 @@
   {
     "objectID": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
     "href": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
     "objectID": "static/presentations/libs/leaflet-providers/rstudio_install.html",
     "href": "static/presentations/libs/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
     "objectID": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
     "href": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
     "objectID": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
     "href": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
     "objectID": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
     "href": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
     "objectID": "static/workshops/libs/leaflet-providers/rstudio_install.html",
     "href": "static/workshops/libs/leaflet-providers/rstudio_install.html",
-    "title": "geocompx",
+    "title": "",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
