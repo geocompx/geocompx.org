@@ -9,7 +9,7 @@
   {
     "objectID": "post.html",
     "href": "post.html",
-    "title": "",
+    "title": "Posts",
     "section": "",
     "text": "Posts related to R are aggregated at R-bloggers and RWeekly\n\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nAutomatic website for the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n3 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n1 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n1 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n9 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n11 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n8 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n2 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n6 min\n\n\n\n\n\n\nNo matching items"
   },
@@ -418,5 +418,12 @@
     "title": "About us",
     "section": "",
     "text": "Robin Lovelace\nJannes Muenchow\nAnita Grasser\nOlivier Leroy\n\n\nJakub Nowosad\nMichael Dorman\nMireia Camacho\n…"
+  },
+  {
+    "objectID": "static/img/book_cover_py_tmp.html",
+    "href": "static/img/book_cover_py_tmp.html",
+    "title": "",
+    "section": "",
+    "text": "https://www.oldbookillustrations.com/subjects/animals/page/9/ https://alexaanswers.amazon.com/question/wZ1u5YAK7xPaZCJxawr51"
   }
 ]
