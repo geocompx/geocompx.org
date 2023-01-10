@@ -1,5 +1,5 @@
 ---
-title-prefix: "geocompx"
+pagetitle: "geocompx"
 page-layout: full
 toc: false
 ---
