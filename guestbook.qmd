@@ -33,8 +33,11 @@ page-layout: full
 
 ### Book reviews
 
-> I first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought "this is great! but need to move on!". A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.  
-See the rest of this review and maybe add your own review [here](https://www.amazon.com/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1138304514/). 
+> I first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought "this is great! but need to move on!". A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.
+
+>  Beautiful book: A must-read if you're into data analytics/science with R and do geospatial analysis.
+
+See the rest of these reviews and maybe add your own review [here](https://www.amazon.com/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1138304514/). 
 
 ### Social media
 
