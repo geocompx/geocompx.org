@@ -6,6 +6,11 @@ page-layout: full
 
 ##### ([suggest more here](https://github.com/geocompx/geocompx.org/edit/main/guestbook.qmd))
 
+[Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes, Jakub Nowosad
+
+[Spatial Data Science with applications in R](https://r-spatial.org/book/) from Edzer Pebesma, Roger Bivand with [solutions](https://edzer.github.io/sdsr_exercises/)
+
+
 ## Geocomputation with R
 
 ### Modules using the book
