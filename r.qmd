@@ -132,3 +132,9 @@ GIS Learning Community. Cincinnati, Ohio, 2017-11-01
 - [Point Pattern analysis, spatial interpolation and heatmaps](https://geocompr.github.io/geocompkg/articles/point-pattern.html)
 - [Desire Lines Extended](https://geocompr.github.io/geocompkg/articles/linevia.html)
 - [Spatial data and the tidyverse: pitfalls to avoid](https://geocompr.github.io/geocompkg/articles/tidyverse-pitfalls.html)
+
+## Other books
+
+[Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes, Jakub Nowosad
+
+[Spatial Data Science with applications in R](https://r-spatial.org/book/) from Edzer Pebesma, Roger Bivand with [solutions](https://edzer.github.io/sdsr_exercises/)
