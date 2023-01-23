@@ -425,5 +425,12 @@
     "title": "",
     "section": "",
     "text": "https://www.oldbookillustrations.com/subjects/animals/page/9/ https://alexaanswers.amazon.com/question/wZ1u5YAK7xPaZCJxawr51"
+  },
+  {
+    "objectID": "r.html#other-recommened-books",
+    "href": "r.html#other-recommened-books",
+    "title": "R resources",
+    "section": "Other recommened books",
+    "text": "Other recommened books\n\nElegant and informative maps with tmap from Martijn Tennekes and Jakub Nowosad\nSpatial Data Science with applications in R from Edzer Pebesma and Roger Bivand; with solutions"
   }
 ]
