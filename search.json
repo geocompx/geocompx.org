@@ -364,11 +364,11 @@
     "text": "Vignettes\n\nThese vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R\n\nSpatial Joins Extended\nMaking inset maps of the USA\nAlgorithms Extended\nPoint Pattern analysis, spatial interpolation and heatmaps\nDesire Lines Extended\nSpatial data and the tidyverse: pitfalls to avoid"
   },
   {
-    "objectID": "r.html#other-books",
-    "href": "r.html#other-books",
+    "objectID": "r.html#other-recommened-books",
+    "href": "r.html#other-recommened-books",
     "title": "R resources",
-    "section": "Other books",
-    "text": "Other books\nElegant and informative maps with tmap from Martijn Tennekes, Jakub Nowosad\nSpatial Data Science with applications in R from Edzer Pebesma, Roger Bivand with solutions"
+    "section": "Other recommened books",
+    "text": "Other recommened books\n\nElegant and informative maps with tmap from Martijn Tennekes and Jakub Nowosad\nSpatial Data Science with applications in R from Edzer Pebesma and Roger Bivand; with solutions"
   },
   {
     "objectID": "static/workshops/libs/leaflet-providers/rstudio_install.html",
