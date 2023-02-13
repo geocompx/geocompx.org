@@ -1,5 +1,6 @@
 project:
   type: website
+  resources: "static/img/tmview-1.html"
 
 website:
   favicon: "static/favicon.ico"
