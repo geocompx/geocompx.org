@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2023-05-28">
+
+<title>Upcoming changes to popular R packages for spatial data: what you need to do</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html" rel="" target="">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html" rel="" target="">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html" rel="" target="">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html" rel="" target="">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About us</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompx" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx" rel="" target=""><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp" rel="" target=""><i class="bi bi-discord" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../post.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-issue" id="toc-the-issue" class="nav-link active" data-scroll-target="#the-issue">The issue</a></li>
+  <li><a href="#the-context" id="toc-the-context" class="nav-link" data-scroll-target="#the-context">The context</a></li>
+  <li><a href="#how-to-test-if-your-code-is-affected" id="toc-how-to-test-if-your-code-is-affected" class="nav-link" data-scroll-target="#how-to-test-if-your-code-is-affected">How to test if your code is affected?</a></li>
+  <li><a href="#solutions-for-users" id="toc-solutions-for-users" class="nav-link" data-scroll-target="#solutions-for-users">Solutions for users</a></li>
+  <li><a href="#solutions-for-package-developers" id="toc-solutions-for-package-developers" class="nav-link" data-scroll-target="#solutions-for-package-developers">Solutions for package developers</a></li>
+  <li><a href="#more-resources" id="toc-more-resources" class="nav-link" data-scroll-target="#more-resources">More resources</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Upcoming changes to popular R packages for spatial data: what you need to do</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">posts</div>
+    <div class="quarto-category">rstats</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Nowosad </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 28, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<!--eco examples-->
+<section id="the-issue" class="level2">
+<h2 class="anchored" data-anchor-id="the-issue">The issue</h2>
+<p>Three popular R packages for spatial data handling won’t be available on CRAN after October 2023.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> These packages are:</p>
+<ul>
+<li><strong>rgdal</strong>: a package that provides bindings to the <a href="https://gdal.org/">GDAL</a> and <a href="https://proj.org/">PROJ</a> libraries. In other words, it gives a capability of reading and writing spatial data formats, creating coordinate reference systems and projecting geometries.</li>
+<li><strong>rgeos</strong>: a package that provides bindings to the <a href="https://libgeos.org/">GEOS</a> library. It allows to perform various spatial operations, such as buffering, clipping, or unioning.</li>
+<li><strong>maptools</strong>: an older set of various tools for manipulating spatial data pre-dating <strong>rgdal</strong> and <strong>rgeos</strong>.</li>
+</ul>
+<p>As you can see, two of these packages, <strong>rgdal</strong> and <strong>rgeos</strong> link and allow access to <strong>external</strong> (non-R) spatial libraries for reading and writing spatial data formats and performing spatial operations, such as reprojections and spatial joins.</p>
+<p>If you are a user or developer of any of these packages, you need to be aware of the upcoming changes. From the user perspective, you won’t be able to install these packages from CRAN soon, and thus your workflows will be broken. On the other hand, if you are a developer and your package uses some of the above packages, it will stop working and you won’t be able to retain (or submit) it to CRAN. Very soon you will need to find some alternatives to these packages. Gladly, most of <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> functionality is already available in modern R packages, such as <strong>sf</strong> and <strong>terra</strong>, as you will see below.</p>
+</section>
+<section id="the-context" class="level2">
+<h2 class="anchored" data-anchor-id="the-context">The context</h2>
+<p><strong>rgdal</strong> and <strong>maptools</strong> were first published on CRAN in 2003, and <strong>rgeos</strong> in 2011. These packages were developed when the spatial data analysis ecosystem in R was <a href="https://r.geocompx.org/intro.html#the-history-of-r-spatial">still very young</a>, and they were subsequently used for many (ecological) data analysis workflows.</p>
+<p>Writing a popular, complex package is a lot of work, and maintaining it is even much more work. This can be seen, for example, by looking at <a href="https://cran.r-project.org/src/contrib/Archive/rgdal/">the release versions of the <strong>rgdal</strong> package</a>. There were 151 releases of this package between 2003 and 2023, which means that there was a new release every 7 weeks on average. Now, let’s consider that each release requires many hours of (usually voluntary) work.</p>
+<p><strong>rgdal</strong>, <strong>maptools</strong>, and <strong>rgeos</strong> have a few things in common. While they are independent, they are also closely related to each other – all of them depend on the <strong>sp</strong> package for spatial data representation in R.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Another thing they have in common is that currently we have more modern alternatives to them, such as <strong>sf</strong> (first released in 2016) and <strong>terra</strong> (2020). Finally, the main author of <strong>rgdal</strong>, <strong>maptools</strong>, and <strong>rgeos</strong> is the same person – Roger Bivand, who retired from his position at the Norwegian School of Economics in 2021.</p>
+<p>Thus, given the workloads of maintaining these packages, the existence of modern alternatives, and the retirement of the main author, it was decided to retire these packages.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</section>
+<section id="how-to-test-if-your-code-is-affected" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-test-if-your-code-is-affected">How to test if your code is affected?</h2>
+<p>The most basic way to test if your code is affected by the upcoming changes is to check if you use <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> in your scripts or as dependencies in your packages. If so – your workflows may be broken soon!</p>
+<p>There is also a possibility that you use the <strong>sp</strong> package but not the affected packages. In this case, you may still be touched by the changes, because the <strong>sp</strong> package had interacted with <strong>rgdal</strong> and <strong>rgeos</strong> in the background. For example, if you run the <code>spTransform()</code> function from the <strong>sp</strong> package, it used the <strong>rgdal</strong> package in the background. Thus, you may add the following code to your script to check if it will work in the future:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">"sp_evolution_status"</span> <span class="ot">=</span> <span class="dv">2</span>) <span class="co"># use sf instead of rgdal and rgeos in sp</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you get an error, it means that your code is affected by the changes.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>There is also another possible situation – you are using some packages that depend on the affected packages. This one is the most difficult to check, because you need to inspect the dependencies of all the packages you use.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+</section>
+<section id="solutions-for-users" class="level2">
+<h2 class="anchored" data-anchor-id="solutions-for-users">Solutions for users</h2>
+<p>My first advice would be: do yourself a favor, and just stop using the retired packages today. Write your new scripts using modern alternatives, such as <strong>sf</strong> or <strong>terra</strong>. In most cases they are easy to use, and you will be able to find a lot of examples and other resources online.</p>
+<p>If you have some old scripts that use the retired packages, you have a few options and your decision should depend on your circumstances. If you do not plan to use them in the future, you can just leave them as they are. On the other hand, if you want to perform similar spatial operations, you should consider rewriting the scripts using modern alternatives – see the tables below for the equivalents of the most popular functions from <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong>.</p>
+<p>You also may have old <strong>sp</strong> objects that you want to use in the future. Then, you can convert them to the modern equivalents with functions such as <code>sf::st_as_sf()</code> or <code>terra::vect()</code>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Finally, you may decide to still use the retired packages. You can do that by either not updating your R installation and packages, or by creating a docker image with the old R and packages versions. However, this is generally not a good idea, because <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> will be archived on CRAN soon, and thus you (and other people) won’t be able to install them directly.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+</section>
+<section id="solutions-for-package-developers" class="level2">
+<h2 class="anchored" data-anchor-id="solutions-for-package-developers">Solutions for package developers</h2>
+<p>Look at your package dependencies and check if you use any of the affected packages. If that is the case, you need to find alternatives to them. In general, there are two main alternative options<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>:</p>
+<ul>
+<li><strong>sf</strong> package, which is a modern alternative to <strong>rgdal</strong> and <strong>rgeos</strong>, and also provides a spatial vector data representation in R.</li>
+<li><strong>terra</strong> package, which gives support to working with spatial vector and raster data in R.</li>
+</ul>
+<p>You just need to be aware that functions in these packages are not always identical to the ones in the affected packages. They may have different arguments, different defaults, expect different inputs, or return different outputs. For example, <strong>rgdal</strong>’s <code>readOGR()</code> function returns a <code>Spatial*DataFrame</code> object, while <strong>sf</strong>’s <code>read_sf()</code> returns an <code>sf</code> object and <strong>terra</strong>’s <code>vect()</code> returns a <code>SpatVector</code> object.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">rgdal</th>
+<th style="text-align: left;">sf</th>
+<th style="text-align: left;">terra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">readOGR()</td>
+<td style="text-align: left;">read_sf()</td>
+<td style="text-align: left;">vect()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">writeOGR()</td>
+<td style="text-align: left;">write_sf()</td>
+<td style="text-align: left;">writeVector()</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The <strong>rgeos</strong> functions also have their equivalents in <strong>sf</strong> and <strong>terra</strong>.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></p>
+<p>Interestingly, the most often used <strong>maptools</strong> functions have been already deprecated for a long time and alternative tools for the same purposes existed, e.g., <code>unionSpatialPolygons()</code> could be replaced with <code>rgeos::gUnaryUnion()</code>, and <code>maptools::spRbind()</code> with <code>sp::rbind()</code>. The table below shows their modern substitutes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">rgeos</th>
+<th style="text-align: left;">sf</th>
+<th style="text-align: left;">terra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">gArea()</td>
+<td style="text-align: left;">st_area()</td>
+<td style="text-align: left;">expanse()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gBuffer()</td>
+<td style="text-align: left;">st_buffer()</td>
+<td style="text-align: left;">buffer()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gCentroid()</td>
+<td style="text-align: left;">st_centroid()</td>
+<td style="text-align: left;">centroids()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gDistance()</td>
+<td style="text-align: left;">st_distance()</td>
+<td style="text-align: left;">distance()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">gIntersection()</td>
+<td style="text-align: left;">st_intersection()</td>
+<td style="text-align: left;">crop()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">gIntersects()</td>
+<td style="text-align: left;">st_intersects()</td>
+<td style="text-align: left;">relate()</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">maptools</th>
+<th style="text-align: left;">sf</th>
+<th style="text-align: left;">terra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">unionSpatialPolygons()</td>
+<td style="text-align: left;">st_union()</td>
+<td style="text-align: left;">aggregate()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">spRbind()</td>
+<td style="text-align: left;">rbind()</td>
+<td style="text-align: left;">rbind()</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The <strong>sp</strong> package is not going to be removed from CRAN soon, but it is good to stop using it because it is no longer being actively developed. Here you can find some replacements for its basic functions:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">sp</th>
+<th style="text-align: left;">sf</th>
+<th style="text-align: left;">terra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bbox()</td>
+<td style="text-align: left;">st_bbox()</td>
+<td style="text-align: left;">ext()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">coordinates()</td>
+<td style="text-align: left;">st_coordinates()</td>
+<td style="text-align: left;">crds()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">identicalCRS()</td>
+<td style="text-align: left;">st_crs(x) == st_crs(y)</td>
+<td style="text-align: left;">crs(x) == crs(y)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">over()</td>
+<td style="text-align: left;">st_intersects()</td>
+<td style="text-align: left;">relate()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">point.in.polygon()</td>
+<td style="text-align: left;">st_intersects()</td>
+<td style="text-align: left;">relate()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">proj4string()</td>
+<td style="text-align: left;">st_crs()</td>
+<td style="text-align: left;">crs()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">spsample()</td>
+<td style="text-align: left;">st_sample()</td>
+<td style="text-align: left;">spatSample()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">spTransform()</td>
+<td style="text-align: left;">st_transform()</td>
+<td style="text-align: left;">project()</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>You also may want to visit the <a href="https://github.com/r-spatial/evolution/blob/main/pkgapi_230305_refs.csv">comparison table</a> and the <a href="https://github.com/r-spatial/sf/wiki/Migrating">migration wiki</a> to get more complete lists of alternative functions to the ones from <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong>.</p>
+<p>Additionally, you may still want to accept <strong>sp</strong> objects as inputs and return them as outputs of your functions. In such case, you can use the <code>sf::st_as_sf()</code> or <code>terra::vect()</code> functions to convert <strong>sp</strong> objects to the modern equivalents, perform required spatial operations with <strong>sf</strong>/<strong>terra</strong>, and then convert the results back to <strong>sp</strong> objects with <code>as(x, "Spatial")</code>. Packages depending on <strong>sp</strong> would also need to add <strong>sf</strong> as their weak dependency.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+</section>
+<section id="more-resources" class="level2">
+<h2 class="anchored" data-anchor-id="more-resources">More resources</h2>
+<p>You may use the <a href="https://github.com/r-spatial/evolution/issues"><strong>evolution</strong></a> GitHub repository to ask questions about the retirement process.</p>
+<p>To learn more about the <strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> retirement, you can check the following resources:</p>
+<ul>
+<li><a href="https://stat.ethz.ch/pipermail/r-sig-geo/2021-September/028760.html">The announcement of their retirement</a></li>
+<li>A blog post series about the retirement process: <a href="https://r-spatial.org/r/2022/04/12/evolution.html">part 1</a>, <a href="https://r-spatial.org/r/2022/12/14/evolution2.html">part 2</a>, <a href="https://r-spatial.org/r/2023/04/10/evolution3.html">part 3</a>, <a href="https://r-spatial.org//r/2023/05/15/evolution4.html">part 4</a></li>
+<li>A video about this retirement process: <a href="https://youtu.be/TlpjIqTPMCA" class="uri">https://youtu.be/TlpjIqTPMCA</a></li>
+<li>Scripts converting code from the Applied Spatial Data Analysis with R 2nd edition book to run without retiring packages: <a href="https://github.com/rsbivand/sf_asdar2ed" class="uri">https://github.com/rsbivand/sf_asdar2ed</a></li>
+</ul>
+<p>On the other hand, if you want to learn more about their alternatives and how to use them, there are many resources available online:</p>
+<ul>
+<li><strong>sf</strong> package’s <a href="https://r-spatial.github.io/sf/">official website</a></li>
+<li><strong>terra</strong> package’s <a href="https://rspatial.github.io/terra/reference/terra-package.html">documentation</a></li>
+<li>The <a href="https://r.geocompx.org/">Geocomputation with R</a> book</li>
+<li>The <a href="https://r-spatial.org/book/">Spatial Data Science with applications in R</a> book and its <a href="https://r-spatial.org/book/sp-raster.html">section</a> on the retirement process</li>
+</ul>
+<p>By exploring these resources, you will be able to find alternative workflows that suit your needs and continue your work with spatial data in R. Good luck!</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>I would like to thank <a href="https://fosstodon.org/@rsbivand">Roger Bivand</a> and <a href="https://www.maxhesselbarth.com/">Maximilian H.K. Hesselbarth</a> for their comments and suggestions that helped to improve this document.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Their retirement was <a href="https://stat.ethz.ch/pipermail/r-sig-geo/2021-September/028760.html">announced almost two years ago</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This they share with the <strong>raster</strong> package, which was builtd on <strong>sp</strong> representations and used <strong>rgdal</strong> and <strong>rgeos</strong> under the hood. Since September 2022, <strong>raster</strong> uses <strong>terra</strong>, not <strong>rgdal</strong> or <strong>rgeos</strong>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>More details about the context of these changes may be found in the paper by <a href="https://doi.org/10.1007/s10109-020-00336-0">Bivand (2021)</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>But if you make the <strong>sf</strong> package available, <code>spTransform()</code> will use it instead of <strong>rgdal</strong>. Similarly, many workflows using <strong>raster</strong> can make <strong>terra</strong> available, and remove any mention of <strong>rgdal</strong> or <strong>rgeos</strong>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>However, maintainers of these packages have been actively contacted with the information of both the need to act, and suggesting ways to migrate from retiring packages to <strong>sf</strong> or <strong>terra</strong>. Many packages depended on <strong>rgdal</strong> and <strong>rgeos</strong> because <strong>raster</strong> used to depend on them; they can safely be replaced by the use by <strong>raster</strong> of <strong>terra</strong> “under the hood”.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Read more about this in the <a href="https://geocompx.org/post/2021/spatial-classes-conversion/">Conversions between different spatial classes in R</a> and <a href="https://r-spatial.org/r/2023/04/10/evolution3.html#conserving-sp-workflows">Progress on R-spatial evolution, Apr 2023</a> blog posts.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Their installation will require downloading source packages from the CRAN package archive, and the providing the external software libraries needed to install <strong>rgdal</strong> and <strong>rgeos</strong> from source.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>There are also other options, such as using the <strong>vapour</strong> or <strong>geos</strong> package, but they are not discussed here.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Of course, you can convert these objects back to <strong>sp</strong> classes and carry on as before, if you choose. However, this choice is most suited to legacy settings rather than actively maintained packages.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>You just need to be aware that they may return different values compared to <strong>rgeos</strong>. For example, <strong>sf</strong> may use <a href="https://r-spatial.org/r/2020/06/17/s2.html">a different algorithm to calculate the area of a polygon for data with a geographical coordinate reference system (CRS).</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>See the coercion section of the <a href="https://r-spatial.org/r/2023/04/10/evolution3.html">Progress on R-spatial evolution, Apr 2023</a> blog post.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2023,
+  author = {Nowosad, Jakub},
+  title = {Upcoming Changes to Popular {R} Packages for Spatial Data:
+    What You Need to Do},
+  date = {2023-05-28},
+  url = {https://geocompx.org//post/2023/rgdal-retirement},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. 2023. <span>“Upcoming Changes to Popular R Packages for
+Spatial Data: What You Need to Do.”</span> May 28, 2023. <a href="https://geocompx.org//post/2023/rgdal-retirement">https://geocompx.org//post/2023/rgdal-retirement</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">geocompx, 2016 - 2023</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompx/geocompx.org">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
