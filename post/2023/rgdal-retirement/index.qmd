@@ -1,15 +1,14 @@
 ---
 title: "Upcoming changes to popular R packages for spatial data: what you need to do" 
 author: Jakub Nowosad
-date: "2023-05-28"
+date: "2023-06-04"
 slug: rgdal-retirement
 categories: 
   - posts
   - rstats
 tags: [rspatial, rgdal, rstats]
-draft: true
+draft: false
 ---
-<!--eco examples-->
 
 ## The issue
 
