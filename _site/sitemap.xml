@@ -10,11 +10,11 @@
   </url>
   <url>
     <loc>https://geocompx.org/index.html</loc>
-    <lastmod>2023-02-13T14:16:56.343Z</lastmod>
+    <lastmod>2023-06-04T10:12:12.341Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post.html</loc>
-    <lastmod>2023-02-13T14:16:57.279Z</lastmod>
+    <lastmod>2023-06-04T10:12:10.043Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/crs-projections-transformations/index.html</loc>
@@ -95,5 +95,9 @@
   <url>
     <loc>https://geocompx.org/r.html</loc>
     <lastmod>2023-02-17T14:12:40.909Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2023/rgdal-retirement/index.html</loc>
+    <lastmod>2023-06-04T10:12:08.015Z</lastmod>
   </url>
 </urlset>
