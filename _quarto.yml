@@ -6,13 +6,14 @@ website:
   favicon: "static/favicon.ico"
   # twitter-card: true
   # open-graph: true
-  # title: "geocompx"
+  title: "geocompx"
   site-url: https://geocompx.org/
   description: "geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software"
   navbar:
     # logo: "static/geocompx-text.png"
     logo: "static/geocompx-logo-h.png"
     logo-alt: "geocompx"
+    title: false
     left:
       - href: post.qmd
         text: Posts

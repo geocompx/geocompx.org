@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.280">
+<meta name="generator" content="quarto-1.3.340">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jakub Nowosad">
 <meta name="dcterms.date" content="2021-06-17">
 
-<title>Conversions between different spatial classes in R</title>
+<title>geocompx - Conversions between different spatial classes in R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,9 +19,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,48 +49,19 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -103,8 +75,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -162,55 +133,57 @@ div.csl-indent {
     <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../post.html">
+    <a class="nav-link" href="../../../post.html" rel="" target="">
  <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../r.html">
+    <a class="nav-link" href="../../../r.html" rel="" target="">
  <span class="menu-text">R resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../py.html">
+    <a class="nav-link" href="../../../py.html" rel="" target="">
  <span class="menu-text">Python resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../guestbook.html">
+    <a class="nav-link" href="../../../guestbook.html" rel="" target="">
  <span class="menu-text">Guestbook</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../about.html">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
  <span class="menu-text">About us</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/hashtag/geocompx"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompx" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://fosstodon.org/tags/geocompx"><i class="bi bi-mastodon" role="img">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx" rel="" target=""><i class="bi bi-mastodon" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://discord.gg/PMztXYgNxp"><i class="bi bi-discord" role="img">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp" rel="" target=""><i class="bi bi-discord" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../../post.xml"><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../post.xml" rel="" target=""><i class="bi bi-rss" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -266,12 +239,6 @@ div.csl-indent {
 
 </header>
 
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
 <p>The R programming language has, over the past two decades, evolved substantial spatial data analysis capabilities, and is now one of the most powerful environments for undertaking geographic research using a reproducible command line interface. Currently, dedicated R packages allow to read spatial data and apply a plethora of different kinds of spatial methods in a reproducible fashion.</p>
 <p>There are two main<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> spatial data models - spatial vector data and spatial raster data. Natively R does not support spatial data and does not have a definition of spatial classes. Therefore, there had been <a href="https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial">a need to create R tools able to represent spatial vector and raster data</a>. Spatial classes are slightly different from regular R objects, such as data frames or matrices, as they need to not only store values, but also information about spatial locations and their <a href="https://geocompr.robinlovelace.net/spatial-class.html#crs-intro">coordinate reference systems</a>.</p>
 <p>Nowadays, the most prominent packages to represent spatial vector data are <strong>sf</strong> <span class="citation" data-cites="R-sf">(<a href="#ref-R-sf" role="doc-biblioref">Pebesma 2021a</a>)</span> and its predecessor <strong>sp</strong> <span class="citation" data-cites="R-sp">(<a href="#ref-R-sp" role="doc-biblioref">Pebesma and Bivand 2021</a>)</span>, however, the <strong>terra</strong> <span class="citation" data-cites="R-terra">(<a href="#ref-R-terra" role="doc-biblioref">Hijmans 2021b</a>)</span> package also has its own spatial class for vector data. Spatial raster data can be stored as objects from <strong>terra</strong> <span class="citation" data-cites="R-terra">(<a href="#ref-R-terra" role="doc-biblioref">Hijmans 2021b</a>)</span> and its predecessor <strong>raster</strong> <span class="citation" data-cites="R-raster">(<a href="#ref-R-raster" role="doc-biblioref">Hijmans 2021a</a>)</span>, or alternatively the <strong>stars</strong> package <span class="citation" data-cites="R-stars">(<a href="#ref-R-stars" role="doc-biblioref">Pebesma 2021b</a>)</span>.</p>
@@ -310,9 +277,6 @@ y    1 457 37.5129 -0.000833333 WGS 84 FALSE [y]</code></pre>
 </div>
 </div>
 <p>Secondly, other packages with methods we want to use, could only accept one specific spatial class, but not the other. For example, the current version of the <strong>sabre</strong> package <span class="citation" data-cites="R-sabre">(<a href="#ref-R-sabre" role="doc-biblioref">Nowosad and Stepinski 2019</a>)</span> (0.3.2) accepts objects from the <strong>raster</strong> package, but not ones from <strong>terra</strong> or <strong>stars</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The <code>partitions1</code> and <code>partitions2</code> objects are of the <code>RasterLayer</code> class from <strong>raster</strong>, so the <code>vmeasure_calc()</code> function works correctly.</p>
-<div class="cell">
-
-</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sabre)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
@@ -372,37 +336,37 @@ y    1 457 37.5129 -0.000833333 WGS 84 FALSE [y]</code></pre>
 <p>In summary, <code>st_as_sf()</code> converts other classes into <code>sf</code>, <code>vect()</code> transform other classes into <strong>terra</strong>’s <code>SpatVector</code>, and with <code>as(x, "Spatial")</code> it is possible to get <strong>sp</strong>’s vectors.</p>
 <div class="cell">
 <div class="cell-output-display">
-
-<table class="table" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> FROM/TO </th>
-   <th style="text-align:left;"> sf </th>
-   <th style="text-align:left;"> sp </th>
-   <th style="text-align:left;"> terra </th>
-  </tr>
- </thead>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">sf</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">sp</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">terra</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> sf </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;">  </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> as(x, "Spatial") </td>
-   <td style="text-align:left;font-style: italic;"> vect() </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> sp </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> st_as_sf() </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;">  </td>
-   <td style="text-align:left;font-style: italic;"> vect() </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> terra </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> st_as_sf() </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> as(x, "Spatial") </td>
-   <td style="text-align:left;font-style: italic;">  </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">sf</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "Spatial")</td>
+<td style="text-align: left; font-style: italic;">vect()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">sp</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">st_as_sf()</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
+<td style="text-align: left; font-style: italic;">vect()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">terra</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">st_as_sf()</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "Spatial")</td>
+<td style="text-align: left; font-style: italic;"></td>
+</tr>
 </tbody>
 </table>
+
 
 </div>
 </div>
@@ -442,37 +406,37 @@ y    1 457 37.5129 -0.000833333 WGS 84 FALSE [y]</code></pre>
 <p>As you can see - in most cases, we can just use one function to move from one class to another.</p>
 <div class="cell">
 <div class="cell-output-display">
-
-<table class="table" style="margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> FROM/TO </th>
-   <th style="text-align:left;"> raster </th>
-   <th style="text-align:left;"> terra </th>
-   <th style="text-align:left;"> stars </th>
-  </tr>
- </thead>
+<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">raster</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">terra</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">stars</th>
+</tr>
+</thead>
 <tbody>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> raster </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;">  </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> rast() </td>
-   <td style="text-align:left;font-style: italic;"> st_as_stars() </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> terra </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> raster() </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;">  </td>
-   <td style="text-align:left;font-style: italic;"> st_as_stars() </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;border-right:1px solid;font-weight: bold;"> stars </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> raster() </td>
-   <td style="text-align:left;border-right:1px solid;font-style: italic;"> as(x, "SpatRaster") </td>
-   <td style="text-align:left;font-style: italic;">  </td>
-  </tr>
+<tr class="odd">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">raster</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">rast()</td>
+<td style="text-align: left; font-style: italic;">st_as_stars()</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">terra</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">raster()</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
+<td style="text-align: left; font-style: italic;">st_as_stars()</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; border-right: 1px solid; font-weight: bold;">stars</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">raster()</td>
+<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "SpatRaster")</td>
+<td style="text-align: left; font-style: italic;"></td>
+</tr>
 </tbody>
 </table>
+
 
 </div>
 </div>
@@ -490,32 +454,32 @@ y    1 457 37.5129 -0.000833333 WGS 84 FALSE [y]</code></pre>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-R-spData" class="csl-entry" role="doc-biblioentry">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-R-spData" class="csl-entry" role="listitem">
 Bivand, Roger, Jakub Nowosad, and Robin Lovelace. 2020. <em>spData: Datasets for Spatial Analysis</em>. <a href="https://nowosad.github.io/spData/">https://nowosad.github.io/spData/</a>.
 </div>
-<div id="ref-R-raster" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-raster" class="csl-entry" role="listitem">
 Hijmans, Robert J. 2021a. <em>Raster: Geographic Data Analysis and Modeling</em>. <a href="https://rspatial.org/raster">https://rspatial.org/raster</a>.
 </div>
-<div id="ref-R-terra" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-terra" class="csl-entry" role="listitem">
 ———. 2021b. <em>Terra: Spatial Data Analysis</em>. <a href="https://rspatial.org/terra">https://rspatial.org/terra</a>.
 </div>
-<div id="ref-R-spDataLarge" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-spDataLarge" class="csl-entry" role="listitem">
 Nowosad, Jakub, and Robin Lovelace. 2021. <em>spDataLarge: Large Datasets for Spatial Analysis</em>. <a href="https://github.com/Nowosad/spData">https://github.com/Nowosad/spData</a>.
 </div>
-<div id="ref-R-sabre" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-sabre" class="csl-entry" role="listitem">
 Nowosad, Jakub, and Tomasz Stepinski. 2019. <em>Sabre: Spatial Association Between Regionalizations</em>. <a href="https://nowosad.github.io/sabre/">https://nowosad.github.io/sabre/</a>.
 </div>
-<div id="ref-R-sf" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-sf" class="csl-entry" role="listitem">
 Pebesma, Edzer. 2021a. <em>Sf: Simple Features for r</em>.
 </div>
-<div id="ref-R-stars" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-stars" class="csl-entry" role="listitem">
 ———. 2021b. <em>Stars: Spatiotemporal Arrays, Raster and Vector Data Cubes</em>.
 </div>
-<div id="ref-R-sp" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-sp" class="csl-entry" role="listitem">
 Pebesma, Edzer, and Roger Bivand. 2021. <em>Sp: Classes and Methods for Spatial Data</em>. <a href="https://CRAN.R-project.org/package=sp">https://CRAN.R-project.org/package=sp</a>.
 </div>
-<div id="ref-R-tmap" class="csl-entry" role="doc-biblioentry">
+<div id="ref-R-tmap" class="csl-entry" role="listitem">
 Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.com/mtennekes/tmap">https://github.com/mtennekes/tmap</a>.
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
@@ -524,15 +488,15 @@ Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.c
 <li id="fn1"><p>There are also other spatial data models, including meshes or point clouds.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>I plan to improve that in a future release.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
-  author = {Jakub Nowosad},
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
+  author = {Nowosad, Jakub},
   title = {Conversions Between Different Spatial Classes in {R}},
   date = {2021-06-17},
   url = {https://geocompx.org//post/2021/spatial-classes-conversion},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2021" class="csl-entry quarto-appendix-citeas" role="doc-biblioentry">
-Jakub Nowosad. 2021. <span>“Conversions Between Different Spatial
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2021" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. 2021. <span>“Conversions Between Different Spatial
 Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/spatial-classes-conversion">https://geocompx.org//post/2021/spatial-classes-conversion</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -562,9 +526,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -629,6 +607,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -672,6 +736,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">geocompx, 2016 - 2023</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
