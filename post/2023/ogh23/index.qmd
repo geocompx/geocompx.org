@@ -1,0 +1,550 @@
+---
+title: "Geographic data analysis in R and Python: comparing code and outputs for vector data"
+format: html
+# # Alternative title:
+# title: "Teaching R and Python for geographic data: shared experiences and lessons learned"
+author: 
+  - name: Robin Lovelace
+    affiliation: University of Leeds, Active Travel England, UK
+    orcid: 0000-0001-5679-6536
+    email: 
+  - name: Anita Graser
+    affiliation: Austrian Institute of Technology, Austria
+    orcid: 0000-0001-5361-2885
+    email: 
+  - name: Michael Dorman
+    affiliation: Ben-Gurion University of the Negev, Israel
+    orcid: 
+    email:
+  - name: Jakub Nowosad
+    affiliation: Adam Mickiewicz University, Poznań, Poland
+    orcid: 0000-0002-1057-3721
+    email: 
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+# install python packages needed for this document:
+pkgs = c("geopandas", "shapely", "pandas", "rasterio", "matplotlib", "folium", "mapclassify")
+reticulate::py_install(pkgs)
+```
+
+# Introduction
+
+In this blog post, we talk about our experience teaching R and Python for geocomputation.
+The focus of the blog post is on geographic vector data, meaning points, lines, polygons (and their 'multi' variants) and the attributes associated with them.
+Geographic data analysis is a broad topic and in a later post we will cover raster data, meaning gridded data such as satellite images.
+
+ <!---
+ broadly defined as [follows](https://r.geocompx.org/intro#what-is-geocomputation):
+
+> Working with geographic data in a computational way, focusing on code, reproducibility and modularity. 
+--->
+The context of this blog post is the [OpenGeoHub Summer School 2023](https://opengeohub.org/summer-school/opengeohub-summer-school-poznan-2023/) which has courses on R, Python and Julia.
+The size and the diversity of the event has grown over the years.
+Noting that many events focus on just one language, and the advantages of diversity of languages and approaches, we wanted to follow-up in a blog post that could be useful to others.
+
+OpenGeoHub 2023 was also a unique chance for the authors of the in-progress open source book, [Geocomputation with Python](https://py.geocompx.org/) to meet in person: the first time we have all been in one place at the same time.
+
+The post is based on the following lecture notes, which we recommend checking out for deeper dives into the R and Python implementations of geocomputation:
+
+- [Tidy geographic data with sf, dplyr, ggplot2, geos and friends](https://ogh23.robinlovelace.net/tidy)
+- [Working with spatial data in Python](https://geobgu.xyz/presentations/p_2023_ogh/)
+
+<!---
+ TODO: Add video links 
+--->
+
+# Comparing R and Python for vector geographic data analysis
+
+## Loading packages
+
+We will start by loading core packages for working with geographic vector and attribute data.
+See detailed description of [R](https://ogh23.robinlovelace.net/tidy#vector-data) and [Python](https://geobgu.xyz/presentations/p_2023_ogh/01-vector.html) implementations in the respective lecture note sections.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+import pandas as pd
+from shapely import Point
+import geopandas as gpd
+```
+
+## R
+
+<!---
+ jn: I would suggest to use specific packages from tidyverse instead of attaching the whole tidyverse 
+
+rl: Why? Tidyverse is popular and it makes life easy.
+Also that's the approach in the teaching materials.
+For the book and for software development that's another matter but for this blog post I think it's fine.
+--->
+
+```{r}
+library(sf)
+library(tidyverse)
+library(tmap)
+```
+
+:::
+
+## Creating geographic data
+
+The following commands create geographic datasets 'from scratch' representing coordinates of a the faculty where the Summer School takes place, and few hotels, in Poznan, Poland.
+Most projects start with pre-generated data, but it's useful to create datasets to understand data structures.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+poi = gpd.GeoDataFrame([
+    {"name": "Faculty",        "geometry": Point(16.9418, 52.4643)},
+    {"name": "Hotel ForZa",    "geometry": Point(16.9474, 52.4436)},
+    {"name": "Hotel Lechicka", "geometry": Point(16.9308, 52.4437)},
+    {"name": "FairPlayce",     "geometry": Point(16.9497, 52.4604)},
+], crs=4326)
+```
+
+## R
+
+```{r}
+poi_df = tribble(
+  ~name, ~lon, ~lat,
+  "Faculty",        16.9418, 52.4643,
+  "Hotel ForZa",    16.9474, 52.4436,
+  "Hotel Lechicka", 16.9308, 52.4437,
+  "FairPlayce",     16.9497, 52.4604
+)
+poi_sf = sf::st_as_sf(poi_df, coords = c("lon", "lat"), crs = "EPSG:4326")
+```
+
+:::
+
+### Downloading data
+
+The following commands download data from the internet.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+import urllib.request
+import zipfile
+import os
+u = "https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"
+f = os.path.basename(u)
+if not os.path.exists("data"):
+    urllib.request.urlretrieve(u, f)
+```
+
+## R
+
+```{r}
+u = "https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"
+f = basename(u)
+if (!dir.exists("data")) {
+  download.file(u, f)
+}
+```
+
+Note that we can read directly from ZIP files with R and Python thanks to the [GDAL Virtual File System](https://gdal.org/user/virtual_file_systems.html).
+
+:::
+
+## Unzipping data
+
+We can unzip the data in R and Python: it contains spatial information about bus stops.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+with zipfile.ZipFile(f, 'r') as zip_ref:
+    zip_ref.extractall()
+```
+
+## R
+
+```{r}
+unzip(f)
+```
+
+:::
+
+## Reading and printing geographic data
+
+As shown below, Python and R implemenations to import a shapefile are similar.
+Note: we recommend using open file formats such as GeoPackage (`.gpkg`), as outlined in [Geocomputation with R](https://r.geocompx.org/read-write) and [Geocomputation with Python](https://py.geocompx.org/08-read-write-plot).
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+pol_all = gpd.read_file("zip://data.zip!data/osm/gis_osm_transport_a_free_1.shp")
+pol_all
+```
+
+## R
+
+```{r}
+pol_all = sf::read_sf("/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp")
+pol_all
+```
+
+:::
+
+Note: in R, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:
+
+```{r}
+#| eval: false
+uz = paste0("/vsizip//vsicurl/", u, "/data/osm/gis_osm_transport_a_free_1.shp")
+pol_all = sf::read_sf(uz)
+```
+
+## Subsetting by attributes
+
+The following commands select a subset of the data based on attribute values (looking for a specific string in the `name` column).
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+pol = pol_all[pol_all['name'].str.contains('Port*.+Poz', na=False)]
+pol
+```
+
+## R
+
+```{r}
+pol = pol_all |>
+  filter(str_detect(name, "Port*.+Poz"))
+pol
+```
+
+:::
+
+## Basic plotting
+
+The following commands plot the data.
+Note that by default, R's `plot()` method for `{sf}` objects creates a plot for each column in the data (up to 9 by default). <!--- Perhaps switch to plot(st_geometry(pol)) in R, to make it more comparable with Python? --->
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+pol.plot();
+```
+
+## R
+
+```{r}
+plot(pol)
+```
+
+:::
+
+The arguments needed to change the colour of the fill and border are different in R and Python, but the results are similar.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+pol.plot(color='none', edgecolor='black');
+```
+
+## R
+
+```{r}
+plot(st_geometry(pol), col = "white", border = "black")
+```
+
+:::
+
+## Creating geographic data frames from a CSV file
+
+The following commands create a geographic data frame from a CSV file.
+Note that two steps---creating the geometry column and combining it with the original table, hereby combined into one complex expression---are needed to convert a `DataFrame` to a `GeoDataFrame` in Python, whereas in R the `sf::st_as_sf()` function can be used to convert a `data.frame` to a spatial data frame directly.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+# Unzip the data.zip file:
+with zipfile.ZipFile(f, 'r') as zip_ref:
+    zip_ref.extractall("data")
+stops = pd.read_csv("data/gtfs/stops.txt")
+stops = gpd.GeoDataFrame(
+    stops.drop(columns=['stop_lon', 'stop_lat', 'stop_code']),
+    geometry = gpd.points_from_xy(stops.stop_lon, stops.stop_lat),
+    crs = 4326)
+stops
+```
+
+## R
+
+```{r}
+stops = read_csv("data/gtfs/stops.txt") |>
+  select(-stop_code) |>
+  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = "EPSG:4326")
+stops
+```
+
+:::
+
+## Plotting attributes and layers
+
+The following commands plot the bus stops loaded in the previous step.
+Note that the **tmap** package is hereby used in R to create these more advanced plots, as it also supports interactive mapping (see below).
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+stops.plot(markersize=1, column='zone_id', legend=True);
+```
+
+## R
+
+```{r}
+tm_shape(stops) +
+  tm_symbols(size = 0.1, col = "zone_id")
+```
+
+:::
+
+We can add basic overlays in both languages as follows.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+base = stops.plot(markersize=0.1)
+poi.plot(ax=base, color='red');
+```
+
+## R
+
+<!---
+ jn: should the next example use tmap instead of base R? 
+--->
+
+```{r}
+plot(stops$geometry, col = "grey", pch = 20, cex = 0.5)
+plot(poi_sf$geometry, col = "red", add = TRUE)
+```
+
+:::
+
+## Interactive plots
+
+The following commands create interactive plots, in Python and R respectively.
+The Python code requires the **folium** and **mapclassify** packages, which are not installed by default when you install **geopandas**.
+Note that with **tmap**, you can use the same code to create static and interactive plots, by changing the `tmap_mode()`. 
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+stops.explore(column='zone_id', legend=True, cmap='Dark2')
+```
+
+## R
+
+```{r}
+tmap_mode("view")
+tm_shape(stops) +
+  tm_symbols(size = 0.1, col = "zone_id")
+```
+
+:::
+
+## Reprojecting data
+
+The following commands reproject the data to a local projected Coordinate Reference System (CRS).
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+poi.crs
+poi_projected = poi.to_crs(2180)
+stops_projected = stops.to_crs(2180)
+```
+
+## R
+
+```{r}
+st_crs(poi_sf)
+poi_projected = st_transform(poi_sf, 2180)
+stops_projected = st_transform(stops, 2180)
+```
+
+:::
+
+## Buffers
+
+The following commands create buffers around the points.
+Note that R allows buffer to be created directly from a spatial data frame with geographic (lon/lot) coordinates thanks to its integration with Google's S2 spherical geometry engine, as outlined in [Geocomputation with R](https://r.geocompx.org/reproj-geo-data#geom-proj).
+For buffer operations to work in Python you must reproject the data first (which we did, see above) (although there are plans for **geopandas** to support a spherical geometry backend at some point, as discussed in issue [#2098](https://github.com/geopandas/geopandas/issues/2098)).
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+<!---
+ TODO: can we improve this? 
+--->
+
+To create a new vector layers named `poi_buffer`, in both languages, we can do the following.
+
+```{python}
+poi_buffer = poi.copy()
+poi_buffer.geometry = poi_projected.buffer(150).to_crs(4326)
+```
+
+## R
+
+```{r}
+poi_buffer = st_buffer(poi_sf, 150)
+```
+
+:::
+
+## Calculating distances and areas
+
+An interesting difference between R and Python is that the former uses the `units` package to store units, making it easy to convert between them, as outlined in the [buffers section of the R lecture notes](https://ogh23.robinlovelace.net/tidy#buffers). 
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+poi_buffer.to_crs(2180).area
+```
+
+## R
+
+```{r}
+st_area(poi_buffer)
+```
+
+:::
+
+## Spatial subsetting
+
+Code to subset the bus stops within the buffered `poi` points is shown below.
+The R code is more concise because there is a special `[` notation for the specific case of subsetting by intersection. In Python you must undertake the explicit steps, which are applicable to any predicate in both languages:
+
+- Take the unary union of the buffered points before subsetting
+- Create a boolean `Series` object with the `.intersects` or other method, and use the boolean Series to subset the data (rather than another geographic object)
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+poi_union = poi_buffer.unary_union
+sel = stops.intersects(poi_union)
+stops_in_b = stops[sel]
+stops_in_b
+```
+
+## R
+
+```{r}
+stops_in_b = stops[poi_buffer, ]
+stops_in_b
+```
+
+:::
+
+## Spatial joins
+
+Spatial joins are implemented with similar functions in R and Python and the outputs are the same.
+See the [Python](https://geobgu.xyz/presentations/p_2023_ogh/01-vector.html#sec-spatial-join) and R tutorials, and in Geocomputation with R Section [4.2.4](https://r.geocompx.org/spatial-operations#spatial-joining) and Geocomputation with Python [3.3.4](https://py.geocompx.org/04-spatial-operations#sec-spatial-joining) for more details.
+
+::: {.panel-tabset group="language"}
+
+## Python
+
+```{python}
+poi_buffer.sjoin(stops, how='left')
+```
+
+## R
+
+```{r}
+st_join(poi_buffer, stops)
+```
+
+:::
+
+```{python}
+#| eval: false
+#| echo: false
+# Aim: check to see if there's a bug in sjoin
+points = gpd.GeoDataFrame([
+    {"name": "a",        "geometry": Point(0, 0)},
+    {"name": "b",    "geometry": Point(1, 0)},
+    {"name": "c", "geometry": Point(1, 1)},
+], crs=4326)
+
+# First two points:
+points2 = points.iloc[:2, :]
+buffers = points.buffer(0.1)
+# GeoDataFrame of buffers with values of 1 and 2:
+buffers = gpd.GeoDataFrame({
+    "value": [1, 2, 3],
+    "geometry": buffers
+})
+buffers.sjoin(points2, how='left')
+```
+
+# Questions and next steps
+
+The code above shows that R and Python are similar in many ways.
+Differences include:
+
+- R's package **sf** use of the S2 spherical geometry engine by default for lon/lat data, which can mean fewer lines of code for some operations (e.g. buffers)
+- The R package **sf** returns measures with units, which can make conversions easier, but which can also be confusing for new users
+- Python uses the 'zip:' syntax for virtual file system access, while R uses '/vsizip/'
+- Python has native support for interactive plotting with the `.explore()` method, while R requires an additional package such as **tmap** or **mapview** to create interactive plots
+
+The above code is also a good example of how to create a reproducible workflow for geographic data analysis.
+We hope that it can also act a bit like a [Rosetta Stone](https://en.wikipedia.org/wiki/Rosetta_Stone) for those who are familiar with one language and want to learn the other.
+
+It also raises some questions, which we leave unanswered for the community to consider and comment on:
+
+- Which language is more concise?
+  - While there are slightly fewer lines of R code in the examples above, there may be ways to improve the Python code
+- Which language runs quicker?
+    - It would be interesting to see benchmarks for the above code, perhaps in a future [geocompx](https://geocompx.org/) blog post or even a multi-language benchmarking package
+- Which language is quicker to write code in (the answer likely depends on your prior experience and tastes)?
+
+We welcome input on these questions and any other comments on the above code, the source code of which can be found at [github.com/geocompx/geocompx.org](https://github.com/geocompx/geocompx.org/blob/main/post/2023/rgdal-retirement/index.qmd).
+If you would like to contribute, with ideas, comments, or additional questions, feel free to get in touch via the [geocompx](https://geocompx.org/) website, our [Discord server](https://discord.gg/PMztXYgNxp), in a [GitHub Discussion](https://github.com/orgs/geocompx/discussions), on [Mastodon](https://fosstodon.org/tags/geocompx) or anywhere else.
+
+# Further reading
+
+There is lots more to learn in this space.
+For more information, the following resources are recommended:
+
+- [Geocomputation with R](https://r.geocompx.org/) 
+- [Geocomputation with Python](https://py.geocompx.org/)
+- [Spatial Data Science with applications in R and Python](https://r-spatial.org/python/), which provides R and Python code side-by-side
+- A great tutorial that simultaneously covers R and Python is [Tools and packages to query and process Sentinel-1 and Sentinel-2 data with R and Python](https://github.com/loreabad6/ogh23) by Lorena Abad.
