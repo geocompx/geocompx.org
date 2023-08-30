@@ -1,6 +1,5 @@
 ---
 title: "Geographic data analysis in R and Python: comparing code and outputs for vector data"
-format: html
 # # Alternative title:
 # title: "Teaching R and Python for geographic data: shared experiences and lessons learned"
 author: 
@@ -16,6 +15,14 @@ author:
   - name: Jakub Nowosad
     affiliation: Adam Mickiewicz University, Poznań, Poland
     orcid: 0000-0002-1057-3721
+date: "2023-08-30"
+slug: ogh2023-r-py
+categories: 
+  - posts
+  - rstats
+  - python
+tags: [rspatial, geopython]
+draft: false
 ---
 
 ```{r}
