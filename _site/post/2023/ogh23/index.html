@@ -1,26 +1,287 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
-      xmlns:media="http://search.yahoo.com/mrss/" 
-      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
-      xmlns:dc="http://purl.org/dc/elements/1.1/" 
-      version="2.0">
-<channel>
-<title>geocompx</title>
-<link>https://geocompx.org/post.html#category=python</link>
-<atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
-<description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.3.340</generator>
-<lastBuildDate>Tue, 29 Aug 2023 22:00:00 GMT</lastBuildDate>
-<item>
-  <title>Geographic data analysis in R and Python: comparing code and outputs for vector data</title>
-  <dc:creator>Robin Lovelace</dc:creator>
-  <dc:creator>Anita Graser</dc:creator>
-  <dc:creator>Michael Dorman</dc:creator>
-  <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2023/ogh23/index.html</link>
-  <description><![CDATA[ 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Robin Lovelace">
+<meta name="author" content="Anita Graser">
+<meta name="author" content="Michael Dorman">
+<meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2023-08-30">
+
+<title>geocompx - Geographic data analysis in R and Python: comparing code and outputs for vector data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
 
 
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="../../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="../../../site_libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="../../../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="../../../site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="../../../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="../../../site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="../../../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="../../../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="../../../site_libs/leaflet-binding-2.1.2/leaflet.js"></script>
+<script src="../../../site_libs/leaflet-providers-1.13.0/leaflet-providers_1.13.0.js"></script>
+<script src="../../../site_libs/leaflet-providers-plugin-2.1.2/leaflet-providers-plugin.js"></script>
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html" rel="" target="">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html" rel="" target="">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html" rel="" target="">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html" rel="" target="">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About us</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompx" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx" rel="" target=""><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp" rel="" target=""><i class="bi bi-discord" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../post.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#comparing-r-and-python-for-vector-geographic-data-analysis" id="toc-comparing-r-and-python-for-vector-geographic-data-analysis" class="nav-link" data-scroll-target="#comparing-r-and-python-for-vector-geographic-data-analysis">Comparing R and Python for vector geographic data analysis</a>
+  <ul class="collapse">
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading packages</a></li>
+  <li><a href="#creating-geographic-data" id="toc-creating-geographic-data" class="nav-link" data-scroll-target="#creating-geographic-data">Creating geographic data</a>
+  <ul class="collapse">
+  <li><a href="#downloading-data" id="toc-downloading-data" class="nav-link" data-scroll-target="#downloading-data">Downloading data</a></li>
+  </ul></li>
+  <li><a href="#unzipping-data" id="toc-unzipping-data" class="nav-link" data-scroll-target="#unzipping-data">Unzipping data</a></li>
+  <li><a href="#reading-and-printing-geographic-data" id="toc-reading-and-printing-geographic-data" class="nav-link" data-scroll-target="#reading-and-printing-geographic-data">Reading and printing geographic data</a></li>
+  <li><a href="#subsetting-by-attributes" id="toc-subsetting-by-attributes" class="nav-link" data-scroll-target="#subsetting-by-attributes">Subsetting by attributes</a></li>
+  <li><a href="#basic-plotting" id="toc-basic-plotting" class="nav-link" data-scroll-target="#basic-plotting">Basic plotting</a></li>
+  <li><a href="#creating-geographic-data-frames-from-a-csv-file" id="toc-creating-geographic-data-frames-from-a-csv-file" class="nav-link" data-scroll-target="#creating-geographic-data-frames-from-a-csv-file">Creating geographic data frames from a CSV file</a></li>
+  <li><a href="#plotting-attributes-and-layers" id="toc-plotting-attributes-and-layers" class="nav-link" data-scroll-target="#plotting-attributes-and-layers">Plotting attributes and layers</a></li>
+  <li><a href="#interactive-plots" id="toc-interactive-plots" class="nav-link" data-scroll-target="#interactive-plots">Interactive plots</a></li>
+  <li><a href="#reprojecting-data" id="toc-reprojecting-data" class="nav-link" data-scroll-target="#reprojecting-data">Reprojecting data</a></li>
+  <li><a href="#buffers" id="toc-buffers" class="nav-link" data-scroll-target="#buffers">Buffers</a></li>
+  <li><a href="#calculating-distances-and-areas" id="toc-calculating-distances-and-areas" class="nav-link" data-scroll-target="#calculating-distances-and-areas">Calculating distances and areas</a></li>
+  <li><a href="#spatial-subsetting" id="toc-spatial-subsetting" class="nav-link" data-scroll-target="#spatial-subsetting">Spatial subsetting</a></li>
+  <li><a href="#spatial-joins" id="toc-spatial-joins" class="nav-link" data-scroll-target="#spatial-joins">Spatial joins</a></li>
+  </ul></li>
+  <li><a href="#questions-and-next-steps" id="toc-questions-and-next-steps" class="nav-link" data-scroll-target="#questions-and-next-steps">Questions and next steps</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Geographic data analysis in R and Python: comparing code and outputs for vector data</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">posts</div>
+    <div class="quarto-category">rstats</div>
+    <div class="quarto-category">python</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Robin Lovelace <a href="https://orcid.org/0000-0001-5679-6536" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of Leeds, Active Travel England, UK
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Anita Graser <a href="https://orcid.org/0000-0001-5361-2885" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Austrian Institute of Technology, Austria
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Michael Dorman <a href="https://orcid.org/0000-0001-6450-8047" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Ben-Gurion University of the Negev, Israel
+          </p>
+      </div>
+      <div class="quarto-title-meta-contents">
+    <p class="author">Jakub Nowosad <a href="https://orcid.org/0000-0002-1057-3721" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Adam Mickiewicz University, Poznań, Poland
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 30, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
@@ -46,28 +307,16 @@
 <h2 class="anchored" data-anchor-id="loading-packages">Loading packages</h2>
 <p>We will start by loading core packages for working with geographic vector and attribute data. See detailed description of <a href="https://ogh23.robinlovelace.net/tidy#vector-data">R</a> and <a href="https://geobgu.xyz/presentations/p_2023_ogh/01-vector.html">Python</a> implementations in the respective lecture note sections.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-1-1" class="tab-pane active" aria-labelledby="tabset-1-1-tab">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> pd</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> shapely <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> Point</span>
-<span id="cb1-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> geopandas <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> gpd</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shapely <span class="im">import</span> Point</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-1-2" class="tab-pane" aria-labelledby="tabset-1-2-tab">
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <!---
  jn: I would suggest to use specific packages from tidyverse instead of attaching the whole tidyverse 
 
@@ -76,15 +325,9 @@ Also that's the approach in the teaching materials.
 For the book and for software development that's another matter but for this blog post I think it's fine.
 --->
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)</span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tidyverse)</span>
-<span id="cb2-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tmap)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -94,126 +337,28 @@ font-style: inherit;">library</span>(tmap)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="creating-geographic-data">Creating geographic data</h2>
 <p>The following commands create geographic datasets ‘from scratch’ representing coordinates of a the faculty where the Summer School takes place, and few hotels, in Poznan, Poland. Most projects start with pre-generated data, but it’s useful to create datasets to understand data structures.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-2-1" class="tab-pane active" aria-labelledby="tabset-2-1-tab">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">poi <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> gpd.GeoDataFrame([</span>
-<span id="cb3-2">    {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Faculty"</span>,        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"geometry"</span>: Point(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9418</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4643</span>)},</span>
-<span id="cb3-3">    {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Hotel ForZa"</span>,    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"geometry"</span>: Point(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9474</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4436</span>)},</span>
-<span id="cb3-4">    {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Hotel Lechicka"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"geometry"</span>: Point(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9308</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4437</span>)},</span>
-<span id="cb3-5">    {<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"FairPlayce"</span>,     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"geometry"</span>: Point(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9497</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4604</span>)},</span>
-<span id="cb3-6">], crs<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4326</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>poi <span class="op">=</span> gpd.GeoDataFrame([</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Faculty"</span>,        <span class="st">"geometry"</span>: Point(<span class="fl">16.9418</span>, <span class="fl">52.4643</span>)},</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Hotel ForZa"</span>,    <span class="st">"geometry"</span>: Point(<span class="fl">16.9474</span>, <span class="fl">52.4436</span>)},</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Hotel Lechicka"</span>, <span class="st">"geometry"</span>: Point(<span class="fl">16.9308</span>, <span class="fl">52.4437</span>)},</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"FairPlayce"</span>,     <span class="st">"geometry"</span>: Point(<span class="fl">16.9497</span>, <span class="fl">52.4604</span>)},</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>], crs<span class="op">=</span><span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-2-2" class="tab-pane" aria-labelledby="tabset-2-2-tab">
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">poi_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tribble</span>(</span>
-<span id="cb4-2">  <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span>name, <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span>lon, <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span>lat,</span>
-<span id="cb4-3">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Faculty"</span>,        <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9418</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4643</span>,</span>
-<span id="cb4-4">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Hotel ForZa"</span>,    <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9474</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4436</span>,</span>
-<span id="cb4-5">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Hotel Lechicka"</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9308</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4437</span>,</span>
-<span id="cb4-6">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"FairPlayce"</span>,     <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16.9497</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">52.4604</span></span>
-<span id="cb4-7">)</span>
-<span id="cb4-8">poi_sf <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> sf<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sf</span>(poi_df, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lon"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lat"</span>), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"EPSG:4326"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>poi_df <span class="ot">=</span> <span class="fu">tribble</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>name, <span class="sc">~</span>lon, <span class="sc">~</span>lat,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Faculty"</span>,        <span class="fl">16.9418</span>, <span class="fl">52.4643</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Hotel ForZa"</span>,    <span class="fl">16.9474</span>, <span class="fl">52.4436</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Hotel Lechicka"</span>, <span class="fl">16.9308</span>, <span class="fl">52.4437</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"FairPlayce"</span>,     <span class="fl">16.9497</span>, <span class="fl">52.4604</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>poi_sf <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(poi_df, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="st">"EPSG:4326"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -222,62 +367,26 @@ font-style: inherit;">"EPSG:4326"</span>)</span></code></pre></div>
 <h3 class="anchored" data-anchor-id="downloading-data">Downloading data</h3>
 <p>The following commands download data from the internet.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-3-1" class="tab-pane active" aria-labelledby="tabset-3-1-tab">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> urllib.request</span>
-<span id="cb5-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> zipfile</span>
-<span id="cb5-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> os</span>
-<span id="cb5-4">u <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"</span></span>
-<span id="cb5-5">f <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> os.path.basename(u)</span>
-<span id="cb5-6"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">not</span> os.path.exists(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>):</span>
-<span id="cb5-7">    urllib.request.urlretrieve(u, f)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> <span class="st">"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> os.path.basename(u)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(<span class="st">"data"</span>):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(u, f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-3-2" class="tab-pane" aria-labelledby="tabset-3-2-tab">
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">u <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"</span></span>
-<span id="cb6-2">f <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">basename</span>(u)</span>
-<span id="cb6-3"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dir.exists</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>)) {</span>
-<span id="cb6-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">download.file</span>(u, f)</span>
-<span id="cb6-5">}</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>u <span class="ot">=</span> <span class="st">"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="fu">basename</span>(u)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">"data"</span>)) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(u, f)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that we can read directly from ZIP files with R and Python thanks to the <a href="https://gdal.org/user/virtual_file_systems.html">GDAL Virtual File System</a>.</p>
 </div>
@@ -289,25 +398,17 @@ font-style: inherit;">download.file</span>(u, f)</span>
 <h2 class="anchored" data-anchor-id="unzipping-data">Unzipping data</h2>
 <p>We can unzip the data in R and Python: it contains spatial information about bus stops.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-4-1" class="tab-pane active" aria-labelledby="tabset-4-1-tab">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> zip_ref:</span>
-<span id="cb7-2">    zip_ref.extractall()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(f, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-4-2" class="tab-pane" aria-labelledby="tabset-4-2-tab">
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unzip</span>(f)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -317,16 +418,12 @@ font-style: inherit;">unzip</span>(f)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="reading-and-printing-geographic-data">Reading and printing geographic data</h2>
 <p>As shown below, Python and R implemenations to import a shapefile are similar. Note: we recommend using open file formats such as GeoPackage (<code>.gpkg</code>), as outlined in <a href="https://r.geocompx.org/read-write">Geocomputation with R</a> and <a href="https://py.geocompx.org/08-read-write-plot">Geocomputation with Python</a>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-5-1" class="tab-pane active" aria-labelledby="tabset-5-1-tab">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">pol_all <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> gpd.read_file(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zip://data.zip!data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
-<span id="cb9-2">pol_all</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pol_all <span class="op">=</span> gpd.read_file(<span class="st">"zip://data.zip!data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pol_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         osm_id  ...                                           geometry
 0      27923283  ...  POLYGON ((16.84088 52.42479, 16.84112 52.42511...
@@ -345,18 +442,10 @@ font-style: inherit;">"zip://data.zip!data/osm/gis_osm_transport_a_free_1.shp"</
 </div>
 </div>
 </div>
-<div id="tabset-5-2" class="tab-pane" aria-labelledby="tabset-5-2-tab">
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">pol_all <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> sf<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
-<span id="cb11-2">pol_all</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pol_all <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">"/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pol_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 282 features and 4 fields
 Geometry type: POLYGON
@@ -384,46 +473,20 @@ Geodetic CRS:  WGS 84
 </div>
 <p>Note: in R, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">uz <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/vsizip//vsicurl/"</span>, u, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"/data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
-<span id="cb13-2">pol_all <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> sf<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_sf</span>(uz)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>uz <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"/vsizip//vsicurl/"</span>, u, <span class="st">"/data/osm/gis_osm_transport_a_free_1.shp"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pol_all <span class="ot">=</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(uz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="subsetting-by-attributes" class="level2">
 <h2 class="anchored" data-anchor-id="subsetting-by-attributes">Subsetting by attributes</h2>
 <p>The following commands select a subset of the data based on attribute values (looking for a specific string in the <code>name</code> column).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" aria-controls="tabset-6-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" aria-controls="tabset-6-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-6-1" class="tab-pane active" aria-labelledby="tabset-6-1-tab">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">pol <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pol_all[pol_all[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'name'</span>].<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">str</span>.contains(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Port*.+Poz'</span>, na<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>)]</span>
-<span id="cb14-2">pol</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pol <span class="op">=</span> pol_all[pol_all[<span class="st">'name'</span>].<span class="bu">str</span>.contains(<span class="st">'Port*.+Poz'</span>, na<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        osm_id  ...                                           geometry
 116  342024881  ...  POLYGON ((16.80040 52.42494, 16.80060 52.42533...
@@ -432,21 +495,11 @@ font-style: inherit;">False</span>)]</span>
 </div>
 </div>
 </div>
-<div id="tabset-6-2" class="tab-pane" aria-labelledby="tabset-6-2-tab">
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">pol <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> pol_all <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb16-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">filter</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_detect</span>(name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Port*.+Poz"</span>))</span>
-<span id="cb16-3">pol</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pol <span class="ot">=</span> pol_all <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(name, <span class="st">"Port*.+Poz"</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 4 fields
 Geometry type: POLYGON
@@ -467,25 +520,21 @@ Geodetic CRS:  WGS 84
 <h2 class="anchored" data-anchor-id="basic-plotting">Basic plotting</h2>
 <p>The following commands plot the data. Note that by default, R’s <code>plot()</code> method for <code>{sf}</code> objects creates a plot for each column in the data (up to 9 by default). <!--- Perhaps switch to plot(st_geometry(pol)) in R, to make it more comparable with Python? ---></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" aria-controls="tabset-7-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" aria-controls="tabset-7-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-7-1" class="tab-pane active" aria-labelledby="tabset-7-1-tab">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">pol.plot()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pol.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="614"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="614"></p>
 </div>
 </div>
 </div>
-<div id="tabset-7-2" class="tab-pane" aria-labelledby="tabset-7-2-tab">
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(pol)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pol)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-16-3.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -493,43 +542,21 @@ font-style: inherit;">plot</span>(pol)</span></code></pre></div>
 </div>
 <p>The arguments needed to change the colour of the fill and border are different in R and Python, but the results are similar.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" aria-controls="tabset-8-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" aria-controls="tabset-8-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-8-1" class="tab-pane active" aria-labelledby="tabset-8-1-tab">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">pol.plot(color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'none'</span>, edgecolor<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'black'</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pol.plot(color<span class="op">=</span><span class="st">'none'</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
-<div id="tabset-8-2" class="tab-pane" aria-labelledby="tabset-8-2-tab">
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_geometry</span>(pol), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">border =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"black"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(pol), <span class="at">col =</span> <span class="st">"white"</span>, <span class="at">border =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-18-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -540,49 +567,19 @@ font-style: inherit;">"black"</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="creating-geographic-data-frames-from-a-csv-file">Creating geographic data frames from a CSV file</h2>
 <p>The following commands create a geographic data frame from a CSV file. Note that two steps—creating the geometry column and combining it with the original table, hereby combined into one complex expression—are needed to convert a <code>DataFrame</code> to a <code>GeoDataFrame</code> in Python, whereas in R the <code>sf::st_as_sf()</code> function can be used to convert a <code>data.frame</code> to a spatial data frame directly.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" aria-controls="tabset-9-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" aria-controls="tabset-9-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-9-1" class="tab-pane active" aria-labelledby="tabset-9-1-tab">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Unzip the data.zip file:</span></span>
-<span id="cb22-2"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> zip_ref:</span>
-<span id="cb22-3">    zip_ref.extractall(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>)</span>
-<span id="cb22-4">stops <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> pd.read_csv(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data/gtfs/stops.txt"</span>)</span>
-<span id="cb22-5">stops <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> gpd.GeoDataFrame(</span>
-<span id="cb22-6">    stops.drop(columns<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'stop_lon'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'stop_lat'</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'stop_code'</span>]),</span>
-<span id="cb22-7">    geometry <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> gpd.points_from_xy(stops.stop_lon, stops.stop_lat),</span>
-<span id="cb22-8">    crs <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4326</span>)</span>
-<span id="cb22-9">stops</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unzip the data.zip file:</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(f, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">"data"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>stops <span class="op">=</span> pd.read_csv(<span class="st">"data/gtfs/stops.txt"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>stops <span class="op">=</span> gpd.GeoDataFrame(</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    stops.drop(columns<span class="op">=</span>[<span class="st">'stop_lon'</span>, <span class="st">'stop_lat'</span>, <span class="st">'stop_code'</span>]),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    geometry <span class="op">=</span> gpd.points_from_xy(stops.stop_lon, stops.stop_lat),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    crs <span class="op">=</span> <span class="dv">4326</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>stops</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      stop_id  ...                   geometry
 0        2186  ...  POINT (17.04263 52.32684)
@@ -601,40 +598,12 @@ font-style: inherit;">4326</span>)</span>
 </div>
 </div>
 </div>
-<div id="tabset-9-2" class="tab-pane" aria-labelledby="tabset-9-2-tab">
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">stops <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_csv</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data/gtfs/stops.txt"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb24-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">select</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>stop_code) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb24-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stop_lon"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"stop_lat"</span>), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"EPSG:4326"</span>)</span>
-<span id="cb24-4">stops</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>stops <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"data/gtfs/stops.txt"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>stop_code) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"stop_lon"</span>, <span class="st">"stop_lat"</span>), <span class="at">crs =</span> <span class="st">"EPSG:4326"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>stops</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 2921 features and 3 fields
 Geometry type: POINT
@@ -665,50 +634,22 @@ Geodetic CRS:  WGS 84
 <h2 class="anchored" data-anchor-id="plotting-attributes-and-layers">Plotting attributes and layers</h2>
 <p>The following commands plot the bus stops loaded in the previous step. Note that the <strong>tmap</strong> package is hereby used in R to create these more advanced plots, as it also supports interactive mapping (see below).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" aria-controls="tabset-10-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" aria-controls="tabset-10-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-10-1" class="tab-pane active" aria-labelledby="tabset-10-1-tab">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">stops.plot(markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, column<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'zone_id'</span>, legend<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>stops.plot(markersize<span class="op">=</span><span class="dv">1</span>, column<span class="op">=</span><span class="st">'zone_id'</span>, legend<span class="op">=</span><span class="va">True</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
-<div id="tabset-10-2" class="tab-pane" aria-labelledby="tabset-10-2-tab">
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(stops) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb27-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_symbols</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zone_id"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(stops) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"zone_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-22-3.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-22-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -716,68 +657,26 @@ font-style: inherit;">"zone_id"</span>)</span></code></pre></div>
 </div>
 <p>We can add basic overlays in both languages as follows.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" aria-controls="tabset-11-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" aria-controls="tabset-11-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-11-1" class="tab-pane active" aria-labelledby="tabset-11-1-tab">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1">base <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> stops.plot(markersize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>)</span>
-<span id="cb28-2">poi.plot(ax<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>base, color<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'red'</span>)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> stops.plot(markersize<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>poi.plot(ax<span class="op">=</span>base, color<span class="op">=</span><span class="st">'red'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
-<div id="tabset-11-2" class="tab-pane" aria-labelledby="tabset-11-2-tab">
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
 <!---
  jn: should the next example use tmap instead of base R? 
 --->
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(stops<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>geometry, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"grey"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cex =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>)</span>
-<span id="cb29-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(poi_sf<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>geometry, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"red"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">add =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stops<span class="sc">$</span>geometry, <span class="at">col =</span> <span class="st">"grey"</span>, <span class="at">pch =</span> <span class="dv">20</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(poi_sf<span class="sc">$</span>geometry, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-24-3.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-24-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -788,23 +687,11 @@ font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="interactive-plots">Interactive plots</h2>
 <p>The following commands create interactive plots, in Python and R respectively. The Python code requires the <strong>folium</strong> and <strong>mapclassify</strong> packages, which are not installed by default when you install <strong>geopandas</strong>. Note that with <strong>tmap</strong>, you can use the same code to create static and interactive plots, by changing the <code>tmap_mode()</code>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" aria-controls="tabset-12-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" aria-controls="tabset-12-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-12-1" class="tab-pane active" aria-labelledby="tabset-12-1-tab">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">stops.explore(column<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'zone_id'</span>, legend<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span>, cmap<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Dark2'</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>stops.explore(column<span class="op">=</span><span class="st">'zone_id'</span>, legend<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'Dark2'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
@@ -1059,29 +946,11 @@ font-style: inherit;">'Dark2'</span>)</span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="tabset-12-2" class="tab-pane" aria-labelledby="tabset-12-2-tab">
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tmap_mode</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"view"</span>)</span>
-<span id="cb31-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(stops) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb31-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_symbols</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.1</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"zone_id"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">"view"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(stops) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"zone_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6ae284356bc10a625920" style="width:100%;height:464px;"></div>
@@ -1096,11 +965,11 @@ font-style: inherit;">"zone_id"</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="reprojecting-data">Reprojecting data</h2>
 <p>The following commands reproject the data to a local projected Coordinate Reference System (CRS).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" aria-controls="tabset-13-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" aria-controls="tabset-13-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-13-1" class="tab-pane active" aria-labelledby="tabset-13-1-tab">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1">poi.crs</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>poi.crs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;Geographic 2D CRS: EPSG:4326&gt;
 Name: WGS 84
@@ -1114,23 +983,13 @@ Datum: World Geodetic System 1984 ensemble
 - Ellipsoid: WGS 84
 - Prime Meridian: Greenwich</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1">poi_projected <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> poi.to_crs(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2180</span>)</span>
-<span id="cb34-2">stops_projected <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> stops.to_crs(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2180</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>poi_projected <span class="op">=</span> poi.to_crs(<span class="dv">2180</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>stops_projected <span class="op">=</span> stops.to_crs(<span class="dv">2180</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-13-2" class="tab-pane" aria-labelledby="tabset-13-2-tab">
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_crs</span>(poi_sf)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_crs</span>(poi_sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinate Reference System:
   User input: EPSG:4326 
@@ -1162,20 +1021,8 @@ GEOGCRS["WGS 84",
         BBOX[-90,-180,90,180]],
     ID["EPSG",4326]]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1">poi_projected <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(poi_sf, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2180</span>)</span>
-<span id="cb37-2">stops_projected <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(stops, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2180</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>poi_projected <span class="ot">=</span> <span class="fu">st_transform</span>(poi_sf, <span class="dv">2180</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>stops_projected <span class="ot">=</span> <span class="fu">st_transform</span>(stops, <span class="dv">2180</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1185,37 +1032,21 @@ font-style: inherit;">2180</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="buffers">Buffers</h2>
 <p>The following commands create buffers around the points. Note that R allows buffer to be created directly from a spatial data frame with geographic (lon/lot) coordinates thanks to its integration with Google’s S2 spherical geometry engine, as outlined in <a href="https://r.geocompx.org/reproj-geo-data#geom-proj">Geocomputation with R</a>. For buffer operations to work in Python you must reproject the data first (which we did, see above) (although there are plans for <strong>geopandas</strong> to support a spherical geometry backend at some point, as discussed in issue <a href="https://github.com/geopandas/geopandas/issues/2098">#2098</a>).</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" aria-controls="tabset-14-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" aria-controls="tabset-14-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" role="tab" aria-controls="tabset-14-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" role="tab" aria-controls="tabset-14-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-14-1" class="tab-pane active" aria-labelledby="tabset-14-1-tab">
+<div id="tabset-14-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-14-1-tab">
 <!---
  TODO: can we improve this? 
 --->
 <p>To create a new vector layers named <code>poi_buffer</code>, in both languages, we can do the following.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1">poi_buffer <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> poi.copy()</span>
-<span id="cb38-2">poi_buffer.geometry <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> poi_projected.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">buffer</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">150</span>).to_crs(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4326</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>poi_buffer <span class="op">=</span> poi.copy()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>poi_buffer.geometry <span class="op">=</span> poi_projected.<span class="bu">buffer</span>(<span class="dv">150</span>).to_crs(<span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-14-2" class="tab-pane" aria-labelledby="tabset-14-2-tab">
+<div id="tabset-14-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1">poi_buffer <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_buffer</span>(poi_sf, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">150</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>poi_buffer <span class="ot">=</span> <span class="fu">st_buffer</span>(poi_sf, <span class="dv">150</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1225,13 +1056,11 @@ font-style: inherit;">150</span>)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="calculating-distances-and-areas">Calculating distances and areas</h2>
 <p>An interesting difference between R and Python is that the former uses the <code>units</code> package to store units, making it easy to convert between them, as outlined in the <a href="https://ogh23.robinlovelace.net/tidy#buffers">buffers section of the R lecture notes</a>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" aria-controls="tabset-15-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" aria-controls="tabset-15-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" role="tab" aria-controls="tabset-15-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" role="tab" aria-controls="tabset-15-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-15-1" class="tab-pane active" aria-labelledby="tabset-15-1-tab">
+<div id="tabset-15-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-15-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1">poi_buffer.to_crs(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2180</span>).area</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>poi_buffer.to_crs(<span class="dv">2180</span>).area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0    70572.341037
 1    70572.341037
@@ -1241,11 +1070,9 @@ dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<div id="tabset-15-2" class="tab-pane" aria-labelledby="tabset-15-2-tab">
+<div id="tabset-15-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_area</span>(poi_buffer)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_area</span>(poi_buffer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [m^2]
 [1] 71656.68 71644.28 71656.92 71667.15</code></pre>
@@ -1263,20 +1090,14 @@ font-style: inherit;">st_area</span>(poi_buffer)</span></code></pre></div>
 <li>Create a boolean <code>Series</code> object with the <code>.intersects</code> or other method, and use the boolean Series to subset the data (rather than another geographic object)</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" aria-controls="tabset-16-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" aria-controls="tabset-16-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" role="tab" aria-controls="tabset-16-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" role="tab" aria-controls="tabset-16-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-16-1" class="tab-pane active" aria-labelledby="tabset-16-1-tab">
+<div id="tabset-16-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-16-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1">poi_union <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> poi_buffer.unary_union</span>
-<span id="cb44-2">sel <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> stops.intersects(poi_union)</span>
-<span id="cb44-3">stops_in_b <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> stops[sel]</span>
-<span id="cb44-4">stops_in_b</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>poi_union <span class="op">=</span> poi_buffer.unary_union</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>sel <span class="op">=</span> stops.intersects(poi_union)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>stops_in_b <span class="op">=</span> stops[sel]</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>stops_in_b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      stop_id              stop_name zone_id                   geometry
 295       418  UAM Wydział Geografii       A  POINT (16.94108 52.46419)
@@ -1286,12 +1107,10 @@ font-style: inherit;">=</span> stops[sel]</span>
 </div>
 </div>
 </div>
-<div id="tabset-16-2" class="tab-pane" aria-labelledby="tabset-16-2-tab">
+<div id="tabset-16-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1">stops_in_b <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> stops[poi_buffer, ]</span>
-<span id="cb46-2">stops_in_b</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>stops_in_b <span class="ot">=</span> stops[poi_buffer, ]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>stops_in_b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 4 features and 3 fields
 Geometry type: POINT
@@ -1315,15 +1134,11 @@ Geodetic CRS:  WGS 84
 <h2 class="anchored" data-anchor-id="spatial-joins">Spatial joins</h2>
 <p>Spatial joins are implemented with similar functions in R and Python and the outputs are the same. See the <a href="https://geobgu.xyz/presentations/p_2023_ogh/01-vector.html#sec-spatial-join">Python</a> and R tutorials, and in Geocomputation with R Section <a href="https://r.geocompx.org/spatial-operations#spatial-joining">4.2.4</a> and Geocomputation with Python <a href="https://py.geocompx.org/04-spatial-operations#sec-spatial-joining">3.3.4</a> for more details.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
-<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" aria-controls="tabset-17-1" aria-selected="true">Python</a></li><li class="nav-item"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" aria-controls="tabset-17-2" aria-selected="false">R</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content" data-group="language">
-<div id="tabset-17-1" class="tab-pane active" aria-labelledby="tabset-17-1-tab">
+<div id="tabset-17-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-17-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1">poi_buffer.sjoin(stops, how<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'left'</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>poi_buffer.sjoin(stops, how<span class="op">=</span><span class="st">'left'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             name  ... zone_id
 0         Faculty  ...       A
@@ -1337,11 +1152,9 @@ font-style: inherit;">'left'</span>)</span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="tabset-17-2" class="tab-pane" aria-labelledby="tabset-17-2-tab">
+<div id="tabset-17-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-17-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_join</span>(poi_buffer, stops)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">st_join</span>(poi_buffer, stops)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 6 features and 4 fields
 Geometry type: POLYGON
@@ -1410,16 +1223,264 @@ Geodetic CRS:  WGS 84
   url = {https://geocompx.org//post/2023/ogh23},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2023" class="csl-entry quarto-appendix-citeas">
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2023" class="csl-entry quarto-appendix-citeas" role="listitem">
 Lovelace, Robin, Anita Graser, Michael Dorman, and Jakub Nowosad. 2023.
 <span>“Geographic Data Analysis in R and Python: Comparing Code and
 Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.org//post/2023/ogh23">https://geocompx.org//post/2023/ogh23</a>.
-</div></div></section></div> ]]></description>
-  <category>posts</category>
-  <category>rstats</category>
-  <category>python</category>
-  <guid>https://geocompx.org/post/2023/ogh23/index.html</guid>
-  <pubDate>Tue, 29 Aug 2023 22:00:00 GMT</pubDate>
-</item>
-</channel>
-</rss>
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">geocompx, 2016 - 2023</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompx/geocompx.org">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
