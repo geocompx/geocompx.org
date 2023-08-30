@@ -203,13 +203,23 @@ pol_all
 
 :::
 
-Note: in R, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:
+Note: in both R and Python, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:
+
+::: {.panel-tabset group="language"}
+
+```{python}
+#| eval: false
+pol_all = gpd.read_file("zip+" + u + "/data/osm/gis_osm_transport_a_free_1.shp")
+pol_all
+```
 
 ```{r}
 #| eval: false
 uz = paste0("/vsizip//vsicurl/", u, "/data/osm/gis_osm_transport_a_free_1.shp")
 pol_all = sf::read_sf(uz)
 ```
+
+:::
 
 ## Subsetting by attributes
 
