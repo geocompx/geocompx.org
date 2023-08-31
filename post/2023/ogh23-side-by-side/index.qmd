@@ -22,7 +22,7 @@ categories:
   - rstats
   - python
 tags: [rspatial, geopython]
-draft: false
+draft: true
 ---
 
 ```{r}
