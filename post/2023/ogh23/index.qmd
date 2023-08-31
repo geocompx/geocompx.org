@@ -155,13 +155,11 @@ if (!dir.exists("data")) {
 }
 ```
 
-Note that we can read directly from ZIP files with R and Python thanks to the [GDAL Virtual File System](https://gdal.org/user/virtual_file_systems.html).
-
 :::
 
 ## Unzipping data
 
-We can unzip the data in R and Python: it contains spatial information about bus stops.
+Unzip the zipfile in R and Python as follows.
 
 ::: {.panel-tabset group="language"}
 
@@ -182,8 +180,11 @@ unzip(f)
 
 ## Reading and printing geographic data
 
-As shown below, Python and R implemenations to import a shapefile are similar.
+As shown below, Python and R code to import a shapefile are similar.
 Note: we recommend using open file formats such as GeoPackage (`.gpkg`), as outlined in [Geocomputation with R](https://r.geocompx.org/read-write) and [Geocomputation with Python](https://py.geocompx.org/08-read-write-plot).
+
+Note also that we read directly from the ZIP file thanks to the [GDAL Virtual File System](https://gdal.org/user/virtual_file_systems.html).
+
 
 ::: {.panel-tabset group="language"}
 
@@ -203,7 +204,7 @@ pol_all
 
 :::
 
-Note: in both R and Python, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:
+Note: in both R and Python, you can read-in the dataset from the URL in a single line of code without first downloading the zip file, although the syntax is different, with R using GDAL's `/vsicurl/` character string and Python using the `zip+` syntax.
 
 ::: {.panel-tabset group="language"}
 
