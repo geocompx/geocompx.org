@@ -1,5 +1,5 @@
 ---
-title: "Geographic data analysis in R and Python: comparing code and outputs for vector data"
+title: "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)"
 # # Alternative title:
 # title: "Teaching R and Python for geographic data: shared experiences and lessons learned"
 author: 
@@ -27,7 +27,7 @@ draft: false
 
 ```{r}
 #| include: false
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, eval = FALSE)
 # install python packages needed for this document:
 pkgs = c("geopandas", "shapely", "pandas", "rasterio", "matplotlib", "folium", "mapclassify")
 reticulate::py_install(pkgs)
