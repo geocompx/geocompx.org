@@ -466,7 +466,7 @@
     "href": "post.html",
     "title": "Posts",
     "section": "",
-    "text": "Posts related to R are aggregated at R-bloggers and RWeekly\n\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nGeographic data analysis in R and Python: comparing code and outputs for vector data\n\n\n\n\n\n\n\nposts\n\n\nrstats\n\n\npython\n\n\n\n\n\n\n\n\n\n\n\nAug 30, 2023\n\n\n10 min\n\n\n\n\n\n\n\n\nUpcoming changes to popular R packages for spatial data: what you need to do\n\n\n\n\n\n\n\nposts\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 4, 2023\n\n\n10 min\n\n\n\n\n\n\n\n\nAutomatic website for the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n5 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n2 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n2 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n10 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n12 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n10 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n3 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
+    "text": "Posts related to R are aggregated at R-bloggers and RWeekly\n\n\n\n\n\n\n\n   \n     \n     \n       Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\nGeographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)\n\n\n\n\n\n\n\nposts\n\n\nrstats\n\n\npython\n\n\n\n\n\n\n\n\n\n\n\nAug 30, 2023\n\n\n10 min\n\n\n\n\n\n\n\n\nGeographic data analysis in R and Python: comparing code and outputs for vector data\n\n\n\n\n\n\n\nposts\n\n\nrstats\n\n\npython\n\n\n\n\n\n\n\n\n\n\n\nAug 30, 2023\n\n\n10 min\n\n\n\n\n\n\n\n\nUpcoming changes to popular R packages for spatial data: what you need to do\n\n\n\n\n\n\n\nposts\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 4, 2023\n\n\n10 min\n\n\n\n\n\n\n\n\nAutomatic website for the Geocomputation with R solutions\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nFeb 24, 2022\n\n\n4 min\n\n\n\n\n\n\n\n\nProgress update: Geocomputation with R Second Edition Part 1\n\n\n\n\n\n\n\nupdates\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJan 27, 2022\n\n\n5 min\n\n\n\n\n\n\n\n\nGeocomputation with R: Second Edition feedback\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 6, 2021\n\n\n2 min\n\n\n\n\n\n\n\n\nConversions between different spatial classes in R\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nJun 17, 2021\n\n\n5 min\n\n\n\n\n\n\n\n\nRecent changes in R spatial and how to be ready for them\n\n\n\n\n\n\n\nannouncement\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 25, 2020\n\n\n2 min\n\n\n\n\n\n\n\n\nDemo of reproducible geographic data analysis: mapping Covid-19 data with R\n\n\n\n\n\n\n\ndemo\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nApr 23, 2020\n\n\n10 min\n\n\n\n\n\n\n\n\nInstalling spatial R packages on Ubuntu\n\n\n\n\n\n\n\nsetup\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nMar 30, 2020\n\n\n12 min\n\n\n\n\n\n\n\n\nInset maps with ggplot2\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nDec 8, 2019\n\n\n9 min\n\n\n\n\n\n\n\n\nMap coloring: the color scale styles available in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nOct 17, 2019\n\n\n10 min\n\n\n\n\n\n\n\n\nGrids and graticules in the tmap package\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nSep 4, 2019\n\n\n3 min\n\n\n\n\n\n\n\n\nGeographic projections and transformations\n\n\n\n\n\n\n\nvignette\n\n\nrstats\n\n\n\n\n\n\n\n\n\n\n\nAug 21, 2019\n\n\n7 min\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "py.html",
@@ -642,5 +642,110 @@
     "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data",
     "section": "Spatial joins",
     "text": "Spatial joins\nSpatial joins are implemented with similar functions in R and Python and the outputs are the same. See the Python and R tutorials, and in Geocomputation with R Section 4.2.4 and Geocomputation with Python 3.3.4 for more details.\n\nPythonR\n\n\n\npoi_buffer.sjoin(stops, how='left')\n\n             name  ... zone_id\n0         Faculty  ...       A\n0         Faculty  ...       A\n1     Hotel ForZa  ...     NaN\n2  Hotel Lechicka  ...       A\n2  Hotel Lechicka  ...       A\n3      FairPlayce  ...     NaN\n\n[6 rows x 6 columns]\n\n\n\n\n\nst_join(poi_buffer, stops)\n\nSimple feature collection with 6 features and 4 fields\nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: 16.92856 ymin: 52.44223 xmax: 16.95195 ymax: 52.46567\nGeodetic CRS:  WGS 84\n# A tibble: 6 × 5\n  name                                        geometry stop_id stop_name zone_id\n* &lt;chr&gt;                                  &lt;POLYGON [°]&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  \n1 Faculty        ((16.93959 52.46441, 16.93957 52.464…     418 UAM Wydz… A      \n2 Faculty        ((16.93959 52.46441, 16.93957 52.464…     417 UAM Wydz… A      \n3 Hotel ForZa    ((16.94759 52.44224, 16.94762 52.442…      NA &lt;NA&gt;      &lt;NA&gt;   \n4 Hotel Lechicka ((16.93275 52.44435, 16.93275 52.444…     467 Umultows… A      \n5 Hotel Lechicka ((16.93275 52.44435, 16.93275 52.444…     468 Umultows… A      \n6 FairPlayce     ((16.9477 52.461, 16.94765 52.46092,…      NA &lt;NA&gt;      &lt;NA&gt;"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html",
+    "href": "post/2023/ogh23-side-by-side/index.html",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "",
+    "text": "In this blog post, we talk about our experience teaching R and Python for geocomputation. The focus of the blog post is on geographic vector data, meaning points, lines, polygons (and their ‘multi’ variants) and the attributes associated with them. Geographic data analysis is a broad topic and in a later post we will cover raster data, meaning gridded data such as satellite images.\n The context of this blog post is the OpenGeoHub Summer School 2023 which has courses on R, Python and Julia. The size and the diversity of the event has grown over the years. Noting that many events focus on just one language, and the advantages of diversity of languages and approaches, we wanted to follow-up in a blog post that could be useful to others.\nOpenGeoHub 2023 was also a unique chance for the authors of the in-progress open source book, Geocomputation with Python to meet in person: the first time we have all been in one place at the same time.\nThe post is based on the following lecture notes, which we recommend checking out for deeper dives into the R and Python implementations of geocomputation:\n\nTidy geographic data with sf, dplyr, ggplot2, geos and friends\nWorking with spatial data in Python"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#loading-packages",
+    "href": "post/2023/ogh23-side-by-side/index.html#loading-packages",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Loading packages",
+    "text": "Loading packages\nWe will start by loading core packages for working with geographic vector and attribute data. See detailed description of R and Python implementations in the respective lecture note sections.\n\nPythonR\n\n\n\nimport pandas as pd\nfrom shapely import Point\nimport geopandas as gpd\n\n\n\n\n\nlibrary(sf)\nlibrary(tidyverse)\nlibrary(tmap)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#creating-geographic-data",
+    "href": "post/2023/ogh23-side-by-side/index.html#creating-geographic-data",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Creating geographic data",
+    "text": "Creating geographic data\nThe following commands create geographic datasets ‘from scratch’ representing coordinates of a the faculty where the Summer School takes place, and few hotels, in Poznan, Poland. Most projects start with pre-generated data, but it’s useful to create datasets to understand data structures.\n\nPythonR\n\n\n\npoi = gpd.GeoDataFrame([\n    {\"name\": \"Faculty\",        \"geometry\": Point(16.9418, 52.4643)},\n    {\"name\": \"Hotel ForZa\",    \"geometry\": Point(16.9474, 52.4436)},\n    {\"name\": \"Hotel Lechicka\", \"geometry\": Point(16.9308, 52.4437)},\n    {\"name\": \"FairPlayce\",     \"geometry\": Point(16.9497, 52.4604)},\n], crs=4326)\n\n\n\n\npoi_df = tribble(\n  ~name, ~lon, ~lat,\n  \"Faculty\",        16.9418, 52.4643,\n  \"Hotel ForZa\",    16.9474, 52.4436,\n  \"Hotel Lechicka\", 16.9308, 52.4437,\n  \"FairPlayce\",     16.9497, 52.4604\n)\npoi_sf = sf::st_as_sf(poi_df, coords = c(\"lon\", \"lat\"), crs = \"EPSG:4326\")\n\n\n\n\n\nDownloading data\nThe following commands download data from the internet.\n\nPythonR\n\n\n\nimport urllib.request\nimport zipfile\nimport os\nu = \"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip\"\nf = os.path.basename(u)\nif not os.path.exists(\"data\"):\n    urllib.request.urlretrieve(u, f)\n\n\n\n\nu = \"https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip\"\nf = basename(u)\nif (!dir.exists(\"data\")) {\n  download.file(u, f)\n}\n\nNote that we can read directly from ZIP files with R and Python thanks to the GDAL Virtual File System."
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#unzipping-data",
+    "href": "post/2023/ogh23-side-by-side/index.html#unzipping-data",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Unzipping data",
+    "text": "Unzipping data\nWe can unzip the data in R and Python: it contains spatial information about bus stops.\n\nPythonR\n\n\n\nwith zipfile.ZipFile(f, 'r') as zip_ref:\n    zip_ref.extractall()\n\n\n\n\nunzip(f)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#reading-and-printing-geographic-data",
+    "href": "post/2023/ogh23-side-by-side/index.html#reading-and-printing-geographic-data",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Reading and printing geographic data",
+    "text": "Reading and printing geographic data\nAs shown below, Python and R implemenations to import a shapefile are similar. Note: we recommend using open file formats such as GeoPackage (.gpkg), as outlined in Geocomputation with R and Geocomputation with Python.\n\nPythonR\n\n\n\npol_all = gpd.read_file(\"zip://data.zip!data/osm/gis_osm_transport_a_free_1.shp\")\npol_all\n\n\n\n\npol_all = sf::read_sf(\"/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp\")\npol_all\n\n\n\n\nNote: in R, you can read-in the dataset from the URL in a single line of code without first downloading the zip file:\n\nuz = paste0(\"/vsizip//vsicurl/\", u, \"/data/osm/gis_osm_transport_a_free_1.shp\")\npol_all = sf::read_sf(uz)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#subsetting-by-attributes",
+    "href": "post/2023/ogh23-side-by-side/index.html#subsetting-by-attributes",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Subsetting by attributes",
+    "text": "Subsetting by attributes\nThe following commands select a subset of the data based on attribute values (looking for a specific string in the name column).\n\nPythonR\n\n\n\npol = pol_all[pol_all['name'].str.contains('Port*.+Poz', na=False)]\npol\n\n\n\n\npol = pol_all |&gt;\n  filter(str_detect(name, \"Port*.+Poz\"))\npol"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#basic-plotting",
+    "href": "post/2023/ogh23-side-by-side/index.html#basic-plotting",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Basic plotting",
+    "text": "Basic plotting\nThe following commands plot the data. Note that by default, R’s plot() method for {sf} objects creates a plot for each column in the data (up to 9 by default). \n\nPythonR\n\n\n\npol.plot();\n\n\n\n\nplot(pol)\n\n\n\n\nThe arguments needed to change the colour of the fill and border are different in R and Python, but the results are similar.\n\nPythonR\n\n\n\npol.plot(color='none', edgecolor='black');\n\n\n\n\nplot(st_geometry(pol), col = \"white\", border = \"black\")"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#creating-geographic-data-frames-from-a-csv-file",
+    "href": "post/2023/ogh23-side-by-side/index.html#creating-geographic-data-frames-from-a-csv-file",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Creating geographic data frames from a CSV file",
+    "text": "Creating geographic data frames from a CSV file\nThe following commands create a geographic data frame from a CSV file. Note that two steps—creating the geometry column and combining it with the original table, hereby combined into one complex expression—are needed to convert a DataFrame to a GeoDataFrame in Python, whereas in R the sf::st_as_sf() function can be used to convert a data.frame to a spatial data frame directly.\n\nPythonR\n\n\n\n# Unzip the data.zip file:\nwith zipfile.ZipFile(f, 'r') as zip_ref:\n    zip_ref.extractall(\"data\")\nstops = pd.read_csv(\"data/gtfs/stops.txt\")\nstops = gpd.GeoDataFrame(\n    stops.drop(columns=['stop_lon', 'stop_lat', 'stop_code']),\n    geometry = gpd.points_from_xy(stops.stop_lon, stops.stop_lat),\n    crs = 4326)\nstops\n\n\n\n\nstops = read_csv(\"data/gtfs/stops.txt\") |&gt;\n  select(-stop_code) |&gt;\n  st_as_sf(coords = c(\"stop_lon\", \"stop_lat\"), crs = \"EPSG:4326\")\nstops"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#plotting-attributes-and-layers",
+    "href": "post/2023/ogh23-side-by-side/index.html#plotting-attributes-and-layers",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Plotting attributes and layers",
+    "text": "Plotting attributes and layers\nThe following commands plot the bus stops loaded in the previous step. Note that the tmap package is hereby used in R to create these more advanced plots, as it also supports interactive mapping (see below).\n\nPythonR\n\n\n\nstops.plot(markersize=1, column='zone_id', legend=True);\n\n\n\n\ntm_shape(stops) +\n  tm_symbols(size = 0.1, col = \"zone_id\")\n\n\n\n\nWe can add basic overlays in both languages as follows.\n\nPythonR\n\n\n\nbase = stops.plot(markersize=0.1)\npoi.plot(ax=base, color='red');\n\n\n\n\n\nplot(stops$geometry, col = \"grey\", pch = 20, cex = 0.5)\nplot(poi_sf$geometry, col = \"red\", add = TRUE)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#interactive-plots",
+    "href": "post/2023/ogh23-side-by-side/index.html#interactive-plots",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Interactive plots",
+    "text": "Interactive plots\nThe following commands create interactive plots, in Python and R respectively. The Python code requires the folium and mapclassify packages, which are not installed by default when you install geopandas. Note that with tmap, you can use the same code to create static and interactive plots, by changing the tmap_mode().\n\nPythonR\n\n\n\nstops.explore(column='zone_id', legend=True, cmap='Dark2')\n\n\n\n\ntmap_mode(\"view\")\ntm_shape(stops) +\n  tm_symbols(size = 0.1, col = \"zone_id\")"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#reprojecting-data",
+    "href": "post/2023/ogh23-side-by-side/index.html#reprojecting-data",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Reprojecting data",
+    "text": "Reprojecting data\nThe following commands reproject the data to a local projected Coordinate Reference System (CRS).\n\nPythonR\n\n\n\npoi.crs\npoi_projected = poi.to_crs(2180)\nstops_projected = stops.to_crs(2180)\n\n\n\n\nst_crs(poi_sf)\npoi_projected = st_transform(poi_sf, 2180)\nstops_projected = st_transform(stops, 2180)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#buffers",
+    "href": "post/2023/ogh23-side-by-side/index.html#buffers",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Buffers",
+    "text": "Buffers\nThe following commands create buffers around the points. Note that R allows buffer to be created directly from a spatial data frame with geographic (lon/lot) coordinates thanks to its integration with Google’s S2 spherical geometry engine, as outlined in Geocomputation with R. For buffer operations to work in Python you must reproject the data first (which we did, see above) (although there are plans for geopandas to support a spherical geometry backend at some point, as discussed in issue #2098).\n\nPythonR\n\n\n\nTo create a new vector layers named poi_buffer, in both languages, we can do the following.\n\npoi_buffer = poi.copy()\npoi_buffer.geometry = poi_projected.buffer(150).to_crs(4326)\n\n\n\n\npoi_buffer = st_buffer(poi_sf, 150)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#calculating-distances-and-areas",
+    "href": "post/2023/ogh23-side-by-side/index.html#calculating-distances-and-areas",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Calculating distances and areas",
+    "text": "Calculating distances and areas\nAn interesting difference between R and Python is that the former uses the units package to store units, making it easy to convert between them, as outlined in the buffers section of the R lecture notes.\n\nPythonR\n\n\n\npoi_buffer.to_crs(2180).area\n\n\n\n\nst_area(poi_buffer)"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#spatial-subsetting",
+    "href": "post/2023/ogh23-side-by-side/index.html#spatial-subsetting",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Spatial subsetting",
+    "text": "Spatial subsetting\nCode to subset the bus stops within the buffered poi points is shown below. The R code is more concise because there is a special [ notation for the specific case of subsetting by intersection. In Python you must undertake the explicit steps, which are applicable to any predicate in both languages:\n\nTake the unary union of the buffered points before subsetting\nCreate a boolean Series object with the .intersects or other method, and use the boolean Series to subset the data (rather than another geographic object)\n\n\nPythonR\n\n\n\npoi_union = poi_buffer.unary_union\nsel = stops.intersects(poi_union)\nstops_in_b = stops[sel]\nstops_in_b\n\n\n\n\nstops_in_b = stops[poi_buffer, ]\nstops_in_b"
+  },
+  {
+    "objectID": "post/2023/ogh23-side-by-side/index.html#spatial-joins",
+    "href": "post/2023/ogh23-side-by-side/index.html#spatial-joins",
+    "title": "Geographic data analysis in R and Python: comparing code and outputs for vector data (side-by-side version)",
+    "section": "Spatial joins",
+    "text": "Spatial joins\nSpatial joins are implemented with similar functions in R and Python and the outputs are the same. See the Python and R tutorials, and in Geocomputation with R Section 4.2.4 and Geocomputation with Python 3.3.4 for more details.\n\nPythonR\n\n\n\npoi_buffer.sjoin(stops, how='left')\n\n\n\n\nst_join(poi_buffer, stops)"
   }
 ]
