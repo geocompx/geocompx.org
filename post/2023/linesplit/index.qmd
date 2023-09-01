@@ -78,22 +78,22 @@ lines_number = round(sqrt(n_cells))
 
 
 ```{r}
-#| eval: false
-#| echo: false
 # One way of creating it:
 grid_polygons = sf::st_make_grid(study_area, n = c(10, 10))
-grid = sf::st_cast(grid_polygons, "LINESTRING")
-summary(duplicated(grid))
-plot(grid[1])
+grid_polygons_lines = sf::st_cast(grid_polygons, "LINESTRING")
+grid_vect = terra::vect(grid_polygons)
+grid_rast = terra::rast(grid_vect, nrow = lines_number, ncol = lines_number)
+terra::values(grid_rast) = runif(n_cells)
 ```
 
 We'll define a function to create the grid, that contains lines that go horizontally and vertically, as follows:
 
 ```{r}
 #| code-fold: true
-mkgrid <- function(x, lines_number = 100) {
+mkgrid <- function(x, lines_number = 10) {
   # function creates grid based on the bbox of the sf object with defined number of lines
   # inspired by https://grass.osgeo.org/grass82/manuals//v.mkgrid.html
+  lines_number = lines_number + 1
   pbox <- sf::st_bbox(x)
   pbox <- data.frame(xmin = pbox[1], ymin = pbox[2], xmax = pbox[3], ymax = pbox[4])
 
@@ -127,6 +127,21 @@ Construct the grid as follows:
 grid = mkgrid(study_area, lines_number = lines_number)
 class(grid$grid)
 plot(grid$grid)
+```
+
+We can check that the `grid` and `grid_polygon` objects are equivalent as follows:
+
+```{r}
+plot(grid$grid, lwd = 9, col = "red")
+plot(grid_polygons_lines, lwd = 3, col = "blue", add = TRUE)
+```
+
+And for `terra` objects:
+
+```{r}
+library(terra)
+plot(grid_rast, lwd = 9)
+plot(grid_vect, lwd = 3, col = NA, add = TRUE)
 ```
 
 # Approaches
@@ -198,11 +213,12 @@ tm_shape(st_cast(roads_splitted$geometry[10], 'POINT')) + tm_dots(col = "red", s
 # Rasterisation
 
 ```{r}
-#| eval: false
-# TODO: fix this bit
 roads_split_lines$length = st_length(roads_split_lines)
-rasterised_lines = terra::rasterize(roads_split_lines, grd, field = "osm_id")
+rasterised_lines = terra::rasterize(roads_split_lines, grid_rast, field = "length", fun = sum)
+plot(rasterised_lines)
+plot(vect(roads), add = TRUE)
 ```
+
 
 # Results
 
