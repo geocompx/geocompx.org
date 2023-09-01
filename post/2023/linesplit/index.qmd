@@ -24,7 +24,7 @@ A key message if you're doing this kind of operation on medium to large datasets
 
 # Introduction
 
-# Input data
+## Pre-requisites
 
 ```{r}
 # The problem
@@ -37,11 +37,63 @@ A key message if you're doing this kind of operation on medium to large datasets
 
 library(sf)
 library(dplyr)
+```
 
+# Input data
+
+We used the following input datasets and parameters:
+
+- `study_area`: a polygon, the larger the area, the more roads
+- Transport network data representing part of Poznan, Poland, where the idea for this blog post originated
+- A grid of lines representing the raster cells, defined by `n_cells`: the number of cells in the grid, or the size of the cells in the grid, or a `raster_grid` object
+
+## The case study area
+
+For the case study area we used a small area in Poznan around the Adam Mickiewicz University campus, as shown in the map below.
+
+```{r}
+buffer_distance = 100
+# study_area = sf::st_read("https://github.com/Robinlovelace/opengeohub2023/raw/main/pois_buffer_simple.geojson")
+geography_department = tmaptools::geocode_OSM("Collegium Geographicum, Poznan", as.sf = TRUE)
+study_area = sf::st_buffer(geography_department$point, buffer_distance)
+plot(study_area)
+```
+
+## Transport network data
+
+```{r}
+roads = osmextract::oe_get("Poznan", boundary = study_area, boundary_type = "clipsrc")
+nrow(roads)
+plot(roads$geometry)
+```
+
+## Grid of lines
+
+Set the number of cells in the grid:
+
+```{r}
+n_cells = 100
+lines_number = round(sqrt(n_cells))
+```
+
+
+```{r}
+#| eval: false
+#| echo: false
+# One way of creating it:
+grid_polygons = sf::st_make_grid(study_area, n = c(10, 10))
+grid = sf::st_cast(grid_polygons, "LINESTRING")
+summary(duplicated(grid))
+plot(grid[1])
+```
+
+We'll define a function to create the grid, that contains lines that go horizontally and vertically, as follows:
+
+```{r}
+#| code-fold: true
 mkgrid <- function(x, lines_number = 100) {
   # function creates grid based on the bbox of the sf object with defined number of lines
   # inspired by https://grass.osgeo.org/grass82/manuals//v.mkgrid.html
-  lines_number <- 100
   pbox <- sf::st_bbox(x)
   pbox <- data.frame(xmin = pbox[1], ymin = pbox[2], xmax = pbox[3], ymax = pbox[4])
 
@@ -67,29 +119,24 @@ mkgrid <- function(x, lines_number = 100) {
 
   list(grid = grid, grid_h = grid_h, grid_v = grid_v)
 }
+```
 
-poznan_pbf_filnename = "~/data/osm/"
-list.files(poznan_pbf_filnename)
-file.remove(file.path(poznan_pbf_filnename, "bbbike_Poznan.gpkg"))
-# osmextract::oe_vectortranslate(poznan_pbf_filnename)
-roads_all = osmextract::oe_get("Poznan", extra_tags = "maxspeed", force_vectortranslate = TRUE)
+Construct the grid as follows:
 
-set.seed(1234)
+```{r}
+grid = mkgrid(study_area, lines_number = lines_number)
+class(grid$grid)
+plot(grid$grid)
+```
 
-roads = roads_all |>
-  sample_n(10)
+# Approaches
 
+```{r}
 ##### 1. segmentize
 time_st_segmentize = system.time({
   roads_segmented <- st_as_sf(roads, wkt = "geometry", crs = "EPSG:4326") |>
   sf::st_segmentize(dfMaxLength = 10)
 })
-
-
-grid <- mkgrid(roads_all)
-
-grd <- stars::st_as_stars(sf::st_bbox(roads_all), nx = 100, ny = 100, values = 1) |>
-  st_as_sf(as_points = FALSE) |> st_cast("MULTILINESTRING")
 
 ##### 2. st_split
 time_st_split <- system.time({roads_splitted <- lwgeom::st_split(tibble::rowid_to_column(roads), grid$grid)|>
@@ -130,6 +177,12 @@ times_combined = rbind(time_st_segmentize, time_st_split, time_split_lines, time
 
 ##### Visual verification
 
+```
+
+
+We can visualise the results as follows.
+
+```{r}
 library(tmap)
 tmap_mode("view")
 
@@ -138,11 +191,24 @@ tm_shape(st_cast(roads_splitted$geometry[10], 'POINT')) + tm_dots(col = "red", s
   tm_shape(st_cast(roads$geometry[10], 'POINT')) + tm_dots(col = "green") +
   tm_shape(grid$grid_v) + tm_lines(lty = "dotted") +
   tm_shape(grid$grid_h) + tm_lines(lty = "dotted") +
-  tm_shape(grid$grid) + tm_lines()
-
+  tm_shape(grid$grid) + tm_lines() +
+  tm_basemap("Esri.WorldImagery")
 ```
 
-# Approaches
+# Rasterisation
+
+```{r}
+#| eval: false
+# TODO: fix this bit
+roads_split_lines$length = st_length(roads_split_lines)
+rasterised_lines = terra::rasterize(roads_split_lines, grd, field = "osm_id")
+```
+
+# Results
+
+```{r}
+knitr::kable(times_combined)
+```
 
 # Discussion and next steps
 
