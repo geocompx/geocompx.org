@@ -1,0 +1,301 @@
+---
+title: "R-spatial beyond `{sf}`"
+author: 
+  - name: Josiah Parry
+    affiliation: Esri
+    orcid: 0000-0001-9910-865X
+categories: 
+  - posts
+  - rstats
+tags: [rspatial]
+date: "2023-09-06"
+slug: r-spatial-beyond-sf
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`{sf}` has transformed the R ecosystem and helped pave the way for wider adoption of geospatial workflows by R users. The R-spatial ecosystem, however, is much bigger than just sf. There are lower level packages such as `{geos}`, `{wk}`, and `{s2}` that provide access to geometries and algorithms outside of the context of sf. These packages are often more performant than sf but require a different frame of mind when using them. 
+
+The goal of this post is to demystify the way in which sf represents geometries and explain how other geometry libraries can be use along side their typical sf workflows. 
+
+## Understanding `sf`
+
+Most R users that do geospatial analysis are familiar with sf and understand spatial workflows in that context only. Many users of `sf` view it as this magical data frame that lets you do spatial analysis—and that is exactly how it feels! This means that sf has done a great job in making spatial analysis feel a lot easier for the vast majority of R users. 
+
+But `sf` needs to be understood in a more fundamental way. `sf` is named after the [Simple Feature Access Standard](https://en.wikipedia.org/wiki/Simple_Features). Simple features are an agreed upon way to represent "geometric primitives"—things like `Point`s, `LineString`s, `Polygon`s, and their `Multi`- types. The `sf` package builds a hierarchy off of these. We have `sfg`, `sfc`, and `sf` objects.
+
+[![](https://r-spatial.github.io/sf/articles/sf_xfig.png)](https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features)
+
+### `sfg` objects
+
+At the core is the `sfg` class which are representations of simple feature geometries. `sfg` class objects are representations of a simple feature. They are a single geometry at a time. We can think of them as a scalar value (even though R does not have the concept of a scalar).
+
+```{r}
+library(sf)
+
+# create a point
+pnt <- st_point(c(0, 10))
+
+# create a line
+ln <- st_linestring(matrix(c(0, 1, 0, 0), ncol = 2))
+
+class(pnt)
+class(ln)
+```
+
+Each scalar value can be used independently which is useful in itself. 
+
+```{r}
+st_length(ln)
+```
+`sfg` objects are very simple objects constructed of numeric vectors, matrices, and lists of matrices. They also have no sense of a coordinate reference system (CRS). More often than not, though, we want to have a vector of geometries—one for each element in a dataset, for example. In sf, a vector of geometries is stored in an `sfc` object.
+
+### `sfc` objects
+
+`sfc` is short for **s**imple **f**eature **c**olumn. You might think that you could create a vector of geometries by combining them using `c()` but that would be wrong
+
+```{r}
+c(pnt, pnt)
+c(pnt, ln)
+```
+`sfg` objects behave like scalars so combining them creates either a `Multi`- type of the `sfg` or a geometry collection (another type of simple feature).
+
+To create a vector of geometries you must use `st_sfc()`. `st_sfc()` is the construct for creating a "simple feature geometry list column." It lets you also set a number of attributes that are associated with the vector. 
+
+```{r}
+st_sfc(pnt, pnt)
+```
+
+Each `sfc` object attributes such as a CRS, bounding box, and precision. 
+
+```{r}
+c(
+  st_sfc(pnt, pnt), 
+  st_sfc(pnt),
+  st_sfc(ln)
+)
+```
+
+Under the hood, this is just a list of `sfg` objects. Remember, it's not magic! 
+
+```{r}
+unclass(st_sfc(pnt, pnt))
+```
+
+Since `sfc` objects are vectors, they can be included as a column in a data frame. 
+
+```{r}
+df <- data.frame(
+  geo = st_sfc(pnt, pnt)
+)
+
+df
+
+class(df)
+```
+
+## Geometry and data.frames
+
+Having geometry included in a data frame was a huge win for the R community because this means that attributes can be included along with geometries. Further, geometries in a data frame means that they are dplyr compatible. 
+
+For example we can create a vector of points from the `x` and `y` columns from the `diamonds` dataset in `ggplot2`.
+
+```{r}
+data(diamonds, package = "ggplot2")
+
+pnts <- purrr::map2( # <1>
+  diamonds$x, 
+  diamonds$y, 
+  function(.x, .y) st_point(c(.x, .y)) # <2>
+) |> 
+  st_sfc() # <3>
+```
+1. We iterate over both the x and y columns in the diamonds dataset returning a list
+2. Each value of `x` and `y` are accessed through the placeholder `.x` and `.y` based on their position in the `map2()` function. `st_point()` takes a length 2 numeric vector and returns a single `sfg` `POINT` object.
+3. We pass the list of `sfg` objects to create an `sfc`
+
+We can included this in a data frame 
+
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+
+dmnd <- diamonds |> 
+  select(price, clarity) |> 
+  bind_cols(geometry = pnts)
+
+head(dmnd)
+```
+
+Now we have a tibble with price, clarity, and geometry! Huge win! What if we wanted to calculate the average price by clarity and keep the geometries?
+
+```{r}
+dmnd |> 
+  group_by(clarity) |> 
+  summarise(avg_price = mean(price))
+```
+
+Unfortunately, we lose the geometry just like we would for any other column that wasn't included in the `summarise()` call. To keep it, we would need to perform an operation on the geometry itself. 
+
+```{r}
+dmnd |> 
+  group_by(clarity) |> 
+  summarise(
+    avg_price = mean(price),
+    geometry = st_union(geometry)
+  )
+```
+
+Wouldn't it be nice if the geometry knew to do that? Well, that is exactly what `sf` objects are.
+
+## `sf` objects
+
+`sf` objects are just data frames with a geometry column that is *sticky* and *smart.* We can create an `sf` object if an `sfc` column is present in a data frame by using `st_as_sf()`. 
+
+```{r}
+dmnd_sf <- st_as_sf(dmnd)
+```
+
+Doing this creates an object of class `sf`. The two things that make an `sf` object so special are the class `sf` and the the attribute `sf_column`. 
+
+```{r}
+attr(dmnd_sf, "sf_column") # <1>
+```
+1. `attr()` lets us accesss a single attribute by name
+This attribute tells us which column is the geometry. Because we have this `sf` can implement its own methods for common functions like `select()`, `mutate()`, `aggregate()`, `group_by()`, etc which always keep the `attr(x, "sf_column")` attached to the data frame. 
+Having the class and attribute allow methods like `summarise()` to be written for the class itself and handle the things like unioning geometry for us. 
+
+```{r}
+dmnd_sf |> 
+  group_by(clarity) |> 
+  summarise(avg_price = mean(price))
+```
+Note that this is just like what we wrote earlier except that we didn't have to handle the geometry column manually. If we compare these two approaches and ignore attribute difference like `sf_column` and `class` we can see that they are identical.
+
+```{r}
+x <- dmnd |> 
+  group_by(clarity) |> 
+  summarise(
+    avg_price = mean(price),
+    geometry = st_union(geometry)
+  )
+
+y <- dmnd_sf |> 
+  group_by(clarity) |> 
+  summarise(avg_price = mean(price))
+
+all.equal(x, y, check.attributes = FALSE) # <1>
+```
+1. We ignore attributes because they _will_ be different because the classes are different
+
+## Other geometry vectors
+
+Knowing how `sf` works can be helpful for understanding how we can ease our reliance on it for all geospatial operations. Instead of thinking of the entire sf data frame as the thing that handles all geometry operations we now know that it is the `sfc` geometry column. 
+
+In R there are different ways of representing geometry besides `sfc` vectors. The packages `s2`, `geos`, `wk`, and `rsgeo` all provide different vectors of geometries that can be used. 
+
+These libraries are very handy for doing geometric operations. Each of these packages tend to be better at one thing than another and each have their place. You will often find big speed improvements if you use these libraries instead of `sf` for certain things.
+
+Take for example calculating the length of linestrings on a geodesic. We can use the `roxel` dataset from `{sfnetworks}`. 
+
+```{r}
+data(roxel, package = "sfnetworks")
+```
+
+To illustrate we can extract the geometry column and cast it as an `rsgeo` class object.
+
+```{r}
+library(rsgeo)
+geo <- roxel$geometry
+rs <- as_rsgeo(geo)
+```
+
+We can then use the functions `st_length()` and `length_haversine()` respectively to compute the length of linestrings. 
+
+```{r}
+bench::mark(
+  st_length(geo),
+  length_haversine(rs),
+  check = FALSE
+)
+```
+This is markedly faster when using rsgeo. We also do not have to extract the vector and work with it as its own object. Any vector can be included in a data frame, remember? 
+
+```{r}
+roxel |> 
+  as_tibble() |> 
+  mutate(
+    geometry = as_rsgeo(geometry),
+    length = length_haversine(geometry)
+    ) |> 
+  select(name, type, length, geometry)
+```
+This same approach can work for other libraries such as geos.
+
+```{r}
+library(geos)
+
+roxel |> 
+  as_tibble() |> 
+  mutate(
+    geometry = as_geos_geometry(geometry),
+    length = geos_length(geometry)
+    ) |> 
+  select(name, type, length, geometry)
+```
+
+If you plan on doing more than just one operation, it is best to convert to the desired geometry type only once and then use it in subsequent calls. Converting from one geometry type can take some time and add additional and unwanted overhead if you're doing it all the time. 
+
+```{r}
+roxy_geos <- roxel |> 
+  st_transform(25832) |> # <1>
+  as_tibble() |> # <2>
+  mutate(geometry = as_geos_geometry(geometry)) # <3>
+```
+1. We project our dataset to use meters
+2. We remove the sf class so we can modify the geometry column
+3. We update the geometry from an `sfc` to a `geos_geometry`
+
+With a geometry column that is a `geos_geometry`, you can use the functions from the `geos` package to perform your analyses. And, if doing larger scale analyses, it might be faster and more memory efficient!
+
+
+:::{.panel-tabset}
+
+## geos 
+```{r}
+roxy_geos |> 
+  mutate(length = geos_length(geometry)) |> 
+  group_by(type) |> 
+  summarise(
+    geometry = geos_unary_union(geos_make_collection(geometry)),
+    avg_len = sum(length)
+  ) 
+```
+
+## sf
+
+```{r}
+roxel |> 
+  mutate(length = st_length(geometry)) |> 
+  group_by(type) |> 
+  summarise(avg_len = sum(length)) 
+```
+
+:::
+
+## Continuing your r-spatial journey
+
+With this, I encourage you to look at other geometry libraries available in the R ecosystem. Some of the notable ones are: 
+
+- [s2](https://r-spatial.github.io/s2/index.html) for spherical geometry operations with google s2
+- [geos](https://paleolimbot.github.io/geos/) bindings to the powerful libgeos C library
+- [rsgeo](https://rsgeo.josiahparry.com) bindings to the GeoRust geo-types and geo crates
+
+Each library can convert to and from sf geometries as well.
+
+Happy programming! 
+

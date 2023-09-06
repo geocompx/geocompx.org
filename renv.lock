@@ -547,6 +547,11 @@
         "Rcpp"
       ]
     },
+    "geos": {
+      "Package": "geos",
+      "Version": "0.2.3",
+      "Source": "Repository"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.4.3",
@@ -1281,6 +1286,11 @@
       "Repository": "CRAN",
       "Hash": "1de7ab598047a87bba48434ba35d497d",
       "Requirements": []
+    },
+    "rsgeo": {
+      "Package": "rsgeo",
+      "Version": "0.1.5",
+      "Source": "Repository"
     },
     "rstudioapi": {
       "Package": "rstudioapi",
