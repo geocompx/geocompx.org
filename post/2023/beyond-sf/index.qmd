@@ -261,7 +261,7 @@ roxy_geos <- roxel |>
   mutate(geometry = as_geos_geometry(geometry)) # <3>
 ```
 1. We project our dataset to use meters
-2. We remove the sf class so we can modify the geometry column
+2. We remove the `sf` class so we can modify the geometry column
 3. We update the geometry from an `sfc` to a `geos_geometry`
 
 With a geometry column that is a `geos_geometry`, you can use the functions from the **geos** package to perform your analyses. And, if doing larger scale analyses, it might be faster and more memory efficient!
