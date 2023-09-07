@@ -160,7 +160,7 @@ Wouldn't it be nice if the geometry knew to do that? Well, that is exactly what 
 dmnd_sf <- st_as_sf(dmnd)
 ```
 
-Doing this creates an object of class `sf`. The two things that make an `sf` object so special are the class `sf` and the the attribute `sf_column`. 
+Doing this creates an object of class `sf`. The two things that make an `sf` object so special are the class `sf` and the attribute `sf_column`. 
 
 ```{r}
 attr(dmnd_sf, "sf_column") # <1>
