@@ -1,0 +1,236 @@
+---
+title: "Splitting and rasterising linestrings representing transport networks"
+# # Alternative title:
+# title: "Teaching R and Python for geographic data: shared experiences and lessons learned"
+author: 
+  - name: Iwo Augustyniak
+    affiliation: University of Warsaw, Poland
+    orcid: 0000-0002-1057-3721
+  - name: Robin Lovelace
+    affiliation: University of Leeds, Active Travel England, UK
+    orcid: 0000-0001-5679-6536
+date: "2023-08-15"
+slug: linesplit
+categories: 
+  - posts
+  - rstats
+tags: [rspatial]
+draft: true
+---
+
+The outputs we're looking for are raster datasets with attributes associated with roads and other transport types.
+
+A key message if you're doing this kind of operation on medium to large datasets is: watch out for `st_split()`: in our benchmarks it is very slow.
+
+# Introduction
+
+## Pre-requisites
+
+```{r}
+# The problem
+#
+# There is a need to split road network with the grid.
+# The only function for this I'm aware of is lwgeom::st_split
+# This function is quite slow for dense grid (thousands of lines) and many roads (milions)
+#
+# The challange is how to optimize it or make more 'smarter'
+
+library(sf)
+library(dplyr)
+```
+
+# Input data
+
+We used the following input datasets and parameters:
+
+- `study_area`: a polygon, the larger the area, the more roads
+- Transport network data representing part of Poznan, Poland, where the idea for this blog post originated
+- A grid of lines representing the raster cells, defined by `n_cells`: the number of cells in the grid, or the size of the cells in the grid, or a `raster_grid` object
+
+## The case study area
+
+For the case study area we used a small area in Poznan around the Adam Mickiewicz University campus, as shown in the map below.
+
+```{r}
+buffer_distance = 100
+# study_area = sf::st_read("https://github.com/Robinlovelace/opengeohub2023/raw/main/pois_buffer_simple.geojson")
+geography_department = tmaptools::geocode_OSM("Collegium Geographicum, Poznan", as.sf = TRUE)
+study_area = sf::st_buffer(geography_department$point, buffer_distance)
+plot(study_area)
+```
+
+## Transport network data
+
+```{r}
+roads = osmextract::oe_get("Poznan", boundary = study_area, boundary_type = "clipsrc")
+nrow(roads)
+plot(roads$geometry)
+```
+
+## Grid of lines
+
+Set the number of cells in the grid:
+
+```{r}
+n_cells = 100
+lines_number = round(sqrt(n_cells))
+```
+
+
+```{r}
+# One way of creating it:
+grid_polygons = sf::st_make_grid(study_area, n = c(10, 10))
+grid_polygons_lines = sf::st_cast(grid_polygons, "LINESTRING")
+grid_vect = terra::vect(grid_polygons)
+grid_rast = terra::rast(grid_vect, nrow = lines_number, ncol = lines_number)
+terra::values(grid_rast) = runif(n_cells)
+```
+
+We'll define a function to create the grid, that contains lines that go horizontally and vertically, as follows:
+
+```{r}
+#| code-fold: true
+mkgrid <- function(x, lines_number = 10) {
+  # function creates grid based on the bbox of the sf object with defined number of lines
+  # inspired by https://grass.osgeo.org/grass82/manuals//v.mkgrid.html
+  lines_number = lines_number + 1
+  pbox <- sf::st_bbox(x)
+  pbox <- data.frame(xmin = pbox[1], ymin = pbox[2], xmax = pbox[3], ymax = pbox[4])
+
+  x = seq.int(from = pbox$xmin, to = pbox$xmax, length.out = lines_number)
+
+  # vertical lines
+  grid_v <- as.data.frame(x) |>
+    mutate(y = x, from = pbox$ymin, to = pbox$ymax) |>
+    as.matrix()
+  geom <- apply(grid_v, 1, function(x)  st_as_text(st_linestring(matrix(x, ncol = 2))), simplify = T)
+  grid_v <- cbind(as.data.frame(grid_v), geom) |>  st_as_sf(wkt = "geom", crs = "EPSG:4326")
+
+  # horizontal lines
+  y = seq.int(from = pbox$ymin, to = pbox$ymax, length.out = lines_number)
+  grid_h <- as.data.frame(y) |>
+    mutate(x = y, from = pbox$xmin, to = pbox$xmax) |> select(from, to, x, y) |>
+    as.matrix()
+  geom <- apply(grid_h, 1, function(x)  st_as_text(st_linestring(matrix(x, ncol = 2))), simplify = T)
+  grid_h <- cbind(as.data.frame(grid_h), geom) |>  st_as_sf(wkt = "geom", crs = "EPSG:4326")
+
+  # grid as one object
+  grid <- st_union(rbind(grid_h, grid_v))
+
+  list(grid = grid, grid_h = grid_h, grid_v = grid_v)
+}
+```
+
+Construct the grid as follows:
+
+```{r}
+grid = mkgrid(study_area, lines_number = lines_number)
+class(grid$grid)
+plot(grid$grid)
+```
+
+We can check that the `grid` and `grid_polygon` objects are equivalent as follows:
+
+```{r}
+plot(grid$grid, lwd = 9, col = "red")
+plot(grid_polygons_lines, lwd = 3, col = "blue", add = TRUE)
+```
+
+And for `terra` objects:
+
+```{r}
+library(terra)
+plot(grid_rast, lwd = 9)
+plot(grid_vect, lwd = 3, col = NA, add = TRUE)
+```
+
+# Approaches
+
+```{r}
+##### 1. segmentize
+time_st_segmentize = system.time({
+  roads_segmented <- st_as_sf(roads, wkt = "geometry", crs = "EPSG:4326") |>
+  sf::st_segmentize(dfMaxLength = 10)
+})
+
+##### 2. st_split
+time_st_split <- system.time({roads_splitted <- lwgeom::st_split(tibble::rowid_to_column(roads), grid$grid)|>
+  sf::st_collection_extract("LINESTRING") |>
+  group_by(rowid) |> summarise(sum = mean(rowid)) |> st_cast("LINESTRING")})
+
+
+##### 3. split_lines
+split_lines <- function(roads, blades_h, blades_v) {
+  blades_h <- collapse::rsplit(blades_h, 1:nrow(blades_h)) # data.frame to list
+  blades_v <- collapse::rsplit(blades_v, 1:nrow(blades_v)) # data.frame to list
+  tmp <- purrr::map(blades_h,\(x) lwgeom::st_split(tibble::rowid_to_column(roads), x)) |> # split roads line by line
+    purrr::list_rbind() |> # resulting list to data.frame
+    sf::st_as_sf() |> # data.frame to sf object
+    sf::st_collection_extract("LINESTRING") |>
+    group_by(rowid) |> summarise(sum = mean(rowid)) |> st_cast("MULTILINESTRING") # splitted road segments back to one road
+
+  # the same but with vertical lines
+  purrr::map(blades_v,\(x) lwgeom::st_split(tmp, x)) |>
+    purrr::list_rbind() |> sf::st_as_sf() |> sf::st_collection_extract("LINESTRING") |>
+    group_by(rowid) |> summarise(sum = mean(rowid)) |> st_cast("MULTILINESTRING") # st_cast("LINESTRING") 'disappears' parts of multilines
+}
+
+time_split_lines <- system.time({roads_split_lines <- split_lines(roads, grid$grid_h, grid$grid_v)})
+
+##### 4. split_lines2
+split_lines2 <- function(x, h, v) {
+  blades <- rbind(h, v)
+  crosses <- st_filter(x, blades, .predicate = st_crosses)
+  others <- filter(roads, !osm_id %in% (crosses$osm_id))
+  splitted <- lwgeom::st_split(crosses, blades)
+  rbind(splitted, others) |> sf::st_collection_extract("LINESTRING")
+}
+
+time_split_lines2 <- system.time({roads_split_lines2 <- split_lines2(roads, grid$grid_h, grid$grid_v)})
+
+times_combined = rbind(time_st_segmentize, time_st_split, time_split_lines, time_split_lines2)
+
+##### Visual verification
+
+```
+
+
+We can visualise the results as follows.
+
+```{r}
+library(tmap)
+tmap_mode("view")
+
+tm_shape(st_cast(roads_splitted$geometry[10], 'POINT')) + tm_dots(col = "red", scale = 4) +
+  tm_shape(st_cast(roads_split_lines$geometry[10], 'POINT')) + tm_dots(col = "blue", scale = 2) +
+  tm_shape(st_cast(roads$geometry[10], 'POINT')) + tm_dots(col = "green") +
+  tm_shape(grid$grid_v) + tm_lines(lty = "dotted") +
+  tm_shape(grid$grid_h) + tm_lines(lty = "dotted") +
+  tm_shape(grid$grid) + tm_lines() +
+  tm_basemap("Esri.WorldImagery")
+```
+
+# Rasterisation
+
+```{r}
+roads_split_lines$length = st_length(roads_split_lines)
+rasterised_lines = terra::rasterize(roads_split_lines, grid_rast, field = "length", fun = sum)
+plot(rasterised_lines)
+plot(vect(roads), add = TRUE)
+```
+
+
+# Results
+
+```{r}
+knitr::kable(times_combined)
+```
+
+# Discussion and next steps
+
+<!---
+ # References 
+--->
+
+
+
