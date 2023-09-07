@@ -25,19 +25,19 @@ The goal of this post is to demystify the way in which **sf** represents geometr
 
 ## Understanding `sf`
 
-Most R users that do geospatial analysis are familiar with sf and understand spatial workflows in that context only. Many users of `sf` view it as this magical data frame that lets you do spatial analysis—and that is exactly how it feels! This means that sf has done a great job in making spatial analysis feel a lot easier for the vast majority of R users. 
+Most R users that do geospatial analysis are familiar with **sf** and understand spatial workflows in that context only. Many users of **sf** view it as this magical data frame that lets you do spatial analysis—and that is exactly how it feels! This means that **sf** has done a great job in making spatial analysis feel a lot easier for the vast majority of R users. 
 
 :::{.callout-note}
 Read more about **sf** in [Spatial Data Science](https://r-spatial.org/book/07-Introsf.html#sec-sfintro)
 :::
 
-But `sf` needs to be understood in a more fundamental way. `sf` is named after the [Simple Feature Access Standard](https://en.wikipedia.org/wiki/Simple_Features). Simple features are an agreed upon way to represent "geometric primitives"—things like `Point`s, `LineString`s, `Polygon`s, and their `Multi`- types. The `sf` package builds a hierarchy off of these. We have `sfg`, `sfc`, and `sf` objects.
+But it is good to understand **sf** in a more fundamental way. **sf** is named after the [Simple Feature Access Standard](https://en.wikipedia.org/wiki/Simple_Features). Simple features are an agreed upon way to represent "geometric primitives"—things like `Point`s, `LineString`s, `Polygon`s, and their `Multi`- types. The **sf** package builds a hierarchy off of these. We have `sfg`, `sfc`, and `sf` objects.
 
 [![](https://r-spatial.github.io/sf/articles/sf_xfig.png)](https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features)
 
 ### `sfg` objects
 
-At the core is the `sfg` class which are representations of simple feature geometries. `sfg` class objects are representations of a simple feature. They are a single geometry at a time. We can think of them as a scalar value (even though R does not have the concept of a scalar).
+At the core is the `sfg` class which is the representation of a simple feature geometry. `sfg` class objects are representations of a simple feature. They are a single geometry at a time. We can think of them as a scalar value (even though R does not have the concept of a scalar).
 
 ```{r}
 library(sf)
@@ -57,7 +57,7 @@ Each scalar value can be used independently which is useful in itself.
 ```{r}
 st_length(ln)
 ```
-`sfg` objects are very simple objects constructed of numeric vectors, matrices, and lists of matrices. They also have no sense of a coordinate reference system (CRS). More often than not, though, we want to have a vector of geometries—one for each element in a dataset, for example. In sf, a vector of geometries is stored in an `sfc` object.
+`sfg` objects are very simple objects constructed of numeric vectors, matrices, and lists of matrices. They also have no sense of a coordinate reference system (CRS). More often than not, though, we want to have a vector of geometries—one for each element in a dataset, for example. In **sf**, a vector of geometries is stored in an `sfc` object.
 
 ### `sfc` objects
 
@@ -194,15 +194,15 @@ y <- dmnd_sf |>
 
 all.equal(x, y, check.attributes = FALSE) # <1>
 ```
-1. We ignore attributes because they _will_ be different because the classes are different
+1. We ignore attributes because they _will_ be different because the classes are different.
 
 ## Other geometry vectors
 
-Knowing how `sf` works can be helpful for understanding how we can ease our reliance on it for all geospatial operations. Instead of thinking of the entire sf data frame as the thing that handles all geometry operations we now know that it is the `sfc` geometry column. 
+Knowing how **sf** works can be helpful for understanding how we can ease our reliance on it for all geospatial operations. Instead of thinking of the entire sf data frame as the thing that handles all geometry operations we now know that it is the `sfc` geometry column. 
 
 In R there are different ways of representing geometry besides `sfc` vectors. The packages `s2`, `geos`, `wk`, and `rsgeo` all provide different vectors of geometries that can be used. 
 
-These libraries are very handy for doing geometric operations. Each of these packages tend to be better at one thing than another and each have their place. You will often find big speed improvements if you use these libraries instead of `sf` for certain things.
+These libraries are very handy for doing geometric operations. Each of these packages tend to be better at one thing than another, and each have their place. You might find big speed improvements if you opt to use one of these libraries instead of **sf** for certain things.
 
 Take for example calculating the length of linestrings on a geodesic. We can use the `roxel` dataset from `{sfnetworks}`. 
 
@@ -210,7 +210,7 @@ Take for example calculating the length of linestrings on a geodesic. We can use
 data(roxel, package = "sfnetworks")
 ```
 
-To illustrate we can extract the geometry column and cast it as an `rsgeo` class object.
+To illustrate, we can extract the geometry column and cast it as an `rsgeo` class object.
 
 ```{r}
 library(rsgeo)
@@ -224,10 +224,12 @@ We can then use the functions `st_length()` and `length_haversine()` respectivel
 bench::mark(
   st_length(geo),
   length_haversine(rs),
-  check = FALSE
+  check = FALSE # <1>
 )
 ```
-This is markedly faster when using rsgeo. We also do not have to extract the vector and work with it as its own object. Any vector can be included in a data frame, remember? 
+1. `check = FALSE` because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.
+
+This is markedly faster when using **rsgeo**. We also do not have to extract the vector and work with it as its own object. Any vector can be included in a data frame, remember? 
 
 ```{r}
 roxel |> 
@@ -238,7 +240,8 @@ roxel |>
     ) |> 
   select(name, type, length, geometry)
 ```
-This same approach can work for other libraries such as geos.
+
+This same approach can work for other libraries such as **geos**.
 
 ```{r}
 library(geos)
@@ -252,7 +255,7 @@ roxel |>
   select(name, type, length, geometry)
 ```
 
-If you plan on doing more than just one operation, it is best to convert to the desired geometry type only once and then use it in subsequent calls. Converting from one geometry type can take some time and add additional and unwanted overhead if you're doing it all the time. 
+If you plan on doing more than just one operation, it is best to convert to the desired geometry type only once and then use it in subsequent calls. Converting from one geometry type can take some time and add additional unwanted overhead if you're doing it all the time. 
 
 ```{r}
 roxy_geos <- roxel |> 
@@ -298,8 +301,9 @@ With this, I encourage you to look at other geometry libraries available in the 
 - [s2](https://r-spatial.github.io/s2/index.html) for spherical geometry operations with google s2
 - [geos](https://paleolimbot.github.io/geos/) bindings to the powerful libgeos C library
 - [rsgeo](https://rsgeo.josiahparry.com) bindings to the GeoRust geo-types and geo crates
+- [wk](https://paleolimbot.github.io/wk/) for low level generic geometry interface with C and C++ APIs
 
-Each library can convert to and from sf geometries as well.
+Each library can convert to and from **sf** geometries as well.
 
 Happy programming! 
 
