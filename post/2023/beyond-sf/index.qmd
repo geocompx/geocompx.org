@@ -165,7 +165,7 @@ Doing this creates an object of class `sf`. The two things that make an `sf` obj
 ```{r}
 attr(dmnd_sf, "sf_column") # <1>
 ```
-1. `attr()` lets us accesss a single attribute by name
+1. `attr()` lets us access a single attribute by name
 This attribute tells us which column is the geometry. Because we have this `sf` can implement its own methods for common functions like `select()`, `mutate()`, `aggregate()`, `group_by()`, etc which always keep the `attr(x, "sf_column")` attached to the data frame. 
 Having the class and attribute allow methods like `summarise()` to be written for the class itself and handle the things like unioning geometry for us. 
 
