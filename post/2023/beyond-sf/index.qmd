@@ -1,5 +1,5 @@
 ---
-title: "R-spatial beyond `{sf}`"
+title: "R-spatial beyond sf"
 author: 
   - name: Josiah Parry
     affiliation: Esri
