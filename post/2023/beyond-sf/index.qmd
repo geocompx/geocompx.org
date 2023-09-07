@@ -27,6 +27,10 @@ The goal of this post is to demystify the way in which sf represents geometries 
 
 Most R users that do geospatial analysis are familiar with sf and understand spatial workflows in that context only. Many users of `sf` view it as this magical data frame that lets you do spatial analysis—and that is exactly how it feels! This means that sf has done a great job in making spatial analysis feel a lot easier for the vast majority of R users. 
 
+:::{.callout-note}
+Read more about **sf** in [Spatial Data Science](https://r-spatial.org/book/07-Introsf.html#sec-sfintro)
+:::
+
 But `sf` needs to be understood in a more fundamental way. `sf` is named after the [Simple Feature Access Standard](https://en.wikipedia.org/wiki/Simple_Features). Simple features are an agreed upon way to represent "geometric primitives"—things like `Point`s, `LineString`s, `Polygon`s, and their `Multi`- types. The `sf` package builds a hierarchy off of these. We have `sfg`, `sfc`, and `sf` objects.
 
 [![](https://r-spatial.github.io/sf/articles/sf_xfig.png)](https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features)
