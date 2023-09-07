@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 **sf** has transformed the R ecosystem and helped pave the way for wider adoption of geospatial workflows by R users. The R-spatial ecosystem, however, is much bigger than just sf. There are lower level packages such as **geos**, **wk**, and **s2** that provide access to geometries and algorithms outside of the context of sf. These packages are often more performant than sf but require a different frame of mind when using them.
 
-The goal of this post is to demystify the way in which sf represents geometries and explain how other geometry libraries can be use along side their typical sf workflows. 
+The goal of this post is to demystify the way in which sf represents geometries and explain how other geometry libraries can be used along side their typical sf workflows.
 
 ## Understanding `sf`
 
