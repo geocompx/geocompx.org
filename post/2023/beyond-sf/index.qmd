@@ -71,7 +71,7 @@ To create a vector of geometries you must use `st_sfc()`. `st_sfc()` is the cons
 st_sfc(pnt, pnt)
 ```
 
-Each `sfc` object attributes such as a CRS, bounding box, and precision. 
+Each `sfc` object contains attributes such as a CRS (optional), bounding box, and precision.
 
 ```{r}
 c(
