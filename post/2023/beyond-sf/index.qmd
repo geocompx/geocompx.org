@@ -291,7 +291,7 @@ roxel |>
 
 :::
 
-## Continuing your r-spatial journey
+## Continuing your R-spatial journey
 
 With this, I encourage you to look at other geometry libraries available in the R ecosystem. Some of the notable ones are: 
 
