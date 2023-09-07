@@ -264,7 +264,7 @@ roxy_geos <- roxel |>
 2. We remove the sf class so we can modify the geometry column
 3. We update the geometry from an `sfc` to a `geos_geometry`
 
-With a geometry column that is a `geos_geometry`, you can use the functions from the `geos` package to perform your analyses. And, if doing larger scale analyses, it might be faster and more memory efficient!
+With a geometry column that is a `geos_geometry`, you can use the functions from the **geos** package to perform your analyses. And, if doing larger scale analyses, it might be faster and more memory efficient!
 
 
 :::{.panel-tabset}
