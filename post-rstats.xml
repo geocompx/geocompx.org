@@ -10,7 +10,1130 @@
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 30 Aug 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 08 Sep 2023 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>R-spatial beyond sf</title>
+  <dc:creator>Josiah Parry</dc:creator>
+  <link>https://geocompx.org/post/2023/beyond-sf/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p><strong>sf</strong> has transformed the R ecosystem and helped pave the way for wider adoption of geospatial workflows by R users. The R-spatial ecosystem, however, is much bigger than just <strong>sf</strong>. There are lower level packages such as <strong>geos</strong>, <strong>wk</strong>, and <strong>s2</strong> that provide access to geometries and algorithms outside of the context of <strong>sf</strong>. These packages are often more performant than <strong>sf</strong> but require a different frame of mind when using them.</p>
+<p>The goal of this post is to demystify the way in which <strong>sf</strong> represents geometries and explain how other geometry libraries can be used alongside typical <strong>sf</strong> workflows.</p>
+<section id="understanding-sf" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-sf">Understanding <code>sf</code></h2>
+<p>Most R users that do geospatial analysis are familiar with <strong>sf</strong> and understand spatial workflows in that context only. Many users of <strong>sf</strong> view it as this magical data frame that lets you do spatial analysis—and that is exactly how it feels! This means that <strong>sf</strong> has done a great job in making spatial analysis feel a lot easier for the vast majority of R users.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Read more about <strong>sf</strong> in <a href="https://r-spatial.org/book/07-Introsf.html#sec-sfintro">Spatial Data Science</a></p>
+</div>
+</div>
+<p>But it is good to understand <strong>sf</strong> in a more fundamental way. <strong>sf</strong> is named after the <a href="https://en.wikipedia.org/wiki/Simple_Features">Simple Feature Access Standard</a>. Simple features are an agreed upon way to represent “geometric primitives”—things like <code>Point</code>s, <code>LineString</code>s, <code>Polygon</code>s, and their <code>Multi</code>- types. The <strong>sf</strong> package builds a hierarchy off of these. We have <code>sfg</code>, <code>sfc</code>, and <code>sf</code> objects.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features"><img src="https://geocompx.org/post/2023/beyond-sf/https:/r-spatial.github.io/sf/articles/sf_xfig.png" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<section id="sfg-objects" class="level3">
+<h3 class="anchored" data-anchor-id="sfg-objects"><code>sfg</code> objects</h3>
+<p>At the core is the <code>sfg</code> class which is the representation of a simple feature geometry. <code>sfg</code> class objects are representations of a simple feature. They are a single geometry at a time. We can think of them as a scalar value (even though R does not have the concept of a scalar).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb1-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Linking to GEOS 3.11.1, GDAL 3.6.4, PROJ 9.1.1; sf_use_s2() is TRUE</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># create a point</span></span>
+<span id="cb1-5">pnt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>))</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># create a line</span></span>
+<span id="cb1-8">ln <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_linestring</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(pnt)</span>
+<span id="cb1-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] "XY"    "POINT" "sfg"</span></span>
+<span id="cb1-12"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(ln)</span>
+<span id="cb1-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] "XY"         "LINESTRING" "sfg"</span></span></code></pre></div>
+</div>
+<p>Each scalar value can be used independently which is useful in itself.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_length</span>(ln)</span>
+<span id="cb2-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] 1</span></span></code></pre></div>
+</div>
+<p><code>sfg</code> objects are very simple objects constructed of numeric vectors, matrices, and lists of matrices. They also have no sense of a coordinate reference system (CRS). More often than not, though, we want to have a vector of geometries—one for each element in a dataset, for example. In <strong>sf</strong>, a vector of geometries is stored in an <code>sfc</code> object.</p>
+</section>
+<section id="sfc-objects" class="level3">
+<h3 class="anchored" data-anchor-id="sfc-objects"><code>sfc</code> objects</h3>
+<p><code>sfc</code> is short for <strong>s</strong>imple <strong>f</strong>eature <strong>c</strong>olumn. You might think that you could create a vector of geometries by combining them using <code>c()</code> but that would be wrong</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(pnt, pnt)</span>
+<span id="cb3-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; MULTIPOINT ((0 10), (0 10))</span></span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(pnt, ln)</span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; GEOMETRYCOLLECTION (POINT (0 10), LINESTRING (0 0, 1 0))</span></span></code></pre></div>
+</div>
+<p><code>sfg</code> objects behave like scalars so combining them creates either a <code>Multi</code>- type of the <code>sfg</code> or a geometry collection (another type of simple feature).</p>
+<p>To create a vector of geometries you must use <code>st_sfc()</code>. <code>st_sfc()</code> is the construct for creating a “simple feature geometry list column.” It lets you also set a number of attributes that are associated with the vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(pnt, pnt)</span>
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry set for 2 features </span></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry type: POINT</span></span>
+<span id="cb4-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Dimension:     XY</span></span>
+<span id="cb4-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Bounding box:  xmin: 0 ymin: 10 xmax: 0 ymax: 10</span></span>
+<span id="cb4-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; CRS:           NA</span></span>
+<span id="cb4-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb4-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span></code></pre></div>
+</div>
+<p>Each <code>sfc</code> object contains attributes such as a CRS (optional), bounding box, and precision.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb5-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(pnt, pnt), </span>
+<span id="cb5-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(pnt),</span>
+<span id="cb5-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(ln)</span>
+<span id="cb5-5">)</span>
+<span id="cb5-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry set for 4 features </span></span>
+<span id="cb5-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry type: GEOMETRY</span></span>
+<span id="cb5-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Dimension:     XY</span></span>
+<span id="cb5-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 10</span></span>
+<span id="cb5-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; CRS:           NA</span></span>
+<span id="cb5-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb5-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb5-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb5-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; LINESTRING (0 0, 1 0)</span></span></code></pre></div>
+</div>
+<p>Under the hood, this is just a list of <code>sfg</code> objects. Remember, it’s not magic!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unclass</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(pnt, pnt))</span>
+<span id="cb6-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [[1]]</span></span>
+<span id="cb6-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb6-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; </span></span>
+<span id="cb6-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [[2]]</span></span>
+<span id="cb6-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; POINT (0 10)</span></span>
+<span id="cb6-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; </span></span>
+<span id="cb6-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; attr(,"precision")</span></span>
+<span id="cb6-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] 0</span></span>
+<span id="cb6-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; attr(,"bbox")</span></span>
+<span id="cb6-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; xmin ymin xmax ymax </span></span>
+<span id="cb6-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;    0   10    0   10 </span></span>
+<span id="cb6-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; attr(,"crs")</span></span>
+<span id="cb6-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Coordinate Reference System: NA</span></span>
+<span id="cb6-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; attr(,"n_empty")</span></span>
+<span id="cb6-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] 0</span></span></code></pre></div>
+</div>
+<p>Since <code>sfc</code> objects are vectors, they can be included as a column in a data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb7-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geo =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(pnt, pnt)</span>
+<span id="cb7-3">)</span>
+<span id="cb7-4"></span>
+<span id="cb7-5">df</span>
+<span id="cb7-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;       geometry</span></span>
+<span id="cb7-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 POINT (0 10)</span></span>
+<span id="cb7-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 POINT (0 10)</span></span>
+<span id="cb7-9"></span>
+<span id="cb7-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">class</span>(df)</span>
+<span id="cb7-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] "data.frame"</span></span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="geometry-and-data.frames" class="level2">
+<h2 class="anchored" data-anchor-id="geometry-and-data.frames">Geometry and data.frames</h2>
+<p>Having geometry included in a data frame was a huge win for the R community because this means that attributes can be included along with geometries. Further, geometries in a data frame means that they are dplyr compatible.</p>
+<p>For example we can create a vector of points from the <code>x</code> and <code>y</code> columns from the <code>diamonds</code> dataset in <code>ggplot2</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-8" style="background: #f1f3f5;"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>(diamonds, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ggplot2"</span>)</span>
+<span id="annotated-cell-8-2"></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-3" class="code-annotation-target">pnts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> purrr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">map2</span>(</span>
+<span id="annotated-cell-8-4">  diamonds<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>x, </span>
+<span id="annotated-cell-8-5">  diamonds<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>y, </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-6" class="code-annotation-target">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(.x, .y) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(.x, .y))</span>
+<span id="annotated-cell-8-7">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-8-8" class="code-annotation-target">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="1">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="6" data-code-annotation="2">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="8" data-code-annotation="3">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
+</dd>
+</dl>
+</div>
+</div>
+<p>We can included this in a data frame</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">warn.conflicts =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">dmnd <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> diamonds <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb8-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(price, clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb8-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bind_cols</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> pnts)</span>
+<span id="cb8-6"></span>
+<span id="cb8-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(dmnd)</span>
+<span id="cb8-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 6 × 3</span></span>
+<span id="cb8-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   price clarity    geometry</span></span>
+<span id="cb8-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;int&gt; &lt;ord&gt;       &lt;POINT&gt;</span></span>
+<span id="cb8-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1   326 SI2     (3.95 3.98)</span></span>
+<span id="cb8-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2   326 SI1     (3.89 3.84)</span></span>
+<span id="cb8-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3   327 VS1     (4.05 4.07)</span></span>
+<span id="cb8-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4   334 VS2      (4.2 4.23)</span></span>
+<span id="cb8-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5   335 SI2     (4.34 4.35)</span></span>
+<span id="cb8-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6   336 VVS2    (3.94 3.96)</span></span></code></pre></div>
+</div>
+<p>Now we have a tibble with price, clarity, and geometry! Huge win! What if we wanted to calculate the average price by clarity and keep the geometries?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">dmnd <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb9-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb9-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_price =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(price))</span>
+<span id="cb9-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 8 × 2</span></span>
+<span id="cb9-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   clarity avg_price</span></span>
+<span id="cb9-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;ord&gt;       &lt;dbl&gt;</span></span>
+<span id="cb9-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 I1          3924.</span></span>
+<span id="cb9-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 SI2         5063.</span></span>
+<span id="cb9-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3 SI1         3996.</span></span>
+<span id="cb9-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4 VS2         3925.</span></span>
+<span id="cb9-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5 VS1         3839.</span></span>
+<span id="cb9-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6 VVS2        3284.</span></span>
+<span id="cb9-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 7 VVS1        2523.</span></span>
+<span id="cb9-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 8 IF          2865.</span></span></code></pre></div>
+</div>
+<p>Unfortunately, we lose the geometry just like we would for any other column that wasn’t included in the <code>summarise()</code> call. To keep it, we would need to perform an operation on the geometry itself.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">dmnd <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb10-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="cb10-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_price =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(price),</span>
+<span id="cb10-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_union</span>(geometry)</span>
+<span id="cb10-6">  )</span>
+<span id="cb10-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 8 × 3</span></span>
+<span id="cb10-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   clarity avg_price                                                     geometry</span></span>
+<span id="cb10-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;ord&gt;       &lt;dbl&gt;                                                 &lt;MULTIPOINT&gt;</span></span>
+<span id="cb10-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 I1          3924. ((4.33 4.29), (4.33 4.36), (4.36 4.33), (4.38 4.42), (4.39 …</span></span>
+<span id="cb10-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 SI2         5063. ((0 0), (0 6.62), (3.79 3.75), (3.84 3.82), (3.87 3.85), (3…</span></span>
+<span id="cb10-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3 SI1         3996. ((3.88 3.84), (3.89 3.84), (3.9 3.85), (3.93 3.96), (3.95 3…</span></span>
+<span id="cb10-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4 VS2         3925. ((0 0), (3.73 3.68), (3.73 3.71), (3.74 3.71), (3.76 3.73),…</span></span>
+<span id="cb10-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5 VS1         3839. ((0 0), (3.83 3.85), (3.84 3.87), (3.86 3.89), (3.88 3.9), …</span></span>
+<span id="cb10-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6 VVS2        3284. ((3.83 3.86), (3.85 3.89), (3.85 3.9), (3.85 3.91), (3.86 3…</span></span>
+<span id="cb10-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 7 VVS1        2523. ((0 0), (3.83 3.85), (3.87 3.9), (3.88 3.95), (3.88 3.99), …</span></span>
+<span id="cb10-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 8 IF          2865. ((3.86 3.88), (3.89 3.9), (3.91 3.95), (3.92 3.94), (3.93 3…</span></span></code></pre></div>
+</div>
+<p>Wouldn’t it be nice if the geometry knew to do that? Well, that is exactly what <code>sf</code> objects are.</p>
+</section>
+<section id="sf-objects" class="level2">
+<h2 class="anchored" data-anchor-id="sf-objects"><code>sf</code> objects</h2>
+<p><code>sf</code> objects are just data frames with a geometry column that is <em>sticky</em> and <em>smart.</em> We can create an <code>sf</code> object if an <code>sfc</code> column is present in a data frame by using <code>st_as_sf()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dmnd_sf <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>(dmnd)</span></code></pre></div>
+</div>
+<p>Doing this creates an object of class <code>sf</code>. The two things that make an <code>sf</code> object so special are the class <code>sf</code> and the attribute <code>sf_column</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-13" style="background: #f1f3f5;"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-13-1" class="code-annotation-target"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">attr</span>(dmnd_sf, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sf_column"</span>)</span>
+<span id="annotated-cell-13-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] "geometry"</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
+</dd>
+</dl>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">dmnd_sf <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb12-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb12-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_price =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(price))</span>
+<span id="cb12-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Simple feature collection with 8 features and 2 fields</span></span>
+<span id="cb12-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry type: MULTIPOINT</span></span>
+<span id="cb12-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Dimension:     XY</span></span>
+<span id="cb12-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 10.74 ymax: 58.9</span></span>
+<span id="cb12-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; CRS:           NA</span></span>
+<span id="cb12-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 8 × 3</span></span>
+<span id="cb12-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   clarity avg_price                                                     geometry</span></span>
+<span id="cb12-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;ord&gt;       &lt;dbl&gt;                                                 &lt;MULTIPOINT&gt;</span></span>
+<span id="cb12-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 I1          3924. ((4.33 4.29), (4.33 4.36), (4.36 4.33), (4.38 4.42), (4.39 …</span></span>
+<span id="cb12-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 SI2         5063. ((0 0), (0 6.62), (3.79 3.75), (3.84 3.82), (3.87 3.85), (3…</span></span>
+<span id="cb12-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3 SI1         3996. ((3.88 3.84), (3.89 3.84), (3.9 3.85), (3.93 3.96), (3.95 3…</span></span>
+<span id="cb12-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4 VS2         3925. ((0 0), (3.73 3.68), (3.73 3.71), (3.74 3.71), (3.76 3.73),…</span></span>
+<span id="cb12-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5 VS1         3839. ((0 0), (3.83 3.85), (3.84 3.87), (3.86 3.89), (3.88 3.9), …</span></span>
+<span id="cb12-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6 VVS2        3284. ((3.83 3.86), (3.85 3.89), (3.85 3.9), (3.85 3.91), (3.86 3…</span></span>
+<span id="cb12-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 7 VVS1        2523. ((0 0), (3.83 3.85), (3.87 3.9), (3.88 3.95), (3.88 3.99), …</span></span>
+<span id="cb12-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 8 IF          2865. ((3.86 3.88), (3.89 3.9), (3.91 3.95), (3.92 3.94), (3.93 3…</span></span></code></pre></div>
+</div>
+<p>Note that this is just like what we wrote earlier except that we didn’t have to handle the geometry column manually. If we compare these two approaches and ignore attribute difference like <code>sf_column</code> and <code>class</code> we can see that they are identical.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-15" style="background: #f1f3f5;"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-15-1">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> dmnd <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="annotated-cell-15-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="annotated-cell-15-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="annotated-cell-15-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_price =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(price),</span>
+<span id="annotated-cell-15-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_union</span>(geometry)</span>
+<span id="annotated-cell-15-6">  )</span>
+<span id="annotated-cell-15-7"></span>
+<span id="annotated-cell-15-8">y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> dmnd_sf <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="annotated-cell-15-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(clarity) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="annotated-cell-15-10">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_price =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(price))</span>
+<span id="annotated-cell-15-11"></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-15-12" class="code-annotation-target"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all.equal</span>(x, y, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">check.attributes =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="annotated-cell-15-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; [1] TRUE</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="12" data-code-annotation="1">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="other-geometry-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="other-geometry-vectors">Other geometry vectors</h2>
+<p>Knowing how <strong>sf</strong> works can be helpful for understanding how we can ease our reliance on it for all geospatial operations. Instead of thinking of the entire sf data frame as the thing that handles all geometry operations we now know that it is the <code>sfc</code> geometry column.</p>
+<p>In R there are different ways of representing geometry besides <code>sfc</code> vectors. The packages <code>s2</code>, <code>geos</code>, <code>wk</code>, and <code>rsgeo</code> all provide different vectors of geometries that can be used.</p>
+<p>These libraries are very handy for doing geometric operations. Each of these packages tend to be better at one thing than another, and each have their place. You might find big speed improvements if you opt to use one of these libraries instead of <strong>sf</strong> for certain things.</p>
+<p>Take for example calculating the length of linestrings on a geodesic. We can use the <code>roxel</code> dataset from <code>{sfnetworks}</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>(roxel, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sfnetworks"</span>)</span></code></pre></div>
+</div>
+<p>To illustrate, we can extract the geometry column and cast it as an <code>rsgeo</code> class object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(rsgeo)</span>
+<span id="cb14-2">geo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> roxel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>geometry</span>
+<span id="cb14-3">rs <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_rsgeo</span>(geo)</span></code></pre></div>
+</div>
+<p>We can then use the functions <code>st_length()</code> and <code>length_haversine()</code> respectively to compute the length of linestrings.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-18" style="background: #f1f3f5;"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-18-1">bench<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mark</span>(</span>
+<span id="annotated-cell-18-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_length</span>(geo),</span>
+<span id="annotated-cell-18-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length_haversine</span>(rs),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-18-4" class="code-annotation-target">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">check =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="annotated-cell-18-5">)</span>
+<span id="annotated-cell-18-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 2 × 6</span></span>
+<span id="annotated-cell-18-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   expression                min   median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="annotated-cell-18-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;bch:expr&gt;           &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
+<span id="annotated-cell-18-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 st_length(geo)         6.34ms    6.8ms      140.    2.84MB     2.09</span></span>
+<span id="annotated-cell-18-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 length_haversine(rs) 457.01µs  515.3µs     1659.     8.8KB     0</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-18" data-code-lines="4" data-code-annotation="1"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>This is markedly faster when using <strong>rsgeo</strong>. We also do not have to extract the vector and work with it as its own object. Any vector can be included in a data frame, remember?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">roxel <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb15-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_tibble</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb15-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(</span>
+<span id="cb15-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_rsgeo</span>(geometry),</span>
+<span id="cb15-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length_haversine</span>(geometry)</span>
+<span id="cb15-6">    ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb15-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(name, type, length, geometry)</span>
+<span id="cb15-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 851 × 4</span></span>
+<span id="cb15-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;    name                  type        length</span></span>
+<span id="cb15-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;    &lt;chr&gt;                 &lt;fct&gt;        &lt;dbl&gt;</span></span>
+<span id="cb15-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  1 Havixbecker Strasse   residential   28.8</span></span>
+<span id="cb15-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  2 Pienersallee          secondary    108. </span></span>
+<span id="cb15-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  3 Schulte-Bernd-Strasse residential   54.3</span></span>
+<span id="cb15-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  4 &lt;NA&gt;                  path         155. </span></span>
+<span id="cb15-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  5 Welsingheide          residential  209. </span></span>
+<span id="cb15-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  6 &lt;NA&gt;                  footway       63.0</span></span>
+<span id="cb15-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  7 &lt;NA&gt;                  footway       42.2</span></span>
+<span id="cb15-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  8 &lt;NA&gt;                  path          45.3</span></span>
+<span id="cb15-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  9 &lt;NA&gt;                  track        348. </span></span>
+<span id="cb15-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 10 &lt;NA&gt;                  track        145. </span></span>
+<span id="cb15-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # ℹ 841 more rows</span></span>
+<span id="cb15-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # ℹ 1 more variable: geometry &lt;r_LINEST&gt;</span></span></code></pre></div>
+</div>
+<p>This same approach can work for other libraries such as <strong>geos</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(geos)</span>
+<span id="cb16-2"></span>
+<span id="cb16-3">roxel <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb16-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_tibble</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb16-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(</span>
+<span id="cb16-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_geos_geometry</span>(geometry),</span>
+<span id="cb16-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geos_length</span>(geometry)</span>
+<span id="cb16-8">    ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb16-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(name, type, length, geometry)</span>
+<span id="cb16-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 851 × 4</span></span>
+<span id="cb16-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;    name                  type          length geometry                          </span></span>
+<span id="cb16-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;    &lt;chr&gt;                 &lt;fct&gt;          &lt;dbl&gt; &lt;geos_geom&gt;                       </span></span>
+<span id="cb16-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  1 Havixbecker Strasse   residential 0.000331 &lt;LINESTRING (7.53372 51.95556, 7.…</span></span>
+<span id="cb16-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  2 Pienersallee          secondary   0.00101  &lt;LINESTRING (7.53244 51.95422, 7.…</span></span>
+<span id="cb16-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  3 Schulte-Bernd-Strasse residential 0.000505 &lt;LINESTRING (7.53271 51.95209, 7.…</span></span>
+<span id="cb16-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  4 &lt;NA&gt;                  path        0.00201  &lt;LINESTRING [7.5382 51.945...7.54…</span></span>
+<span id="cb16-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  5 Welsingheide          residential 0.00188  &lt;LINESTRING (7.53767 51.9475, 7.5…</span></span>
+<span id="cb16-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  6 &lt;NA&gt;                  footway     0.000585 &lt;LINESTRING (7.54379 51.94733, 7.…</span></span>
+<span id="cb16-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  7 &lt;NA&gt;                  footway     0.000408 &lt;LINESTRING (7.54012 51.94478, 7.…</span></span>
+<span id="cb16-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  8 &lt;NA&gt;                  path        0.000628 &lt;LINESTRING (7.53822 51.94546, 7.…</span></span>
+<span id="cb16-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;  9 &lt;NA&gt;                  track       0.00430  &lt;LINESTRING [7.5401 51.945...7.54…</span></span>
+<span id="cb16-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 10 &lt;NA&gt;                  track       0.00162  &lt;LINESTRING [7.5412 51.946...7.54…</span></span>
+<span id="cb16-23"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # ℹ 841 more rows</span></span></code></pre></div>
+</div>
+<p>If you plan on doing more than just one operation, it is best to convert to the desired geometry type only once and then use it in subsequent calls. Converting from one geometry type can take some time and add additional unwanted overhead if you’re doing it all the time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-21" style="background: #f1f3f5;"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-21-1">roxy_geos <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> roxel <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-21-2" class="code-annotation-target">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_transform</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">25832</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-21-3" class="code-annotation-target">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_tibble</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-21-4" class="code-annotation-target">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_geos_geometry</span>(geometry))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="2" data-code-annotation="1">We project our dataset to use meters</span>
+</dd>
+<dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="3" data-code-annotation="2">We remove the <code>sf</code> class so we can modify the geometry column</span>
+</dd>
+<dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="4" data-code-annotation="3">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
+</dd>
+</dl>
+</div>
+</div>
+<p>With a geometry column that is a <code>geos_geometry</code>, you can use the functions from the <strong>geos</strong> package to perform your analyses. And, if doing larger scale analyses, it might be faster and more memory efficient!</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" aria-controls="tabset-1-1" aria-selected="true">geos</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" aria-controls="tabset-1-2" aria-selected="false">sf</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">roxy_geos <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geos_length</span>(geometry)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(type) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="cb17-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geometry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geos_unary_union</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geos_make_collection</span>(geometry)),</span>
+<span id="cb17-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_len =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(length)</span>
+<span id="cb17-7">  ) </span>
+<span id="cb17-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 9 × 3</span></span>
+<span id="cb17-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   type         geometry                                                  avg_len</span></span>
+<span id="cb17-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;fct&gt;        &lt;geos_geom&gt;                                                 &lt;dbl&gt;</span></span>
+<span id="cb17-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 cycleway     &lt;MULTILINESTRING [399010 5756791...400105 5757567]&gt;        2740. </span></span>
+<span id="cb17-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 footway      &lt;MULTILINESTRING [398732 5755903...399949 5757266]&gt;        4212. </span></span>
+<span id="cb17-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3 path         &lt;MULTILINESTRING [398473 5755558...399961 5757747]&gt;        7525. </span></span>
+<span id="cb17-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4 pedestrian   &lt;LINESTRING (399313.41032 5756903.27258, 399269.10927 57…    44.8</span></span>
+<span id="cb17-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5 residential  &lt;MULTILINESTRING [398511 5755623...400125 5757523]&gt;       22495. </span></span>
+<span id="cb17-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6 secondary    &lt;MULTILINESTRING [398476 5755557...400104 5757548]&gt;        3946. </span></span>
+<span id="cb17-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 7 service      &lt;MULTILINESTRING [398470 5755810...399995 5757577]&gt;        6600. </span></span>
+<span id="cb17-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 8 track        &lt;MULTILINESTRING [399654 5755892...399975 5757362]&gt;         974. </span></span>
+<span id="cb17-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 9 unclassified &lt;MULTILINESTRING [398655 5755557...399971 5757726]&gt;        1973.</span></span></code></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">roxel <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_length</span>(geometry)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(type) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">avg_len =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(length)) </span>
+<span id="cb18-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Simple feature collection with 9 features and 2 fields</span></span>
+<span id="cb18-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geometry type: GEOMETRY</span></span>
+<span id="cb18-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Dimension:     XY</span></span>
+<span id="cb18-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Bounding box:  xmin: 7.522594 ymin: 51.94151 xmax: 7.546705 ymax: 51.9612</span></span>
+<span id="cb18-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb18-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; # A tibble: 9 × 3</span></span>
+<span id="cb18-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   type         avg_len                                                  geometry</span></span>
+<span id="cb18-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt;   &lt;fct&gt;            [m]                                            &lt;GEOMETRY [°]&gt;</span></span>
+<span id="cb18-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 1 cycleway      2735.  MULTILINESTRING ((7.535912 51.95764, 7.536254 51.95772, …</span></span>
+<span id="cb18-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 2 footway       4206.  MULTILINESTRING ((7.543791 51.94733, 7.54369 51.94686, 7…</span></span>
+<span id="cb18-15"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 3 path          7513.  MULTILINESTRING ((7.523003 51.95298, 7.523524 51.95306),…</span></span>
+<span id="cb18-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 4 pedestrian      44.7         LINESTRING (7.534819 51.95371, 7.534176 51.95364)</span></span>
+<span id="cb18-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 5 residential  22457.  MULTILINESTRING ((7.533722 51.95556, 7.533461 51.95576),…</span></span>
+<span id="cb18-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 6 secondary     3939.  MULTILINESTRING ((7.532442 51.95422, 7.53236 51.95377, 7…</span></span>
+<span id="cb18-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 7 service       6589.  MULTILINESTRING ((7.532238 51.95388, 7.532069 51.9535, 7…</span></span>
+<span id="cb18-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 8 track          972.  MULTILINESTRING ((7.540063 51.94468, 7.540338 51.94468, …</span></span>
+<span id="cb18-21"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#&gt; 9 unclassified  1968.  MULTILINESTRING ((7.534918 51.94681, 7.535121 51.94688),…</span></span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="continuing-your-r-spatial-journey" class="level2">
+<h2 class="anchored" data-anchor-id="continuing-your-r-spatial-journey">Continuing your R-spatial journey</h2>
+<p>With this, I encourage you to look at other geometry libraries available in the R ecosystem. Some of the notable ones are:</p>
+<ul>
+<li><a href="https://r-spatial.github.io/s2/index.html">s2</a> for spherical geometry operations with google s2</li>
+<li><a href="https://paleolimbot.github.io/geos/">geos</a> bindings to the powerful libgeos C library</li>
+<li><a href="https://rsgeo.josiahparry.com">rsgeo</a> bindings to the GeoRust geo-types and geo crates</li>
+<li><a href="https://paleolimbot.github.io/wk/">wk</a> for low level generic geometry interface with C and C++ APIs</li>
+</ul>
+<p>Each library can convert to and from <strong>sf</strong> geometries as well.</p>
+<p>Happy programming!</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{parry2023,
+  author = {Parry, Josiah},
+  title = {R-Spatial Beyond Sf},
+  date = {2023-09-08},
+  url = {https://geocompx.org//post/2023/beyond-sf},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-parry2023" class="csl-entry quarto-appendix-citeas">
+Parry, Josiah. 2023. <span>“R-Spatial Beyond Sf.”</span> September 8,
+2023. <a href="https://geocompx.org//post/2023/beyond-sf">https://geocompx.org//post/2023/beyond-sf</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <guid>https://geocompx.org/post/2023/beyond-sf/index.html</guid>
+  <pubDate>Fri, 08 Sep 2023 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Geographic data analysis in R and Python: comparing code and outputs for vector data</title>
   <dc:creator>Robin Lovelace</dc:creator>
