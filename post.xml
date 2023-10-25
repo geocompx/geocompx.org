@@ -336,15 +336,15 @@ font-style: inherit;">st_sfc</span>()</span><div class="code-annotation-gutter-b
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="1" data-code-cell="annotated-cell-8">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-8" data-code-lines="3">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="6" data-code-annotation="2" data-code-cell="annotated-cell-8">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-8" data-code-lines="6">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="8" data-code-annotation="3" data-code-cell="annotated-cell-8">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-8" data-code-lines="8">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
 </dd>
 </dl>
 </div>
@@ -541,7 +541,7 @@ font-style: inherit;">#&gt; [1] "geometry"</span></span><div class="code-annotat
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="1" data-code-annotation="1" data-code-cell="annotated-cell-13"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-13" data-code-lines="1"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
 </dd>
 </dl>
 </div>
@@ -670,7 +670,7 @@ font-style: inherit;">#&gt; [1] TRUE</span></span><div class="code-annotation-gu
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="12" data-code-annotation="1" data-code-cell="annotated-cell-15">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-15" data-code-lines="12">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
 </dd>
 </dl>
 </div>
@@ -745,7 +745,7 @@ font-style: inherit;">#&gt; 2 length_haversine(rs) 457.01µs  515.3µs     1659.
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="4" data-code-annotation="1" data-code-cell="annotated-cell-18"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-18" data-code-lines="4"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
 </dd>
 </dl>
 </div>
@@ -931,15 +931,15 @@ font-style: inherit;">as_geos_geometry</span>(geometry))</span><div class="code-
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-lines="2" data-code-annotation="1" data-code-cell="annotated-cell-21">We project our dataset to use meters</span>
+<span data-code-annotation="1" data-code-cell="annotated-cell-21" data-code-lines="2">We project our dataset to use meters</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-lines="3" data-code-annotation="2" data-code-cell="annotated-cell-21">We remove the <code>sf</code> class so we can modify the geometry column</span>
+<span data-code-annotation="2" data-code-cell="annotated-cell-21" data-code-lines="3">We remove the <code>sf</code> class so we can modify the geometry column</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-lines="4" data-code-annotation="3" data-code-cell="annotated-cell-21">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
+<span data-code-annotation="3" data-code-cell="annotated-cell-21" data-code-lines="4">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
 </dd>
 </dl>
 </div>
