@@ -17,7 +17,7 @@ page-layout: full
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-[Jakub Nowosad](https://jakubnowosad.com/)<link href="https://mastodon.social/@edzer" rel="me" />
+[Jakub Nowosad](https://jakubnowosad.com/)<link href="https://fosstodon.org/@nowosad" rel="me" />
 
 [Michael Dorman](https://geobgu.xyz/)
 
