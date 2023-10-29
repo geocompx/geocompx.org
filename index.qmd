@@ -35,3 +35,6 @@ After community consultations and much debate, we settled on **geocompx** as a n
 :::
 
 :::
+
+<!--mastodon metadata-->
+<link href="https://fosstodon.org/@nowosad" rel="me" />
