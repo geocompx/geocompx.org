@@ -1,0 +1,47 @@
+---
+title: "Geocomputation with R map comptetition: cover for the 2nd edition" 
+author: Robin Lovelace
+date: "2023-11-01"
+slug: map-competition
+categories: 
+  - posts
+  - rstats
+tags: [rspatial, rgdal, rstats]
+draft: false
+---
+
+# Introduction
+
+The 2nd edition of [Geocomputation with R](https://r.geocompx.org) is due to be published in early 2024 and we're looking for a new cover image!
+
+The first edition featured the following image by Marco Sciaini:
+
+![](images/paste-2.png)
+
+After some [iteration](https://github.com/geocompx/geocompr/issues/284) on this winning idea, the concept was refined, resulting in the following (see reproducible source code at [github.com/geocompx/geocompr/](https://github.com/geocompx/geocompr/blob/main/code/frontcover.R)):
+
+![](images/paste-1.png)
+
+This is now the official cover image for Geocomputation with R version 1:
+
+![](images/paste-3.png)
+
+
+```{r}
+nc = sf::st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+plot(nc)
+```
+
+# Competition
+
+The competition is open to all, with the following rules:
+
+- The image must be related to Geocomputation with R
+- The winning image/concept must be based on reproducible code
+
+The winner, selected by the authors of Geocomputation with R, will receive a $150 voucher for Taylor and Francis books, a copy of the book and will be credited in the book.
+A runner up will receive a copy of the book.
+
+# How to enter
+
+To enter, please submit your idea via GitHub (by sharing your idea as a comment in [issue #980](https://github.com/geocompx/geocompr/issues/980)), social media or email [todo: add addresses and social media tags]
