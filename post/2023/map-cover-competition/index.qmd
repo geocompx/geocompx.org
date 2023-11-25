@@ -41,13 +41,19 @@ The competition has the following rules:
 - The winning image/concept must be based on reproducible code
 - The deadline for submissions is 31st December 2023
 
+Submissions will be evaluated by us, the authors of Geocomputation with R, based on:
+
+- How good we think the image  will look as a front cover for the second edition of Geocomputation with R
+- Creativity and originality
+- Quality of the code
+
 # How to enter
 
 To enter, please submit your idea via GitHub (by sharing your idea as a comment in [issue #980](https://github.com/geocompx/geocompr/issues/980)), by email or find us on social media: [Robin](https://www.robinlovelace.net/), [Jakub](https://jakubnowosad.com/).
 
 # Prizes
 
-The winner, selected by the authors of Geocomputation with R, will receive a $150 voucher for Taylor and Francis books, a copy of the second edition of Geocomputation with R and will be credited in the book.
+The winner will receive a $150 voucher for Taylor and Francis books, a copy of the second edition of Geocomputation with R and will be credited in the book.
 A runner-up will receive a copy of the book.
 
 We look forward to seeing your ideas!
