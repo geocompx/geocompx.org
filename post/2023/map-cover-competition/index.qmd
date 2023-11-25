@@ -18,6 +18,10 @@ The 2nd edition of [Geocomputation with R](https://r.geocompx.org) is due to be 
 Now, we're looking for a new cover image and we'd like your help.
 The competition is open to all and we have some prizes (see below).
 
+We're launching this map competition on 1st December, the day after the [#30DayMapChallenge](https://30daymapchallenge.com/) finished, to keep the map-making momentum going (and to provide an outlet for anyone suffering from withdrawal symptoms)!
+Like the 30 Day Map Challenge this competition is set up in the spirit of sharing ideas and fun.
+Unlike the challenge you have up to 31 days *to create a single map*, set of maps or other visualisation that could go on the front cover of this popular [open source] and [community-driven](https://github.com/geocompx/geocompr/graphs/contributors) book (questions are welcome via [GitHub](https://github.com/geocompx/geocompr/) issues/discussions and on the [geocompx Discord server](https://discord.gg/PMztXYgNxp)).
+
 # A bit of history
 
 [Marco Sciaini](https://marcosci.github.io/) won the competition for the book cover of the first edition of Geocomputation with R.
