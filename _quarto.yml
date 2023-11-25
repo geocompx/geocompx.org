@@ -34,6 +34,7 @@ website:
         href: https://discord.gg/PMztXYgNxp
       - icon: rss
         href: post.xml
+  google-analytics: "G-PS0D9S7P17"
   page-footer: 
      left: "geocompx, 2016 - 2023" 
      right:

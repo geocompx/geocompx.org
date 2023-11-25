@@ -1,0 +1,63 @@
+---
+title: "Geocomputation with R comptetition: book cover for the 2nd edition" 
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: "2023-12-01"
+slug: map-competition
+categories: 
+  - posts
+  - rstats
+  - announcement
+tags: [rspatial, rstats, announcement]
+draft: true
+fig-cap-location: top
+---
+
+# Introduction
+
+The 2nd edition of [Geocomputation with R](https://r.geocompx.org) is due to be published in 2024.
+Now, we're looking for a new cover image and we'd like your help.
+The competition is open to all and we have some prizes (see below).
+
+We're launching this map competition on 1st December, the day after the [#30DayMapChallenge](https://30daymapchallenge.com/) finished, to keep the map-making momentum going (and to provide an outlet for anyone suffering from withdrawal symptoms)!
+Like the 30 Day Map Challenge this competition is set up in the spirit of sharing ideas and fun.
+Unlike the challenge you have up to 31 days *to create a single map*, set of maps or other visualisation that could go on the front cover of this popular [open source] and [community-driven](https://github.com/geocompx/geocompr/graphs/contributors) book (questions are welcome via [GitHub](https://github.com/geocompx/geocompr/) issues/discussions and on the [geocompx Discord server](https://discord.gg/PMztXYgNxp)).
+
+# A bit of history
+
+[Marco Sciaini](https://marcosci.github.io/) won the competition for the book cover of the first edition of Geocomputation with R.
+His winning entry is shown on the left below.
+After some [iteration](https://github.com/geocompx/geocompr/issues/284) on this winning idea, the concept was refined, resulting in a reproducible image (see its source code at [github.com/geocompx/geocompr/](https://github.com/geocompx/geocompr/blob/main/code/frontcover.R)) (center).
+Then, the image was incorporated into the official cover of the book's first edition (right).
+
+::: {.column-page-inset layout-ncol=3}
+![Submission](images/paste-2.png)
+
+![Final](images/paste-1.png)
+
+![Book cover](images/paste-3.png)
+:::
+
+# Competition
+
+The competition has the following rules:
+
+- The image must be (somewhat) related to [Geocomputation with R](https://r.geocompx.org)
+- The winning image/concept must be based on reproducible code
+- The deadline for submissions is 31st December 2023
+
+Submissions will be evaluated by us, the authors of Geocomputation with R, based on:
+
+- How good we think the image  will look as a front cover for the second edition of Geocomputation with R
+- Creativity and originality
+- Quality of the code
+
+# How to enter
+
+To enter, please submit your idea via GitHub (by sharing your idea as a comment in [issue #980](https://github.com/geocompx/geocompr/issues/980)), by email or find us on social media: [Robin](https://www.robinlovelace.net/), [Jakub](https://jakubnowosad.com/).
+
+# Prizes
+
+The winner will receive a $150 voucher for Taylor and Francis books, a copy of the second edition of Geocomputation with R and will be credited in the book.
+A runner-up will receive a copy of the book.
+
+We look forward to seeing your ideas!
