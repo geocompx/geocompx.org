@@ -1,0 +1,11 @@
+---
+title: "" 
+author: ""
+date: "2023-XX-XX"
+slug: 
+categories: 
+  - rstats
+tags: [rspatial, rstats]
+draft: true
+bibliography: refs.bib
+---
