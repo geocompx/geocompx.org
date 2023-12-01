@@ -8,7 +8,7 @@ categories:
   - rstats
   - announcement
 tags: [rspatial, rstats, announcement]
-draft: true
+draft: false
 fig-cap-location: top
 ---
 
