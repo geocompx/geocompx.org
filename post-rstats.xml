@@ -10,7 +10,98 @@
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 08 Sep 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 01 Dec 2023 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Geocomputation with R comptetition: book cover for the 2nd edition</title>
+  <dc:creator>Robin Lovelace, Jakub Nowosad, Jannes Muenchow</dc:creator>
+  <link>https://geocompx.org/post/2023/map-cover-competition/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The 2nd edition of <a href="https://r.geocompx.org">Geocomputation with R</a> is due to be published in 2024. Now, we’re looking for a new cover image and we’d like your help. The competition is open to all and we have some prizes (see below).</p>
+<p>We’re launching this map competition on 1st December, the day after the <a href="https://30daymapchallenge.com/">#30DayMapChallenge</a> finished, to keep the map-making momentum going (and to provide an outlet for anyone suffering from withdrawal symptoms)! Like the 30 Day Map Challenge this competition is set up in the spirit of sharing ideas and fun. Unlike the challenge you have up to 31 days <em>to create a single map</em>, set of maps or other visualisation that could go on the front cover of this popular [open source] and <a href="https://github.com/geocompx/geocompr/graphs/contributors">community-driven</a> book (questions are welcome via <a href="https://github.com/geocompx/geocompr/">GitHub</a> issues/discussions and on the <a href="https://discord.gg/PMztXYgNxp">geocompx Discord server</a>).</p>
+</section>
+<section id="a-bit-of-history" class="level1 page-columns page-full">
+<h1>A bit of history</h1>
+<p><a href="https://marcosci.github.io/">Marco Sciaini</a> won the competition for the book cover of the first edition of Geocomputation with R. His winning entry is shown on the left below. After some <a href="https://github.com/geocompx/geocompr/issues/284">iteration</a> on this winning idea, the concept was refined, resulting in a reproducible image (see its source code at <a href="https://github.com/geocompx/geocompr/blob/main/code/frontcover.R">github.com/geocompx/geocompr/</a>) (center). Then, the image was incorporated into the official cover of the book’s first edition (right).</p>
+<div class="column-page-inset quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">Submission</figcaption>
+<p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">Final</figcaption>
+<p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">Book cover</figcaption>
+<p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="competition" class="level1">
+<h1>Competition</h1>
+<p>The competition has the following rules:</p>
+<ul>
+<li>The image must be (somewhat) related to <a href="https://r.geocompx.org">Geocomputation with R</a></li>
+<li>The winning image/concept must be based on reproducible code</li>
+<li>The deadline for submissions is 31st December 2023</li>
+</ul>
+<p>Submissions will be evaluated by us, the authors of Geocomputation with R, based on:</p>
+<ul>
+<li>How good we think the image will look as a front cover for the second edition of Geocomputation with R</li>
+<li>Creativity and originality</li>
+<li>Quality of the code</li>
+</ul>
+</section>
+<section id="how-to-enter" class="level1">
+<h1>How to enter</h1>
+<p>To enter, please submit your idea via GitHub (by sharing your idea as a comment in <a href="https://github.com/geocompx/geocompr/issues/980">issue #980</a>), by email or find us on social media: <a href="https://www.robinlovelace.net/">Robin</a>, <a href="https://jakubnowosad.com/">Jakub</a>.</p>
+</section>
+<section id="prizes" class="level1">
+<h1>Prizes</h1>
+<p>The winner will receive a $150 voucher for Taylor and Francis books, a copy of the second edition of Geocomputation with R and will be credited in the book. A runner-up will receive a copy of the book.</p>
+<p>We look forward to seeing your ideas!</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
+  author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
+  title = {Geocomputation with {R} Comptetition: Book Cover for the 2nd
+    Edition},
+  date = {2023-12-01},
+  url = {https://geocompx.org//post/2023/map-cover-competition},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace, jakub nowosad, jannes muenchow2023" class="csl-entry quarto-appendix-citeas">
+Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2023.
+<span>“Geocomputation with R Comptetition: Book Cover for the 2nd
+Edition.”</span> December 1, 2023. <a href="https://geocompx.org//post/2023/map-cover-competition">https://geocompx.org//post/2023/map-cover-competition</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <category>announcement</category>
+  <guid>https://geocompx.org/post/2023/map-cover-competition/index.html</guid>
+  <pubDate>Fri, 01 Dec 2023 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>R-spatial beyond sf</title>
   <dc:creator>Josiah Parry</dc:creator>
