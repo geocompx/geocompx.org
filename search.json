@@ -599,7 +599,7 @@
     "href": "post/2023/geocompy-bp1/index.html",
     "title": "Say hi to ‘Geocomputation with Python’",
     "section": "",
-    "text": "Geocomputation with Python, also known as geocompy, is an open-source book on geographic data analysis with Python.1 It is written by Michael Dorman, Anita Graser, Robin Lovelace, and me with contributions from others. You can find it online at py.geocompy.org.\nWe started working on this project at the beginning of 2022, and since then, we have been making steady progress. The book is currently in the late stages of development, and we hope to release the first edition in 2024.2 This blog post briefly introduces the project, its goals, and its current status. It also serves as an invitation for contributions and feedback."
+    "text": "Geocomputation with Python, also known as geocompy, is an open-source book on geographic data analysis with Python.1 It is written by Michael Dorman, Anita Graser, Robin Lovelace, and me with contributions from others. You can find it online at py.geocompx.org.\nWe started working on this project at the beginning of 2022, and since then, we have been making steady progress. The book is currently in the late stages of development, and we hope to release the first edition in 2024.2 This blog post briefly introduces the project, its goals, and its current status. It also serves as an invitation for contributions and feedback."
   },
   {
     "objectID": "post/2023/geocompy-bp1/index.html#footnotes",
