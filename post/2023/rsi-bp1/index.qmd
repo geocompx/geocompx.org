@@ -219,6 +219,6 @@ If you want to learn more about **rsi** package, you can visit [GitHub repositor
 
 While working on this article, I found many posibble features that could be added into **rsi**.
 An useful feature would be adding methods of simpler product filtering, based on cloud coverage and other parameters. 
-Other feature could be focused on time series analysis, by calculating indices for each available in selected time span.
+Other feature could be focused on time series analysis, by calculating indices for each available item in selected time span.
 
 I'm looking forward into the future developements of **rsi**. 
