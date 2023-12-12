@@ -2,12 +2,13 @@
 title: "Say hi to 'Geocomputation with Python'" 
 author: "Jakub Nowosad"
 date: "2023-12-12"
-slug: 
+slug: geocompy-bp1
 categories: 
   - python
   - geopython
   - geocompy
-draft: true
+tags: [python]
+draft: false
 ---
 
 **Geocomputation with Python**, also known as **geocompy**, is an open-source book on geographic data analysis with Python.^[The book is also a sibling project of [Geocomputation with R](https://r.geocompy.org) (**geocompr**), a book on geographic data analysis, visualization, and modeling using the R programming language. The **geocompy** follows the style and structure of the first part of **geocompr**.]
