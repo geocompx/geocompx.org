@@ -1,0 +1,77 @@
+---
+title: "Say hi to 'Geocomputation with Python'" 
+author: "Jakub Nowosad"
+date: "2023-12-12"
+slug: 
+categories: 
+  - python
+  - geopython
+  - geocompy
+draft: true
+---
+
+**Geocomputation with Python**, also known as **geocompy**, is an open-source book on geographic data analysis with Python.^[The book is also a sibling project of [Geocomputation with R](https://r.geocompy.org) (**geocompr**), a book on geographic data analysis, visualization, and modeling using the R programming language. The **geocompy** follows the style and structure of the first part of **geocompr**.]
+It is written by [Michael Dorman](https://geobgu.xyz/), [Anita Graser](https://anitagraser.com/), [Robin Lovelace](https://www.robinlovelace.net/), and [me](https://jakubnowosad.com/) with contributions from [others](https://github.com/geocompx/geocompy/graphs/contributors).
+You can find it online at [py.geocompy.org](https://py.geocompy.org).
+
+We started working on this project at the beginning of 2022, and since then, we have been making steady progress.
+The book is currently in the late stages of development, and we hope to release the first edition in 2024.^[As a physical book with CRC Press.]
+This blog post briefly introduces the project, its goals, and its current status.
+It also serves as an invitation for contributions and feedback.
+
+# geocompy
+
+The **geocompy** book is motivated by the need for an introductory yet rigorous and up-to-date resource on geographic data with (arguably) the most popular programming language in the world.
+It presents the foundations of geographic data analysis in Python, with an equal focus on vector and raster data.
+
+::: {#figs1 layout-ncol=2}
+
+![](fig1.png)
+
+![](fig2.png)
+
+*Examples of figures from the book.*
+:::
+
+It starts by explaining the basic concepts of geographic data analysis, such as vector and raster data models (using [GeoPandas](https://geopandas.org/) and [Rasterio](https://rasterio.readthedocs.io/en/latest/)), coordinate reference systems, and spatial units.
+Next, it shows how to perform various attribute and spatial operations on geographic data, such as data subsetting, joins, aggregations, and raster algebra.
+The book also covers geometric operations, such as buffering, clipping, and intersecting.
+The next part of the book focuses on interactions between vector and raster data: extraction, rasterization, and raster to vector conversion.
+Then, the book deeply dives into the coordinate reference systems, including their definition and projections.
+The next chapter is about reading and writing geographic data, including getting data from the web, geocoding, and working with the most popular formats, such as GeoPackage and GeoTIFF.
+The last chapter covers the basics of data visualization, including static and interactive maps.
+
+::: {#figs2 layout-ncol=2}
+
+![](fig3.png)
+
+![](fig4.png)
+
+*Examples of figures from the book.*
+:::
+
+If you’re just starting out with Python for working with geographic data or want to organize your knowledge, we hope you will find this book an excellent place to start.
+
+# What are we still working on?
+
+The core structure and content of the book are already in place.
+However, there are still a few things to do before releasing the first edition.
+This includes adding acknowledgments, an introduction, and a conclusion, and preparing the book for publication.
+We are also still discussing if we should add exercises to the book.
+
+# Feedback and contributions
+
+We developed the book in the open to make it accessible to everyone.
+We also hope that it will encourage contributions from the community, for example by:
+
+- Improving the text, e.g., clarifying unclear sentences, fixing typos
+- Changing the code, e.g., to do things in a more efficient or elegant way
+- Suggesting new content 
+
+If you want to contribute, please open an issue or a pull request on [GitHub](https://github.com/geocompx/geocompy).
+Now, when the book is in the late stages of development, it is the perfect time to provide feedback as it can still be incorporated into the soon-to-be-published book.
+
+It would also be great if you could share the message about the book with your friends and colleagues and communicate about it online.
+You can also join our [Discord](https://discord.gg/PMztXYgNxp) server to discuss the project.
+
+Thank you!
