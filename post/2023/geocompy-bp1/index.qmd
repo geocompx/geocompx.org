@@ -11,9 +11,9 @@ tags: [python]
 draft: false
 ---
 
-**Geocomputation with Python**, also known as **geocompy**, is an open-source book on geographic data analysis with Python.^[The book is also a sibling project of [Geocomputation with R](https://r.geocompy.org) (**geocompr**), a book on geographic data analysis, visualization, and modeling using the R programming language. The **geocompy** follows the style and structure of the first part of **geocompr**.]
+**Geocomputation with Python**, also known as **geocompy**, is an open-source book on geographic data analysis with Python.^[The book is also a sibling project of [Geocomputation with R](https://r.geocompx.org) (**geocompr**), a book on geographic data analysis, visualization, and modeling using the R programming language. The **geocompy** follows the style and structure of the first part of **geocompr**.]
 It is written by [Michael Dorman](https://geobgu.xyz/), [Anita Graser](https://anitagraser.com/), [Robin Lovelace](https://www.robinlovelace.net/), and [me](https://jakubnowosad.com/) with contributions from [others](https://github.com/geocompx/geocompy/graphs/contributors).
-You can find it online at [py.geocompy.org](https://py.geocompy.org).
+You can find it online at [py.geocompx.org](https://py.geocompx.org).
 
 We started working on this project at the beginning of 2022, and since then, we have been making steady progress.
 The book is currently in the late stages of development, and we hope to release the first edition in 2024.^[As a physical book with CRC Press.]
