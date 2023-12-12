@@ -10,7 +10,96 @@
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 30 Aug 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 12 Dec 2023 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Say hi to ‘Geocomputation with Python’</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2023/geocompy-bp1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<p><strong>Geocomputation with Python</strong>, also known as <strong>geocompy</strong>, is an open-source book on geographic data analysis with Python.<sup>1</sup> It is written by <a href="https://geobgu.xyz/">Michael Dorman</a>, <a href="https://anitagraser.com/">Anita Graser</a>, <a href="https://www.robinlovelace.net/">Robin Lovelace</a>, and <a href="https://jakubnowosad.com/">me</a> with contributions from <a href="https://github.com/geocompx/geocompy/graphs/contributors">others</a>. You can find it online at <a href="https://py.geocompy.org">py.geocompy.org</a>.</p>
+<p>We started working on this project at the beginning of 2022, and since then, we have been making steady progress. The book is currently in the late stages of development, and we hope to release the first edition in 2024.<sup>2</sup> This blog post briefly introduces the project, its goals, and its current status. It also serves as an invitation for contributions and feedback.</p>
+<section id="geocompy" class="level1">
+<h1>geocompy</h1>
+<p>The <strong>geocompy</strong> book is motivated by the need for an introductory yet rigorous and up-to-date resource on geographic data with (arguably) the most popular programming language in the world. It presents the foundations of geographic data analysis in Python, with an equal focus on vector and raster data.</p>
+<div id="figs1" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="https://geocompx.org/post/2023/geocompy-bp1/fig1.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="https://geocompx.org/post/2023/geocompy-bp1/fig2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><em>Examples of figures from the book.</em></p>
+</div>
+</div>
+</div>
+<p>It starts by explaining the basic concepts of geographic data analysis, such as vector and raster data models (using <a href="https://geopandas.org/">GeoPandas</a> and <a href="https://rasterio.readthedocs.io/en/latest/">Rasterio</a>), coordinate reference systems, and spatial units. Next, it shows how to perform various attribute and spatial operations on geographic data, such as data subsetting, joins, aggregations, and raster algebra. The book also covers geometric operations, such as buffering, clipping, and intersecting. The next part of the book focuses on interactions between vector and raster data: extraction, rasterization, and raster to vector conversion. Then, the book deeply dives into the coordinate reference systems, including their definition and projections. The next chapter is about reading and writing geographic data, including getting data from the web, geocoding, and working with the most popular formats, such as GeoPackage and GeoTIFF. The last chapter covers the basics of data visualization, including static and interactive maps.</p>
+<div id="figs2" class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="https://geocompx.org/post/2023/geocompy-bp1/fig3.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="https://geocompx.org/post/2023/geocompy-bp1/fig4.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><em>Examples of figures from the book.</em></p>
+</div>
+</div>
+</div>
+<p>If you’re just starting out with Python for working with geographic data or want to organize your knowledge, we hope you will find this book an excellent place to start.</p>
+</section>
+<section id="what-are-we-still-working-on" class="level1">
+<h1>What are we still working on?</h1>
+<p>The core structure and content of the book are already in place. However, there are still a few things to do before releasing the first edition. This includes adding acknowledgments, an introduction, and a conclusion, and preparing the book for publication. We are also still discussing if we should add exercises to the book.</p>
+</section>
+<section id="feedback-and-contributions" class="level1">
+<h1>Feedback and contributions</h1>
+<p>We developed the book in the open to make it accessible to everyone. We also hope that it will encourage contributions from the community, for example by:</p>
+<ul>
+<li>Improving the text, e.g., clarifying unclear sentences, fixing typos</li>
+<li>Changing the code, e.g., to do things in a more efficient or elegant way</li>
+<li>Suggesting new content</li>
+</ul>
+<p>If you want to contribute, please open an issue or a pull request on <a href="https://github.com/geocompx/geocompy">GitHub</a>. Now, when the book is in the late stages of development, it is the perfect time to provide feedback as it can still be incorporated into the soon-to-be-published book.</p>
+<p>It would also be great if you could share the message about the book with your friends and colleagues and communicate about it online. You can also join our <a href="https://discord.gg/PMztXYgNxp">Discord</a> server to discuss the project.</p>
+<p>Thank you!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The book is also a sibling project of <a href="https://r.geocompy.org">Geocomputation with R</a> (<strong>geocompr</strong>), a book on geographic data analysis, visualization, and modeling using the R programming language. The <strong>geocompy</strong> follows the style and structure of the first part of <strong>geocompr</strong>.↩︎</p></li>
+<li id="fn2"><p>As a physical book with CRC Press.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2023,
+  author = {Nowosad, Jakub},
+  title = {Say Hi to “{Geocomputation} with {Python}”},
+  date = {2023-12-12},
+  url = {https://geocompx.org//post/2023/geocompy-bp1},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2023" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2023. <span>“Say Hi to <span>‘Geocomputation with
+Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org//post/2023/geocompy-bp1">https://geocompx.org//post/2023/geocompy-bp1</a>.
+</div></div></section></div> ]]></description>
+  <category>python</category>
+  <category>geopython</category>
+  <category>geocompy</category>
+  <guid>https://geocompx.org/post/2023/geocompy-bp1/index.html</guid>
+  <pubDate>Tue, 12 Dec 2023 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Geographic data analysis in R and Python: comparing code and outputs for vector data</title>
   <dc:creator>Robin Lovelace</dc:creator>

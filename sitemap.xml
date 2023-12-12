@@ -1,115 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://geocompx.org/post.html</loc>
-    <lastmod>2023-12-12T11:26:27.946Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:23.134Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:22.290Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:21.438Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/img/book_cover_py_tmp.html</loc>
-    <lastmod>2023-12-12T11:26:20.590Z</lastmod>
-  </url>
-  <url>
     <loc>https://geocompx.org/py.html</loc>
-    <lastmod>2023-12-12T11:26:20.106Z</lastmod>
+    <lastmod>2023-12-12T12:28:08.068Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post.html</loc>
+    <lastmod>2023-12-12T12:28:07.580Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2022/geocompr-solutions/index.html</loc>
-    <lastmod>2023-12-12T11:26:19.354Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2019/tmap-grid/index.html</loc>
-    <lastmod>2023-12-12T11:26:18.130Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</loc>
-    <lastmod>2023-12-12T11:26:16.730Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</loc>
-    <lastmod>2023-12-12T11:26:15.638Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2023/rgdal-retirement/index.html</loc>
-    <lastmod>2023-12-12T11:26:13.982Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2023/beyond-sf/index.html</loc>
-    <lastmod>2023-12-12T11:26:12.722Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2021/geocompr2-bp1/index.html</loc>
-    <lastmod>2023-12-12T11:26:06.270Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/about.html</loc>
-    <lastmod>2023-12-12T11:26:05.562Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</loc>
-    <lastmod>2023-12-12T11:26:07.086Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2023/map-cover-competition/index.html</loc>
-    <lastmod>2023-12-12T11:26:09.490Z</lastmod>
+    <lastmod>2023-12-12T12:28:05.884Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/ogh23/index.html</loc>
-    <lastmod>2023-12-12T11:26:11.830Z</lastmod>
+    <lastmod>2023-12-12T12:28:02.316Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2023/rgdal-retirement/index.html</loc>
+    <lastmod>2023-12-12T12:27:59.908Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</loc>
+    <lastmod>2023-12-12T12:27:58.460Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2020/r-spatial-demo-covid-19/index.html</loc>
-    <lastmod>2023-12-12T11:26:14.830Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</loc>
-    <lastmod>2023-12-12T11:26:16.026Z</lastmod>
+    <lastmod>2023-12-12T12:27:57.220Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/crs-projections-transformations/index.html</loc>
-    <lastmod>2023-12-12T11:26:17.530Z</lastmod>
+    <lastmod>2023-12-12T12:27:55.728Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/tmap-styles/index.html</loc>
-    <lastmod>2023-12-12T11:26:18.906Z</lastmod>
+    <lastmod>2023-12-12T12:27:54.171Z</lastmod>
   </url>
   <url>
-    <loc>https://geocompx.org/post/2022/geocompr2-bp2/index.html</loc>
-    <lastmod>2023-12-12T11:26:19.850Z</lastmod>
+    <loc>https://geocompx.org/post/2021/geocompr2-bp1/index.html</loc>
+    <lastmod>2023-12-12T12:27:52.551Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/about.html</loc>
+    <lastmod>2023-12-12T12:27:51.775Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:51.107Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:50.235Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:49.343Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/index.html</loc>
-    <lastmod>2023-12-12T11:26:20.366Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/presentations/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:21.018Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/workshops/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:21.870Z</lastmod>
-  </url>
-  <url>
-    <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2023-12-12T11:26:22.710Z</lastmod>
+    <lastmod>2023-12-12T12:27:48.643Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/guestbook.html</loc>
-    <lastmod>2023-12-12T11:26:26.846Z</lastmod>
+    <lastmod>2023-12-12T12:27:48.075Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/img/book_cover_py_tmp.html</loc>
+    <lastmod>2023-12-12T12:27:48.899Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/presentations/libs/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:49.775Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/workshops/libs/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:50.675Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html</loc>
+    <lastmod>2023-12-12T12:27:51.531Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/r.html</loc>
-    <lastmod>2023-12-12T11:26:28.306Z</lastmod>
+    <lastmod>2023-12-12T12:27:52.139Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</loc>
+    <lastmod>2023-12-12T12:27:53.339Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</loc>
+    <lastmod>2023-12-12T12:27:54.903Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2019/tmap-grid/index.html</loc>
+    <lastmod>2023-12-12T12:27:56.340Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</loc>
+    <lastmod>2023-12-12T12:27:57.640Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2023/geocompy-bp1/index.html</loc>
+    <lastmod>2023-12-12T12:27:58.900Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2023/beyond-sf/index.html</loc>
+    <lastmod>2023-12-12T12:28:00.800Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2023/map-cover-competition/index.html</loc>
+    <lastmod>2023-12-12T12:28:05.412Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2022/geocompr2-bp2/index.html</loc>
+    <lastmod>2023-12-12T12:28:06.388Z</lastmod>
   </url>
 </urlset>
