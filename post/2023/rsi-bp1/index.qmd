@@ -51,7 +51,7 @@ For this example, we will create area of interest of 5000 meters around a point 
 ``` {r creating san antonio area of interest}
 library(sf)
 san_antonio = st_point(c(-98.491142, 29.424349))
-san_antonio = st_set_crs(st_sfc(san_antonio), "EPSG:4326")
+san_antonio = st_sfc(san_antonio, crs = "EPSG:4326")
 san_antonio = st_buffer(st_transform(san_antonio, "EPSG:3081"), 5000)
 ```
 
