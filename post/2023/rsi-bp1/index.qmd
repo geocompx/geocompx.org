@@ -89,8 +89,8 @@ Let's also obtain the DEM of our area.
 
 ``` {r downloading dem for sa}
 sa_dem = get_dem(
-  san_antonio,
-  output_filename = tempfile(fileext = ".tif")
+    san_antonio,
+    output_filename = tempfile(fileext = ".tif")
 )
 ```
 
