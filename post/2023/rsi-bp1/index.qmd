@@ -55,7 +55,7 @@ san_antonio = st_sfc(san_antonio, crs = "EPSG:4326")
 san_antonio = st_buffer(st_transform(san_antonio, "EPSG:3081"), 5000)
 ```
 
-Having specified the area of interest, we can create our query.oo
+Having specified the area of interest, we can create our query.
 We will start with downloading Landsat data for September and October 2023 and save it to a temporary file.
 
 ``` {r downloading landsat for sa}
