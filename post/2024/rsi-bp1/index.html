@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mateusz Rydzik">
+<meta name="dcterms.date" content="2024-01-10">
+
+<title>geocompx - An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-PS0D9S7P17"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
+</script>
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html" rel="" target="">
+ <span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html" rel="" target="">
+ <span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html" rel="" target="">
+ <span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html" rel="" target="">
+ <span class="menu-text">Guestbook</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html" rel="" target="">
+ <span class="menu-text">About us</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompx" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx" rel="" target=""><i class="bi bi-mastodon" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp" rel="" target=""><i class="bi bi-discord" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../post.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set up</a></li>
+  <li><a href="#acquiring-stac-data" id="toc-acquiring-stac-data" class="nav-link" data-scroll-target="#acquiring-stac-data">Acquiring STAC data</a></li>
+  <li><a href="#calculating-spectral-indices" id="toc-calculating-spectral-indices" class="nav-link" data-scroll-target="#calculating-spectral-indices">Calculating spectral indices</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">rstats</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mateusz Rydzik </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 10, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><a href="https://permian-global-research.github.io/rsi/"><strong>rsi</strong></a> is a recent R package developed by <a href="https://www.mm218.dev/">Michael Mahoney</a> and funded by Permian Global Research. It offers features that simplify the process of acquiring spatial data from STAC (<em>SpatioTemporal Asset Catalog</em>) and calculating spectral indices based on such data. A unique feature of this package is its source for the indices. Instead of providing a static list of available formulas, <strong>rsi</strong> obtains them from <a href="https://awesome-ee-spectral-indices.readthedocs.io/en/latest/">Awesome Spectral Indices</a>: a curated repository of over 200 indices covering multiple application domains. The combination of satellite imagery access through STAC and a constantly expanding spectral indices repository significantly simplifies remote sensing processes and creates new opportunities, including the automation of calculating spectral indices over a wide span of time and area.</p>
+</section>
+<section id="set-up" class="level1">
+<h1>Set up</h1>
+<p><strong>rsi</strong> is available in development version on <a href="https://github.com/Permian-Global-Research/rsi">GitHub</a>, which can be installed with <a href="https://pak.r-lib.org/">pak</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"Permian-Global-Research/rsi"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To acquire the newest Awesome Spectral Indices dataset, we can call <a href="https://permian-global-research.github.io/rsi/reference/spectral_indices.html"><code>spectral_indices()</code></a>. Calling it without passing any arguments will result in using cached version of the tibble, which is updated automatically once a day. This tibble contains column with indices formulas, which are using standardized band names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rsi)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>asi <span class="ot">=</span> <span class="fu">spectral_indices</span>(<span class="at">download_indices =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>asi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 231 × 9
+   application_domain bands     contributor   date_of_addition formula long_name
+   &lt;chr&gt;              &lt;list&gt;    &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;    
+ 1 vegetation         &lt;chr [2]&gt; https://gith… 2021-11-17       (N - 0… Aerosol …
+ 2 vegetation         &lt;chr [2]&gt; https://gith… 2021-11-17       (N - 0… Aerosol …
+ 3 water              &lt;chr [6]&gt; https://gith… 2022-09-22       (B + G… Augmente…
+ 4 vegetation         &lt;chr [2]&gt; https://gith… 2021-09-20       (1 / G… Anthocya…
+ 5 vegetation         &lt;chr [3]&gt; https://gith… 2022-04-08       N * ((… Anthocya…
+ 6 vegetation         &lt;chr [4]&gt; https://gith… 2021-05-11       (N - (… Atmosphe…
+ 7 vegetation         &lt;chr [4]&gt; https://gith… 2021-05-14       sla * … Adjusted…
+ 8 vegetation         &lt;chr [2]&gt; https://gith… 2022-04-08       (N * (… Advanced…
+ 9 water              &lt;chr [4]&gt; https://gith… 2021-09-18       4.0 * … Automate…
+10 water              &lt;chr [5]&gt; https://gith… 2021-09-18       B + 2.… Automate…
+# ℹ 221 more rows
+# ℹ 3 more variables: platforms &lt;list&gt;, reference &lt;chr&gt;, short_name &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="acquiring-stac-data" class="level1">
+<h1>Acquiring STAC data</h1>
+<p><strong>rsi</strong> provides <a href="https://permian-global-research.github.io/rsi/reference/get_stac_data.html#ref-usage"><code>get_stac_data()</code></a> function, built around the <strong>rstac</strong> package. It allows to connect to specified STAC source, and access data, based on selected attributes, like geospatial area of interest, date of acquisition of imagery, collection name, etc. For users convenience, <strong>rsi</strong> comes with additional functions that facilitate <code>get_stac_data()</code> function, providing necessary parameters, and limiting users input to specifying area of interest and a time frame of imagery. Those functions allow to access Landsat, Sentinel 1-2 imagery and digital elevation models (DEMs), available on Microsoft’s Planetary Computer.</p>
+<p>Let’s start with creating our area of interest. <code>get_stac_data()</code> accepts <code>sf</code> objects from which it extracts boundaries, so we can load in already existing data source, or create our own. For this example, we will create area of interest of 5000 meters around a point in San Antonio.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>san_antonio <span class="ot">=</span> <span class="fu">st_point</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">98.491142</span>, <span class="fl">29.424349</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>san_antonio <span class="ot">=</span> <span class="fu">st_sfc</span>(san_antonio, <span class="at">crs =</span> <span class="st">"EPSG:4326"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>san_antonio <span class="ot">=</span> <span class="fu">st_buffer</span>(<span class="fu">st_transform</span>(san_antonio, <span class="st">"EPSG:3081"</span>), <span class="dv">5000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Having specified the area of interest, we can create our query. We will start with downloading Landsat data for September and October 2023 and save it to a temporary file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sa_landsat <span class="ot">=</span> <span class="fu">get_landsat_imagery</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    san_antonio,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_date =</span> <span class="st">"2023-09-01"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_date =</span> <span class="st">"2023-10-31"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sa_landsat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/tmp/Rtmppind2Y/file501082fbc26c0.tif"</code></pre>
+</div>
+</div>
+<p><code>get_stac_data()</code> and its child functions return the path to downloaded image. As a default, they create the composite image out of median values of all avaiable images for specified time span. We can specify other composite functions, like <code>mean</code>, <code>sum</code>, <code>min</code> or <code>max</code>. We can also not use composite function at all (<code>composite_function = NULL</code>), and obtain all available images for specified time span. Another default argument, passed in for <code>mask_band</code>, automatically masks clouds with NAs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sa_sentinel2 <span class="ot">=</span> <span class="fu">get_sentinel2_imagery</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    san_antonio,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_date =</span> <span class="st">"2023-09-01"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_date =</span> <span class="st">"2023-10-31"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, we download Sentinel 2 images for September and October 2023, mask out clouds, and create a composite image.</p>
+<p>Let’s also obtain the DEM of our area.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sa_dem <span class="ot">=</span> <span class="fu">get_dem</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    san_antonio,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After downloading the images, we can load them into <code>SpatRaster</code> objects using <a href="https://rdrr.io/cran/terra/man/rast.html"><code>rast()</code></a>. <strong>rsi</strong> automatically assigns proper band names to it, which follow Awesome Spectral Indices standard.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sa_landsat_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(sa_landsat)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>sa_sentinel2_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(sa_sentinel2)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>sa_dem_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(sa_dem)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>sa_landsat_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 333, 333, 8  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 1141170, 1151160, 803238.9, 813228.9  (xmin, xmax, ymin, ymax)
+coord. ref. : NAD83 / Texas State Mapping System (EPSG:3081) 
+source      : file501082fbc26c0.tif 
+names       : A, B, G, R, N, S1, ... </code></pre>
+</div>
+</div>
+<p>We can plot the rasters together to compare Landsat and Sentinel images and visualize DEM.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plotRGB</span>(sa_landsat_rast, <span class="at">r =</span> <span class="dv">4</span>, <span class="at">g =</span> <span class="dv">3</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">stretch =</span> <span class="st">"lin"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plotRGB</span>(sa_sentinel2_rast, <span class="at">r =</span> <span class="dv">4</span>, <span class="at">g =</span> <span class="dv">3</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">stretch =</span> <span class="st">"lin"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(sa_dem_rast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plotting rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="calculating-spectral-indices" class="level1">
+<h1>Calculating spectral indices</h1>
+<p>Having downloaded images, we can use them to calculate spectral indices. In this example, we will observe the change in vegetation between two dates for the Swarzędz area in Poland. Let’s start by creating a new area of interest.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>swarzedz <span class="ot">=</span> <span class="fu">st_point</span>(<span class="fu">c</span>(<span class="fl">17.108174</span>, <span class="fl">52.405725</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>swarzedz <span class="ot">=</span> <span class="fu">st_set_crs</span>(<span class="fu">st_sfc</span>(swarzedz), <span class="st">"EPSG:4326"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>swarzedz <span class="ot">=</span> <span class="fu">st_buffer</span>(<span class="fu">st_transform</span>(swarzedz, <span class="st">"EPSG:2180"</span>), <span class="dv">5000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the most accurate results, we will use Sentinel 2 data. The date span is set from July to September 2023. We will also pass in <code>composite_function = NULL</code>, so that all available images will be downloaded separately.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_sep <span class="ot">=</span> <span class="fu">get_sentinel2_imagery</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    swarzedz,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_date =</span> <span class="st">"2023-07-01"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_date =</span> <span class="st">"2023-09-30"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">composite_function =</span> <span class="cn">NULL</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_sep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "/tmp/Rtmppind2Y/file5010818963908_2023-09-27T10:00:31.024000Z.tif"
+ [2] "/tmp/Rtmppind2Y/file5010818963908_2023-09-22T09:56:49.024000Z.tif"
+ [3] "/tmp/Rtmppind2Y/file5010818963908_2023-09-17T10:00:31.024000Z.tif"
+ [4] "/tmp/Rtmppind2Y/file5010818963908_2023-09-12T09:56:09.024000Z.tif"
+ [5] "/tmp/Rtmppind2Y/file5010818963908_2023-09-07T10:00:31.024000Z.tif"
+ [6] "/tmp/Rtmppind2Y/file5010818963908_2023-09-02T09:55:59.024000Z.tif"
+ [7] "/tmp/Rtmppind2Y/file5010818963908_2023-08-28T10:00:31.025000Z.tif"
+ [8] "/tmp/Rtmppind2Y/file5010818963908_2023-08-23T09:55:59.024000Z.tif"
+ [9] "/tmp/Rtmppind2Y/file5010818963908_2023-08-18T10:00:31.024000Z.tif"
+[10] "/tmp/Rtmppind2Y/file5010818963908_2023-08-13T09:55:59.024000Z.tif"
+[11] "/tmp/Rtmppind2Y/file5010818963908_2023-08-08T10:00:31.024000Z.tif"
+[12] "/tmp/Rtmppind2Y/file5010818963908_2023-08-03T09:55:59.024000Z.tif"
+[13] "/tmp/Rtmppind2Y/file5010818963908_2023-07-29T10:00:31.024000Z.tif"
+[14] "/tmp/Rtmppind2Y/file5010818963908_2023-07-19T10:00:31.024000Z.tif"
+[15] "/tmp/Rtmppind2Y/file5010818963908_2023-07-14T09:55:59.024000Z.tif"
+[16] "/tmp/Rtmppind2Y/file5010818963908_2023-07-09T10:00:31.024000Z.tif"
+[17] "/tmp/Rtmppind2Y/file5010818963908_2023-07-04T09:55:59.024000Z.tif"</code></pre>
+</div>
+</div>
+<p><strong>rsi</strong> allows for <a href="https://permian-global-research.github.io/rsi/articles/Downloading-data-from-STAC-APIs-using-rsi.html#using-cql2-to-refine-queries-to-stac-apis">creating custom query functions using CQL2</a>, which we can use to filter out products that do not meet our criteria. A common use case is filtering items based on their cloud coverage. For instance, if we want to download Sentinel-2 imagery with cloud cover below 25%, we can define our query function as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sentinel2_25cc_qf <span class="ot">&lt;-</span> <span class="cf">function</span>(bbox, stac_source, start_date, end_date, limit, ...) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    geom <span class="ot">&lt;-</span> rstac<span class="sc">::</span><span class="fu">cql2_bbox_as_geojson</span>(bbox)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    datetime <span class="ot">&lt;-</span> rstac<span class="sc">::</span><span class="fu">cql2_interval</span>(start_date, end_date)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    request <span class="ot">&lt;-</span> rstac<span class="sc">::</span><span class="fu">ext_filter</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        rstac<span class="sc">::</span><span class="fu">stac</span>(stac_source),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        collection <span class="sc">==</span> <span class="st">"sentinel-2-l2a"</span> <span class="sc">&amp;&amp;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">t_intersects</span>(datetime, {{datetime}}) <span class="sc">&amp;&amp;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">s_intersects</span>(geom, {{geom}}) <span class="sc">&amp;&amp;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        platform <span class="sc">==</span> <span class="st">"Sentinel-2B"</span> <span class="sc">&amp;&amp;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">eo:cloud_cover</span><span class="st">`</span> <span class="sc">&lt;</span> <span class="dv">25</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    rstac<span class="sc">::</span><span class="fu">items_fetch</span>(rstac<span class="sc">::</span><span class="fu">post_request</span>(request))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We could pass it in using the code <code>get_stac_data(query_function = sentinel2_25cc_qf)</code>. This is an optional argument, as <strong>rsi</strong> provides a default query function. We can then continue our work with the results stored in <code>swarzedz_sentinel2_sep</code>, selecting two images that have low cloud coverage.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_07_09 <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(swarzedz_sentinel2_sep[<span class="dv">16</span>])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_09_27 <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(swarzedz_sentinel2_sep[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>rsi</strong>’s <a href="https://permian-global-research.github.io/rsi/reference/calculate_indices.html">calculate_indices()</a> requires a data frame of indices to calculate. Since we want to calculate <a href="https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index">NDVI</a>, all we need to do is extract the row with NDVI’s formula. We can use the <code>short_name</code> column for that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ndvi <span class="ot">=</span> asi[asi<span class="sc">$</span>short_name <span class="sc">==</span> <span class="st">"NDVI"</span>, ]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_07_09_ndvi <span class="ot">=</span> <span class="fu">calculate_indices</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    swarzedz_sentinel2_07_09,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    ndvi,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_09_27_ndvi <span class="ot">=</span> <span class="fu">calculate_indices</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    swarzedz_sentinel2_09_27,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    ndvi,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">output_filename =</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".tif"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_07_09_ndvi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/tmp/Rtmppind2Y/file501084d439b94.tif"</code></pre>
+</div>
+</div>
+<p>We now can plot both rasters to see the values that were calculated for both dates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_07_09_ndvi_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(swarzedz_sentinel2_07_09_ndvi)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>swarzedz_sentinel2_09_27_ndvi_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(swarzedz_sentinel2_09_27_ndvi)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(swarzedz_sentinel2_07_09_ndvi_rast, <span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(swarzedz_sentinel2_09_27_ndvi_rast, <span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plotting NDVI rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To better visualize the change in NDVI over time, we can create a difference raster. Values above 0 indicate that NDVI was higher on October 27 than on July 9. Values below 0 indicate that the NDVI values decreased on October 27, compared to July 9. Values equal to 0 mean that NDVI values haven’t changed over time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dif <span class="ot">=</span> swarzedz_sentinel2_09_27_ndvi_rast <span class="sc">-</span> swarzedz_sentinel2_07_09_ndvi_rast</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(dif)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dif, <span class="at">main =</span> <span class="st">""</span>, <span class="at">xlab =</span> <span class="st">"NDVI"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/calculating difference raster-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can save both rasters as one, using <a href="https://permian-global-research.github.io/rsi/reference/stack_rasters.html"><code>stack_rasters()</code></a> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>stack <span class="ot">=</span> <span class="fu">stack_rasters</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    swarzedz_sentinel2_07_09_ndvi,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    swarzedz_sentinel2_09_27_ndvi</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".vrt"</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>stack_rast <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">rast</span>(stack)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stack_rast) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"NDVI 07.09"</span>, <span class="st">"NDVI 09.27"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>stack_rast</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 1000, 1000, 2  (nrow, ncol, nlyr)
+resolution  : 10, 10  (x, y)
+extent      : 366347.1, 376347.1, 501106.3, 511106.3  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source      : file5010876ee0652.vrt 
+names       : NDVI 07.09, NDVI 09.27 
+min values  : -0.1237687, -0.5265973 
+max values  :  0.7251614,  0.7040647 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(stack_rast, <span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plotting stack rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>The goal of this article was to demonstrate the capabilities of <strong>rsi</strong> package on the most common examples in remote sensing tasks. It’s current state already shows huge potential in many remote sensing applications. <strong>rsi</strong> provides functions which simplify processes of downloading satellite imagery and calculating spectral indices. If you want to learn more about <strong>rsi</strong> package, you can visit <a href="https://github.com/Permian-Global-Research/rsi">GitHub repository of the project</a>.</p>
+<p>While working on this article, I found many posibble features that could be added into <strong>rsi</strong>. An useful feature would be adding methods of simpler product filtering, based on cloud coverage and other parameters. Other feature could be focused on time series analysis, by calculating indices for each available item in selected time span.</p>
+<p>I’m looking forward into the future developements of <strong>rsi</strong>.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{rydzik2024,
+  author = {Rydzik, Mateusz},
+  title = {An Overview of the Rsi {R} Package for Retrieving Satellite
+    Imagery and Calculating Spectral Indices},
+  date = {2024-01-10},
+  url = {https://geocompx.org//post/2024/rsi-bp1},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-rydzik2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Rydzik, Mateusz. 2024. <span>“An Overview of the Rsi R Package for
+Retrieving Satellite Imagery and Calculating Spectral Indices.”</span>
+January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geocompx.org//post/2024/rsi-bp1</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">geocompx, 2016 - 2024</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompx/geocompx.org">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

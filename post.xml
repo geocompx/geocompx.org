@@ -10,7 +10,731 @@
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Tue, 12 Dec 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 10 Jan 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices</title>
+  <dc:creator>Mateusz Rydzik</dc:creator>
+  <link>https://geocompx.org/post/2024/rsi-bp1/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><a href="https://permian-global-research.github.io/rsi/"><strong>rsi</strong></a> is a recent R package developed by <a href="https://www.mm218.dev/">Michael Mahoney</a> and funded by Permian Global Research. It offers features that simplify the process of acquiring spatial data from STAC (<em>SpatioTemporal Asset Catalog</em>) and calculating spectral indices based on such data. A unique feature of this package is its source for the indices. Instead of providing a static list of available formulas, <strong>rsi</strong> obtains them from <a href="https://awesome-ee-spectral-indices.readthedocs.io/en/latest/">Awesome Spectral Indices</a>: a curated repository of over 200 indices covering multiple application domains. The combination of satellite imagery access through STAC and a constantly expanding spectral indices repository significantly simplifies remote sensing processes and creates new opportunities, including the automation of calculating spectral indices over a wide span of time and area.</p>
+</section>
+<section id="set-up" class="level1">
+<h1>Set up</h1>
+<p><strong>rsi</strong> is available in development version on <a href="https://github.com/Permian-Global-Research/rsi">GitHub</a>, which can be installed with <a href="https://pak.r-lib.org/">pak</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">pak<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pak</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Permian-Global-Research/rsi"</span>)</span></code></pre></div>
+</div>
+<p>To acquire the newest Awesome Spectral Indices dataset, we can call <a href="https://permian-global-research.github.io/rsi/reference/spectral_indices.html"><code>spectral_indices()</code></a>. Calling it without passing any arguments will result in using cached version of the tibble, which is updated automatically once a day. This tibble contains column with indices formulas, which are using standardized band names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(rsi)</span>
+<span id="cb2-2">asi <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">spectral_indices</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">download_indices =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb2-3">asi</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 231 × 9
+   application_domain bands     contributor   date_of_addition formula long_name
+   &lt;chr&gt;              &lt;list&gt;    &lt;chr&gt;         &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;    
+ 1 vegetation         &lt;chr [2]&gt; https://gith… 2021-11-17       (N - 0… Aerosol …
+ 2 vegetation         &lt;chr [2]&gt; https://gith… 2021-11-17       (N - 0… Aerosol …
+ 3 water              &lt;chr [6]&gt; https://gith… 2022-09-22       (B + G… Augmente…
+ 4 vegetation         &lt;chr [2]&gt; https://gith… 2021-09-20       (1 / G… Anthocya…
+ 5 vegetation         &lt;chr [3]&gt; https://gith… 2022-04-08       N * ((… Anthocya…
+ 6 vegetation         &lt;chr [4]&gt; https://gith… 2021-05-11       (N - (… Atmosphe…
+ 7 vegetation         &lt;chr [4]&gt; https://gith… 2021-05-14       sla * … Adjusted…
+ 8 vegetation         &lt;chr [2]&gt; https://gith… 2022-04-08       (N * (… Advanced…
+ 9 water              &lt;chr [4]&gt; https://gith… 2021-09-18       4.0 * … Automate…
+10 water              &lt;chr [5]&gt; https://gith… 2021-09-18       B + 2.… Automate…
+# ℹ 221 more rows
+# ℹ 3 more variables: platforms &lt;list&gt;, reference &lt;chr&gt;, short_name &lt;chr&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="acquiring-stac-data" class="level1">
+<h1>Acquiring STAC data</h1>
+<p><strong>rsi</strong> provides <a href="https://permian-global-research.github.io/rsi/reference/get_stac_data.html#ref-usage"><code>get_stac_data()</code></a> function, built around the <strong>rstac</strong> package. It allows to connect to specified STAC source, and access data, based on selected attributes, like geospatial area of interest, date of acquisition of imagery, collection name, etc. For users convenience, <strong>rsi</strong> comes with additional functions that facilitate <code>get_stac_data()</code> function, providing necessary parameters, and limiting users input to specifying area of interest and a time frame of imagery. Those functions allow to access Landsat, Sentinel 1-2 imagery and digital elevation models (DEMs), available on Microsoft’s Planetary Computer.</p>
+<p>Let’s start with creating our area of interest. <code>get_stac_data()</code> accepts <code>sf</code> objects from which it extracts boundaries, so we can load in already existing data source, or create our own. For this example, we will create area of interest of 5000 meters around a point in San Antonio.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb4-2">san_antonio <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">98.491142</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">29.424349</span>))</span>
+<span id="cb4-3">san_antonio <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(san_antonio, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">crs =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EPSG:4326"</span>)</span>
+<span id="cb4-4">san_antonio <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_buffer</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_transform</span>(san_antonio, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EPSG:3081"</span>), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>)</span></code></pre></div>
+</div>
+<p>Having specified the area of interest, we can create our query. We will start with downloading Landsat data for September and October 2023 and save it to a temporary file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">sa_landsat <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_landsat_imagery</span>(</span>
+<span id="cb5-2">    san_antonio,</span>
+<span id="cb5-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-09-01"</span>,</span>
+<span id="cb5-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">end_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-10-31"</span>,</span>
+<span id="cb5-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>)</span>
+<span id="cb5-6">)</span>
+<span id="cb5-7">sa_landsat</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/tmp/Rtmppind2Y/file501082fbc26c0.tif"</code></pre>
+</div>
+</div>
+<p><code>get_stac_data()</code> and its child functions return the path to downloaded image. As a default, they create the composite image out of median values of all avaiable images for specified time span. We can specify other composite functions, like <code>mean</code>, <code>sum</code>, <code>min</code> or <code>max</code>. We can also not use composite function at all (<code>composite_function = NULL</code>), and obtain all available images for specified time span. Another default argument, passed in for <code>mask_band</code>, automatically masks clouds with NAs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">sa_sentinel2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_sentinel2_imagery</span>(</span>
+<span id="cb7-2">    san_antonio,</span>
+<span id="cb7-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-09-01"</span>,</span>
+<span id="cb7-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">end_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-10-31"</span>,</span>
+<span id="cb7-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>)</span>
+<span id="cb7-6">)</span></code></pre></div>
+</div>
+<p>In this example, we download Sentinel 2 images for September and October 2023, mask out clouds, and create a composite image.</p>
+<p>Let’s also obtain the DEM of our area.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">sa_dem <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_dem</span>(</span>
+<span id="cb8-2">    san_antonio,</span>
+<span id="cb8-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>)</span>
+<span id="cb8-4">)</span></code></pre></div>
+</div>
+<p>After downloading the images, we can load them into <code>SpatRaster</code> objects using <a href="https://rdrr.io/cran/terra/man/rast.html"><code>rast()</code></a>. <strong>rsi</strong> automatically assigns proper band names to it, which follow Awesome Spectral Indices standard.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(terra)</span>
+<span id="cb9-2">sa_landsat_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(sa_landsat)</span>
+<span id="cb9-3">sa_sentinel2_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(sa_sentinel2)</span>
+<span id="cb9-4">sa_dem_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(sa_dem)</span>
+<span id="cb9-5">sa_landsat_rast</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 333, 333, 8  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 1141170, 1151160, 803238.9, 813228.9  (xmin, xmax, ymin, ymax)
+coord. ref. : NAD83 / Texas State Mapping System (EPSG:3081) 
+source      : file501082fbc26c0.tif 
+names       : A, B, G, R, N, S1, ... </code></pre>
+</div>
+</div>
+<p>We can plot the rasters together to compare Landsat and Sentinel images and visualize DEM.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>))</span>
+<span id="cb11-2">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plotRGB</span>(sa_landsat_rast, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">g =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">b =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">stretch =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lin"</span>)</span>
+<span id="cb11-3">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plotRGB</span>(sa_sentinel2_rast, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">g =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">b =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">stretch =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lin"</span>)</span>
+<span id="cb11-4">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(sa_dem_rast)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="calculating-spectral-indices" class="level1">
+<h1>Calculating spectral indices</h1>
+<p>Having downloaded images, we can use them to calculate spectral indices. In this example, we will observe the change in vegetation between two dates for the Swarzędz area in Poland. Let’s start by creating a new area of interest.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">swarzedz <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_point</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">17.108174</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">52.405725</span>))</span>
+<span id="cb12-2">swarzedz <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_set_crs</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_sfc</span>(swarzedz), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EPSG:4326"</span>)</span>
+<span id="cb12-3">swarzedz <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_buffer</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_transform</span>(swarzedz, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EPSG:2180"</span>), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>)</span></code></pre></div>
+</div>
+<p>For the most accurate results, we will use Sentinel 2 data. The date span is set from July to September 2023. We will also pass in <code>composite_function = NULL</code>, so that all available images will be downloaded separately.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">swarzedz_sentinel2_sep <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_sentinel2_imagery</span>(</span>
+<span id="cb13-2">    swarzedz,</span>
+<span id="cb13-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">start_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-07-01"</span>,</span>
+<span id="cb13-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">end_date =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2023-09-30"</span>,</span>
+<span id="cb13-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>),</span>
+<span id="cb13-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">composite_function =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb13-7">)</span>
+<span id="cb13-8"></span>
+<span id="cb13-9">swarzedz_sentinel2_sep</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "/tmp/Rtmppind2Y/file5010818963908_2023-09-27T10:00:31.024000Z.tif"
+ [2] "/tmp/Rtmppind2Y/file5010818963908_2023-09-22T09:56:49.024000Z.tif"
+ [3] "/tmp/Rtmppind2Y/file5010818963908_2023-09-17T10:00:31.024000Z.tif"
+ [4] "/tmp/Rtmppind2Y/file5010818963908_2023-09-12T09:56:09.024000Z.tif"
+ [5] "/tmp/Rtmppind2Y/file5010818963908_2023-09-07T10:00:31.024000Z.tif"
+ [6] "/tmp/Rtmppind2Y/file5010818963908_2023-09-02T09:55:59.024000Z.tif"
+ [7] "/tmp/Rtmppind2Y/file5010818963908_2023-08-28T10:00:31.025000Z.tif"
+ [8] "/tmp/Rtmppind2Y/file5010818963908_2023-08-23T09:55:59.024000Z.tif"
+ [9] "/tmp/Rtmppind2Y/file5010818963908_2023-08-18T10:00:31.024000Z.tif"
+[10] "/tmp/Rtmppind2Y/file5010818963908_2023-08-13T09:55:59.024000Z.tif"
+[11] "/tmp/Rtmppind2Y/file5010818963908_2023-08-08T10:00:31.024000Z.tif"
+[12] "/tmp/Rtmppind2Y/file5010818963908_2023-08-03T09:55:59.024000Z.tif"
+[13] "/tmp/Rtmppind2Y/file5010818963908_2023-07-29T10:00:31.024000Z.tif"
+[14] "/tmp/Rtmppind2Y/file5010818963908_2023-07-19T10:00:31.024000Z.tif"
+[15] "/tmp/Rtmppind2Y/file5010818963908_2023-07-14T09:55:59.024000Z.tif"
+[16] "/tmp/Rtmppind2Y/file5010818963908_2023-07-09T10:00:31.024000Z.tif"
+[17] "/tmp/Rtmppind2Y/file5010818963908_2023-07-04T09:55:59.024000Z.tif"</code></pre>
+</div>
+</div>
+<p><strong>rsi</strong> allows for <a href="https://permian-global-research.github.io/rsi/articles/Downloading-data-from-STAC-APIs-using-rsi.html#using-cql2-to-refine-queries-to-stac-apis">creating custom query functions using CQL2</a>, which we can use to filter out products that do not meet our criteria. A common use case is filtering items based on their cloud coverage. For instance, if we want to download Sentinel-2 imagery with cloud cover below 25%, we can define our query function as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">sentinel2_25cc_qf <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(bbox, stac_source, start_date, end_date, limit, ...) {</span>
+<span id="cb15-2">    geom <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cql2_bbox_as_geojson</span>(bbox)</span>
+<span id="cb15-3">    datetime <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cql2_interval</span>(start_date, end_date)</span>
+<span id="cb15-4">    request <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ext_filter</span>(</span>
+<span id="cb15-5">        rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stac</span>(stac_source),</span>
+<span id="cb15-6">        collection <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sentinel-2-l2a"</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&amp;</span></span>
+<span id="cb15-7">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t_intersects</span>(datetime, {{datetime}}) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&amp;</span></span>
+<span id="cb15-8">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">s_intersects</span>(geom, {{geom}}) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&amp;</span></span>
+<span id="cb15-9">        platform <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Sentinel-2B"</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&amp;</span></span>
+<span id="cb15-10">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">eo:cloud_cover</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">25</span></span>
+<span id="cb15-11">        )</span>
+<span id="cb15-12">    rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">items_fetch</span>(rstac<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">post_request</span>(request))</span>
+<span id="cb15-13">}</span></code></pre></div>
+</div>
+<p>We could pass it in using the code <code>get_stac_data(query_function = sentinel2_25cc_qf)</code>. This is an optional argument, as <strong>rsi</strong> provides a default query function. We can then continue our work with the results stored in <code>swarzedz_sentinel2_sep</code>, selecting two images that have low cloud coverage.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">swarzedz_sentinel2_07_09 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(swarzedz_sentinel2_sep[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>])</span>
+<span id="cb16-2">swarzedz_sentinel2_09_27 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(swarzedz_sentinel2_sep[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])</span></code></pre></div>
+</div>
+<p><strong>rsi</strong>’s <a href="https://permian-global-research.github.io/rsi/reference/calculate_indices.html">calculate_indices()</a> requires a data frame of indices to calculate. Since we want to calculate <a href="https://en.wikipedia.org/wiki/Normalized_difference_vegetation_index">NDVI</a>, all we need to do is extract the row with NDVI’s formula. We can use the <code>short_name</code> column for that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">ndvi <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> asi[asi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>short_name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"NDVI"</span>, ]</span>
+<span id="cb17-2">swarzedz_sentinel2_07_09_ndvi <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">calculate_indices</span>(</span>
+<span id="cb17-3">    swarzedz_sentinel2_07_09,</span>
+<span id="cb17-4">    ndvi,</span>
+<span id="cb17-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>)</span>
+<span id="cb17-6">)</span>
+<span id="cb17-7">swarzedz_sentinel2_09_27_ndvi <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">calculate_indices</span>(</span>
+<span id="cb17-8">    swarzedz_sentinel2_09_27,</span>
+<span id="cb17-9">    ndvi,</span>
+<span id="cb17-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output_filename =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".tif"</span>)</span>
+<span id="cb17-11">)</span>
+<span id="cb17-12">swarzedz_sentinel2_07_09_ndvi</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/tmp/Rtmppind2Y/file501084d439b94.tif"</code></pre>
+</div>
+</div>
+<p>We now can plot both rasters to see the values that were calculated for both dates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb19-2">swarzedz_sentinel2_07_09_ndvi_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(swarzedz_sentinel2_07_09_ndvi)</span>
+<span id="cb19-3">swarzedz_sentinel2_09_27_ndvi_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(swarzedz_sentinel2_09_27_ndvi)</span>
+<span id="cb19-4">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(swarzedz_sentinel2_07_09_ndvi_rast, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb19-5">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(swarzedz_sentinel2_09_27_ndvi_rast, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting NDVI rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To better visualize the change in NDVI over time, we can create a difference raster. Values above 0 indicate that NDVI was higher on October 27 than on July 9. Values below 0 indicate that the NDVI values decreased on October 27, compared to July 9. Values equal to 0 mean that NDVI values haven’t changed over time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb20-2">dif <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> swarzedz_sentinel2_09_27_ndvi_rast <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> swarzedz_sentinel2_07_09_ndvi_rast</span>
+<span id="cb20-3">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(dif)</span>
+<span id="cb20-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hist</span>(dif, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"NDVI"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/calculating difference raster-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can save both rasters as one, using <a href="https://permian-global-research.github.io/rsi/reference/stack_rasters.html"><code>stack_rasters()</code></a> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">stack <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stack_rasters</span>(</span>
+<span id="cb21-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb21-3">    swarzedz_sentinel2_07_09_ndvi,</span>
+<span id="cb21-4">    swarzedz_sentinel2_09_27_ndvi</span>
+<span id="cb21-5">  ),</span>
+<span id="cb21-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".vrt"</span>)</span>
+<span id="cb21-7">)</span>
+<span id="cb21-8">stack_rast <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(stack)</span>
+<span id="cb21-9"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(stack_rast) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"NDVI 07.09"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"NDVI 09.27"</span>)</span>
+<span id="cb21-10">stack_rast</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 1000, 1000, 2  (nrow, ncol, nlyr)
+resolution  : 10, 10  (x, y)
+extent      : 366347.1, 376347.1, 501106.3, 511106.3  (xmin, xmax, ymin, ymax)
+coord. ref. : ETRF2000-PL / CS92 (EPSG:2180) 
+source      : file5010876ee0652.vrt 
+names       : NDVI 07.09, NDVI 09.27 
+min values  : -0.1237687, -0.5265973 
+max values  :  0.7251614,  0.7040647 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(stack_rast, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting stack rasters-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>The goal of this article was to demonstrate the capabilities of <strong>rsi</strong> package on the most common examples in remote sensing tasks. It’s current state already shows huge potential in many remote sensing applications. <strong>rsi</strong> provides functions which simplify processes of downloading satellite imagery and calculating spectral indices. If you want to learn more about <strong>rsi</strong> package, you can visit <a href="https://github.com/Permian-Global-Research/rsi">GitHub repository of the project</a>.</p>
+<p>While working on this article, I found many posibble features that could be added into <strong>rsi</strong>. An useful feature would be adding methods of simpler product filtering, based on cloud coverage and other parameters. Other feature could be focused on time series analysis, by calculating indices for each available item in selected time span.</p>
+<p>I’m looking forward into the future developements of <strong>rsi</strong>.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{rydzik2024,
+  author = {Rydzik, Mateusz},
+  title = {An Overview of the Rsi {R} Package for Retrieving Satellite
+    Imagery and Calculating Spectral Indices},
+  date = {2024-01-10},
+  url = {https://geocompx.org//post/2024/rsi-bp1},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-rydzik2024" class="csl-entry quarto-appendix-citeas">
+Rydzik, Mateusz. 2024. <span>“An Overview of the Rsi R Package for
+Retrieving Satellite Imagery and Calculating Spectral Indices.”</span>
+January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geocompx.org//post/2024/rsi-bp1</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <guid>https://geocompx.org/post/2024/rsi-bp1/index.html</guid>
+  <pubDate>Wed, 10 Jan 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Say hi to ‘Geocomputation with Python’</title>
   <dc:creator>Jakub Nowosad</dc:creator>
