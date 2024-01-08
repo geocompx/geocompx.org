@@ -142,8 +142,25 @@ swarzedz_sentinel2_sep = get_sentinel2_imagery(
 swarzedz_sentinel2_sep
 ```
 
-**rsi** does not include any cloud filtering methods, but [we can use CQL2 queries](https://github.com/Permian-Global-Research/rsi/issues/6#issuecomment-1821148413) to modify **rsi**'s filter functions. 
-In this case, we will skip this step and select two images that are not covered in clouds.
+**rsi** allows for [creating custom query functions using CQL2](https://permian-global-research.github.io/rsi/articles/Downloading-data-from-STAC-APIs-using-rsi.html#using-cql2-to-refine-queries-to-stac-apis), which we can use to filter out products that do not meet our criteria. A common use case is filtering items based on their cloud coverage. For instance, if we want to download Sentinel-2 imagery with cloud cover below 25%, we can define our query function as follows:
+
+``` {r creating query function for sentinel2 25% cloud cover}
+sentinel2_25cc_qf <- function(bbox, stac_source, start_date, end_date, limit, ...) {
+    geom <- rstac::cql2_bbox_as_geojson(bbox)
+    datetime <- rstac::cql2_interval(start_date, end_date)
+    request <- rstac::ext_filter(
+        rstac::stac(stac_source),
+        collection == "sentinel-2-l2a" &&
+        t_intersects(datetime, {{datetime}}) &&
+        s_intersects(geom, {{geom}}) &&
+        platform == "Sentinel-2B" &&
+        `eo:cloud_cover` < 25
+        )
+    rstac::items_fetch(rstac::post_request(request))
+}
+```
+
+We could pass it in using the code `get_stac_data(query_function = sentinel2_25cc_qf)`. This is an optional argument, as **rsi** provides a default query function. We can then continue our work with the results stored in `swarzedz_sentinel2_sep`, selecting two images that have low cloud coverage.
 
 ``` {r selecting images for two specific dates}
 swarzedz_sentinel2_07_09 = terra::rast(swarzedz_sentinel2_sep[16])
