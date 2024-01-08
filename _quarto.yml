@@ -36,7 +36,7 @@ website:
         href: post.xml
   google-analytics: "G-PS0D9S7P17"
   page-footer: 
-     left: "geocompx, 2016 - 2023" 
+     left: "geocompx, 2016 - 2024" 
      right:
       - icon: github
         href: https://github.com/geocompx/geocompx.org
