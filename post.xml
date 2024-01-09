@@ -3712,6 +3712,36 @@ Spatial Data: What You Need to Do.”</span> June 4, 2023. <a href="https://geoc
   <pubDate>Sun, 04 Jun 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>Geocomputation with R comptetition: book cover for the 2nd edition</title>
+  <dc:creator>Robin Lovelace, Jakub Nowosad, Jannes Muenchow</dc:creator>
+  <link>https://geocompx.org/post/2024/cover-competition-results/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
+  author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
+  title = {Geocomputation with {R} Comptetition: Book Cover for the 2nd
+    Edition},
+  date = {2023-01-11},
+  url = {https://geocompx.org//post/2024/cover-competition-results},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace, jakub nowosad, jannes muenchow2023" class="csl-entry quarto-appendix-citeas">
+Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2023.
+<span>“Geocomputation with R Comptetition: Book Cover for the 2nd
+Edition.”</span> January 11, 2023. <a href="https://geocompx.org//post/2024/cover-competition-results">https://geocompx.org//post/2024/cover-competition-results</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <category>announcement</category>
+  <guid>https://geocompx.org/post/2024/cover-competition-results/index.html</guid>
+  <pubDate>Wed, 11 Jan 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Automatic website for the Geocomputation with R solutions</title>
   <dc:creator>Jakub Nowosad</dc:creator>
   <link>https://geocompx.org/post/2022/geocompr-solutions/index.html</link>
