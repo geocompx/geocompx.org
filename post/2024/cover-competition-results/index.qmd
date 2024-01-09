@@ -1,0 +1,13 @@
+---
+title: "Geocomputation with R comptetition: book cover for the 2nd edition" 
+author: Robin Lovelace, Jakub Nowosad, Jannes Muenchow
+date: "2023-01-11"
+slug: map-competition-results
+categories: 
+  - posts
+  - rstats
+  - announcement
+tags: [rspatial, rstats, announcement]
+draft: false
+fig-cap-location: top
+---
