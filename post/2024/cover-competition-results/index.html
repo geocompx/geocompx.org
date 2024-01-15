@@ -6,8 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Robin Lovelace, Jakub Nowosad, Jannes Muenchow">
-<meta name="dcterms.date" content="2023-01-11">
+<meta name="author" content="Benjamin Nowak">
+<meta name="dcterms.date" content="2023-01-17">
 
 <title>geocompx - Geocomputation with R comptetition: book cover for the 2nd edition</title>
 <style>
@@ -147,7 +147,15 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#one-page-many-things-to-show" id="toc-one-page-many-things-to-show" class="nav-link active" data-scroll-target="#one-page-many-things-to-show">One page, many things to show</a></li>
+  <li><a href="#a-tribute-to-useful-ressources" id="toc-a-tribute-to-useful-ressources" class="nav-link" data-scroll-target="#a-tribute-to-useful-ressources">A tribute to useful ressources</a></li>
+  <li><a href="#almost-there" id="toc-almost-there" class="nav-link" data-scroll-target="#almost-there">Almost there…</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -169,14 +177,14 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Robin Lovelace, Jakub Nowosad, Jannes Muenchow </p>
+             <p>Benjamin Nowak </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 11, 2023</p>
+      <p class="date">January 17, 2023</p>
     </div>
   </div>
   
@@ -186,21 +194,68 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 </header>
 
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a guest blog post written by Benjamin Nowak. He is the winner of the <a href="../../../post/2023/map-cover-competition/">Geocomputation with R book cover competition</a> for the second edition of the book. Congratulations!</p>
+</div>
+</div>
+<section id="one-page-many-things-to-show" class="level1">
+<h1>One page, many things to show</h1>
+<p>Like <a href="https://marcosci.github.io/">Marco Sciaini</a>, the creator of <a href="https://github.com/geocompx/geocompx.org/blob/main/post/2023/map-cover-competition/images/paste-3.png">the cover of the previous edition</a>, I started with the idea that seemed most logical to illustrate the cover of <strong>Geocomputation with R</strong>: illustrate various geocomputation and mapping techniques on the front page. The hexagons, reminiscent of R packages, were a good idea of Marco’s, but I had to come up with something new.</p>
+<p>The cover competition arrived approximately at the same time as the release of Alberto Cairo’s <a href="http://www.thefunctionalart.com/2023/11/the-art-of-insight-has-arrived.html"><strong>The Art of Insight</strong></a>, and I must confess that the beautiful tryptic imagined by Nadieh Bremer for the cover first gave me the idea of trying out a layout with three different maps (one on top of the other). But it was just copying someone else.</p>
+<p>The next idea then came to me quickly, as it fits well with the way graphics and maps are added as different layers in the same <code>ggplot()</code> object: adding different small maps on one big map.</p>
+</section>
+<section id="a-tribute-to-useful-ressources" class="level1">
+<h1>A tribute to useful ressources</h1>
+<p>Another idea I had with this cover was to highlight useful resources for the R community. For this purpose, I used <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-06-06/readme.md">a Tidy Tuesday dataset on energy production by country</a> for the Dorling cartogram that covered Europe in my first proposal.</p>
+<p>Another very important resource for me are the palette color packages, which save me so much time for my dataviz creation! So for this proposal I used Blake Robert Mills’ <a href="https://github.com/BlakeRMills/MoMAColors"><strong>MoMAColors</strong></a> packages and <a href="https://github.com/thomasp85/scico"><strong>scico</strong></a> from Fabio Crameri and Thomas Lin Pedersen.</p>
+<p>This led me to the following proposal:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">Proposal</figcaption>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+<section id="almost-there" class="level1">
+<h1>Almost there…</h1>
+<p>I was delighted when this proposal was chosen by Robin, Jakub and Jannes for the cover of the second edition of <strong>Geocomputation with R</strong>! But there were still a few elements missing to illustrate the diversity of cartographic objects and methods covered in the book. So, after some discussion and several iterations with the authors, we added:</p>
+<ul>
+<li>a NDVI raster covering the eastern part of the map</li>
+<li>a map of trades over Europe</li>
+</ul>
+<p>On this last point, I had already had the opportunity <a href="https://x.com/BjnNowak/status/1715229934107373970?s=20">to transform the FAOStat tables of coffee exports into line vectors</a>, but I have to admit that the solution provided here by Robin, with the <a href="https://github.com/ITSLeeds/od"><strong>od</strong></a> package, was much faster! After one last try, a solution was found to keep a version of Dorling’s cartogram in the background, by keeping the circles on the centroids (which leads to superimpositions but is more consistent with the departures and arrivals of the flows).</p>
+<p>Now, the image contains vector and raster data (which is the focus of the 1st part of the book), shows some visualization techniques (i.e., cartograms; 2nd part of the book), and also shows some geocomputation techniques (i.e., origin-destination lines; 3rd part of the book).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">The final version of the book cover image</figcaption>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+<p>Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!</p>
 
 
+</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
-  author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowak2023,
+  author = {Nowak, Benjamin},
   title = {Geocomputation with {R} Comptetition: Book Cover for the 2nd
     Edition},
-  date = {2023-01-11},
+  date = {2023-01-17},
   url = {https://geocompx.org//post/2024/cover-competition-results},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace, jakub nowosad, jannes muenchow2023" class="csl-entry quarto-appendix-citeas" role="listitem">
-Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2023.
-<span>“Geocomputation with R Comptetition: Book Cover for the 2nd
-Edition.”</span> January 11, 2023. <a href="https://geocompx.org//post/2024/cover-competition-results">https://geocompx.org//post/2024/cover-competition-results</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowak2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowak, Benjamin. 2023. <span>“Geocomputation with R Comptetition: Book
+Cover for the 2nd Edition.”</span> January 17, 2023. <a href="https://geocompx.org//post/2024/cover-competition-results">https://geocompx.org//post/2024/cover-competition-results</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
