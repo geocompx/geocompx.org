@@ -1240,15 +1240,15 @@ font-style: inherit;">st_sfc</span>()</span><div class="code-annotation-gutter-b
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="1">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="1" data-code-lines="3">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="6" data-code-annotation="2">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="2" data-code-lines="6">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-8" data-code-lines="8" data-code-annotation="3">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
+<span data-code-cell="annotated-cell-8" data-code-annotation="3" data-code-lines="8">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
 </dd>
 </dl>
 </div>
@@ -1445,7 +1445,7 @@ font-style: inherit;">#&gt; [1] "geometry"</span></span><div class="code-annotat
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
+<span data-code-cell="annotated-cell-13" data-code-annotation="1" data-code-lines="1"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
 </dd>
 </dl>
 </div>
@@ -1574,7 +1574,7 @@ font-style: inherit;">#&gt; [1] TRUE</span></span><div class="code-annotation-gu
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-15" data-code-lines="12" data-code-annotation="1">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
+<span data-code-cell="annotated-cell-15" data-code-annotation="1" data-code-lines="12">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
 </dd>
 </dl>
 </div>
@@ -1649,7 +1649,7 @@ font-style: inherit;">#&gt; 2 length_haversine(rs) 457.01µs  515.3µs     1659.
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="4" data-code-annotation="1"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
+<span data-code-cell="annotated-cell-18" data-code-annotation="1" data-code-lines="4"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
 </dd>
 </dl>
 </div>
@@ -1835,15 +1835,15 @@ font-style: inherit;">as_geos_geometry</span>(geometry))</span><div class="code-
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="2" data-code-annotation="1">We project our dataset to use meters</span>
+<span data-code-cell="annotated-cell-21" data-code-annotation="1" data-code-lines="2">We project our dataset to use meters</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="3" data-code-annotation="2">We remove the <code>sf</code> class so we can modify the geometry column</span>
+<span data-code-cell="annotated-cell-21" data-code-annotation="2" data-code-lines="3">We remove the <code>sf</code> class so we can modify the geometry column</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="4" data-code-annotation="3">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
+<span data-code-cell="annotated-cell-21" data-code-annotation="3" data-code-lines="4">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
 </dd>
 </dl>
 </div>
@@ -3710,6 +3710,83 @@ Spatial Data: What You Need to Do.”</span> June 4, 2023. <a href="https://geoc
   <category>rstats</category>
   <guid>https://geocompx.org/post/2023/rgdal-retirement/index.html</guid>
   <pubDate>Sun, 04 Jun 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Geocomputation with R competition: book cover for the 2nd edition</title>
+  <dc:creator>Benjamin Nowak</dc:creator>
+  <link>https://geocompx.org/post/2024/cover-competition-results/index.html</link>
+  <description><![CDATA[ 
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is a guest blog post written by Benjamin Nowak. He is the winner of the <a href="../../../post/2023/map-cover-competition/">Geocomputation with R book cover competition</a> for the second edition of the book. Congratulations!</p>
+</div>
+</div>
+<section id="one-page-many-things-to-show" class="level1">
+<h1>One page, many things to show</h1>
+<p>Like <a href="https://marcosci.github.io/">Marco Sciaini</a>, the creator of <a href="https://github.com/geocompx/geocompx.org/blob/main/post/2023/map-cover-competition/images/paste-3.png">the cover of the previous edition</a>, I started with the idea that seemed most logical to illustrate the cover of <strong>Geocomputation with R</strong>: illustrate various geocomputation and mapping techniques on the front page. The hexagons, reminiscent of R packages, were a good idea of Marco’s, but I had to come up with something new.</p>
+<p>The cover competition arrived approximately at the same time as the release of Alberto Cairo’s <a href="http://www.thefunctionalart.com/2023/11/the-art-of-insight-has-arrived.html"><strong>The Art of Insight</strong></a>, and I must confess that the beautiful tryptic imagined by Nadieh Bremer for the cover first gave me the idea of trying out a layout with three different maps (one on top of the other). But it was just copying someone else.</p>
+<p>The next idea then came to me quickly, as it fits well with the way graphics and maps are added as different layers in the same <code>ggplot()</code> object: adding different small maps on one big map.</p>
+</section>
+<section id="a-tribute-to-useful-ressources" class="level1">
+<h1>A tribute to useful ressources</h1>
+<p>Another idea I had with this cover was to highlight useful resources for the R community. For this purpose, I used <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-06-06/readme.md">a Tidy Tuesday dataset on energy production by country</a> for the Dorling cartogram that covered Europe in my first proposal.</p>
+<p>Another very important resource for me are the palette color packages, which save me so much time for my dataviz creation! So for this proposal I used Blake Robert Mills’ <a href="https://github.com/BlakeRMills/MoMAColors"><strong>MoMAColors</strong></a> packages and <a href="https://github.com/thomasp85/scico"><strong>scico</strong></a> from Fabio Crameri and Thomas Lin Pedersen.</p>
+<p>This led me to the following proposal:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">Proposal</figcaption>
+<p><img src="https://geocompx.org/post/2024/cover-competition-results/https:/raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</section>
+<section id="almost-there" class="level1">
+<h1>Almost there…</h1>
+<p>I was delighted when this proposal was chosen by Robin, Jakub and Jannes for the cover of the second edition of <strong>Geocomputation with R</strong>! But there were still a few elements missing to illustrate the diversity of cartographic objects and methods covered in the book. So, after some discussion and several iterations with the authors, we added:</p>
+<ul>
+<li>a NDVI raster covering the eastern part of the map</li>
+<li>a map of trades over Europe</li>
+</ul>
+<p>On this last point, I had already had the opportunity <a href="https://x.com/BjnNowak/status/1715229934107373970?s=20">to transform the FAOStat tables of coffee exports into line vectors</a>, but I have to admit that the solution provided here by Robin, with the <a href="https://github.com/ITSLeeds/od"><strong>od</strong></a> package, was much faster! After one last try, a solution was found to keep a version of Dorling’s cartogram in the background, by keeping the circles on the centroids (which leads to superimpositions but is more consistent with the departures and arrivals of the flows).</p>
+<p>Now, the image contains vector and raster data (which is the focus of the 1st part of the book), shows some visualization techniques (i.e., cartograms; 2nd part of the book), and also shows some geocomputation techniques (i.e., origin-destination lines; 3rd part of the book).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption class="figure-caption">The final version of the book cover image</figcaption>
+<p><img src="https://geocompx.org/post/2024/cover-competition-results/https:/raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+<p>Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowak2023,
+  author = {Nowak, Benjamin},
+  title = {Geocomputation with {R} Competition: Book Cover for the 2nd
+    Edition},
+  date = {2023-01-17},
+  url = {https://geocompx.org//post/2024/cover-competition-results},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowak2023" class="csl-entry quarto-appendix-citeas">
+Nowak, Benjamin. 2023. <span>“Geocomputation with R Competition: Book
+Cover for the 2nd Edition.”</span> January 17, 2023. <a href="https://geocompx.org//post/2024/cover-competition-results">https://geocompx.org//post/2024/cover-competition-results</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <category>announcement</category>
+  <guid>https://geocompx.org/post/2024/cover-competition-results/index.html</guid>
+  <pubDate>Tue, 17 Jan 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Automatic website for the Geocomputation with R solutions</title>
