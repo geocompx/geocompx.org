@@ -1,14 +1,14 @@
 ---
-title: "Geocomputation with R comptetition: book cover for the 2nd edition" 
+title: "Geocomputation with R competition: book cover for the 2nd edition" 
 author: Benjamin Nowak
 date: "2023-01-17"
-slug: map-competition-results
+slug: cover-competition-results
 categories: 
   - posts
   - rstats
   - announcement
 tags: [rspatial, rstats, announcement]
-draft: true
+draft: false
 fig-cap-location: top
 ---
 
