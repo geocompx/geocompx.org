@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -48,7 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -57,6 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -104,16 +111,43 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="style.css">
-<link rel="alternate" type="application/rss+xml" title="geocompx" href="post.xml"></head>
+<link rel="alternate" type="application/rss+xml" title="geocompx" href="post.xml" data-external="1"></head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="./static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
     </a>
@@ -125,51 +159,51 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./post.html" rel="" target="" aria-current="page">
- <span class="menu-text">Posts</span></a>
+    <a class="nav-link active" href="./post.html" aria-current="page"> 
+<span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./r.html" rel="" target="">
- <span class="menu-text">R resources</span></a>
+    <a class="nav-link" href="./r.html"> 
+<span class="menu-text">R resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./py.html" rel="" target="">
- <span class="menu-text">Python resources</span></a>
+    <a class="nav-link" href="./py.html"> 
+<span class="menu-text">Python resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./guestbook.html" rel="" target="">
- <span class="menu-text">Guestbook</span></a>
+    <a class="nav-link" href="./guestbook.html"> 
+<span class="menu-text">Guestbook</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
- <span class="menu-text">About us</span></a>
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About us</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/hashtag/geocompx" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/hashtag/geocompx"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://fosstodon.org/tags/geocompx" rel="" target=""><i class="bi bi-mastodon" role="img">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx"> <i class="bi bi-mastodon" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://discord.gg/PMztXYgNxp" rel="" target=""><i class="bi bi-discord" role="img">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp"> <i class="bi bi-discord" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="./post.xml" rel="" target=""><i class="bi bi-rss" role="img">
+    <a class="nav-link" href="./post.xml"> <i class="bi bi-rss" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -190,7 +224,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-left">
 
     
   
@@ -198,7 +232,9 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
   </div>
   
 
+
 </header>
+
 
 <div class="quarto-margin-sidebar">
 <p>Posts related to R are aggregated at <a href="https://www.r-bloggers.com/" target="_blank">R-bloggers</a> and <a href="https://rweekly.org/" target="_blank">RWeekly</a></p>
@@ -231,16 +267,14 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="posts,rstats,announcement" data-listing-date-sort="1705449600000" data-listing-file-modified-sort="1705482478671" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="0" data-categories="posts,rstats,announcement" data-listing-date-sort="1705449600000" data-listing-file-modified-sort="1708622589026" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="526">
 <div class="body">
-<a href="./post/2024/cover-competition-results/index.html">
 <h3 class="no-anchor listing-title">
-Geocomputation with R competition: book cover for the 2nd edition
+<a href="./post/2024/cover-competition-results/index.html" class="no-external">Geocomputation with R competition: book cover for the 2nd edition</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2024/cover-competition-results/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('posts'); return false;">
 posts
@@ -252,14 +286,12 @@ rstats
 announcement
 </div>
 </div>
-<a href="./post/2024/cover-competition-results/index.html">
 <div class="listing-description">
-This is a guest blog post written by Benjamin Nowak. He is the winner of the Geocomputation with R book cover competition for the second edition of the book. Congratulations!
+<a href="./post/2024/cover-competition-results/index.html" class="no-external">This is a guest blog post written by Benjamin Nowak. He is the winner of the Geocomputation with R book cover competition for the second edition of the book. Congratulations!</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2024/cover-competition-results/index.html">
+<a href="./post/2024/cover-competition-results/index.html" class="no-external">
 <div class="listing-date">
 Jan 17, 2024
 </div>
@@ -269,29 +301,25 @@ Jan 17, 2024
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="rstats" data-listing-date-sort="1704844800000" data-listing-file-modified-sort="1705482478671" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="quarto-post image-right" data-index="1" data-categories="rstats" data-listing-date-sort="1704844800000" data-listing-file-modified-sort="1708622589026" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1330">
 <div class="body">
-<a href="./post/2024/rsi-bp1/index.html">
 <h3 class="no-anchor listing-title">
-An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices
+<a href="./post/2024/rsi-bp1/index.html" class="no-external">An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2024/rsi-bp1/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('rstats'); return false;">
 rstats
 </div>
 </div>
-<a href="./post/2024/rsi-bp1/index.html">
 <div class="listing-description">
-<strong>rsi</strong> is a recent R package developed by Michael Mahoney…<em></em><strong></strong>
+<a href="./post/2024/rsi-bp1/index.html" class="no-external"><strong>rsi</strong> is a recent R package developed by Michael Mahoney and funded by Permian Global Research. It offers features that simplify the process of acquiring spatial data from…<em></em><strong></strong></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2024/rsi-bp1/index.html">
+<a href="./post/2024/rsi-bp1/index.html" class="no-external">
 <div class="listing-date">
 Jan 10, 2024
 </div>
@@ -301,16 +329,14 @@ Jan 10, 2024
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="python,geopython,geocompy" data-listing-date-sort="1702339200000" data-listing-file-modified-sort="1705482478667" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="2" data-categories="python,geopython,geocompy" data-listing-date-sort="1702339200000" data-listing-file-modified-sort="1708622589022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="552">
 <div class="body">
-<a href="./post/2023/geocompy-bp1/index.html">
 <h3 class="no-anchor listing-title">
-Say hi to ‘Geocomputation with Python’
+<a href="./post/2023/geocompy-bp1/index.html" class="no-external">Say hi to ‘Geocomputation with Python’</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2023/geocompy-bp1/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('python'); return false;">
 python
@@ -322,14 +348,12 @@ geopython
 geocompy
 </div>
 </div>
-<a href="./post/2023/geocompy-bp1/index.html">
 <div class="listing-description">
-<strong>Geocomputation with Python</strong>, also known as <strong>geocompy</strong>, is an open-source book on geographic data analysis with Python.<sup>1</sup> It is written by Michael Dorman, Anita Graser, Ro…
+<a href="./post/2023/geocompy-bp1/index.html" class="no-external"><strong>Geocomputation with Python</strong>, also known as <strong>geocompy</strong>, is an open-source book on geographic data analysis with Python.<sup>1</sup> It is written by Michael Dorman, Anita Graser, Robin…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2023/geocompy-bp1/index.html">
+<a href="./post/2023/geocompy-bp1/index.html" class="no-external">
 <div class="listing-date">
 Dec 12, 2023
 </div>
@@ -339,16 +363,14 @@ Dec 12, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="posts,rstats,announcement" data-listing-date-sort="1701388800000" data-listing-file-modified-sort="1705482478671" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="3" data-categories="posts,rstats,announcement" data-listing-date-sort="1701388800000" data-listing-file-modified-sort="1708622589022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="346">
 <div class="body">
-<a href="./post/2023/map-cover-competition/index.html">
 <h3 class="no-anchor listing-title">
-Geocomputation with R comptetition: book cover for the 2nd edition
+<a href="./post/2023/map-cover-competition/index.html" class="no-external">Geocomputation with R comptetition: book cover for the 2nd edition</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2023/map-cover-competition/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('posts'); return false;">
 posts
@@ -360,14 +382,12 @@ rstats
 announcement
 </div>
 </div>
-<a href="./post/2023/map-cover-competition/index.html">
 <div class="listing-description">
-The 2nd edition of Geocomputation with R is due to be published in…
+<a href="./post/2023/map-cover-competition/index.html" class="no-external">The 2nd edition of Geocomputation with R is due to be published in 2024. Now, we’re looking for a new cover image and we’d like your help. The competition is open to all and…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2023/map-cover-competition/index.html">
+<a href="./post/2023/map-cover-competition/index.html" class="no-external">
 <div class="listing-date">
 Dec 1, 2023
 </div>
@@ -377,16 +397,14 @@ Dec 1, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="posts,rstats" data-listing-date-sort="1694131200000" data-listing-file-modified-sort="1705482478667" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
+<div class="quarto-post image-right" data-index="4" data-categories="posts,rstats" data-listing-date-sort="1694131200000" data-listing-file-modified-sort="1708622589022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1645">
 <div class="body">
-<a href="./post/2023/beyond-sf/index.html">
 <h3 class="no-anchor listing-title">
-R-spatial beyond sf
+<a href="./post/2023/beyond-sf/index.html" class="no-external">R-spatial beyond sf</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2023/beyond-sf/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('posts'); return false;">
 posts
@@ -395,14 +413,12 @@ posts
 rstats
 </div>
 </div>
-<a href="./post/2023/beyond-sf/index.html">
 <div class="listing-description">
-<strong>sf</strong> has transformed the R ecosystem and helped pave the way for wider adoption of geospatial workflows by R users. The R-spatial ecosystem, however, is much bigger than just <strong>sf</strong>. There are lower level packages such…<strong></strong><strong></strong><strong></strong><strong></strong><strong></strong>
+<a href="./post/2023/beyond-sf/index.html" class="no-external"><strong>sf</strong> has transformed the R ecosystem and helped pave the way for wider adoption of geospatial workflows by R users. The R-spatial ecosystem, however, is much bigger than just <strong>sf</strong>…<strong></strong><strong></strong><strong></strong><strong></strong><strong></strong></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2023/beyond-sf/index.html">
+<a href="./post/2023/beyond-sf/index.html" class="no-external">
 <div class="listing-date">
 Sep 8, 2023
 </div>
@@ -412,16 +428,14 @@ Sep 8, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="posts,rstats,python" data-listing-date-sort="1693353600000" data-listing-file-modified-sort="1705482478671" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
+<div class="quarto-post image-right" data-index="5" data-categories="posts,rstats,python" data-listing-date-sort="1693353600000" data-listing-file-modified-sort="1708622589022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1845">
 <div class="body">
-<a href="./post/2023/ogh23/index.html">
 <h3 class="no-anchor listing-title">
-Geographic data analysis in R and Python: comparing code and outputs for vector data
+<a href="./post/2023/ogh23/index.html" class="no-external">Geographic data analysis in R and Python: comparing code and outputs for vector data</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2023/ogh23/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('posts'); return false;">
 posts
@@ -433,14 +447,12 @@ rstats
 python
 </div>
 </div>
-<a href="./post/2023/ogh23/index.html">
 <div class="listing-description">
-In this blog post, we talk about our experience teaching R and Python for geocomputation. The focus of the blog post is on geographic vector data, meaning points, lines…
+<a href="./post/2023/ogh23/index.html" class="no-external">In this blog post, we talk about our experience teaching R and Python for geocomputation. The focus of the blog post is on geographic vector data, meaning points, lines…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2023/ogh23/index.html">
+<a href="./post/2023/ogh23/index.html" class="no-external">
 <div class="listing-date">
 Aug 30, 2023
 </div>
@@ -450,16 +462,14 @@ Aug 30, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="posts,rstats" data-listing-date-sort="1685836800000" data-listing-file-modified-sort="1705482478671" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
+<div class="quarto-post image-right" data-index="6" data-categories="posts,rstats" data-listing-date-sort="1685836800000" data-listing-file-modified-sort="1708622589022" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1808">
 <div class="body">
-<a href="./post/2023/rgdal-retirement/index.html">
 <h3 class="no-anchor listing-title">
-Upcoming changes to popular R packages for spatial data: what you need to do
+<a href="./post/2023/rgdal-retirement/index.html" class="no-external">Upcoming changes to popular R packages for spatial data: what you need to do</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2023/rgdal-retirement/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('posts'); return false;">
 posts
@@ -468,14 +478,12 @@ posts
 rstats
 </div>
 </div>
-<a href="./post/2023/rgdal-retirement/index.html">
 <div class="listing-description">
-Three popular R packages for spatial data handling won’t be available on CRAN after October 2023.<sup>1</sup> These packages are:
+<a href="./post/2023/rgdal-retirement/index.html" class="no-external">Three popular R packages for spatial data handling won’t be available on CRAN after October 2023.<sup>1</sup> These packages are:</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2023/rgdal-retirement/index.html">
+<a href="./post/2023/rgdal-retirement/index.html" class="no-external">
 <div class="listing-date">
 Jun 4, 2023
 </div>
@@ -485,16 +493,14 @@ Jun 4, 2023
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="vignette,rstats" data-listing-date-sort="1645660800000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="quarto-post image-right" data-index="7" data-categories="vignette,rstats" data-listing-date-sort="1645660800000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="765">
 <div class="body">
-<a href="./post/2022/geocompr-solutions/index.html">
 <h3 class="no-anchor listing-title">
-Automatic website for the Geocomputation with R solutions
+<a href="./post/2022/geocompr-solutions/index.html" class="no-external">Automatic website for the Geocomputation with R solutions</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2022/geocompr-solutions/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -503,14 +509,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2022/geocompr-solutions/index.html">
 <div class="listing-description">
-Geocomputation with R is a book on geographic data analysis, visualization, and modeling. Each chapter<sup>1</sup> ends with a set of exercises allowing the readers to test how well they understand each presented concepts and approaches. However, exercises are often not enough without…
+<a href="./post/2022/geocompr-solutions/index.html" class="no-external">Geocomputation with R is a book on geographic data analysis, visualization, and modeling. Each chapter<sup>1</sup> ends with a set of exercises allowing the readers to test how well…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2022/geocompr-solutions/index.html">
+<a href="./post/2022/geocompr-solutions/index.html" class="no-external">
 <div class="listing-date">
 Feb 24, 2022
 </div>
@@ -520,16 +524,14 @@ Feb 24, 2022
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="updates,rstats" data-listing-date-sort="1643241600000" data-listing-file-modified-sort="1705482478667" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
+<div class="quarto-post image-right" data-index="8" data-categories="updates,rstats" data-listing-date-sort="1643241600000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="938">
 <div class="body">
-<a href="./post/2022/geocompr2-bp2/index.html">
 <h3 class="no-anchor listing-title">
-Progress update: Geocomputation with R Second Edition Part 1
+<a href="./post/2022/geocompr2-bp2/index.html" class="no-external">Progress update: Geocomputation with R Second Edition Part 1</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2022/geocompr2-bp2/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('updates'); return false;">
 updates
@@ -538,14 +540,12 @@ updates
 rstats
 </div>
 </div>
-<a href="./post/2022/geocompr2-bp2/index.html">
 <div class="listing-description">
-Geocomputation with R is a book on geographic data analysis, visualization…
+<a href="./post/2022/geocompr2-bp2/index.html" class="no-external">Geocomputation with R is a book on geographic data analysis, visualization, and modeling. The First Edition was first published as a physical book in 2019 and we have…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2022/geocompr2-bp2/index.html">
+<a href="./post/2022/geocompr2-bp2/index.html" class="no-external">
 <div class="listing-date">
 Jan 27, 2022
 </div>
@@ -555,16 +555,14 @@ Jan 27, 2022
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="announcement,rstats" data-listing-date-sort="1630886400000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="9" data-categories="announcement,rstats" data-listing-date-sort="1630886400000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="269">
 <div class="body">
-<a href="./post/2021/geocompr2-bp1/index.html">
 <h3 class="no-anchor listing-title">
-Geocomputation with R: Second Edition feedback
+<a href="./post/2021/geocompr2-bp1/index.html" class="no-external">Geocomputation with R: Second Edition feedback</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2021/geocompr2-bp1/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('announcement'); return false;">
 announcement
@@ -573,14 +571,12 @@ announcement
 rstats
 </div>
 </div>
-<a href="./post/2021/geocompr2-bp1/index.html">
 <div class="listing-description">
-TL;DR: Please help us by filling out the survey at https://forms.gle/nq9RmbxJyZXQgc948.
+<a href="./post/2021/geocompr2-bp1/index.html" class="no-external">TL;DR: Please help us by filling out the survey at https://forms.gle/nq9RmbxJyZXQgc948.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2021/geocompr2-bp1/index.html">
+<a href="./post/2021/geocompr2-bp1/index.html" class="no-external">
 <div class="listing-date">
 Sep 6, 2021
 </div>
@@ -590,16 +586,14 @@ Sep 6, 2021
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="vignette,rstats" data-listing-date-sort="1623888000000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
+<div class="quarto-post image-right" data-index="10" data-categories="vignette,rstats" data-listing-date-sort="1623888000000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="999">
 <div class="body">
-<a href="./post/2021/spatial-classes-conversion/index.html">
 <h3 class="no-anchor listing-title">
-Conversions between different spatial classes in R
+<a href="./post/2021/spatial-classes-conversion/index.html" class="no-external">Conversions between different spatial classes in R</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2021/spatial-classes-conversion/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -608,14 +602,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2021/spatial-classes-conversion/index.html">
 <div class="listing-description">
-The R programming language has, over the past two decades, evolved substantial spatial data analysis capabilities, and is now one of the most powerful environments for…
+<a href="./post/2021/spatial-classes-conversion/index.html" class="no-external">The R programming language has, over the past two decades, evolved substantial spatial data analysis capabilities, and is now one of the most powerful environments for…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2021/spatial-classes-conversion/index.html">
+<a href="./post/2021/spatial-classes-conversion/index.html" class="no-external">
 <div class="listing-date">
 Jun 17, 2021
 </div>
@@ -625,16 +617,14 @@ Jun 17, 2021
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="announcement,rstats" data-listing-date-sort="1587772800000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="11" data-categories="announcement,rstats" data-listing-date-sort="1587772800000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="338">
 <div class="body">
-<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html">
 <h3 class="no-anchor listing-title">
-Recent changes in R spatial and how to be ready for them
+<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html" class="no-external">Recent changes in R spatial and how to be ready for them</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('announcement'); return false;">
 announcement
@@ -643,14 +633,12 @@ announcement
 rstats
 </div>
 </div>
-<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html">
 <div class="listing-description">
-Currently, hundreds of R packages are related to spatial data analysis. They range from ecology and earth observation, hydrology and soil science, to transportation and…
+<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html" class="no-external">Currently, hundreds of R packages are related to spatial data analysis. They range from ecology and earth observation, hydrology and soil science, to transportation and…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html">
+<a href="./post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html" class="no-external">
 <div class="listing-date">
 Apr 25, 2020
 </div>
@@ -660,16 +648,14 @@ Apr 25, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="demo,rstats" data-listing-date-sort="1587600000000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
+<div class="quarto-post image-right" data-index="12" data-categories="demo,rstats" data-listing-date-sort="1587600000000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1941">
 <div class="body">
-<a href="./post/2020/r-spatial-demo-covid-19/index.html">
 <h3 class="no-anchor listing-title">
-Demo of reproducible geographic data analysis: mapping Covid-19 data with R
+<a href="./post/2020/r-spatial-demo-covid-19/index.html" class="no-external">Demo of reproducible geographic data analysis: mapping Covid-19 data with R</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2020/r-spatial-demo-covid-19/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('demo'); return false;">
 demo
@@ -678,14 +664,12 @@ demo
 rstats
 </div>
 </div>
-<a href="./post/2020/r-spatial-demo-covid-19/index.html">
 <div class="listing-description">
-The…
+<a href="./post/2020/r-spatial-demo-covid-19/index.html" class="no-external">The coronavirus pandemic is a global phenomenon that will affect the lives of the majority of the world’s population for years to come. Impacts range from physical…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2020/r-spatial-demo-covid-19/index.html">
+<a href="./post/2020/r-spatial-demo-covid-19/index.html" class="no-external">
 <div class="listing-date">
 Apr 23, 2020
 </div>
@@ -695,16 +679,14 @@ Apr 23, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="setup,rstats" data-listing-date-sort="1585526400000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
+<div class="quarto-post image-right" data-index="13" data-categories="setup,rstats" data-listing-date-sort="1585526400000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2213">
 <div class="body">
-<a href="./post/2020/installing-r-spatial-packages-linux/index.html">
 <h3 class="no-anchor listing-title">
-Installing spatial R packages on Ubuntu
+<a href="./post/2020/installing-r-spatial-packages-linux/index.html" class="no-external">Installing spatial R packages on Ubuntu</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2020/installing-r-spatial-packages-linux/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('setup'); return false;">
 setup
@@ -713,14 +695,12 @@ setup
 rstats
 </div>
 </div>
-<a href="./post/2020/installing-r-spatial-packages-linux/index.html">
 <div class="listing-description">
-This post explains how to quickly get key R packages for geographic research installed on Ubuntu, a popular Linux distribution.
+<a href="./post/2020/installing-r-spatial-packages-linux/index.html" class="no-external">This post explains how to quickly get key R packages for geographic research installed on Ubuntu, a popular Linux distribution.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2020/installing-r-spatial-packages-linux/index.html">
+<a href="./post/2020/installing-r-spatial-packages-linux/index.html" class="no-external">
 <div class="listing-date">
 Mar 30, 2020
 </div>
@@ -730,16 +710,14 @@ Mar 30, 2020
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="14" data-categories="vignette,rstats" data-listing-date-sort="1575763200000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
+<div class="quarto-post image-right" data-index="14" data-categories="vignette,rstats" data-listing-date-sort="1575763200000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1606">
 <div class="body">
-<a href="./post/2019/ggplot2-inset-maps/index.html">
 <h3 class="no-anchor listing-title">
-Inset maps with ggplot2
+<a href="./post/2019/ggplot2-inset-maps/index.html" class="no-external">Inset maps with ggplot2</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2019/ggplot2-inset-maps/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -748,14 +726,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2019/ggplot2-inset-maps/index.html">
 <div class="listing-description">
-Inset maps enable multiple places to be shown in the same geographic data visualisation, as described in the Inset maps section (8.2.7) of our open source book Geocomputation with R. The topic of…
+<a href="./post/2019/ggplot2-inset-maps/index.html" class="no-external">Inset maps enable multiple places to be shown in the same geographic data visualisation, as described in the Inset maps section (8.2.7) of our open source book…</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2019/ggplot2-inset-maps/index.html">
+<a href="./post/2019/ggplot2-inset-maps/index.html" class="no-external">
 <div class="listing-date">
 Dec 8, 2019
 </div>
@@ -765,16 +741,14 @@ Dec 8, 2019
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="15" data-categories="vignette,rstats" data-listing-date-sort="1571270400000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
+<div class="quarto-post image-right" data-index="15" data-categories="vignette,rstats" data-listing-date-sort="1571270400000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1822">
 <div class="body">
-<a href="./post/2019/tmap-styles/index.html">
 <h3 class="no-anchor listing-title">
-Map coloring: the color scale styles available in the tmap package
+<a href="./post/2019/tmap-styles/index.html" class="no-external">Map coloring: the color scale styles available in the tmap package</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2019/tmap-styles/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -783,14 +757,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2019/tmap-styles/index.html">
 <div class="listing-description">
-This vignette builds on the making maps chapter of the Geocomputation with R book. Its goal is to demonstrate all possible map styles available in the <strong>tmap</strong> package.
+<a href="./post/2019/tmap-styles/index.html" class="no-external">This vignette builds on the making maps chapter of the Geocomputation with R book. Its goal is to demonstrate all possible map styles available in the <strong>tmap</strong> package.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2019/tmap-styles/index.html">
+<a href="./post/2019/tmap-styles/index.html" class="no-external">
 <div class="listing-date">
 Oct 17, 2019
 </div>
@@ -800,16 +772,14 @@ Oct 17, 2019
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="16" data-categories="vignette,rstats" data-listing-date-sort="1567555200000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="16" data-categories="vignette,rstats" data-listing-date-sort="1567555200000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="599">
 <div class="body">
-<a href="./post/2019/tmap-grid/index.html">
 <h3 class="no-anchor listing-title">
-Grids and graticules in the tmap package
+<a href="./post/2019/tmap-grid/index.html" class="no-external">Grids and graticules in the tmap package</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2019/tmap-grid/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -818,14 +788,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2019/tmap-grid/index.html">
 <div class="listing-description">
-This vignette builds on the making maps chapter of the Geocomputation with R book. Its goal is to demonstrate how to set and modify grids and graticules in the <strong>tmap</strong> package.
+<a href="./post/2019/tmap-grid/index.html" class="no-external">This vignette builds on the making maps chapter of the Geocomputation with R book. Its goal is to demonstrate how to set and modify grids and graticules in the <strong>tmap</strong> package.</a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2019/tmap-grid/index.html">
+<a href="./post/2019/tmap-grid/index.html" class="no-external">
 <div class="listing-date">
 Sep 4, 2019
 </div>
@@ -835,16 +803,14 @@ Sep 4, 2019
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="17" data-categories="vignette,rstats" data-listing-date-sort="1566345600000" data-listing-file-modified-sort="1705482478663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="quarto-post image-right" data-index="17" data-categories="vignette,rstats" data-listing-date-sort="1566345600000" data-listing-file-modified-sort="1708622589018" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1307">
 <div class="body">
-<a href="./post/2019/crs-projections-transformations/index.html">
 <h3 class="no-anchor listing-title">
-Geographic projections and transformations
+<a href="./post/2019/crs-projections-transformations/index.html" class="no-external">Geographic projections and transformations</a>
 </h3>
 <div class="listing-subtitle">
-
+<a href="./post/2019/crs-projections-transformations/index.html" class="no-external"></a>
 </div>
-</a>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('vignette'); return false;">
 vignette
@@ -853,14 +819,12 @@ vignette
 rstats
 </div>
 </div>
-<a href="./post/2019/crs-projections-transformations/index.html">
 <div class="listing-description">
-This workbook outlines key concepts and functions related to map…<em></em>
+<a href="./post/2019/crs-projections-transformations/index.html" class="no-external">This workbook outlines key concepts and functions related to map projections — also referred to as coordinate reference systems (CRSs) — and transformation of geographic…<em></em></a>
 </div>
-</a>
 </div>
 <div class="metadata">
-<a href="./post/2019/crs-projections-transformations/index.html">
+<a href="./post/2019/crs-projections-transformations/index.html" class="no-external">
 <div class="listing-date">
 Aug 21, 2019
 </div>
@@ -954,10 +918,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -967,8 +930,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -981,6 +953,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1024,6 +1115,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1049,6 +1141,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1111,7 +1229,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">geocompx, 2016 - 2024</div>   
+    <div class="nav-footer-left">
+<p>geocompx, 2016 - 2024</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
@@ -1127,6 +1247,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+
 
 
 

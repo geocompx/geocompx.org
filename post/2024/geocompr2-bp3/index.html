@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jakub Nowosad, Robin Lovelace, Jannes Muenchow">
+<meta name="dcterms.date" content="2024-03-27">
 
-<title>geocompx</title>
+<title>geocompx - Second edition of Geocomputation with R is (almost) complete</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../static/favicon.ico" rel="icon">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -78,7 +80,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
 
 
-<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../../style.css">
 </head>
 
 <body class="nav-fixed">
@@ -88,8 +90,8 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -99,25 +101,25 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../post.html"> 
+    <a class="nav-link" href="../../../post.html"> 
 <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../r.html"> 
+    <a class="nav-link" href="../../../r.html"> 
 <span class="menu-text">R resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../py.html"> 
+    <a class="nav-link" href="../../../py.html"> 
 <span class="menu-text">Python resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../guestbook.html"> 
+    <a class="nav-link" href="../../../guestbook.html"> 
 <span class="menu-text">Guestbook</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"> 
+    <a class="nav-link" href="../../../about.html"> 
 <span class="menu-text">About us</span></a>
   </li>  
   <li class="nav-item compact">
@@ -136,7 +138,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="../../post.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../post.xml"> <i class="bi bi-rss" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -152,19 +154,97 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#whats-new" id="toc-whats-new" class="nav-link active" data-scroll-target="#whats-new">What’s new?</a></li>
+  <li><a href="#whats-different" id="toc-whats-different" class="nav-link" data-scroll-target="#whats-different">What’s different?</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s next?</a></li>
+  <li><a href="#acknowledgements-and-how-to-connect" id="toc-acknowledgements-and-how-to-connect" class="nav-link" data-scroll-target="#acknowledgements-and-how-to-connect">Acknowledgements and how to connect</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Second edition of <em>Geocomputation with R</em> is (almost) complete</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">updates</div>
+    <div class="quarto-category">rstats</div>
+  </div>
+  </div>
 
 
 
-<p>https://www.oldbookillustrations.com/subjects/animals/page/9/ https://alexaanswers.amazon.com/question/wZ1u5YAK7xPaZCJxawr51</p>
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Nowosad, Robin Lovelace, Jannes Muenchow </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 27, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
-</main> <!-- /main -->
+
+<p>We are excited to announce that the second edition of Geocomputation with R is (almost) complete. <!-- general introduction to the book --> <!-- with explanation about book content and purpose --></p>
+<section id="whats-new" class="level2">
+<h2 class="anchored" data-anchor-id="whats-new">What’s new?</h2>
+<p><img src="changedfiles.png" class="img-fluid"></p>
+<!-- new graphs -->
+<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/07-s2geos.png -->
+<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/02-sfdiagram.png -->
+<!-- book cover -->
+</section>
+<section id="whats-different" class="level2">
+<h2 class="anchored" data-anchor-id="whats-different">What’s different?</h2>
+<!-- raster to terra -->
+<p><!-- terra/stars R packages for working with raster data --> <!-- sf stays the same --> <!-- maps to tmap4 --> <!-- Replacement of code based on the old mlr package with code based on the new mlr3 package, as described in a huge pull request--> <!-- tons of small changes --> <!-- %>% |> --> <!-- New section in Chapter 2 on spherical geometry engines and the s2 package --> <!--New section on the sfheaders package--> <!-- New chapter on raster-vector interactions split out from Chapter 5--> <!-- An alternative process to simplification is smoothing the boundaries of polygon and linestring geometries, which is implemented in the **smoothr** package\index{smoothr (package)}. --> <!-- https://r.geocompx.org/reproj-geo-data --></p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s next?</h2>
+<!-- final changes, proofreading, and publication -->
+</section>
+<section id="acknowledgements-and-how-to-connect" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements-and-how-to-connect">Acknowledgements and how to connect</h2>
+<!-- The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
+We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*, Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
+We are still actively working on the book, and thus -- let us know if you have any [issues or suggestions](https://github.com/Robinlovelace/geocompr/issues) and feel free to create any [Pull Request](https://github.com/Robinlovelace/geocompr/pulls) from fixing typos, clarifying unclear sentences, to changes to the code and prose.
+You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf). -->
+<!-- https://geocompx.org/post/2022/geocompr2-bp2/ -->
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace, jannes muenchow2024,
+  author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
+  title = {Second Edition of {*Geocomputation} with {R*} Is (Almost)
+    Complete},
+  date = {2024-03-27},
+  url = {https://geocompx.org//post/2024/geocompr2-bp3},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad, robin lovelace, jannes muenchow2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Robin Lovelace, Jannes Muenchow, Jakub. 2024. <span>“Second
+Edition of *Geocomputation with R* Is (Almost) Complete.”</span> March
+27, 2024. <a href="https://geocompx.org//post/2024/geocompr2-bp3">https://geocompx.org//post/2024/geocompr2-bp3</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -9,13 +9,14 @@
 <link>https://geocompx.org/post.html#category=rstats</link>
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.3.450</generator>
+<generator>quarto-1.4.550</generator>
 <lastBuildDate>Wed, 17 Jan 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Geocomputation with R competition: book cover for the 2nd edition</title>
   <dc:creator>Benjamin Nowak</dc:creator>
-  <link>https://geocompx.org/post/2024/cover-competition-results/index.html</link>
+  <link>https://geocompx.org/post/2024/cover-competition-results/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -45,8 +46,8 @@ Note
 <p>This led me to the following proposal:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption class="figure-caption">Proposal</figcaption>
-<p><img src="https://geocompx.org/post/2024/cover-competition-results/https:/raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Proposal</figcaption>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </section>
@@ -61,8 +62,8 @@ Note
 <p>Now, the image contains vector and raster data (which is the focus of the 1st part of the book), shows some visualization techniques (i.e., cartograms; 2nd part of the book), and also shows some geocomputation techniques (i.e., origin-destination lines; 3rd part of the book).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption class="figure-caption">The final version of the book cover image</figcaption>
-<p><img src="https://geocompx.org/post/2024/cover-competition-results/https:/raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>The final version of the book cover image</figcaption>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 <p>Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!</p>
@@ -70,7 +71,7 @@ Note
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowak2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowak2024,
   author = {Nowak, Benjamin},
   title = {Geocomputation with {R} Competition: Book Cover for the 2nd
     Edition},
@@ -85,14 +86,15 @@ Cover for the 2nd Edition.”</span> January 17, 2024. <a href="https://geocompx
   <category>posts</category>
   <category>rstats</category>
   <category>announcement</category>
-  <guid>https://geocompx.org/post/2024/cover-competition-results/index.html</guid>
+  <guid>https://geocompx.org/post/2024/cover-competition-results/</guid>
   <pubDate>Wed, 17 Jan 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>An overview of the rsi R package for retrieving satellite imagery and calculating spectral indices</title>
   <dc:creator>Mateusz Rydzik</dc:creator>
-  <link>https://geocompx.org/post/2024/rsi-bp1/index.html</link>
+  <link>https://geocompx.org/post/2024/rsi-bp1/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -368,7 +370,11 @@ font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot</span>(sa_dem_rast)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting rasters-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting rasters-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -672,7 +678,11 @@ font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>))</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting NDVI rasters-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting NDVI rasters-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To better visualize the change in NDVI over time, we can create a difference raster. Values above 0 indicate that NDVI was higher on October 27 than on July 9. Values below 0 indicate that the NDVI values decreased on October 27, compared to July 9. Values equal to 0 mean that NDVI values haven’t changed over time.</p>
@@ -710,7 +720,11 @@ font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"NDVI"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/calculating difference raster-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/calculating difference raster-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can save both rasters as one, using <a href="https://permian-global-research.github.io/rsi/reference/stack_rasters.html"><code>stack_rasters()</code></a> function.</p>
@@ -782,7 +796,11 @@ font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>))</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting stack rasters-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/rsi-bp1/index_files/figure-html/plotting stack rasters-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -795,7 +813,7 @@ font-style: inherit;">1</span>))</span></code></pre></div>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{rydzik2024,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{rydzik2024,
   author = {Rydzik, Mateusz},
   title = {An Overview of the Rsi {R} Package for Retrieving Satellite
     Imagery and Calculating Spectral Indices},
@@ -809,14 +827,15 @@ Retrieving Satellite Imagery and Calculating Spectral Indices.”</span>
 January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geocompx.org//post/2024/rsi-bp1</a>.
 </div></div></section></div> ]]></description>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2024/rsi-bp1/index.html</guid>
+  <guid>https://geocompx.org/post/2024/rsi-bp1/</guid>
   <pubDate>Wed, 10 Jan 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Geocomputation with R comptetition: book cover for the 2nd edition</title>
   <dc:creator>Robin Lovelace, Jakub Nowosad, Jannes Muenchow</dc:creator>
-  <link>https://geocompx.org/post/2023/map-cover-competition/index.html</link>
+  <link>https://geocompx.org/post/2023/map-cover-competition/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -828,28 +847,31 @@ January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geoc
 <section id="a-bit-of-history" class="level1 page-columns page-full">
 <h1>A bit of history</h1>
 <p><a href="https://marcosci.github.io/">Marco Sciaini</a> won the competition for the book cover of the first edition of Geocomputation with R. His winning entry is shown on the left below. After some <a href="https://github.com/geocompx/geocompr/issues/284">iteration</a> on this winning idea, the concept was refined, resulting in a reproducible image (see its source code at <a href="https://github.com/geocompx/geocompr/blob/main/code/frontcover.R">github.com/geocompx/geocompr/</a>) (center). Then, the image was incorporated into the official cover of the book’s first edition (right).</p>
-<div class="column-page-inset quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div>
+
+</div>
+<div class="column-page-inset quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption class="figure-caption">Submission</figcaption>
+<figcaption>Submission</figcaption>
 <p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-2.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption class="figure-caption">Final</figcaption>
+<figcaption>Final</figcaption>
 <p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<figcaption class="figure-caption">Book cover</figcaption>
+<figcaption>Book cover</figcaption>
 <p><img src="https://geocompx.org/post/2023/map-cover-competition/images/paste-3.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
@@ -884,7 +906,7 @@ January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geoc
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
   author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
   title = {Geocomputation with {R} Comptetition: Book Cover for the 2nd
     Edition},
@@ -900,14 +922,15 @@ Edition.”</span> December 1, 2023. <a href="https://geocompx.org//post/2023/ma
   <category>posts</category>
   <category>rstats</category>
   <category>announcement</category>
-  <guid>https://geocompx.org/post/2023/map-cover-competition/index.html</guid>
+  <guid>https://geocompx.org/post/2023/map-cover-competition/</guid>
   <pubDate>Fri, 01 Dec 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>R-spatial beyond sf</title>
   <dc:creator>Josiah Parry</dc:creator>
-  <link>https://geocompx.org/post/2023/beyond-sf/index.html</link>
+  <link>https://geocompx.org/post/2023/beyond-sf/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -930,11 +953,7 @@ Note
 </div>
 </div>
 <p>But it is good to understand <strong>sf</strong> in a more fundamental way. <strong>sf</strong> is named after the <a href="https://en.wikipedia.org/wiki/Simple_Features">Simple Feature Access Standard</a>. Simple features are an agreed upon way to represent “geometric primitives”—things like <code>Point</code>s, <code>LineString</code>s, <code>Polygon</code>s, and their <code>Multi</code>- types. The <strong>sf</strong> package builds a hierarchy off of these. We have <code>sfg</code>, <code>sfc</code>, and <code>sf</code> objects.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features"><img src="https://geocompx.org/post/2023/beyond-sf/https:/r-spatial.github.io/sf/articles/sf_xfig.png" class="img-fluid figure-img"></a></p>
-</figure>
-</div>
+<p><a href="https://r-spatial.github.io/sf/articles/sf1.html#sf-objects-with-simple-features"><img src="https://r-spatial.github.io/sf/articles/sf_xfig.png" class="img-fluid"></a></p>
 <section id="sfg-objects" class="level3">
 <h3 class="anchored" data-anchor-id="sfg-objects"><code>sfg</code> objects</h3>
 <p>At the core is the <code>sfg</code> class which is the representation of a simple feature geometry. <code>sfg</code> class objects are representations of a simple feature. They are a single geometry at a time. We can think of them as a scalar value (even though R does not have the concept of a scalar).</p>
@@ -1228,15 +1247,15 @@ font-style: inherit;">st_sfc</span>()</span><div class="code-annotation-gutter-b
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="3" data-code-cell="annotated-cell-8">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="1">We iterate over both the x and y columns in the diamonds dataset returning a list</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-lines="6" data-code-cell="annotated-cell-8">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
+<span data-code-cell="annotated-cell-8" data-code-lines="6" data-code-annotation="2">Each value of <code>x</code> and <code>y</code> are accessed through the placeholder <code>.x</code> and <code>.y</code> based on their position in the <code>map2()</code> function. <code>st_point()</code> takes a length 2 numeric vector and returns a single <code>sfg</code> <code>POINT</code> object.</span>
 </dd>
 <dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-lines="8" data-code-cell="annotated-cell-8">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
+<span data-code-cell="annotated-cell-8" data-code-lines="8" data-code-annotation="3">We pass the list of <code>sfg</code> objects to create an <code>sfc</code></span>
 </dd>
 </dl>
 </div>
@@ -1433,7 +1452,7 @@ font-style: inherit;">#&gt; [1] "geometry"</span></span><div class="code-annotat
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="1" data-code-cell="annotated-cell-13"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
+<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1"><code>attr()</code> lets us access a single attribute by name This attribute tells us which column is the geometry. Because we have this <code>sf</code> can implement its own methods for common functions like <code>select()</code>, <code>mutate()</code>, <code>aggregate()</code>, <code>group_by()</code>, etc which always keep the <code>attr(x, "sf_column")</code> attached to the data frame. Having the class and attribute allow methods like <code>summarise()</code> to be written for the class itself and handle the things like unioning geometry for us.</span>
 </dd>
 </dl>
 </div>
@@ -1562,7 +1581,7 @@ font-style: inherit;">#&gt; [1] TRUE</span></span><div class="code-annotation-gu
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="12" data-code-cell="annotated-cell-15">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
+<span data-code-cell="annotated-cell-15" data-code-lines="12" data-code-annotation="1">We ignore attributes because they <em>will</em> be different because the classes are different.</span>
 </dd>
 </dl>
 </div>
@@ -1637,7 +1656,7 @@ font-style: inherit;">#&gt; 2 length_haversine(rs) 457.01µs  515.3µs     1659.
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="4" data-code-cell="annotated-cell-18"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="4" data-code-annotation="1"><code>check = FALSE</code> because the distances are ever so slightly different likely due to floating point rounding or the radius of the earth that is used.</span>
 </dd>
 </dl>
 </div>
@@ -1823,15 +1842,15 @@ font-style: inherit;">as_geos_geometry</span>(geometry))</span><div class="code-
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-annotation="1" data-code-lines="2" data-code-cell="annotated-cell-21">We project our dataset to use meters</span>
+<span data-code-cell="annotated-cell-21" data-code-lines="2" data-code-annotation="1">We project our dataset to use meters</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-annotation="2" data-code-lines="3" data-code-cell="annotated-cell-21">We remove the <code>sf</code> class so we can modify the geometry column</span>
+<span data-code-cell="annotated-cell-21" data-code-lines="3" data-code-annotation="2">We remove the <code>sf</code> class so we can modify the geometry column</span>
 </dd>
 <dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-annotation="3" data-code-lines="4" data-code-cell="annotated-cell-21">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
+<span data-code-cell="annotated-cell-21" data-code-lines="4" data-code-annotation="3">We update the geometry from an <code>sfc</code> to a <code>geos_geometry</code></span>
 </dd>
 </dl>
 </div>
@@ -2010,7 +2029,7 @@ font-style: inherit;">#&gt; 9 unclassified  1968.  MULTILINESTRING ((7.534918 51
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{parry2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{parry2023,
   author = {Parry, Josiah},
   title = {R-Spatial Beyond Sf},
   date = {2023-09-08},
@@ -2023,7 +2042,7 @@ Parry, Josiah. 2023. <span>“R-Spatial Beyond Sf.”</span> September 8,
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2023/beyond-sf/index.html</guid>
+  <guid>https://geocompx.org/post/2023/beyond-sf/</guid>
   <pubDate>Fri, 08 Sep 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
@@ -2032,8 +2051,9 @@ Parry, Josiah. 2023. <span>“R-Spatial Beyond Sf.”</span> September 8,
   <dc:creator>Anita Graser</dc:creator>
   <dc:creator>Michael Dorman</dc:creator>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2023/ogh23/index.html</link>
+  <link>https://geocompx.org/post/2023/ogh23/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -2481,7 +2501,11 @@ Geodetic CRS:  WGS 84
 background-color: null;
 font-style: inherit;">;</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="614"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="614"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2491,7 +2515,11 @@ font-style: inherit;">;</span></span></code></pre></div>
 background-color: null;
 font-style: inherit;">plot</span>(pol)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-17-3.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-17-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2515,7 +2543,11 @@ font-style: inherit;">'black'</span>)<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">;</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2535,7 +2567,11 @@ font-style: inherit;">border =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"black"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-19-3.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-19-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2691,7 +2727,11 @@ font-style: inherit;">True</span>)<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">;</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2714,7 +2754,11 @@ font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"zone_id"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2743,7 +2787,11 @@ font-style: inherit;">'red'</span>)<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">;</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2783,7 +2831,11 @@ font-style: inherit;">add =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-25-3.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2023/ogh23/index_files/figure-html/unnamed-chunk-25-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -2812,7 +2864,6 @@ font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'Dark2'</span>)</span></code></pre></div>
 <div class="cell-output-display">
-
 <div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
 <html>
 <head>
@@ -3402,7 +3453,7 @@ Geodetic CRS:  WGS 84
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2023,
   author = {Lovelace, Robin and Graser, Anita and Dorman, Michael and
     Nowosad, Jakub},
   title = {Geographic Data Analysis in {R} and {Python:} Comparing Code
@@ -3419,14 +3470,15 @@ Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.or
   <category>posts</category>
   <category>rstats</category>
   <category>python</category>
-  <guid>https://geocompx.org/post/2023/ogh23/index.html</guid>
+  <guid>https://geocompx.org/post/2023/ogh23/</guid>
   <pubDate>Wed, 30 Aug 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Upcoming changes to popular R packages for spatial data: what you need to do</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2023/rgdal-retirement/index.html</link>
+  <link>https://geocompx.org/post/2023/rgdal-retirement/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3682,7 +3734,7 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
 <li id="fn10"><p>You just need to be aware that they may return different values compared to <strong>rgeos</strong>. For example, <strong>sf</strong> may use <a href="https://r-spatial.org/r/2020/06/17/s2.html">a different algorithm to calculate the area of a polygon for data with a geographical coordinate reference system (CRS).</a>↩︎</p></li>
 <li id="fn11"><p>See the coercion section of the <a href="https://r-spatial.org/r/2023/04/10/evolution3.html">Progress on R-spatial evolution, Apr 2023</a> blog post.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2023,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2023,
   author = {Nowosad, Jakub},
   title = {Upcoming Changes to Popular {R} Packages for Spatial Data:
     What You Need to Do},
@@ -3696,14 +3748,15 @@ Spatial Data: What You Need to Do.”</span> June 4, 2023. <a href="https://geoc
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2023/rgdal-retirement/index.html</guid>
+  <guid>https://geocompx.org/post/2023/rgdal-retirement/</guid>
   <pubDate>Sun, 04 Jun 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Automatic website for the Geocomputation with R solutions</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2022/geocompr-solutions/index.html</link>
+  <link>https://geocompx.org/post/2022/geocompr-solutions/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3762,7 +3815,7 @@ cat(res, sep = '\n')
 <ol>
 <li id="fn1"><p>Except the last one.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2022,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2022,
   author = {Nowosad, Jakub},
   title = {Automatic Website for the {Geocomputation} with {R}
     Solutions},
@@ -3776,14 +3829,15 @@ with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//po
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2022/geocompr-solutions/index.html</guid>
+  <guid>https://geocompx.org/post/2022/geocompr-solutions/</guid>
   <pubDate>Thu, 24 Feb 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Progress update: Geocomputation with R Second Edition Part 1</title>
   <dc:creator>Jakub Nowosad, Robin Lovelace, Jannes Muenchow</dc:creator>
-  <link>https://geocompx.org/post/2022/geocompr2-bp2/index.html</link>
+  <link>https://geocompx.org/post/2022/geocompr2-bp2/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3838,7 +3892,7 @@ with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//po
 <ol>
 <li id="fn1"><p>There are also other significant changes, such as the retirement of <strong>RQGIS</strong> and <strong>mlr</strong>, but we plan to focus on them while updating the second part of the book.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace, jannes muenchow2022,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace, jannes muenchow2022,
   author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
   title = {Progress Update: {Geocomputation} with {R} {Second} {Edition}
     {Part} 1},
@@ -3853,14 +3907,15 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 </div></div></section></div> ]]></description>
   <category>updates</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2022/geocompr2-bp2/index.html</guid>
+  <guid>https://geocompx.org/post/2022/geocompr2-bp2/</guid>
   <pubDate>Thu, 27 Jan 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Geocomputation with R: Second Edition feedback</title>
   <dc:creator>Robin Lovelace, Jakub Nowosad, Jannes Muenchow</dc:creator>
-  <link>https://geocompx.org/post/2021/geocompr2-bp1/index.html</link>
+  <link>https://geocompx.org/post/2021/geocompr2-bp1/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -3874,7 +3929,7 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2021,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2021,
   author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
   title = {Geocomputation with {R:} {Second} {Edition} Feedback},
   date = {2021-09-06},
@@ -3888,14 +3943,15 @@ Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2021.
 </div></div></section></div> ]]></description>
   <category>announcement</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2021/geocompr2-bp1/index.html</guid>
+  <guid>https://geocompx.org/post/2021/geocompr2-bp1/</guid>
   <pubDate>Mon, 06 Sep 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Conversions between different spatial classes in R</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</link>
+  <link>https://geocompx.org/post/2021/spatial-classes-conversion/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -4094,6 +4150,7 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 <p>In summary, <code>st_as_sf()</code> converts other classes into <code>sf</code>, <code>vect()</code> transform other classes into <strong>terra</strong>’s <code>SpatVector</code>, and with <code>as(x, "Spatial")</code> it is possible to get <strong>sp</strong>’s vectors.</p>
 <div class="cell">
 <div class="cell-output-display">
+<div>
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -4126,6 +4183,7 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 </table>
 
 
+</div>
 </div>
 </div>
 </section>
@@ -4224,6 +4282,7 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 <p>As you can see - in most cases, we can just use one function to move from one class to another.</p>
 <div class="cell">
 <div class="cell-output-display">
+<div>
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -4258,6 +4317,7 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 
 </div>
 </div>
+</div>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
@@ -4272,7 +4332,7 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0">
 <div id="ref-R-spData" class="csl-entry">
 Bivand, Roger, Jakub Nowosad, and Robin Lovelace. 2020. <em>spData: Datasets for Spatial Analysis</em>. <a href="https://nowosad.github.io/spData/">https://nowosad.github.io/spData/</a>.
 </div>
@@ -4306,7 +4366,7 @@ Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.c
 <li id="fn1"><p>There are also other spatial data models, including meshes or point clouds.↩︎</p></li>
 <li id="fn2"><p>I plan to improve that in a future release.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
   author = {Nowosad, Jakub},
   title = {Conversions Between Different Spatial Classes in {R}},
   date = {2021-06-17},
@@ -4319,14 +4379,15 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</guid>
+  <guid>https://geocompx.org/post/2021/spatial-classes-conversion/</guid>
   <pubDate>Thu, 17 Jun 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Recent changes in R spatial and how to be ready for them</title>
   <dc:creator>Jakub Nowosad, Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</link>
+  <link>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -4344,7 +4405,7 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace2020,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace2020,
   author = {Nowosad, Robin Lovelace, Jakub},
   title = {Recent Changes in {R} Spatial and How to Be Ready for Them},
   date = {2020-04-25},
@@ -4357,14 +4418,15 @@ and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocomp
 </div></div></section></div> ]]></description>
   <category>announcement</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</guid>
+  <guid>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</guid>
   <pubDate>Sat, 25 Apr 2020 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Demo of reproducible geographic data analysis: mapping Covid-19 data with R</title>
   <dc:creator>Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2020/r-spatial-demo-covid-19/index.html</link>
+  <link>https://geocompx.org/post/2020/r-spatial-demo-covid-19/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -4372,18 +4434,10 @@ and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocomp
 <h1>Introduction</h1>
 <p>The coronavirus pandemic is a global phenomenon that will affect the lives of the majority of the world’s population for years to come. Impacts range from physical distancing measures <a href="https://en.wikipedia.org/wiki/Social_distancing#2019%E2%80%932020_coronavirus_pandemic">already affecting more than half of Earth’s population</a> and knock-on impacts such as <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Coronavirus_lockdown_leading_to_drop_in_pollution_across_Europe">changes in air quality</a> to potentially life threatening illness, with peer reviewed estimates of <a href="https://www.thelancet.com/pdfs/journals/laninf/PIIS1473-3099(20)30243-7.pdf">infection fatality rates</a> showing the disease disproportionately affects the elderly and people with underlying health conditions.</p>
 <p>Like other global phenomena such as climate change, the impacts of the pandemic vary greatly by geographic location, with effective and early implementation of physical distancing measures and effective contact tracing associated with lower death rates, according to preliminary <a href="https://www.medrxiv.org/content/10.1101/2020.03.10.20033738v3">research</a>, as illustrated in the animation below (source: <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">Washington Post</a>).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/"><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/https:/upload.wikimedia.org/wikipedia/commons/thumb/8/82/Katapult_importance_social_distancing.gif/350px-Katapult_importance_social_distancing.gif" class="img-fluid figure-img"></a></p>
-</figure>
-</div>
+<p><a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Katapult_importance_social_distancing.gif/350px-Katapult_importance_social_distancing.gif" class="img-fluid"></a></p>
 <p>This article demonstrates how to download and map open data on the evolving coronavirus pandemic, using reproducible R code. The aim is not to provide scientific analysis of the data, but to demonstrate how ‘open science’ enables public access to important international datasets. It also provides an opportunity to demonstrate how techniques taught in <a href="https://geocompr.robinlovelace.net/"><em>Geocomputation with R</em></a> can be applied to real-world datasets.</p>
 <p>Before undertaking geographic analysis of ‘rate’ data, such as the number Covid-19 infections per unit area, it is worth acknowledging caveats at the outset. Simple graphics of complex phenomena can be misleading. This is well-illustrated in the figure below by <a href="https://github.com/willgeary">Will Geary</a>, which shows how the ecological fallacy can affect interpretations of geographical analysis of areal units such countries that we will be using in this research.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="https://github.com/willgeary/covid-nyc-dasymetric-map"><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/https:/raw.githubusercontent.com/willgeary/covid-nyc-dasymetric-map/master/assets/comparison_table_zip_hex_smoothed.png" class="img-fluid figure-img"></a></p>
-</figure>
-</div>
+<p><a href="https://github.com/willgeary/covid-nyc-dasymetric-map"><img src="https://raw.githubusercontent.com/willgeary/covid-nyc-dasymetric-map/master/assets/comparison_table_zip_hex_smoothed.png" class="img-fluid"></a></p>
 <p>The post is intended more as a taster of geographic visualisation in R than as a gateway to scientific analysis of Covid-19 data. See resources such as the <a href="https://2020.erum.io/covidr-contest/">eRum2020 CovidR</a> contest and <a href="https://towardsdatascience.com/top-5-r-resources-on-covid-19-coronavirus-1d4c8df6d85f">lists</a> of online <a href="https://github.com/HDRUK/covid-19">resources</a> for pointers on how to usefully contribute to data-driven efforts to tackle the crisis.</p>
 </section>
 <section id="set-up" class="level1">
@@ -4409,7 +4463,7 @@ font-style: inherit;">library</span>(dplyr)</span></code></pre></div>
 <section id="getting-international-covid-19-data" class="level1">
 <h1>Getting international Covid-19 data</h1>
 <p>To get data on official Covid-19 statistics, we will use the <a href="https://github.com/covid19datahub/COVID19"><code>COVID19</code></a> R package.</p>
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/https:/camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="20%" style="display: block; margin: auto;"></p>
+<p><img src="https://camo.githubusercontent.com/b627e2aa6edcee3ead77511a35d4e1a5e91aa07f/68747470733a2f2f73746f726167652e636f7669643139646174616875622e696f2f6c6f676f2e737667" width="20%" style="display: block; margin: auto;"></p>
 <p>This package provides daily updated data on a variety of variables related to the coronavirus pandemic at national, regional and city levels. Install it as follows:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
@@ -4518,7 +4572,11 @@ font-style: inherit;">"https://git.io/JfICT"</span>) </span></code></pre></div>
 background-color: null;
 font-style: inherit;">plot</span>(world_iso)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -4545,7 +4603,11 @@ font-style: inherit;">plot</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">st_geometry</span>(world_projected))</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -4648,7 +4710,11 @@ font-style: inherit;">1</span>)</span>
 background-color: null;
 font-style: inherit;">plot</span>(w_yesterday)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The plot method for <code>sf</code> objects is fast and flexible, as documented in <a href="https://r-spatial.github.io/sf/articles/sf5.html"><code>sf</code>’s <em>Plotting Simple Features</em> vignette</a>, which can be accessed with <code>vignette("sf5")</code> from the R console. We can set the breaks to better show the difference between countries with no reported deaths and countries with few reported deaths as follows:</p>
@@ -4659,7 +4725,11 @@ font-style: inherit;">plot</span>(w_yesterday[<span class="st" style="color: #20
 background-color: null;
 font-style: inherit;">"deaths"</span>])</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">b <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -4686,7 +4756,11 @@ font-style: inherit;">"deaths"</span>], <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">breaks =</span> b)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To plot the other Covid-19 variables, reporting number of confirmed cases, number of tests and number of people who have recovered, we can subset the relevant variables and pipe the result to the <code>plot()</code> function (noting the <a href="https://t.co/NyIrKHQSUy">caveat</a> that code containing pipes may be hard to debug) as follows:</p>
@@ -4705,7 +4779,11 @@ font-style: inherit;">%&gt;%</span> </span>
 background-color: null;
 font-style: inherit;">plot</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -4728,7 +4806,11 @@ font-style: inherit;">"deaths"</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"recovered"</span>))</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We can modify the palette and scale as follows:</p>
@@ -4760,7 +4842,11 @@ background-color: null;
 font-style: inherit;">"order"</span></span>
 <span id="cb29-6">    ) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The map can be further improved by adding graticules representing the curvature of the Earth, created as follows:</p>
@@ -4827,7 +4913,11 @@ font-style: inherit;">0.01</span>, <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.25</span>))</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A problem with choropleth maps is that they can under-represent small areas. To overcome this issue we can use dot size instead of color to represent number:</p>
@@ -4902,7 +4992,11 @@ background-color: null;
 font-style: inherit;">"viridis"</span></span>
 <span id="cb32-11">    )</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>One question I have here: make the size legend have <code>style = "log10_pretty"</code> also?</p>
@@ -5021,7 +5115,11 @@ background-color: null;
 font-style: inherit;">"horizontal"</span></span>
 <span id="cb33-17">    )</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>To create an animated map, following instructions in Chapter <a href="https://geocompr.robinlovelace.net/adv-map.html#animated-maps">8</a> of <em>Geocomputation with R</em>, we need to make some small changes to the code above:</p>
@@ -5136,7 +5234,11 @@ font-style: inherit;">"covid-19-animated-map-test.gif"</span>)</span></code></pr
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/https:/user-images.githubusercontent.com/1825120/80087377-e7bda780-8552-11ea-959f-55b154c715fa.gif" class="img-fluid" style="width:40.0%"></p>
+<div>
+<figure class="figure">
+<p><img src="https://user-images.githubusercontent.com/1825120/80087377-e7bda780-8552-11ea-959f-55b154c715fa.gif" class="img-fluid figure-img" style="width:40.0%"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We made an animated map! The first version is rarely the best though, and the map above clearly could benefit from some adjustments before we plot the results for the whole dataset:</p>
@@ -5263,7 +5365,7 @@ background-color: null;
 font-style: inherit;">"covid-19-animated-map.gif"</span>)</span></code></pre></div>
 </div>
 <!--update the file below-->
-<p><img src="https://geocompx.org/post/2020/r-spatial-demo-covid-19/https:/user-images.githubusercontent.com/1825120/80092918-7f26f880-855b-11ea-8017-c4ec6e382209.gif" class="img-fluid"></p>
+<p><img src="https://user-images.githubusercontent.com/1825120/80092918-7f26f880-855b-11ea-8017-c4ec6e382209.gif" class="img-fluid"></p>
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
@@ -5399,7 +5501,7 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
   author = {Lovelace, Robin},
   title = {Demo of Reproducible Geographic Data Analysis: Mapping
     {Covid-19} Data with {R}},
@@ -5413,14 +5515,15 @@ Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https
 </div></div></section></div> ]]></description>
   <category>demo</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2020/r-spatial-demo-covid-19/index.html</guid>
+  <guid>https://geocompx.org/post/2020/r-spatial-demo-covid-19/</guid>
   <pubDate>Thu, 23 Apr 2020 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Installing spatial R packages on Ubuntu</title>
   <dc:creator>Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</link>
+  <link>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -5675,13 +5778,13 @@ font-style: inherit;">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</span>
 <h1>5. Fin</h1>
 <p>R is an open-source language heavily inspired by Unix/Linux so it should come as no surprise that it runs well on a variety of Linux distributions, Ubuntu (covered in this post) in particular. The guidance in this post should get geographic R packages set-up quickly in a future-proof way. A sensible next step is to sharpen you system administration (sysadmin) and shell coding skills, e.g.&nbsp;with reference to <a href="https://help.ubuntu.com/community/SystemAdministration">Ubuntu wiki pages</a> and <a href="https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts">Chapter 2</a> of the open source book <a href="https://www.datascienceatthecommandline.com">Data Science at the Command Line</a>.</p>
 <p>This will take time but, building on <a href="https://www.osgeo.org/">OSGeo</a> libraries, a well set-up Linux machine is an ideal platform to install, run and develop key geographic R packages in a performant, stable and future-proof way. <!-- I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work. --></p>
-<p><img src="https://geocompx.org/post/2020/installing-r-spatial-packages-linux/https:/www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg" class="img-fluid"></p>
+<p><img src="https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg" class="img-fluid"></p>
 <p>Be the <a href="https://wiki.osgeo.org/wiki/FOSS4G">FOSS4G</a> change you want to see in the world!</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
   author = {Lovelace, Robin},
   title = {Installing Spatial {R} Packages on {Ubuntu}},
   date = {2020-03-30},
@@ -5694,14 +5797,15 @@ Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org//post/2020/insta
 </div></div></section></div> ]]></description>
   <category>setup</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</guid>
+  <guid>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</guid>
   <pubDate>Mon, 30 Mar 2020 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Inset maps with ggplot2</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</link>
+  <link>https://geocompx.org/post/2019/ggplot2-inset-maps/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -5834,7 +5938,11 @@ font-style: inherit;">theme_void</span>()</span>
 <span id="cb5-5"></span>
 <span id="cb5-6">ggm1</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The main map’s role is to tell the story. Here we show the number of births between 1974 and 1978 in the North Carolina counties (the <code>BIR74</code> variable) using the Mint color palette from the <strong>rcartocolor</strong> palette. We also customize the legend position and size - this way, the legend is a part of the map, instead of being somewhere outside the map frame.</p>
@@ -5899,7 +6007,11 @@ font-style: inherit;">"mm"</span>))</span>
 <span id="cb6-8"></span>
 <span id="cb6-9">ggm2</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -5941,7 +6053,11 @@ font-style: inherit;">0.3</span>)</span>
 <span id="cb7-4"></span>
 <span id="cb7-5">gg_inset_map1</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The final map can be saved using the <code>ggsave()</code> function.</p>
@@ -6166,7 +6282,11 @@ font-style: inherit;">theme_void</span>()</span>
 <span id="cb14-5"></span>
 <span id="cb14-6">ggm3</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>On the other hand, the main map looks better when we provide some additional context to our data. One of the ways to achieve it is to add the borders of the neighboring states.</p>
@@ -6278,7 +6398,11 @@ font-style: inherit;">4</span>)])</span>
 <span id="cb15-12"></span>
 <span id="cb15-13">ggm4</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Finally, we draw two maps together, trying to find the best location and size for the inset map.</p>
@@ -6317,7 +6441,11 @@ font-style: inherit;">0.35</span>)</span>
 <span id="cb16-4"></span>
 <span id="cb16-5">gg_inset_map2</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The final map can be saved using the <code>ggsave()</code> function.</p>
@@ -6360,7 +6488,7 @@ font-style: inherit;">150</span>)</span></code></pre></div>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Nowosad, Jakub},
   title = {Inset Maps with Ggplot2},
   date = {2019-12-08},
@@ -6373,14 +6501,15 @@ Nowosad, Jakub. 2019. <span>“Inset Maps with Ggplot2.”</span> December
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</guid>
+  <guid>https://geocompx.org/post/2019/ggplot2-inset-maps/</guid>
   <pubDate>Sun, 08 Dec 2019 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Map coloring: the color scale styles available in the tmap package</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/tmap-styles/index.html</link>
+  <link>https://geocompx.org/post/2019/tmap-styles/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -6435,7 +6564,11 @@ font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"lightblue"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The output is a map of world countries, where each country is filled with a light blue color.</p>
@@ -6457,7 +6590,11 @@ font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"MAP_COLORS"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The default color can be changed using the <code>palette</code> argument - run the <code>tmaptools::palette_explorer()</code> function to see possible palettes’ names.</p>
@@ -6480,7 +6617,11 @@ font-style: inherit;">palette =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Pastel1"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <!-- Additionally, the number of classes can be set using the `n` argument. -->
@@ -6504,7 +6645,11 @@ font-style: inherit;">minimize =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The new map uses five colors<!-- except for Angola (blue color)-->. On a side note, in theory, no more than four colors are required to color the polygons of the map so that no two adjacent polygons have the same color (learn more about the four color map theorem on <a href="https://en.wikipedia.org/wiki/Four_color_theorem">Wikipedia</a>).</p>
@@ -6535,7 +6680,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6573,7 +6722,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A histogram is added using <code>legend.hist = TRUE</code> in this and several next examples to show how the selected map style relates to the distribution of values.</p>
@@ -6611,7 +6764,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6664,7 +6821,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Additionally, the default labels can be overwritten using the <code>labels</code> argument.</p>
@@ -6725,7 +6886,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6765,7 +6930,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6805,7 +6974,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6845,7 +7018,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6885,7 +7062,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -6925,7 +7106,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Committee Member: 1(1) 2(1) 3(1) 4(1) 5(1) 6(1) 7(1) 8(1) 9(1) 10(1)
@@ -6969,7 +7154,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7009,7 +7198,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7049,7 +7242,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Learn more about the implementation of discrete scales in <a href="https://r-spatial.github.io/classInt/index.html">the <strong>classInt</strong> package’s documentation</a>.</p>
@@ -7089,7 +7286,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7124,7 +7325,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7155,7 +7360,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Another possible style, <code>order</code> works better in this case; however, it is not easy to interpret.</p>
@@ -7187,7 +7396,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>A better alternative, in this case, is to use a common logarithm (the logarithm to base 10) scale. The <strong>tmap</strong> package gives two possibilities in this case - <code>"log10_pretty"</code> and <code>"log10"</code>. The <code>"log10_pretty"</code> style is a common logarithmic version of the regular <code>pretty</code> style.</p>
@@ -7219,7 +7432,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>On the other hand, the <code>"log10"</code> style is a version of a continuous scale.</p>
@@ -7251,7 +7468,11 @@ font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f
 background-color: null;
 font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="768"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7272,7 +7493,7 @@ font-style: inherit;">TRUE</span>) </span></code></pre></div>
 <li id="fn4"><p>See the <code>?bclust</code> documentation for more details.↩︎</p></li>
 <li id="fn5"><p>See the <code>?kmeans</code> documentation for more details.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Nowosad, Jakub},
   title = {Map Coloring: The Color Scale Styles Available in the Tmap
     Package},
@@ -7286,14 +7507,15 @@ Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geoc
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/tmap-styles/index.html</guid>
+  <guid>https://geocompx.org/post/2019/tmap-styles/</guid>
   <pubDate>Thu, 17 Oct 2019 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Grids and graticules in the tmap package</title>
   <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/tmap-grid/index.html</link>
+  <link>https://geocompx.org/post/2019/tmap-grid/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -7337,7 +7559,11 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">tm_grid</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p><code>tm_graticules()</code> shows longitude lines (meridians) and latitude lines (parallels), with degrees as units (note the degree sign in the example below).</p>
@@ -7356,7 +7582,11 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">tm_graticules</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7378,7 +7608,11 @@ font-style: inherit;">+</span> </span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -7404,7 +7638,11 @@ font-style: inherit;">+</span> </span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The number of horizontal (<code>x</code>) and vertical (<code>y</code>) lines can be set using the <code>n.x</code> and <code>n.y</code> arguments. Importantly, <strong>tmap</strong> rounds coordinate values to equally spaced “round” values, so the number of actual labels may be slightly different than set with <code>n.x</code> and <code>n.y</code>.</p>
@@ -7431,7 +7669,11 @@ font-style: inherit;">+</span> </span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>By default, <code>tm_grid()</code> and <code>tm_graticules()</code> shows ticks and lines. They can be disabled using <code>ticks = FALSE</code> and <code>lines = FALSE</code>.</p>
@@ -7454,7 +7696,11 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Especially, <code>lines = FALSE</code> could be useful when presenting raster data.</p>
@@ -7477,7 +7723,11 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>It is also possible to customize <code>tm_grid()</code> and <code>tm_graticules()</code> apperance, for example by chaning the lines colors (<code>col</code>), width (<code>lwd</code>) or labels size (<code>labels.size</code>).</p>
@@ -7508,7 +7758,11 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The above examples uses <code>tm_grid()</code>, but the same arguments apply to the <code>tm_graticules()</code>.</p>
@@ -7531,7 +7785,11 @@ font-style: inherit;">+</span> </span>
 background-color: null;
 font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>The way to fix this is to use the <code>tm_layout()</code> function and set its <code>inner.margins</code> argument to <code>0</code>.</p>
@@ -7559,14 +7817,18 @@ font-style: inherit;">inner.margins =</span> <span class="dv" style="color: #AD0
 background-color: null;
 font-style: inherit;">0</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="576"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
 </div>
 </div>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
   author = {Nowosad, Jakub},
   title = {Grids and Graticules in the Tmap Package},
   date = {2019-09-04},
@@ -7579,14 +7841,15 @@ Package.”</span> September 4, 2019. <a href="https://geocompx.org//post/2019/t
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/tmap-grid/index.html</guid>
+  <guid>https://geocompx.org/post/2019/tmap-grid/</guid>
   <pubDate>Wed, 04 Sep 2019 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Geographic projections and transformations</title>
   <dc:creator>Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2019/crs-projections-transformations/index.html</link>
+  <link>https://geocompx.org/post/2019/crs-projections-transformations/</link>
   <description><![CDATA[ 
+
 
 
 
@@ -7628,16 +7891,16 @@ font-style: inherit;">library</span>(spData)</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/https:/geocompr.robinlovelace.net/figures/vector_lonlat.png" class="img-fluid figure-img" style="width:49.0%"></p>
-<figcaption class="figure-caption">Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.</figcaption>
+<p><img src="https://geocompr.robinlovelace.net/figures/vector_lonlat.png" class="img-fluid figure-img" style="width:49.0%"></p>
+<figcaption>Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.</figcaption>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/https:/geocompr.robinlovelace.net/figures/vector_projected.png" class="img-fluid figure-img" style="width:49.0%"></p>
-<figcaption class="figure-caption">Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.</figcaption>
+<p><img src="https://geocompr.robinlovelace.net/figures/vector_projected.png" class="img-fluid figure-img" style="width:49.0%"></p>
+<figcaption>Illustration of vector (point) data in which location of London (the red X) is represented with reference to an origin (the blue circle). The left plot represents a geographic CRS with an origin at 0° longitude and latitude. The right plot represents a projected CRS with an origin located in the sea west of the South West Peninsula.</figcaption>
 </figure>
 </div>
 </div>
@@ -7737,21 +8000,33 @@ font-style: inherit;"># set CRS</span></span></code></pre></div>
 <p>Without a coordinate system, we have no context:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Which country is it?</p>
 <p>Location on Earth is measured in degrees so, even when axes are equal, maps are highly distorted representations of reality far from the equator:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Along which axis is the image over-represented?</p>
 <p>Even when we compensate for this, the cylindrical projection is misleading:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>By default, most software (including R) plots data with geographic lon/lat coordinates a cylindrical projection, leading to maps like this:</p>
@@ -7762,7 +8037,11 @@ font-style: inherit;">plot</span>(canada<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">$</span>geom)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -7774,7 +8053,11 @@ font-style: inherit;">#&gt; Warning: plotting the first 9 out of 10 attributes; 
 background-color: null;
 font-style: inherit;">#&gt; all</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Across the whole world, the results look like this:</p>
@@ -7789,13 +8072,21 @@ font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"grey"</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>There is no single ‘correct’ CRS that can represent everywhere well: it is physically impossible to ‘peal’ the surface of the Earth onto a flat screen (credit: <a href="https://unsplash.com/@awarnerway">Awar Jahfar</a>):</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/https:/images.unsplash.com/photo-1564509398619-622e40ad5a5e?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=633&amp;q=80" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="https://images.unsplash.com/photo-1564509398619-622e40ad5a5e?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=633&amp;q=80" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <blockquote class="blockquote">
@@ -7835,7 +8126,11 @@ font-style: inherit;">st_geometry</span>()</span>
 background-color: null;
 font-style: inherit;">plot</span>(world_laea1_g)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -7858,7 +8153,11 @@ font-style: inherit;">%&gt;%</span> </span>
 background-color: null;
 font-style: inherit;">plot</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -7881,7 +8180,11 @@ font-style: inherit;">%&gt;%</span> </span>
 background-color: null;
 font-style: inherit;">plot</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>How to add graticules?</p>
@@ -7931,7 +8234,11 @@ font-style: inherit;">add =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -7994,7 +8301,11 @@ font-style: inherit;">TRUE</span>)</span>
 background-color: null;
 font-style: inherit;">#&gt; Warning in plot.sf(world_laea, add = TRUE): ignoring all but the first attribute</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -8057,7 +8368,11 @@ font-style: inherit;">TRUE</span>)</span>
 background-color: null;
 font-style: inherit;">#&gt; Warning in plot.sf(world_laea, add = TRUE): ignoring all but the first attribute</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -8157,7 +8472,11 @@ font-style: inherit;">9</span>) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># not there</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -8175,7 +8494,11 @@ font-style: inherit;">0.1</span>)</span>
 background-color: null;
 font-style: inherit;">plot</span>(london_buff1)</span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -8191,7 +8514,11 @@ font-style: inherit;">add =</span> T)</span>
 background-color: null;
 font-style: inherit;">#&gt; Warning in plot.sf(london_buff1, add = T): ignoring all but the first attribute</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <div class="cell">
@@ -8241,18 +8568,18 @@ font-style: inherit;">#&gt; Warning in plot.sf(london_buff2, add = TRUE): ignori
 background-color: null;
 font-style: inherit;">#&gt; attribute</span></span></code></pre></div>
 <div class="cell-output-display">
-<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2019/crs-projections-transformations/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="further-reading" class="level1">
 <h1>Further reading</h1>
 <p>If you’re interested in learning more on this, check out <em>Geocomputations with R</em>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="https://geocompr.robinlovelace.net/"><img src="https://geocompx.org/post/2019/crs-projections-transformations/https:/geocompr.robinlovelace.net/images/cover.png" class="img-fluid figure-img"></a></p>
-</figure>
-</div>
+<p><a href="https://geocompr.robinlovelace.net/"><img src="https://geocompr.robinlovelace.net/images/cover.png" class="img-fluid"></a></p>
 <p>More specific resources on projections include:</p>
 <ul>
 <li>Excellent tutorial on coordinate systems on the Manifold website: http://www.manifold.net/doc/mfd9/projections_tutorial.htm</li>
@@ -8267,7 +8594,7 @@ font-style: inherit;">#&gt; attribute</span></span></code></pre></div>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2019,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2019,
   author = {Lovelace, Robin},
   title = {Geographic Projections and Transformations},
   date = {2019-08-21},
@@ -8280,7 +8607,7 @@ Transformations.”</span> August 21, 2019. <a href="https://geocompx.org//post/
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/crs-projections-transformations/index.html</guid>
+  <guid>https://geocompx.org/post/2019/crs-projections-transformations/</guid>
   <pubDate>Wed, 21 Aug 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
