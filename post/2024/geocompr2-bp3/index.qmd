@@ -1,0 +1,54 @@
+---
+title: "Second edition of *Geocomputation with R* is (almost) complete"
+author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+date: "2024-03-27"
+slug: geocompr2-bp3
+categories:
+  - updates
+  - rstats
+tags: [geocompr, geocompr2, geocompx, sf, stars, raster, terra, s2, rstats]
+draft: true
+---
+
+We are excited to announce that the second edition of Geocomputation with R is (almost) complete.
+<!-- general introduction to the book -->
+<!-- with explanation about book content and purpose -->
+
+## What's new?
+
+![](changedfiles.png)
+
+<!-- new graphs --> 
+<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/07-s2geos.png -->
+<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/02-sfdiagram.png -->
+<!-- book cover -->
+
+
+## What's different?
+
+<!-- raster to terra -->
+ <!-- terra/stars R packages for working with raster data -->
+<!-- sf stays the same -->
+<!-- maps to tmap4 -->
+<!-- Replacement of code based on the old mlr package with code based on the new mlr3 package, as described in a huge pull request-->
+<!-- tons of small changes -->
+<!-- %>% |> -->
+<!-- New section in Chapter 2 on spherical geometry engines and the s2 package -->
+<!--New section on the sfheaders package-->
+<!-- New chapter on raster-vector interactions split out from Chapter 5-->
+<!-- An alternative process to simplification is smoothing the boundaries of polygon and linestring geometries, which is implemented in the **smoothr** package\index{smoothr (package)}. -->
+<!-- https://r.geocompx.org/reproj-geo-data -->
+
+
+## What's next?
+
+<!-- final changes, proofreading, and publication -->
+
+## Acknowledgements and how to connect
+
+<!-- The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers!
+We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*, Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
+We are still actively working on the book, and thus -- let us know if you have any [issues or suggestions](https://github.com/Robinlovelace/geocompr/issues) and feel free to create any [Pull Request](https://github.com/Robinlovelace/geocompr/pulls) from fixing typos, clarifying unclear sentences, to changes to the code and prose.
+You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf). -->
+
+<!-- https://geocompx.org/post/2022/geocompr2-bp2/ -->
