@@ -19,7 +19,7 @@ We are excited to announce that the second edition of Geocomputation with R is (
 ![](changedfiles.png)
 
 <!-- new graphs --> 
-<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/07-s2geos.png -->
+
 <!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/02-sfdiagram.png -->
 <!-- book cover -->
 
@@ -29,16 +29,23 @@ We are excited to announce that the second edition of Geocomputation with R is (
 <!-- raster to terra -->
  <!-- terra/stars R packages for working with raster data -->
 <!-- sf stays the same -->
-<!-- maps to tmap4 -->
-<!-- Replacement of code based on the old mlr package with code based on the new mlr3 package, as described in a huge pull request-->
+
 <!-- tons of small changes -->
 <!-- %>% |> -->
 <!-- New section in Chapter 2 on spherical geometry engines and the s2 package -->
 <!--New section on the sfheaders package-->
-<!-- New chapter on raster-vector interactions split out from Chapter 5-->
 <!-- An alternative process to simplification is smoothing the boundaries of polygon and linestring geometries, which is implemented in the **smoothr** package\index{smoothr (package)}. -->
-<!-- https://r.geocompx.org/reproj-geo-data -->
-
+<!-- New chapter on raster-vector interactions split out from Chapter 5-->
+<!-- https://r.geocompx.org/reproj-geo-data: move from proj4string to WKT2 and SRID -->
+<!-- https://raw.githubusercontent.com/geocompx/geocompr/45f518873644e65fa872251f3999f081b60ebd87/figures/07-s2geos.png -->
+<!-- https://r.geocompx.org/reproj-geo-data#mapproj -->
+<!-- reorder of Geographic data I/O, COG, vsicurl, new Geographic data packages (examples), Geographic metadata, Geographic web services (thanks)  -->
+<!-- maps to tmap4 (fig!) -->
+<!-- qgisprocess (figs), saga + grass -->
+<!-- https://r.geocompx.org/gis#cloud -->
+<!-- Replacement of code based on the old mlr package with code based on the new mlr3 package, as described in a huge pull request  (fig!)-->
+<!-- transportation rewritten and expanded (figs) -->
+<!-- new conclusions -->
 
 ## What's next?
 
@@ -52,3 +59,5 @@ We are still actively working on the book, and thus -- let us know if you have a
 You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf). -->
 
 <!-- https://geocompx.org/post/2022/geocompr2-bp2/ -->
+
+<!-- update readme -->
