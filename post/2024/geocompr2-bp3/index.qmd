@@ -81,12 +81,12 @@ We added several new graphs to ease the understanding of the concepts, such as t
 
 ![](02-sfdiagram.png)
 
-The "Bridges to GIS software" chapter was rewritten and expanded, with the new packages made available since the first edition, such as **qgisprocess**, **Rsagacmd**, and **rgrass**.
-Similarly, the "Statistical learning" chapter was redone, with the new code based on the **mlr3** package.
+[The "Bridges to GIS software" chapter](https://r.geocompx.org/gis) was rewritten and expanded, with the new packages made available since the first edition, such as **qgisprocess**, **Rsagacmd**, and **rgrass**.
+Similarly, [the "Statistical learning" chapter](https://r.geocompx.org/spatial-cv) was redone, with the new code based on the **mlr3** package.
 
 ![](12_partitioning.png)
 
-The "Transportation" chapter was also completely rewritten, with new sections on routes, and route networks.
+[The "Transportation" chapter](https://r.geocompx.org/transport) was also completely rewritten, with new sections on routes, and route networks.
 
 ![](wayssln-1.png)
 
@@ -106,9 +106,11 @@ The above changes are just a few examples of the many new things that were added
 ## How to connect and acknowledgements
 
 If you want to connect with us, you can join the [Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf).
-You can also find us on GitHub, where you can open an issue or submit a pull request to [the book's repository](https://github.com/geocompx/geocompr/issues).
+You can find us on GitHub, where you can open an issue or submit a pull request to [the book's repository](https://github.com/geocompx/geocompr/issues).
+We also use the `#geocompr` hashtag on social media to share news and updates about the book, and encourage you to do the same.
 
-This work is certainly not possible without the interest and activity of many people.Several people contributed to the text and code, many other people raised issues and suggested improvements, and many more people provided feedback and support.
+This work was certainly not possible without the interest and activity of many people.
+Several people contributed to the text and code, many other people raised issues and suggested improvements, and many more people provided feedback and support.
 The list is very long -- you can find it at <https://r.geocompx.org/preface#acknowledgements>.
 We feel very grateful for all the help we received from the community.
 
