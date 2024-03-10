@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.4.550</generator>
+<generator>quarto-1.4.551</generator>
 <lastBuildDate>Wed, 17 Jan 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Geocomputation with R competition: book cover for the 2nd edition</title>
@@ -47,7 +47,7 @@ Note
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <figcaption>Proposal</figcaption>
-<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/raw_image.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </section>
@@ -63,7 +63,7 @@ Note
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <figcaption>The final version of the book cover image</figcaption>
-<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="https://raw.githubusercontent.com/BjnNowak/geocomputation/master/img/cover_un_boundaries.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 <p>Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!</p>
