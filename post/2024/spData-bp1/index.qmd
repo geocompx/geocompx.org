@@ -1,0 +1,26 @@
+---
+title: "Shapefile must... be replaced"
+author: Jakub Nowosad
+date: "2024-06-02"
+slug: spData-bp1
+categories:
+  - packages
+  - rstats
+tags: [geocompr, sf, spData, rstats]
+draft: true
+---
+
+The ESRI Shapefile format is possibly the most popular data format for storing spatial vector data.
+It is well-established, widely supported, and can be used in most GIS software.
+At the same time, it has many shortcomings and limitations: it is not a single file, but a collection of files; it has a limit of 2GB per file; it does not support more than one geometry type per file, and more.^[More about its limitations can be found at the [Switch from Shapefile](http://switchfromshapefile.org/) website and in the [Geocomputation with R](https://r.geocompx.org/read-write#file-formats) book.]
+In the last few years, a few improved alternatives to the Shapefile format have been developed, such as the [GeoPackage](https://www.geopackage.org/) and the [FlatGeobuf](https://github.com/flatgeobuf/flatgeobuf) format.^[And more alternatives are being developed, such as [GeoParquet](https://github.com/opengeospatial/geoparquet/).]
+
+In 2017, together with Roger Bivand and Robin Lovelace, we created the [**spData**](https://github.com/Nowosad/spData) R package -- a collection of spatial data both as R objects and external file formats.
+The package has two main goals: to provide easy access to spatial data for teaching purposes and to provide datasets that could be used as examples in the documentation of other packages.
+Many of the datasets in the package are stored in the ESRI Shapefile format, which is not ideal.
+
+Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the **spData** package.
+We hope that this change will serve as a good example and encourage others to use modern spatial data formats.
+At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future.
+Thus, if you use the **spData** package, be aware of this change and update your code accordingly.
+Also, if you have any comments or suggestions, please let us know in the issue on the package's GitHub page at https://github.com/Nowosad/spData/issues/62.
