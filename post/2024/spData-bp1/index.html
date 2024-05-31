@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="">
+<meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2024-06-02">
 
-<title>geocompx -</title>
+<title>geocompx - Shapefile must… be replaced</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -160,7 +161,9 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title">Shapefile must… be replaced</h1>
   <div class="quarto-categories">
+    <div class="quarto-category">packages</div>
     <div class="quarto-category">rstats</div>
   </div>
   </div>
@@ -169,11 +172,17 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Nowosad </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">Invalid Date</p>
+      <p class="date">June 2, 2024</p>
     </div>
   </div>
   
@@ -185,18 +194,29 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </header>
 
 
+<p>The ESRI Shapefile format is possibly the most popular data format for storing spatial vector data. It is well-established, widely supported, and can be used in most GIS software. At the same time, it has many shortcomings and limitations: it is not a single file, but a collection of files; it has a limit of 2GB per file; it does not support more than one geometry type per file, and more.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In the last few years, a few improved alternatives to the Shapefile format have been developed, such as the <a href="https://www.geopackage.org/">GeoPackage</a> and the <a href="https://github.com/flatgeobuf/flatgeobuf">FlatGeobuf</a> format.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>In 2017, together with Roger Bivand and Robin Lovelace, we created the <a href="https://github.com/Nowosad/spData"><strong>spData</strong></a> R package – a collection of spatial data both as R objects and external file formats. The package has two main goals: to provide easy access to spatial data for teaching purposes and to provide datasets that could be used as examples in the documentation of other packages. Many of the datasets in the package are stored in the ESRI Shapefile format, which is not ideal.</p>
+<p>Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the <strong>spData</strong> package. We hope that this change will serve as a good example and encourage others to use modern spatial data formats. At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future. Thus, if you use the <strong>spData</strong> package, be aware of this change and update your code accordingly. Also, if you have any comments or suggestions, please let us know in the issue on the package’s GitHub page at https://github.com/Nowosad/spData/issues/62.</p>
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{untitled,
-  author = {},
-  title = {},
-  date = {},
-  url = {https://geocompx.org//post/2023/sits-obist},
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>More about its limitations can be found at the <a href="http://switchfromshapefile.org/">Switch from Shapefile</a> website and in the <a href="https://r.geocompx.org/read-write#file-formats">Geocomputation with R</a> book.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>And more alternatives are being developed, such as <a href="https://github.com/opengeospatial/geoparquet/">GeoParquet</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2024,
+  author = {Nowosad, Jakub},
+  title = {Shapefile Must... Be Replaced},
+  date = {2024-06-02},
+  url = {https://geocompx.org//post/2024/spData-bp1},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-untitled" class="csl-entry quarto-appendix-citeas" role="listitem">
-n.d. <a href="https://geocompx.org//post/2023/sits-obist">https://geocompx.org//post/2023/sits-obist</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. 2024. <span>“Shapefile Must... Be Replaced.”</span> June
+2, 2024. <a href="https://geocompx.org//post/2024/spData-bp1">https://geocompx.org//post/2024/spData-bp1</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
