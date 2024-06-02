@@ -6,8 +6,8 @@ slug: spData-bp1
 categories:
   - packages
   - rstats
-tags: [geocompr, sf, spData, rstats]
-draft: true
+tags: [geocompr, sf, spData, rstats, file-formats]
+draft: false
 ---
 
 The ESRI Shapefile format is possibly the most popular data format for storing spatial vector data.
@@ -19,7 +19,7 @@ In 2017, together with Roger Bivand and Robin Lovelace, we created the [**spData
 The package has two main goals: to provide easy access to spatial data for teaching purposes and to provide datasets that could be used as examples in the documentation of other packages.
 Many of the datasets in the package are stored in the ESRI Shapefile format, which is not ideal.
 
-Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the **spData** package.
+Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the **spData** package (version number: 2.3.1).
 We hope that this change will serve as a good example and encourage others to use modern spatial data formats.
 At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future.
 Thus, if you use the **spData** package, be aware of this change and update your code accordingly.
