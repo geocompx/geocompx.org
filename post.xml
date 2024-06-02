@@ -10,7 +10,45 @@
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.4.554</generator>
-<lastBuildDate>Wed, 17 Jan 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 02 Jun 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Shapefile must… be replaced</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2024/spData-bp1/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>The ESRI Shapefile format is possibly the most popular data format for storing spatial vector data. It is well-established, widely supported, and can be used in most GIS software. At the same time, it has many shortcomings and limitations: it is not a single file, but a collection of files; it has a limit of 2GB per file; it does not support more than one geometry type per file, and more.<sup>1</sup> In the last few years, a few improved alternatives to the Shapefile format have been developed, such as the <a href="https://www.geopackage.org/">GeoPackage</a> and the <a href="https://github.com/flatgeobuf/flatgeobuf">FlatGeobuf</a> format.<sup>2</sup></p>
+<p>In 2017, together with Roger Bivand and Robin Lovelace, we created the <a href="https://github.com/Nowosad/spData"><strong>spData</strong></a> R package – a collection of spatial data both as R objects and external file formats. The package has two main goals: to provide easy access to spatial data for teaching purposes and to provide datasets that could be used as examples in the documentation of other packages. Many of the datasets in the package are stored in the ESRI Shapefile format, which is not ideal.</p>
+<p>Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the <strong>spData</strong> package (version number: 2.3.1). We hope that this change will serve as a good example and encourage others to use modern spatial data formats. At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future. Thus, if you use the <strong>spData</strong> package, be aware of this change and update your code accordingly. Also, if you have any comments or suggestions, please let us know in the issue on the package’s GitHub page at <a href="https://github.com/Nowosad/spData/issues/62" class="uri">https://github.com/Nowosad/spData/issues/62</a>.</p>
+
+
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>More about its limitations can be found at the <a href="http://switchfromshapefile.org/">Switch from Shapefile</a> website and in the <a href="https://r.geocompx.org/read-write#file-formats">Geocomputation with R</a> book.↩︎</p></li>
+<li id="fn2"><p>And more alternatives are being developed, such as <a href="https://github.com/opengeospatial/geoparquet/">GeoParquet</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2024,
+  author = {Nowosad, Jakub},
+  title = {Shapefile Must... Be Replaced},
+  date = {2024-06-02},
+  url = {https://geocompx.org//post/2024/spData-bp1},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2024" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2024. <span>“Shapefile Must... Be Replaced.”</span> June
+2, 2024. <a href="https://geocompx.org//post/2024/spData-bp1">https://geocompx.org//post/2024/spData-bp1</a>.
+</div></div></section></div> ]]></description>
+  <category>packages</category>
+  <category>rstats</category>
+  <guid>https://geocompx.org/post/2024/spData-bp1/</guid>
+  <pubDate>Sun, 02 Jun 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Geocomputation with R competition: book cover for the 2nd edition</title>
   <dc:creator>Benjamin Nowak</dc:creator>
