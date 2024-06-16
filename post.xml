@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.4.554</generator>
+<generator>quarto-1.4.555</generator>
 <lastBuildDate>Sun, 02 Jun 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Shapefile must… be replaced</title>
@@ -3674,7 +3674,7 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
 <p>You just need to be aware that functions in these packages are not always identical to the ones in the affected packages. They may have different arguments, different defaults, expect different inputs, or return different outputs. For example, <strong>rgdal</strong>’s <code>readOGR()</code> function returns a <code>Spatial*DataFrame</code> object, while <strong>sf</strong>’s <code>read_sf()</code> returns an <code>sf</code> object and <strong>terra</strong>’s <code>vect()</code> returns a <code>SpatVector</code> object.<sup>9</sup></p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">rgdal</th>
@@ -3701,7 +3701,7 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
 <p>Interestingly, the most often used <strong>maptools</strong> functions have been already deprecated for a long time and alternative tools for the same purposes existed, e.g., <code>unionSpatialPolygons()</code> could be replaced with <code>rgeos::gUnaryUnion()</code>, and <code>maptools::spRbind()</code> with <code>sp::rbind()</code>. The table below shows their modern substitutes.</p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">rgeos</th>
@@ -3744,7 +3744,7 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
 </table>
 </div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">maptools</th>
@@ -3770,7 +3770,7 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
 <p>The <strong>sp</strong> package is not going to be removed from CRAN soon, but it is good to stop using it because it is no longer being actively developed. Here you can find some replacements for its basic functions:</p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">sp</th>
@@ -4284,8 +4284,7 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 <p>In summary, <code>st_as_sf()</code> converts other classes into <code>sf</code>, <code>vect()</code> transform other classes into <strong>terra</strong>’s <code>SpatVector</code>, and with <code>as(x, "Spatial")</code> it is possible to get <strong>sp</strong>’s vectors.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
@@ -4317,7 +4316,6 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 </table>
 
 
-</div>
 </div>
 </div>
 </section>
@@ -4416,8 +4414,7 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 <p>As you can see - in most cases, we can just use one function to move from one class to another.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div>
-<table class="table table-sm table-striped small" data-quarto-postprocess="true">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
@@ -4449,7 +4446,6 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 </table>
 
 
-</div>
 </div>
 </div>
 </section>

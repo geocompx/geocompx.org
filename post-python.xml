@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=python</link>
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.4.554</generator>
+<generator>quarto-1.4.555</generator>
 <lastBuildDate>Tue, 12 Dec 2023 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Say hi to ‘Geocomputation with Python’</title>

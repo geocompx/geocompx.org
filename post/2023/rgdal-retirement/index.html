@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -286,7 +286,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>You just need to be aware that functions in these packages are not always identical to the ones in the affected packages. They may have different arguments, different defaults, expect different inputs, or return different outputs. For example, <strong>rgdal</strong>’s <code>readOGR()</code> function returns a <code>Spatial*DataFrame</code> object, while <strong>sf</strong>’s <code>read_sf()</code> returns an <code>sf</code> object and <strong>terra</strong>’s <code>vect()</code> returns a <code>SpatVector</code> object.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">rgdal</th>
@@ -313,7 +313,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>Interestingly, the most often used <strong>maptools</strong> functions have been already deprecated for a long time and alternative tools for the same purposes existed, e.g., <code>unionSpatialPolygons()</code> could be replaced with <code>rgeos::gUnaryUnion()</code>, and <code>maptools::spRbind()</code> with <code>sp::rbind()</code>. The table below shows their modern substitutes.</p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">rgeos</th>
@@ -356,7 +356,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </table>
 </div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">maptools</th>
@@ -382,7 +382,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>The <strong>sp</strong> package is not going to be removed from CRAN soon, but it is good to stop using it because it is no longer being actively developed. Here you can find some replacements for its basic functions:</p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">sp</th>
