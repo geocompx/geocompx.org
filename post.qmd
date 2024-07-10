@@ -16,8 +16,12 @@ title-block-banner: false
 ---
 
 <div class="quarto-margin-sidebar">
+  We welcome guest posts on geocomputation topics! If you have ideas to share, the best way to get in touch is by opening an issue at <https://github.com/geocompx/geocompx.org/issues>. We look forward to your contributions.
+
+  <i> 
   Posts related to R are aggregated at
   <a href="https://www.r-bloggers.com/" target="_blank">R-bloggers</a>
   and
   <a href="https://rweekly.org/" target="_blank">RWeekly</a>
+  </i>
 </div>
