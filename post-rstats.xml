@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=rstats</link>
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.4.555</generator>
+<generator>quarto-1.5.54</generator>
 <lastBuildDate>Sun, 02 Jun 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Shapefile must… be replaced</title>
@@ -37,12 +37,12 @@
   author = {Nowosad, Jakub},
   title = {Shapefile Must... Be Replaced},
   date = {2024-06-02},
-  url = {https://geocompx.org//post/2024/spData-bp1},
+  url = {https://geocompx.org/post/2024/spData-bp1/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2024" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2024. <span>“Shapefile Must... Be Replaced.”</span> June
-2, 2024. <a href="https://geocompx.org//post/2024/spData-bp1">https://geocompx.org//post/2024/spData-bp1</a>.
+2, 2024. <a href="https://geocompx.org/post/2024/spData-bp1/">https://geocompx.org/post/2024/spData-bp1/</a>.
 </div></div></section></div> ]]></description>
   <category>packages</category>
   <category>rstats</category>
@@ -114,12 +114,12 @@ Note
   title = {Geocomputation with {R} Competition: Book Cover for the 2nd
     Edition},
   date = {2024-01-17},
-  url = {https://geocompx.org//post/2024/cover-competition-results},
+  url = {https://geocompx.org/post/2024/cover-competition-results/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowak2024" class="csl-entry quarto-appendix-citeas">
 Nowak, Benjamin. 2024. <span>“Geocomputation with R Competition: Book
-Cover for the 2nd Edition.”</span> January 17, 2024. <a href="https://geocompx.org//post/2024/cover-competition-results">https://geocompx.org//post/2024/cover-competition-results</a>.
+Cover for the 2nd Edition.”</span> January 17, 2024. <a href="https://geocompx.org/post/2024/cover-competition-results/">https://geocompx.org/post/2024/cover-competition-results/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
@@ -513,6 +513,7 @@ font-style: inherit;">NULL</span></span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(bbox, stac_source, start_date, end_date, limit, ...) {</span>
 <span id="cb15-2">    geom <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -856,13 +857,13 @@ font-style: inherit;">1</span>))</span></code></pre></div>
   title = {An Overview of the Rsi {R} Package for Retrieving Satellite
     Imagery and Calculating Spectral Indices},
   date = {2024-01-10},
-  url = {https://geocompx.org//post/2024/rsi-bp1},
+  url = {https://geocompx.org/post/2024/rsi-bp1/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-rydzik2024" class="csl-entry quarto-appendix-citeas">
 Rydzik, Mateusz. 2024. <span>“An Overview of the Rsi R Package for
 Retrieving Satellite Imagery and Calculating Spectral Indices.”</span>
-January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geocompx.org//post/2024/rsi-bp1</a>.
+January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geocompx.org/post/2024/rsi-bp1/</a>.
 </div></div></section></div> ]]></description>
   <category>rstats</category>
   <guid>https://geocompx.org/post/2024/rsi-bp1/</guid>
@@ -944,18 +945,18 @@ January 10, 2024. <a href="https://geocompx.org//post/2024/rsi-bp1">https://geoc
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2023,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace,_jakub_nowosad,_jannes_muenchow2023,
   author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
   title = {Geocomputation with {R} Comptetition: Book Cover for the 2nd
     Edition},
   date = {2023-12-01},
-  url = {https://geocompx.org//post/2023/map-cover-competition},
+  url = {https://geocompx.org/post/2023/map-cover-competition/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace, jakub nowosad, jannes muenchow2023" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace,_jakub_nowosad,_jannes_muenchow2023" class="csl-entry quarto-appendix-citeas">
 Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2023.
 <span>“Geocomputation with R Comptetition: Book Cover for the 2nd
-Edition.”</span> December 1, 2023. <a href="https://geocompx.org//post/2023/map-cover-competition">https://geocompx.org//post/2023/map-cover-competition</a>.
+Edition.”</span> December 1, 2023. <a href="https://geocompx.org/post/2023/map-cover-competition/">https://geocompx.org/post/2023/map-cover-competition/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
@@ -1270,6 +1271,7 @@ background-color: null;
 font-style: inherit;">$</span>y, </span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-6" class="code-annotation-target">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(.x, .y) <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">st_point</span>(<span class="fu" style="color: #4758AB;
@@ -2071,12 +2073,12 @@ font-style: inherit;">#&gt; 9 unclassified  1968.  MULTILINESTRING ((7.534918 51
   author = {Parry, Josiah},
   title = {R-Spatial Beyond Sf},
   date = {2023-09-08},
-  url = {https://geocompx.org//post/2023/beyond-sf},
+  url = {https://geocompx.org/post/2023/beyond-sf/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-parry2023" class="csl-entry quarto-appendix-citeas">
 Parry, Josiah. 2023. <span>“R-Spatial Beyond Sf.”</span> September 8,
-2023. <a href="https://geocompx.org//post/2023/beyond-sf">https://geocompx.org//post/2023/beyond-sf</a>.
+2023. <a href="https://geocompx.org/post/2023/beyond-sf/">https://geocompx.org/post/2023/beyond-sf/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
@@ -2318,8 +2320,10 @@ background-color: null;
 font-style: inherit;">=</span> os.path.basename(u)</span>
 <span id="cb5-6"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">not</span> os.path.exists(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"data"</span>):</span>
@@ -2343,6 +2347,7 @@ background-color: null;
 font-style: inherit;">basename</span>(u)</span>
 <span id="cb7-3"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
@@ -2370,6 +2375,7 @@ font-style: inherit;">download.file</span>(u, f)</span>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
@@ -2629,6 +2635,7 @@ background-color: null;
 font-style: inherit;"># Unzip the data.zip file:</span></span>
 <span id="cb22-2"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
@@ -3497,13 +3504,13 @@ Geodetic CRS:  WGS 84
   title = {Geographic Data Analysis in {R} and {Python:} Comparing Code
     and Outputs for Vector Data},
   date = {2023-08-30},
-  url = {https://geocompx.org//post/2023/ogh23},
+  url = {https://geocompx.org/post/2023/ogh23/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2023" class="csl-entry quarto-appendix-citeas">
 Lovelace, Robin, Anita Graser, Michael Dorman, and Jakub Nowosad. 2023.
 <span>“Geographic Data Analysis in R and Python: Comparing Code and
-Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.org//post/2023/ogh23">https://geocompx.org//post/2023/ogh23</a>.
+Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.org/post/2023/ogh23/">https://geocompx.org/post/2023/ogh23/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
@@ -3777,12 +3784,12 @@ font-style: inherit;">library</span>(sp)</span></code></pre></div>
   title = {Upcoming Changes to Popular {R} Packages for Spatial Data:
     What You Need to Do},
   date = {2023-06-04},
-  url = {https://geocompx.org//post/2023/rgdal-retirement},
+  url = {https://geocompx.org/post/2023/rgdal-retirement/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2023" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2023. <span>“Upcoming Changes to Popular R Packages for
-Spatial Data: What You Need to Do.”</span> June 4, 2023. <a href="https://geocompx.org//post/2023/rgdal-retirement">https://geocompx.org//post/2023/rgdal-retirement</a>.
+Spatial Data: What You Need to Do.”</span> June 4, 2023. <a href="https://geocompx.org/post/2023/rgdal-retirement/">https://geocompx.org/post/2023/rgdal-retirement/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
@@ -3858,12 +3865,12 @@ cat(res, sep = '\n')
   title = {Automatic Website for the {Geocomputation} with {R}
     Solutions},
   date = {2022-02-24},
-  url = {https://geocompx.org//post/2022/geocompr-solutions},
+  url = {https://geocompx.org/post/2022/geocompr-solutions/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2022" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2022. <span>“Automatic Website for the Geocomputation
-with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//post/2022/geocompr-solutions">https://geocompx.org//post/2022/geocompr-solutions</a>.
+with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org/post/2022/geocompr-solutions/">https://geocompx.org/post/2022/geocompr-solutions/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
@@ -3930,18 +3937,18 @@ with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org//po
 <ol>
 <li id="fn1"><p>There are also other significant changes, such as the retirement of <strong>RQGIS</strong> and <strong>mlr</strong>, but we plan to focus on them while updating the second part of the book.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace, jannes muenchow2022,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace,_jannes_muenchow2022,
   author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
   title = {Progress Update: {Geocomputation} with {R} {Second} {Edition}
     {Part} 1},
   date = {2022-01-27},
-  url = {https://geocompx.org//post/2022/geocompr2-bp2},
+  url = {https://geocompx.org/post/2022/geocompr2-bp2/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad, robin lovelace, jannes muenchow2022" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace,_jannes_muenchow2022" class="csl-entry quarto-appendix-citeas">
 Nowosad, Robin Lovelace, Jannes Muenchow, Jakub. 2022. <span>“Progress
 Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
-2022. <a href="https://geocompx.org//post/2022/geocompr2-bp2">https://geocompx.org//post/2022/geocompr2-bp2</a>.
+2022. <a href="https://geocompx.org/post/2022/geocompr2-bp2/">https://geocompx.org/post/2022/geocompr2-bp2/</a>.
 </div></div></section></div> ]]></description>
   <category>updates</category>
   <category>rstats</category>
@@ -3967,17 +3974,17 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace, jakub nowosad, jannes muenchow2021,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace,_jakub_nowosad,_jannes_muenchow2021,
   author = {Lovelace, Jakub Nowosad, Jannes Muenchow, Robin},
   title = {Geocomputation with {R:} {Second} {Edition} Feedback},
   date = {2021-09-06},
-  url = {https://geocompx.org//post/2021/geocompr2-bp1},
+  url = {https://geocompx.org/post/2021/geocompr2-bp1/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace, jakub nowosad, jannes muenchow2021" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace,_jakub_nowosad,_jannes_muenchow2021" class="csl-entry quarto-appendix-citeas">
 Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2021.
 <span>“Geocomputation with R: Second Edition Feedback.”</span> September
-6, 2021. <a href="https://geocompx.org//post/2021/geocompr2-bp1">https://geocompx.org//post/2021/geocompr2-bp1</a>.
+6, 2021. <a href="https://geocompx.org/post/2021/geocompr2-bp1/">https://geocompx.org/post/2021/geocompr2-bp1/</a>.
 </div></div></section></div> ]]></description>
   <category>announcement</category>
   <category>rstats</category>
@@ -4404,12 +4411,12 @@ Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.c
   author = {Nowosad, Jakub},
   title = {Conversions Between Different Spatial Classes in {R}},
   date = {2021-06-17},
-  url = {https://geocompx.org//post/2021/spatial-classes-conversion},
+  url = {https://geocompx.org/post/2021/spatial-classes-conversion/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2021" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2021. <span>“Conversions Between Different Spatial
-Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/spatial-classes-conversion">https://geocompx.org//post/2021/spatial-classes-conversion</a>.
+Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org/post/2021/spatial-classes-conversion/">https://geocompx.org/post/2021/spatial-classes-conversion/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
@@ -4439,16 +4446,16 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org//post/2021/
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad, robin lovelace2020,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace2020,
   author = {Nowosad, Robin Lovelace, Jakub},
   title = {Recent Changes in {R} Spatial and How to Be Ready for Them},
   date = {2020-04-25},
-  url = {https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them},
+  url = {https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/},
   langid = {en}
 }
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad, robin lovelace2020" class="csl-entry quarto-appendix-citeas">
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace2020" class="csl-entry quarto-appendix-citeas">
 Nowosad, Robin Lovelace, Jakub. 2020. <span>“Recent Changes in R Spatial
-and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them">https://geocompx.org//post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them</a>.
+and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/">https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</a>.
 </div></div></section></div> ]]></description>
   <category>announcement</category>
   <category>rstats</category>
@@ -5540,12 +5547,12 @@ font-style: inherit;">session_info</span>()</span></code></pre></div>
   title = {Demo of Reproducible Geographic Data Analysis: Mapping
     {Covid-19} Data with {R}},
   date = {2020-04-23},
-  url = {https://geocompx.org//post/2020/r-spatial-demo-covid-19},
+  url = {https://geocompx.org/post/2020/r-spatial-demo-covid-19/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2020" class="csl-entry quarto-appendix-citeas">
 Lovelace, Robin. 2020. <span>“Demo of Reproducible Geographic Data
-Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https://geocompx.org//post/2020/r-spatial-demo-covid-19">https://geocompx.org//post/2020/r-spatial-demo-covid-19</a>.
+Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https://geocompx.org/post/2020/r-spatial-demo-covid-19/">https://geocompx.org/post/2020/r-spatial-demo-covid-19/</a>.
 </div></div></section></div> ]]></description>
   <category>demo</category>
   <category>rstats</category>
@@ -5762,6 +5769,7 @@ font-style: inherit;">(</span><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">sf</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">)</span></span>
 <span id="cb11-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -5774,6 +5782,7 @@ font-style: inherit;">(</span><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">raster</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">)</span></span>
 <span id="cb11-6"><span class="ex" style="color: null;
 background-color: null;
@@ -5783,6 +5792,7 @@ font-style: inherit;">(</span><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">tmap</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">)</span> </span></code></pre></div>
 <p>The previous commands should take you to a terminal inside the docker container where you try out the Linux command line and R. If you want to use more cutting-edge versions of the geographic libraries, you can use the <code>ubuntu-bionic</code> image (note the more recent version numbers, with PROJ 7.0.0 for example):</p>
 <div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><span class="fu" style="color: #4758AB;
@@ -5801,6 +5811,7 @@ font-style: inherit;">(</span><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">sf</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">)</span></span>
 <span id="cb12-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -5822,12 +5833,12 @@ font-style: inherit;">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</span>
   author = {Lovelace, Robin},
   title = {Installing Spatial {R} Packages on {Ubuntu}},
   date = {2020-03-30},
-  url = {https://geocompx.org//post/2020/installing-r-spatial-packages-linux},
+  url = {https://geocompx.org/post/2020/installing-r-spatial-packages-linux/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2020" class="csl-entry quarto-appendix-citeas">
 Lovelace, Robin. 2020. <span>“Installing Spatial R Packages on
-Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org//post/2020/installing-r-spatial-packages-linux">https://geocompx.org//post/2020/installing-r-spatial-packages-linux</a>.
+Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org/post/2020/installing-r-spatial-packages-linux/">https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</a>.
 </div></div></section></div> ]]></description>
   <category>setup</category>
   <category>rstats</category>
@@ -6526,12 +6537,12 @@ font-style: inherit;">150</span>)</span></code></pre></div>
   author = {Nowosad, Jakub},
   title = {Inset Maps with Ggplot2},
   date = {2019-12-08},
-  url = {https://geocompx.org//post/2019/ggplot2-inset-maps},
+  url = {https://geocompx.org/post/2019/ggplot2-inset-maps/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2019. <span>“Inset Maps with Ggplot2.”</span> December
-8, 2019. <a href="https://geocompx.org//post/2019/ggplot2-inset-maps">https://geocompx.org//post/2019/ggplot2-inset-maps</a>.
+8, 2019. <a href="https://geocompx.org/post/2019/ggplot2-inset-maps/">https://geocompx.org/post/2019/ggplot2-inset-maps/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
@@ -7532,12 +7543,12 @@ font-style: inherit;">TRUE</span>) </span></code></pre></div>
   title = {Map Coloring: The Color Scale Styles Available in the Tmap
     Package},
   date = {2019-10-17},
-  url = {https://geocompx.org//post/2019/tmap-styles},
+  url = {https://geocompx.org/post/2019/tmap-styles/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2019. <span>“Map Coloring: The Color Scale Styles
-Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geocompx.org//post/2019/tmap-styles">https://geocompx.org//post/2019/tmap-styles</a>.
+Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geocompx.org/post/2019/tmap-styles/">https://geocompx.org/post/2019/tmap-styles/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
@@ -7866,12 +7877,12 @@ font-style: inherit;">0</span>)</span></code></pre></div>
   author = {Nowosad, Jakub},
   title = {Grids and Graticules in the Tmap Package},
   date = {2019-09-04},
-  url = {https://geocompx.org//post/2019/tmap-grid},
+  url = {https://geocompx.org/post/2019/tmap-grid/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2019. <span>“Grids and Graticules in the Tmap
-Package.”</span> September 4, 2019. <a href="https://geocompx.org//post/2019/tmap-grid">https://geocompx.org//post/2019/tmap-grid</a>.
+Package.”</span> September 4, 2019. <a href="https://geocompx.org/post/2019/tmap-grid/">https://geocompx.org/post/2019/tmap-grid/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>
@@ -8632,12 +8643,12 @@ font-style: inherit;">#&gt; attribute</span></span></code></pre></div>
   author = {Lovelace, Robin},
   title = {Geographic Projections and Transformations},
   date = {2019-08-21},
-  url = {https://geocompx.org//post/2019/crs-projections-transformations},
+  url = {https://geocompx.org/post/2019/crs-projections-transformations/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2019" class="csl-entry quarto-appendix-citeas">
 Lovelace, Robin. 2019. <span>“Geographic Projections and
-Transformations.”</span> August 21, 2019. <a href="https://geocompx.org//post/2019/crs-projections-transformations">https://geocompx.org//post/2019/crs-projections-transformations</a>.
+Transformations.”</span> August 21, 2019. <a href="https://geocompx.org/post/2019/crs-projections-transformations/">https://geocompx.org/post/2019/crs-projections-transformations/</a>.
 </div></div></section></div> ]]></description>
   <category>vignette</category>
   <category>rstats</category>

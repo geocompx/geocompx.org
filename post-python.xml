@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=python</link>
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.4.555</generator>
+<generator>quarto-1.5.54</generator>
 <lastBuildDate>Tue, 12 Dec 2023 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Say hi to ‘Geocomputation with Python’</title>
@@ -94,12 +94,12 @@
   author = {Nowosad, Jakub},
   title = {Say Hi to “{Geocomputation} with {Python}”},
   date = {2023-12-12},
-  url = {https://geocompx.org//post/2023/geocompy-bp1},
+  url = {https://geocompx.org/post/2023/geocompy-bp1/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2023" class="csl-entry quarto-appendix-citeas">
 Nowosad, Jakub. 2023. <span>“Say Hi to <span>‘Geocomputation with
-Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org//post/2023/geocompy-bp1">https://geocompx.org//post/2023/geocompy-bp1</a>.
+Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org/post/2023/geocompy-bp1/">https://geocompx.org/post/2023/geocompy-bp1/</a>.
 </div></div></section></div> ]]></description>
   <category>python</category>
   <category>geopython</category>
@@ -342,8 +342,10 @@ background-color: null;
 font-style: inherit;">=</span> os.path.basename(u)</span>
 <span id="cb5-6"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">not</span> os.path.exists(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"data"</span>):</span>
@@ -367,6 +369,7 @@ background-color: null;
 font-style: inherit;">basename</span>(u)</span>
 <span id="cb7-3"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
@@ -394,6 +397,7 @@ font-style: inherit;">download.file</span>(u, f)</span>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
@@ -653,6 +657,7 @@ background-color: null;
 font-style: inherit;"># Unzip the data.zip file:</span></span>
 <span id="cb22-2"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">with</span> zipfile.ZipFile(f, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'r'</span>) <span class="im" style="color: #00769E;
@@ -1521,13 +1526,13 @@ Geodetic CRS:  WGS 84
   title = {Geographic Data Analysis in {R} and {Python:} Comparing Code
     and Outputs for Vector Data},
   date = {2023-08-30},
-  url = {https://geocompx.org//post/2023/ogh23},
+  url = {https://geocompx.org/post/2023/ogh23/},
   langid = {en}
 }
 </code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2023" class="csl-entry quarto-appendix-citeas">
 Lovelace, Robin, Anita Graser, Michael Dorman, and Jakub Nowosad. 2023.
 <span>“Geographic Data Analysis in R and Python: Comparing Code and
-Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.org//post/2023/ogh23">https://geocompx.org//post/2023/ogh23</a>.
+Outputs for Vector Data.”</span> August 30, 2023. <a href="https://geocompx.org/post/2023/ogh23/">https://geocompx.org/post/2023/ogh23/</a>.
 </div></div></section></div> ]]></description>
   <category>posts</category>
   <category>rstats</category>
