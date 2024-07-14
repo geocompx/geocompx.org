@@ -6,6 +6,9 @@ page-layout: full
 
 ::: {.grid}
 
+Learn about the story behind the **geocomp*x*** project in [our presentation at FOSS4G Europe 2024](https://jakubnowosad.com/foss4ge2024/#/title-slide).
+This talk explores the origins, development, and future directions of our open-source geospatial initiative. 
+
 ::: {.g-col-12 .g-col-md-6}
 [Robin Lovelace](https://www.robinlovelace.net/)
 
