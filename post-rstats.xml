@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=rstats</link>
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.5.56</generator>
+<generator>quarto-1.5.57</generator>
 <lastBuildDate>Sun, 02 Jun 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Shapefile must… be replaced</title>
