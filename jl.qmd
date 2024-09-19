@@ -1,0 +1,19 @@
+---
+title-prefix: "geocompx"
+title: "Julia resources"
+page-layout: full
+---
+
+## Book
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+**Geocomputation with Julia** (*geocomjl*)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+
+:::
+
+:::

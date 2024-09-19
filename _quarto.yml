@@ -21,6 +21,8 @@ website:
         text: R resources
       - href: py.qmd
         text: Python resources
+      - href: jl.qmd
+        text: Julia resources
       - href: guestbook.qmd
         text: Guestbook
     right:
