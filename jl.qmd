@@ -9,7 +9,9 @@ page-layout: full
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-**Geocomputation with Julia** (*geocomjl*)
+**Geocomputation with Julia** (*geocompjl*)
+Website: jl.geocompx.org
+Github repo: github.com/geocompx/geocompjl
 :::
 
 ::: {.g-col-12 .g-col-md-6}
