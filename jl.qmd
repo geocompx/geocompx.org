@@ -10,8 +10,10 @@ page-layout: full
 
 ::: {.g-col-12 .g-col-md-6}
 **Geocomputation with Julia** (*geocompjl*)
-Website: jl.geocompx.org
-Github repo: github.com/geocompx/geocompjl
+
+**Website:*8 <https://jl.geocompx.org/>
+
+**Github repo:** <https://github.com/geocompx/geocompjl>
 :::
 
 ::: {.g-col-12 .g-col-md-6}
