@@ -17,6 +17,7 @@ page-layout: full
 :::
 
 ::: {.g-col-12 .g-col-md-6}
+<a href="https://jl.geocompx.org/"><img width=80% src="static/img/book_cover_jl.png"/></a>
 
 :::
 

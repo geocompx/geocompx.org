@@ -16,19 +16,27 @@ It is about *eXchanging information* about geocomputation, *cross (X) pollinatio
 
 ::: {.grid .justify}
 
-::: {.g-col-12 .g-col-md-6}
+::: {.g-col-12 .g-col-md-4}
 <center>
-<a href="https://r.geocompx.org/"><img alt="Geocomputation with R" width=50% src="static/img/book_cover_r2.jpg"/></a>
+<a href="https://r.geocompx.org/"><img alt="Geocomputation with R" width=75% src="static/img/book_cover_r2.jpg"/></a>
 
 **Geocomputation with R**
 </center>
 :::
 
-::: {.g-col-12 .g-col-md-6}
+::: {.g-col-12 .g-col-md-4}
 <center>
-<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=50% src="static/img/book_cover_py_tmp_small.png"/></a>
+<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=75% src="static/img/book_cover_py_tmp_small.png"/></a>
 
 **Geocomputation with Python**
+</center>
+:::
+
+::: {.g-col-12 .g-col-md-4}
+<center>
+<a href="https://jl.geocompx.org/"><img alt="Geocomputation with Julia" width=75% src="static/img/book_cover_jl.png"/></a>
+
+**Geocomputation with Julia** *in progress*
 </center>
 :::
 
