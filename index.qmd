@@ -36,7 +36,7 @@ It is about *eXchanging information* about geocomputation, *cross (X) pollinatio
 <center>
 <a href="https://jl.geocompx.org/"><img alt="Geocomputation with Julia" width=75% src="static/img/book_cover_jl.png"/></a>
 
-**Geocomputation with Julia** *in progress*
+**Geocomputation with Julia** (*work in progress*)
 </center>
 :::
 
