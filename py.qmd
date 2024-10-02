@@ -22,7 +22,7 @@ The online version of the book is hosted at [py.geocompx.org/](https://py.geocom
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-<a href="https://py.geocompx.org/"><img width=80% src="static/img/book_cover_py_tmp_small.png"/></a>
+<a href="https://py.geocompx.org/"><img width=80% src="static/img/book_cover_py.png"/></a>
 :::
 
 :::

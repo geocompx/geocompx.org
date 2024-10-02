@@ -26,7 +26,7 @@ It is about *eXchanging information* about geocomputation, *cross (X) pollinatio
 
 ::: {.g-col-12 .g-col-md-4}
 <center>
-<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=75% src="static/img/book_cover_py_tmp_small.png"/></a>
+<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=75% src="static/img/book_cover_py"/></a>
 
 **Geocomputation with Python**
 </center>
