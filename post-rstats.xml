@@ -10,7 +10,90 @@
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.5.57</generator>
-<lastBuildDate>Sun, 02 Jun 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 06 Oct 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Second edition of Geocomputation with R is complete</title>
+  <dc:creator>Jakub Nowosad, Robin Lovelace, Jannes Muenchow</dc:creator>
+  <link>https://geocompx.org/post/2024/geocompr2-bp3/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>We are excited to announce that the second edition of <a href="https://r.geocompx.org/">Geocomputation with R</a> is (almost) complete. It took us about three years to update and improve the book. This blog post summarizes the process and lists things we added and changed. It also mentions what is left to do.</p>
+<section id="geocomputation-with-r" class="level2">
+<h2 class="anchored" data-anchor-id="geocomputation-with-r">Geocomputation with R</h2>
+<p>If you are not familiar with the book, here is a brief introduction (skip this section if you already know the book). Geocomputation with R (<a href="https://r.geocompx.org/" class="uri">https://r.geocompx.org/</a>) is a book about geographic data analysis, visualization, and modeling in a reproducible manner. It is aimed at people who want to learn how to use R to work with geographic data, so the book is designed to be accessible to people with no prior experience in spatial data processing in R.</p>
+<p>The book is divided into three parts: foundations, extensions, and applications. The first part covers the basics of spatial data and the R ecosystem for working with it. It shows how to read, write, and manipulate both spatial vector and raster data using packages such as <strong>sf</strong> and <strong>terra</strong>. This part also explains the topics of spherical geometries, geographic data sources, and coordinate reference systems. The second part of the book covers more advanced topics, such as customized mapping, connecting R with GIS software and cloud services, and machine learning for spatial data. The third part of the book is about applications of geocomputation, including transportation, geomarketing, and ecology. It shows how to use R to solve real-world problems in these fields.</p>
+<p>The book is designed to be practical and hands-on: it contains many examples and exercises. The book is also open-source, so you can contribute to it by submitting a pull request or opening an issue on GitHub.</p>
+</section>
+<section id="what-are-the-biggest-changes" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-the-biggest-changes">What are the biggest changes?</h2>
+<p>The first edition of the book was published in 2019. Since then, the R ecosystem has changed a lot: the <strong>terra</strong> package was introduced for working with raster data, the <strong>sf</strong> package started to support operations on spherical geometries, proj-string used to define coordinate reference systems was replaced by WKT2 and SRID, and a new major version of the <strong>tmap</strong> package was created. Many other packages were also updated, and new ones were made. The second edition of the book reflects these changes.</p>
+<p>Writing the second edition of the book was a long and complex process. We made about 2,500 commits to the book’s repository, which resulted in more than 23,000 changed lines of code and prose.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/changedfiles.png" class="img-fluid"></p>
+<p>There are some major changes in the second edition of the book that affect the structure and content of the whole book. One such change is the replacement of the <strong>raster</strong> package with the <strong>terra</strong> package for working with raster data. The <strong>terra</strong> package is similar to its predecessor, but it is generally faster and more adjusted to working with large datasets. Its functions are often similar to those in <strong>raster</strong>, but there are also some differences that needed to be addressed in the book. <!-- terra/stars R packages for working with raster data --></p>
+<p>Another major change is the addition of information about spherical geometry operations available in the <strong>sf</strong> package in a few places in the book. It includes new sections in Chapter 2 and Chapter 7. Nowadays, the <strong>sf</strong> package supports operations on spherical geometries by default when the input data is in a geographic coordinate reference system. This has a big impact on spatial operations, such as buffering, distance calculations, and area calculations, and it is important to understand how to use it properly.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/07-s2geos.png" class="img-fluid"></p>
+<p>Spatial operations related to projections and coordinate reference systems in many software tools use a library called PROJ. This library underwent breaking changes that started in 2018 and affected many spatial data workflows. The second edition of the book reflects these changes by using the new WKT2 and SRID format for defining coordinate reference systems, and by updating the examples, explanations, and exercises to use the new format. <!-- https://r.geocompx.org/reproj-geo-data --></p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/crs-buf-1.png" class="img-fluid"></p>
+<p>Most figures in the second edition were remade using version 4 of the <strong>tmap</strong> package. The new package version has a different syntax and new features, allowing for more customization and better-looking maps. Therefore, we also updated the whole mapping chapter to reflect the package changes.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/concat-1.png" class="img-fluid"></p>
+<p>Other general changes in the book include the addition of <a href="../../../post/2022/geocompr-solutions/">a new website with the book solutions</a>, replacing the magrittr pipe <code>%&gt;%</code> with the native R pipe <code>|&gt;</code>, and <a href="../../../post/2024/cover-competition-results/">our new book cover</a>.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/cover_un_boundaries.png" class="img-fluid"></p>
+</section>
+<section id="whats-new" class="level2">
+<h2 class="anchored" data-anchor-id="whats-new">What’s new?</h2>
+<p>Many major new additions are also present in the book’s second edition. We added several new graphs to ease the understanding of the concepts, such as the one below that shows the process of creating an <code>sf</code> object from hand.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/02-sfdiagram.png" class="img-fluid"></p>
+<p><a href="https://r.geocompx.org/gis">The “Bridges to GIS software” chapter</a> was rewritten and expanded, with the new packages made available since the first edition, such as <strong>qgisprocess</strong>, <strong>Rsagacmd</strong>, and <strong>rgrass</strong>. Similarly, <a href="https://r.geocompx.org/spatial-cv">the “Statistical learning” chapter</a> was redone, with the new code based on the <strong>mlr3</strong> package.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/12_partitioning.png" class="img-fluid"></p>
+<p><a href="https://r.geocompx.org/transport">The “Transportation” chapter</a> was also completely rewritten, with new sections on routes, and route networks.</p>
+<p><img src="https://geocompx.org/post/2024/geocompr2-bp3/wayssln-1.png" class="img-fluid"></p>
+<p>The book also gained many new sections, including ones on construction and manipulation of <code>sf</code> object using <a href="https://r.geocompx.org/spatial-class#sfheaders">the <strong>sfheaders</strong> package</a>, on smoothing the boundaries of polygon and linestring geometries using <a href="https://r.geocompx.org/geometry-operations#simplification">the <strong>smoothr</strong> package</a>, on creating <a href="https://r.geocompx.org/read-write#geographic-metadata">geographic metadata</a>, and on connecting R with <a href="https://r.geocompx.org/gis#cloud">cloud services</a>.</p>
+<p>The above changes are just a few examples of the many new things that were added to the book – there are many more new sections, examples, and exercises!</p>
+<!-- New chapter on raster-vector interactions split out from Chapter 5-->
+<!-- https://r.geocompx.org/reproj-geo-data#mapproj -->
+<!-- reorder of Geographic data I/O, COG, vsicurl, new Geographic data packages (examples), Geographic metadata, Geographic web services (thanks)  -->
+<!-- new conclusions -->
+<!-- tons of small changes -->
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s next?</h2>
+<p>We are now in the final stages of the book production. The publisher provided us with the proofread of the book<sup>1</sup>, and we are now incorporating the changes into the book.</p>
+<p>The book will be published in January 2025, and some information about it can be found at the <a href="https://www.routledge.com/Geocomputation-with-R/Lovelace-Nowosad-Muenchow/p/book/9781032248882">publisher’s website</a>. Of course, the book will remain open-source, and you can access it for free at https://r.geocompx.org/&gt;.</p>
+</section>
+<section id="how-to-connect-and-acknowledgments" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-connect-and-acknowledgments">How to connect and acknowledgments</h2>
+<p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">Geocomputation with R discord channel</a>. You can find us on GitHub, where you can open an issue or submit a pull request to <a href="https://github.com/geocompx/geocompr/issues">the book’s repository</a>. We also use the <code>#geocompr</code> hashtag on social media to share news and updates about the book, and encourage you to do the same.</p>
+<p>This work was certainly not possible without the interest and activity of many people. Several people contributed to the text and code, many other people raised issues and suggested improvements, and many more people provided feedback and support. The list is very long – you can find it at <a href="https://r.geocompx.org/preface#acknowledgements" class="uri">https://r.geocompx.org/preface#acknowledgements</a>. We feel very grateful for all the help we received from the community. Thank you!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>We are very grateful for this work – it improves the book’s consistency and fixes various grammar mistakes and typos.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace,_jannes_muenchow2024,
+  author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
+  title = {Second Edition of {*Geocomputation} with {R*} Is Complete},
+  date = {2024-10-06},
+  url = {https://geocompx.org/post/2024/geocompr2-bp3/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace,_jannes_muenchow2024" class="csl-entry quarto-appendix-citeas">
+Nowosad, Robin Lovelace, Jannes Muenchow, Jakub. 2024. <span>“Second
+Edition of *Geocomputation with R* Is Complete.”</span> October 6, 2024.
+<a href="https://geocompx.org/post/2024/geocompr2-bp3/">https://geocompx.org/post/2024/geocompr2-bp3/</a>.
+</div></div></section></div> ]]></description>
+  <category>updates</category>
+  <category>rstats</category>
+  <guid>https://geocompx.org/post/2024/geocompr2-bp3/</guid>
+  <pubDate>Sun, 06 Oct 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Shapefile must… be replaced</title>
   <dc:creator>Jakub Nowosad</dc:creator>
