@@ -11,8 +11,8 @@ draft: true
 ---
 
 We are excited to announce that the second edition of [Geocomputation with R](https://r.geocompx.org/) is (almost) complete.
-It tooks us about three years to update and improve the book.
-This blog post summarizes the process and list things we added and changed.
+It took us about three years to update and improve the book.
+This blog post summarizes the process and lists things we added and changed.
 It also mentions what is left to do.
 
 ## Geocomputation with R
@@ -32,7 +32,7 @@ It shows how to use R to solve real-world problems in these fields.
 The book is designed to be practical and hands-on: it contains many examples and exercises.
 The book is also open-source, so you can contribute to it by submitting a pull request or opening an issue on GitHub.
 
-## What's are the biggest changes?
+## What are the biggest changes?
 
 The first edition of the book was published in 2019.
 Since then, the R ecosystem has changed a lot: the **terra** package was introduced for working with raster data, the **sf** package started to support operations on spherical geometries, proj-string used to define coordinate reference systems was replaced by WKT2 and SRID, and a new major version of the **tmap** package was created.
@@ -45,7 +45,7 @@ We made about 2,500 commits to the book's repository, which resulted in more tha
 ![](changedfiles.png)
 
 There are some major changes in the second edition of the book that affect the structure and content of the whole book.
-One of such changes it the replacement of the **raster** package with the **terra** package for working with raster data.
+One such change is the replacement of the **raster** package with the **terra** package for working with raster data.
 The **terra** package is similar to its predecessor, but it is generally faster and more adjusted to working with large datasets.
 Its functions are often similar to those in **raster**, but there are also some differences that needed to be addressed in the book.
 <!-- terra/stars R packages for working with raster data -->
@@ -57,16 +57,16 @@ This has a big impact on spatial operations, such as buffering, distance calcula
 
 ![](07-s2geos.png)
 
-Spatial operations related to projections and coordinate reference systems in many software tools are using a library called PROJ.
-This library undergone breaking changes that started in 2018, and affected many spatial data workflows.
+Spatial operations related to projections and coordinate reference systems in many software tools use a library called PROJ.
+This library underwent breaking changes that started in 2018 and affected many spatial data workflows.
 The second edition of the book reflects these changes by using the new WKT2 and SRID format for defining coordinate reference systems, and by updating the examples, explanations, and exercises to use the new format.
 <!-- https://r.geocompx.org/reproj-geo-data -->
 
 ![](crs-buf-1.png)
 
-Most figures in the second edition were remade using the version 4 of the **tmap** package.
-The new version of the package has a different syntax and new features, allowing for more customization and better-looking maps.
-Therefore, we also updated the whole chapter about mapping to reflect the changes in the package.
+Most figures in the second edition were remade using version 4 of the **tmap** package.
+The new package version has a different syntax and new features, allowing for more customization and better-looking maps.
+Therefore, we also updated the whole mapping chapter to reflect the package changes.
 
 ![](concat-1.png)
 
@@ -76,7 +76,7 @@ Other general changes in the book include the addition of [a new website with th
 
 ## What's new?
 
-Many major new additions are also present in the second edition of the book.
+Many major new additions are also present in the book's second edition.
 We added several new graphs to ease the understanding of the concepts, such as the one below that shows the process of creating an `sf` object from hand.
 
 ![](02-sfdiagram.png)
@@ -106,9 +106,9 @@ We are now in the final stages of the book production.
 The publisher provided us with the proofread of the book^[We are very grateful for this work -- it improves the book's consistency and fixes various grammar mistakes and typos.], and we are now incorporating the changes into the book.
 
 The book will be published in January 2025, and some information about it can be found at the [publisher's website](https://www.routledge.com/Geocomputation-with-R/Lovelace-Nowosad-Muenchow/p/book/9781032248882).
-Of course, the book will remain open-source, and you will be able to access it for free at <https://r.geocompx.org/>.
+Of course, the book will remain open-source, and you can access it for free at https://r.geocompx.org/>.
 
-## How to connect and acknowledgements
+## How to connect and acknowledgments
 
 If you want to connect with us, you can join the [Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf).
 You can find us on GitHub, where you can open an issue or submit a pull request to [the book's repository](https://github.com/geocompx/geocompr/issues).
