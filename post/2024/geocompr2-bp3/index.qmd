@@ -1,7 +1,7 @@
 ---
 title: "Second edition of *Geocomputation with R* is complete"
 author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
-date: "2024-03-27"
+date: "2024-10-06"
 slug: geocompr2-bp3
 categories:
   - updates
@@ -11,7 +11,7 @@ draft: true
 ---
 
 We are excited to announce that the second edition of [Geocomputation with R](https://r.geocompx.org/) is (almost) complete.
-It tooks us more than two and a half years to update the book.
+It tooks us about three years to update and improve the book.
 This blog post summarizes the process and list things we added and changed.
 It also mentions what is left to do.
 
@@ -35,8 +35,8 @@ The book is also open-source, so you can contribute to it by submitting a pull r
 ## What's are the biggest changes?
 
 The first edition of the book was published in 2019.
-Since then, the R ecosystem has changed a lot: the **terra** package was introduced for working with raster data, the **sf** package started to support operations on spherical geometries, proj-string used to define coordinate reference systems was replaced by WKT2 and SRID, and a new major version of the **tmap** package was released.
-Many other packages were also updated, and new ones were created.
+Since then, the R ecosystem has changed a lot: the **terra** package was introduced for working with raster data, the **sf** package started to support operations on spherical geometries, proj-string used to define coordinate reference systems was replaced by WKT2 and SRID, and a new major version of the **tmap** package was created.
+Many other packages were also updated, and new ones were made.
 The second edition of the book reflects these changes.
 
 Writing the second edition of the book was a long and complex process.
@@ -92,16 +92,21 @@ Similarly, [the "Statistical learning" chapter](https://r.geocompx.org/spatial-c
 
 The book also gained many new sections, including ones on construction and manipulation of `sf` object using [the **sfheaders** package](https://r.geocompx.org/spatial-class#sfheaders), on smoothing the boundaries of polygon and linestring geometries using [the **smoothr** package](https://r.geocompx.org/geometry-operations#simplification), on creating [geographic metadata](https://r.geocompx.org/read-write#geographic-metadata),  and on connecting R with [cloud services](https://r.geocompx.org/gis#cloud).
 
-The above changes are just a few examples of the many new things that were added to the book -- there are many more new sections, examples, and exercises that were added to the book!
+The above changes are just a few examples of the many new things that were added to the book -- there are many more new sections, examples, and exercises!
+
 <!-- New chapter on raster-vector interactions split out from Chapter 5-->
 <!-- https://r.geocompx.org/reproj-geo-data#mapproj -->
 <!-- reorder of Geographic data I/O, COG, vsicurl, new Geographic data packages (examples), Geographic metadata, Geographic web services (thanks)  -->
 <!-- new conclusions -->
 <!-- tons of small changes -->
 
-<!-- ## What's next? -->
-<!-- add this part when we know the publication date -->
-<!-- final changes, proofreading, and publication -->
+## What's next?
+
+We are now in the final stages of the book production.
+The publisher provided us with the proofread of the book^[We are very grateful for this work -- it improves the book's consistency and fixes various grammar mistakes and typos.], and we are now incorporating the changes into the book.
+
+The book will be published in January 2025, and some information about it can be found at the [publisher's website](https://www.routledge.com/Geocomputation-with-R/Lovelace-Nowosad-Muenchow/p/book/9781032248882).
+Of course, the book will remain open-source, and you will be able to access it for free at <https://r.geocompx.org/>.
 
 ## How to connect and acknowledgements
 
@@ -113,6 +118,5 @@ This work was certainly not possible without the interest and activity of many p
 Several people contributed to the text and code, many other people raised issues and suggested improvements, and many more people provided feedback and support.
 The list is very long -- you can find it at <https://r.geocompx.org/preface#acknowledgements>.
 We feel very grateful for all the help we received from the community.
-
-<!-- update readme -->
+Thank you!
 
