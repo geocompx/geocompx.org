@@ -7,7 +7,7 @@ categories:
   - updates
   - rstats
 tags: [geocompr, geocompr2, geocompx, sf, stars, raster, terra, s2, rstats]
-draft: true
+draft: false
 ---
 
 We are excited to announce that the second edition of [Geocomputation with R](https://r.geocompx.org/) is (almost) complete.
