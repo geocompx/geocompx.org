@@ -14,10 +14,6 @@ A unique selling point of the book is its cohesive and joined-up coverage of bot
 We aim to minimize surprises, with each section and chapter building on the previous.
 If you’re just starting out with Python for working with geographic data, this book is an excellent place to start.
 
-Inspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book.
-Find the code underlying the geocompy project on [GitHub](https://github.com/geocompr/py), ensuring that the content is reproducible, transparent, and accessible. 
-Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.
-
 The online version of the book is hosted at [py.geocompx.org/](https://py.geocompx.org/).
 
 You can buy it from:
@@ -25,6 +21,11 @@ You can buy it from:
 - [Routledge.com](https://www.routledge.com/9781032460659)
 - [Amazon.com](https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
 - [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
+
+
+Inspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book.
+Find the code underlying the geocompy project on [GitHub](https://github.com/geocompr/py), ensuring that the content is reproducible, transparent, and accessible. 
+Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.
 :::
 
 ::: {.g-col-12 .g-col-md-6}
