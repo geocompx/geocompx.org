@@ -22,10 +22,9 @@ You can buy it from:
 - [Amazon.com](https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
 - [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
 
-
-Inspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book.
+*Inspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book.
 Find the code underlying the geocompy project on [GitHub](https://github.com/geocompr/py), ensuring that the content is reproducible, transparent, and accessible. 
-Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.
+Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.*
 :::
 
 ::: {.g-col-12 .g-col-md-6}
