@@ -19,6 +19,12 @@ Find the code underlying the geocompy project on [GitHub](https://github.com/geo
 Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.
 
 The online version of the book is hosted at [py.geocompx.org/](https://py.geocompx.org/).
+
+You can buy it from:
+
+- [Routledge.com](https://www.routledge.com/9781032460659)
+- [Amazon.com](https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
+- [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/)
 :::
 
 ::: {.g-col-12 .g-col-md-6}

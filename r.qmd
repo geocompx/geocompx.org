@@ -9,7 +9,7 @@ page-layout: full
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover.jpg"/></a>
+<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover_r2.jpg"/></a>
 :::
 
 ::: {.g-col-12 .g-col-md-6}
@@ -20,9 +20,9 @@ The online version of the book is hosted at [r.geocompx.org/](https://r.geocompx
 
 You can buy it from:
 
-- [Routledge.com](https://www.routledge.com/9781138304512)
-- [Amazon.com](https://www.amazon.com/Geocomputation-R-Robin-Lovelace-dp-0367670577/dp/0367670577/)
-- [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-R-Robin-Lovelace/dp/0367670577/)
+- [Routledge.com](https://www.routledge.com/9781032248882)
+- [Amazon.com](https://www.amazon.com/Geocomputation-Chapman-Hall-Robin-Lovelace-dp-1032248882/dp/1032248882)
+- [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-Chapman-Hall-Robin-Lovelace/dp/1032248882/)
 :::
 
 :::
