@@ -30,8 +30,8 @@ website:
     right:
       - href: https://donate.stripe.com/4gweWl94Q9E35AQ6oo
         text: Support this project
-      - icon: twitter
-        href: https://twitter.com/hashtag/geocompx
+      # - icon: twitter
+      #   href: https://twitter.com/hashtag/geocompx
       - icon: mastodon
         href: https://fosstodon.org/tags/geocompx
       - icon: discord
