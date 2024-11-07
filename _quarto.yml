@@ -25,9 +25,11 @@ website:
         text: Julia resources
       - href: guestbook.qmd
         text: Guestbook
-    right:
       - href: about.qmd
         text: About us
+    right:
+      - href: https://donate.stripe.com/4gweWl94Q9E35AQ6oo
+        text: Support this project
       - icon: twitter
         href: https://twitter.com/hashtag/geocompx
       - icon: mastodon
