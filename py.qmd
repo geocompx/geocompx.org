@@ -28,8 +28,8 @@ You can buy it from:
 <a href="https://py.geocompx.org/"><img width=80% src="static/img/book_cover_py.png"/></a>
 :::
 
+:::
+
 *Inspired by the Free and Open Source Software for Geospatial (FOSS4G) movement this is an open source book.
 Find the code underlying the geocompy project on [GitHub](https://github.com/geocompr/py), ensuring that the content is reproducible, transparent, and accessible. 
 Making the book open source allows you or anyone else, to interact with the project by opening [issues](https://github.com/geocompr/py/issues), making typo fixes and more, for the benefit of everyone.*
-
-:::
