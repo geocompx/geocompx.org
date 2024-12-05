@@ -10,7 +10,73 @@
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.6.39</generator>
-<lastBuildDate>Tue, 12 Dec 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 06 Dec 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Support geocompx and the development of open-source geocomputation resources!</title>
+  <dc:creator>Jakub Nowosad, Robin Lovelace</dc:creator>
+  <link>https://geocompx.org/post/2024/support/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>As 2024 comes to an end, we have things to celebrate in the geocompx community, including the completion of two books: the second edition of <a href="https://r.geocompx.org/"><strong>Geocomputation with R</strong></a> and the first edition of <a href="https://py.geocompx.org/"><strong>Geocomputation with Python</strong></a>. Both books are open-source, can be accessed by anyone for free online, and will be on sale soon (watch this space). We are proud of the work we have done, grateful for the contributions we have received, and excited about the future.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/support/geocompx.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Geocomputation with R and Python book covers</figcaption>
+</figure>
+</div>
+<p>We think that open source and open access resources are essential for the development of the field of geocomputation. They allow people to learn about geocomputation, improve their skills, and solve real-world problems. They also enable researchers to share their work, collaborate with others, and build on existing knowledge. In short, we believe that open-source geocomputational resources can make the world a better place.</p>
+<p>However, creating, maintaining, and contributing to such resources is time-consuming and can be hard to sustain, especially for newcomers to open source software development who are likely to be younger and less financially secure.<sup>1</sup></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2024/support/spon.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Donation platforms: GitHub Sponsors and Stripe</figcaption>
+</figure>
+</div>
+<p>Now, we opened two ways to support the <strong>geocomp<em>x</em></strong> project financially:</p>
+<ol type="1">
+<li>First, you can <strong>donate to the project using the following link</strong>: <a href="https://donate.stripe.com/4gweWl94Q9E35AQ6oo">donate.stripe.com/4gweWl94Q9E35AQ6oo</a>.</li>
+<li>Second, you can <strong>sponsor the project on GitHub</strong> at <a href="https://github.com/sponsors/geocompx">github.com/sponsors/geocompx</a>.</li>
+</ol>
+<p>The donations and sponsorships will be used to support the development and maintenance of the project. Our ideas for using the funds include:<sup>2</sup></p>
+<ul>
+<li>Paying for the domain and other infrastructure costs</li>
+<li>Supporting contributors to the project, for example, by providing free books or bounties<sup>3</sup></li>
+<li>Organizing competitions and other events to promote the project and engage the community</li>
+</ul>
+<p>We appreciate any support you can provide, whether it’s a one-time donation, a monthly sponsorship, or simply spreading the word about the project. Thank you for helping us make open-source geocomputational resources more accessible and sustainable!</p>
+
+
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>“(..) you’ll almost certainly be better off financially doing some consulting (or even getting a part-time job in a fast food restaurant)” (Haberman and Wilson, 2023, <a href="https://doi.org/10.1371/journal.pcbi.1011305" class="uri">https://doi.org/10.1371/journal.pcbi.1011305</a>)↩︎</p></li>
+<li id="fn2"><p>Depending on the amount of funds we receive.↩︎</p></li>
+<li id="fn3"><p>Stickers, t-shirts, and other merchandise are also possible.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace2024,
+  author = {Nowosad, Robin Lovelace, Jakub},
+  title = {Support Geocomp*x* and the Development of Open-Source
+    Geocomputation Resources!},
+  date = {2024-12-06},
+  url = {https://geocompx.org/post/2024/support/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace2024" class="csl-entry quarto-appendix-citeas">
+Nowosad, Robin Lovelace, Jakub. 2024. <span>“Support Geocomp*x* and the
+Development of Open-Source Geocomputation Resources!”</span> December 6,
+2024. <a href="https://geocompx.org/post/2024/support/">https://geocompx.org/post/2024/support/</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <category>python</category>
+  <guid>https://geocompx.org/post/2024/support/</guid>
+  <pubDate>Fri, 06 Dec 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Say hi to ‘Geocomputation with Python’</title>
   <dc:creator>Jakub Nowosad</dc:creator>
