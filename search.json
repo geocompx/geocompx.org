@@ -532,43 +532,8 @@
     "text": "Note\n\n\n\nThis is a guest blog post written by Benjamin Nowak. He is the winner of the Geocomputation with R book cover competition for the second edition of the book. Congratulations!\n\n\n\nOne page, many things to show\nLike Marco Sciaini, the creator of the cover of the previous edition, I started with the idea that seemed most logical to illustrate the cover of Geocomputation with R: illustrate various geocomputation and mapping techniques on the front page. The hexagons, reminiscent of R packages, were a good idea of Marco’s, but I had to come up with something new.\nThe cover competition arrived approximately at the same time as the release of Alberto Cairo’s The Art of Insight, and I must confess that the beautiful tryptic imagined by Nadieh Bremer for the cover first gave me the idea of trying out a layout with three different maps (one on top of the other). But it was just copying someone else.\nThe next idea then came to me quickly, as it fits well with the way graphics and maps are added as different layers in the same ggplot() object: adding different small maps on one big map.\n\n\nA tribute to useful ressources\nAnother idea I had with this cover was to highlight useful resources for the R community. For this purpose, I used a Tidy Tuesday dataset on energy production by country for the Dorling cartogram that covered Europe in my first proposal.\nAnother very important resource for me are the palette color packages, which save me so much time for my dataviz creation! So for this proposal I used Blake Robert Mills’ MoMAColors packages and scico from Fabio Crameri and Thomas Lin Pedersen.\nThis led me to the following proposal:\n\n\nProposal\n\n\n\n\n\nAlmost there…\nI was delighted when this proposal was chosen by Robin, Jakub and Jannes for the cover of the second edition of Geocomputation with R! But there were still a few elements missing to illustrate the diversity of cartographic objects and methods covered in the book. So, after some discussion and several iterations with the authors, we added:\n\na NDVI raster covering the eastern part of the map\na map of trades over Europe\n\nOn this last point, I had already had the opportunity to transform the FAOStat tables of coffee exports into line vectors, but I have to admit that the solution provided here by Robin, with the od package, was much faster! After one last try, a solution was found to keep a version of Dorling’s cartogram in the background, by keeping the circles on the centroids (which leads to superimpositions but is more consistent with the departures and arrivals of the flows).\nNow, the image contains vector and raster data (which is the focus of the 1st part of the book), shows some visualization techniques (i.e., cartograms; 2nd part of the book), and also shows some geocomputation techniques (i.e., origin-destination lines; 3rd part of the book).\n\n\nThe final version of the book cover image\n\n\n\nOverall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!\n\n\n\n\nReuseCC BY 4.0CitationBibTeX citation:@online{nowak2024,\n  author = {Nowak, Benjamin},\n  title = {Geocomputation with {R} Competition: Book Cover for the 2nd\n    Edition},\n  date = {2024-01-17},\n  url = {https://geocompx.org/post/2024/cover-competition-results/},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nNowak, Benjamin. 2024. “Geocomputation with R Competition: Book\nCover for the 2nd Edition.” January 17, 2024. https://geocompx.org/post/2024/cover-competition-results/."
   },
   {
-    "objectID": "static/img/book_cover_py_tmp.html",
-    "href": "static/img/book_cover_py_tmp.html",
-    "title": "geocompx",
-    "section": "",
-    "text": "https://www.oldbookillustrations.com/subjects/animals/page/9/ https://alexaanswers.amazon.com/question/wZ1u5YAK7xPaZCJxawr51"
-  },
-  {
-    "objectID": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "href": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "Location",
-    "section": "",
-    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
-  },
-  {
-    "objectID": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "href": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "Location",
-    "section": "",
-    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
-  },
-  {
-    "objectID": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "href": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
-    "title": "Location",
-    "section": "",
-    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
-  },
-  {
-    "objectID": "guestbook.html#geocomputation-with-r",
-    "href": "guestbook.html#geocomputation-with-r",
-    "title": "Guestbook",
-    "section": "Geocomputation with R",
-    "text": "Geocomputation with R\n\nModules using the book\n\nCASA0005 Geographic Information Systems and Science, Andy MacLachlan and Adam Dennett, Centre for Advanced Spatial Analysis, Univeristy College London\nECS530 Analysing spatial data, Roger Bivand, Norwegian School of Economics\nGEOG 495 and 595: Geographic Data Analysis, University of Oregon\nESPM 288: Reproducible and Collaborative Data Science, Berkeley University of California \nENVR_SCI 390-0 “R Data Science” - Special Topics in Environmental Sciences Northwestern University\nPD-15 - R for Geospatial Analysis and Mapping, University Consortium for Geographic Information Science \nCRD 298: Spatial Methods in Community Research, Professor Noli Brazil, University of California, Davis\nCP6521 Advanced GIS, Yongsun Lee, Georgia Tech\nUrban Data Analytics in R, Nikhil Kaza, University of North Carolina at Chapel Hill\nGeospatial Analytics, taught by Dr Nick Tate as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.\nGEOG 28402 & 28403: Geographic Information Science II & III, Marynia Kolak at the Center for Spatial Data Science, Unversity of Chicago\n\n\n\nOther teaching courses/lectures/guides using the book\n\nData Science for Economists, EC 607\n11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health\nData Carpentry: Introduction to Geospatial Raster and Vector Data with R\nR: Mapping and Geospatial guide, Duke University\n\n\n\nBook reviews\n\nI first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought “this is great! but need to move on!”. A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.\n\n\nBeautiful book: A must-read if you’re into data analytics/science with R and do geospatial analysis.\n\nSee the rest of these reviews and maybe add your own review here.\n\n\nSocial media\n\n\n\n\n\n\n;document.getElementById(\"tweet-96773\").innerHTML = tweet[\"html\"];"
-  },
-  {
-    "objectID": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
-    "href": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
+    "objectID": "static/presentations/libs/leaflet-providers/rstudio_install.html",
+    "href": "static/presentations/libs/leaflet-providers/rstudio_install.html",
     "title": "Location",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
@@ -581,11 +546,46 @@
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
   },
   {
-    "objectID": "static/presentations/libs/leaflet-providers/rstudio_install.html",
-    "href": "static/presentations/libs/leaflet-providers/rstudio_install.html",
+    "objectID": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html",
     "title": "Location",
     "section": "",
     "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "guestbook.html#geocomputation-with-r",
+    "href": "guestbook.html#geocomputation-with-r",
+    "title": "Guestbook",
+    "section": "Geocomputation with R",
+    "text": "Geocomputation with R\n\nModules using the book\n\nCASA0005 Geographic Information Systems and Science, Andy MacLachlan and Adam Dennett, Centre for Advanced Spatial Analysis, Univeristy College London\nECS530 Analysing spatial data, Roger Bivand, Norwegian School of Economics\nGEOG 495 and 595: Geographic Data Analysis, University of Oregon\nESPM 288: Reproducible and Collaborative Data Science, Berkeley University of California \nENVR_SCI 390-0 “R Data Science” - Special Topics in Environmental Sciences Northwestern University\nPD-15 - R for Geospatial Analysis and Mapping, University Consortium for Geographic Information Science \nCRD 298: Spatial Methods in Community Research, Professor Noli Brazil, University of California, Davis\nCP6521 Advanced GIS, Yongsun Lee, Georgia Tech\nUrban Data Analytics in R, Nikhil Kaza, University of North Carolina at Chapel Hill\nGeospatial Analytics, taught by Dr Nick Tate as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.\nGEOG 28402 & 28403: Geographic Information Science II & III, Marynia Kolak at the Center for Spatial Data Science, Unversity of Chicago\n\n\n\nOther teaching courses/lectures/guides using the book\n\nData Science for Economists, EC 607\n11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health\nData Carpentry: Introduction to Geospatial Raster and Vector Data with R\nR: Mapping and Geospatial guide, Duke University\n\n\n\nBook reviews\n\nI first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought “this is great! but need to move on!”. A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.\n\n\nBeautiful book: A must-read if you’re into data analytics/science with R and do geospatial analysis.\n\nSee the rest of these reviews and maybe add your own review here.\n\n\nSocial media\n\n\n\n\n\n\n;document.getElementById(\"tweet-57416\").innerHTML = tweet[\"html\"];"
+  },
+  {
+    "objectID": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "Location",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "Location",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "href": "static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html",
+    "title": "Location",
+    "section": "",
+    "text": "Location\n\nfrom: github.com/schloerke/leaflet-providers@urlProtocol\nInspiration taken from https://github.com/leaflet-extras/leaflet-providers/commit/dea786a3219f9cc824b8e96903a17f46ca9a5afc to use the ‘old’ relative url protocols and to ‘upgrade’ them at js runtime.\n\n\n\nNotes…\n\nCopy/paste provider information into providers.json\n\nvar providers = L.TileLayer.Provider.providers;\nJSON.stringify(providers, null, \"  \");\n\n./data-raw/providerNames.R was re-ran to update to the latest providers\nSome providers had their protocols turned into ‘//’.\n\nThis allows browsers to pick the protocol\nTo stop files from the protocols staying as files, a ducktape patch was applied to L.TileLayer.prototype.initialize and L.TileLayer.WMS.prototype.initialize"
+  },
+  {
+    "objectID": "static/img/book_cover_py_tmp.html",
+    "href": "static/img/book_cover_py_tmp.html",
+    "title": "geocompx",
+    "section": "",
+    "text": "https://www.oldbookillustrations.com/subjects/animals/page/9/ https://alexaanswers.amazon.com/question/wZ1u5YAK7xPaZCJxawr51"
   },
   {
     "objectID": "post/2024/rsi-bp1/index.html",
