@@ -6,7 +6,8 @@ slug: support
 categories:
   - posts
   - rstats
-tags: [geocompr, geocompx, geocompy, rstats]
+  - python
+tags: [geocompr, geocompx, geocompy, rstats, python]
 draft: false
 ---
 
