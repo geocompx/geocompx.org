@@ -10,18 +10,18 @@ tags: [geocompr, geocompx, geocompy, rstats]
 draft: true
 ---
 
-Recently, we have completed the second edition of the [**Geocomputation with R**](https://r.geocompx.org/) book and the first edition of the [**Geocomputation with Python**](https://py.geocompx.org/) book.
-Both books are open-source and available for free online.
-We are proud of the work we have done, grateful for the contributions we have received, and excited about the project's future.
+As 2024 comes to an end, we have things to celebrate in the geocompx community, including the completion of two books: the second edition of [**Geocomputation with R**](https://r.geocompx.org/) and the first edition of [**Geocomputation with Python**](https://py.geocompx.org/).
+Both books are open-source, can be accessed by anyone for free online, and will be on sale soon (watch this space).
+We are proud of the work we have done, grateful for the contributions we have received, and excited about the future.
 
 ![Geocomputation with R and Python book covers](geocompx.png){width=75% fig-align="center"}
 
-We think that open-source geocomputational resources are essential for the development of the field.
+We think that open source and open access resources are essential for the development of the field of geocomputation.
 They allow people to learn about geocomputation, improve their skills, and solve real-world problems.
 They also enable researchers to share their work, collaborate with others, and build on existing knowledge.
 In short, we believe that open-source geocomputational resources can make the world a better place.
 
-However, creating and maintaining such resources is time-consuming and hard to sustain.^[“(..) you’ll almost certainly be better off financially doing some consulting (or even getting a part-time job in a fast food restaurant)” (Haberman and Wilson, 2023, <https://doi.org/10.1371/journal.pcbi.1011305>)]
+However, creating and maintaining such resources is time-consuming and can be hard to sustain, especially for newcomers to open source software development who are likely to be younger and less financially secure.^[“(..) you’ll almost certainly be better off financially doing some consulting (or even getting a part-time job in a fast food restaurant)” (Haberman and Wilson, 2023, <https://doi.org/10.1371/journal.pcbi.1011305>)]
 
 ![Donation platforms: GitHub Sponsors and Stripe](spon.png){width=75% fig-align="center"}
 
@@ -37,7 +37,5 @@ Our ideas for using the funds include:^[Depending on the amount of funds we rece
 - Supporting contributors to the project, for example, by providing free books or bounties^[Stickers, t-shirts, and other merchandise are also possible.]
 - Organizing competitions and other events to promote the project and engage the community
 
-We appreciate any support you can provide -- whether it's a one-time donation, a monthly sponsorship, or simply spreading the word about the project.
+We appreciate any support you can provide, whether it's a one-time donation, a monthly sponsorship, or simply spreading the word about the project.
 Thank you for helping us make open-source geocomputational resources more accessible and sustainable!
-
-
