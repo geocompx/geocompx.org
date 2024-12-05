@@ -1,0 +1,12 @@
+---
+title: "Second edition of *Geocomputation with R* is complete"
+author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
+date: "2024-10-06"
+slug: geocompr2-bp3
+categories:
+  - updates
+  - rstats
+tags: [geocompr, geocompr2, geocompx, sf, stars, raster, terra, s2, rstats]
+draft: true
+---
+
