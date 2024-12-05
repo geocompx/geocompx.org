@@ -21,7 +21,7 @@ They allow people to learn about geocomputation, improve their skills, and solve
 They also enable researchers to share their work, collaborate with others, and build on existing knowledge.
 In short, we believe that open-source geocomputational resources can make the world a better place.
 
-However, creating and maintaining such resources is time-consuming and can be hard to sustain, especially for newcomers to open source software development who are likely to be younger and less financially secure.^[“(..) you’ll almost certainly be better off financially doing some consulting (or even getting a part-time job in a fast food restaurant)” (Haberman and Wilson, 2023, <https://doi.org/10.1371/journal.pcbi.1011305>)]
+However, creating, maintaining, and contributing to such resources is time-consuming and can be hard to sustain, especially for newcomers to open source software development who are likely to be younger and less financially secure.^[“(..) you’ll almost certainly be better off financially doing some consulting (or even getting a part-time job in a fast food restaurant)” (Haberman and Wilson, 2023, <https://doi.org/10.1371/journal.pcbi.1011305>)]
 
 ![Donation platforms: GitHub Sponsors and Stripe](spon.png){width=75% fig-align="center"}
 
