@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jakub Nowosad, Robin Lovelace, Jannes Muenchow">
+<meta name="dcterms.date" content="2024-10-06">
 
-<title>quarto-input964ba821d0a5de09 – geocompx</title>
+<title>Second edition of Geocomputation with R is complete – geocompx</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +25,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="/site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="/site_libs/quarto-nav/headroom.min.js"></script>
-<script src="/site_libs/clipboard/clipboard.min.js"></script>
-<script src="/site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="/site_libs/quarto-search/fuse.min.js"></script>
-<script src="/site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="/">
-<link href="/./static/favicon.ico" rel="icon">
-<script src="/site_libs/quarto-html/quarto.js"></script>
-<script src="/site_libs/quarto-html/popper.min.js"></script>
-<script src="/site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="/site_libs/quarto-html/anchor.min.js"></script>
-<link href="/site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="/site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="/site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="/site_libs/bootstrap/bootstrap-a253b4acba35b9ccf518e35739331b69.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-a253b4acba35b9ccf518e35739331b69.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,20 +78,21 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
+<meta name="quarto:status" content="draft">
 
 
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="../../../style.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="/index.html" class="navbar-brand navbar-brand-logo">
-    <img src="/static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -99,27 +102,27 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="/post.html"> 
+    <a class="nav-link" href="../../../post.html"> 
 <span class="menu-text">Posts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/r.html"> 
+    <a class="nav-link" href="../../../r.html"> 
 <span class="menu-text">R resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/py.html"> 
+    <a class="nav-link" href="../../../py.html"> 
 <span class="menu-text">Python resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/jl.html"> 
+    <a class="nav-link" href="../../../jl.html"> 
 <span class="menu-text">Julia resources</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/guestbook.html"> 
+    <a class="nav-link" href="../../../guestbook.html"> 
 <span class="menu-text">Guestbook</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/about.html"> 
+    <a class="nav-link" href="../../../about.html"> 
 <span class="menu-text">About us</span></a>
   </li>  
 </ul>
@@ -139,7 +142,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="/post.xml"> <i class="bi bi-rss" role="img">
+    <a class="nav-link" href="../../../post.xml"> <i class="bi bi-rss" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -151,28 +154,65 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Second edition of <em>Geocomputation with R</em> is complete</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">updates</div>
+    <div class="quarto-category">rstats</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jakub Nowosad, Robin Lovelace, Jannes Muenchow </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 6, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 
 
-<h1>
-¯_(ツ)_/¯
-</h1>
-<h2 class="anchored">
-Now you are lost
-</h2>
 
-
-
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace,_jannes_muenchow2024,
+  author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
+  title = {Second Edition of {*Geocomputation} with {R*} Is Complete},
+  date = {2024-10-06},
+  url = {https://geocompx.org/post/2024/geocompy-bp2/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace,_jannes_muenchow2024" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Robin Lovelace, Jannes Muenchow, Jakub. 2024. <span>“Second
+Edition of *Geocomputation with R* Is Complete.”</span> October 6, 2024.
+<a href="https://geocompx.org/post/2024/geocompy-bp2/">https://geocompx.org/post/2024/geocompy-bp2/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
