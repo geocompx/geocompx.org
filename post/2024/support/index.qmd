@@ -7,7 +7,7 @@ categories:
   - posts
   - rstats
 tags: [geocompr, geocompx, geocompy, rstats]
-draft: true
+draft: false
 ---
 
 As 2024 comes to an end, we have things to celebrate in the geocompx community, including the completion of two books: the second edition of [**Geocomputation with R**](https://r.geocompx.org/) and the first edition of [**Geocomputation with Python**](https://py.geocompx.org/).
