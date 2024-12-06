@@ -106,7 +106,7 @@ We are now in the final stages of the book production.
 The publisher provided us with the proofread of the book^[We are very grateful for this work -- it improves the book's consistency and fixes various grammar mistakes and typos.], and we are now incorporating the changes into the book.
 
 The book will be published in January 2025, and some information about it can be found at the [publisher's website](https://www.routledge.com/Geocomputation-with-R/Lovelace-Nowosad-Muenchow/p/book/9781032248882).
-Of course, the book will remain open-source, and you can access it for free at https://r.geocompx.org/>.
+Of course, the book will remain open-source, and you can access it for free at <https://r.geocompx.org/>.
 
 ## How to connect and acknowledgments
 
