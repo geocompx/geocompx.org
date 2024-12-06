@@ -1,12 +1,41 @@
 ---
-title: "Second edition of *Geocomputation with R* is complete"
-author: Jakub Nowosad, Robin Lovelace, Jannes Muenchow
-date: "2024-10-06"
+title: "*Geocomputation with Python* has arrived"
+author: Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace
+date: "2025-01-24"
 slug: geocompr2-bp3
 categories:
   - updates
-  - rstats
-tags: [geocompr, geocompr2, geocompx, sf, stars, raster, terra, s2, rstats]
+  - python
+tags: [geocompx, geocompy, python, geopandas, shapely, rasterio]
 draft: true
 ---
+
+We are excited to announce that the first edition of *Geocomputation with Python* is now complete.
+You can find the online version of the book at [py.geocompx.org](https://py.geocompx.org).
+The book is also available for purchase from [Routledge.com](https://www.routledge.com/9781032460659), [Amazon.com](https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/), [Amazon.co.uk](https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/), and other booksellers.
+
+[![The book cover](https://geocompx.org/static/img/book_cover_py.png){width=33% fig-align="center"}](https://www.routledge.com/9781032460659)
+
+*Geocomputation with Python* (***geocompy***) is an open-source introductory resource for working with geographic data with Python.
+It covers the entire range of standard GIS operations for both vector and raster data models and provides a consistent learning curve.
+The book is designed to minimize surprises, with each section and chapter building on the previous.
+If you're just starting out with Python to work with geographic data, we hope that the book will be an excellent place to start.
+
+![An image from the book](geocompy2.png)
+
+The book is open-source, and you can find the code underlying the *geocompy* project on [GitHub](https://github.com/geocompx/geocompy).
+This ensures that the content is reproducible, transparent, and accessible.
+It also lets you interact with the project by opening issues and submitting pull requests.
+
+![An image from the book](geocompy3.png)
+
+**Geocompy** would not be possible without the support of the open-source community.
+We want to thank the authors and contributors of the **numpy**, **pandas**, **shapely**, **geopandas**, and **rasterio** packages, which are used extensively in the book, for building these wonderful tools.
+We also acknowledge the open-source community's contributions during the book's development, including Will Deakin, Sean Gillies, Josh Cole, and Jt Miclat.
+Many thanks also to Jannes Muenchow, whose work was essential for parts of the book.
+
+![An image from the book](geocompy4.png){width=75% fig-align="center"}
+
+If you want to connect with us, you can join the [geocompx discord channel](https://discord.gg/Te3gWeDwmf).
+We also use the `#geocompx` hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.
 
