@@ -396,7 +396,7 @@
     "href": "guestbook.html#geocomputation-with-r",
     "title": "Guestbook",
     "section": "Geocomputation with R",
-    "text": "Geocomputation with R\n\nModules using the book\n\nCASA0005 Geographic Information Systems and Science, Andy MacLachlan and Adam Dennett, Centre for Advanced Spatial Analysis, Univeristy College London\nECS530 Analysing spatial data, Roger Bivand, Norwegian School of Economics\nGEOG 495 and 595: Geographic Data Analysis, University of Oregon\nESPM 288: Reproducible and Collaborative Data Science, Berkeley University of California \nENVR_SCI 390-0 “R Data Science” - Special Topics in Environmental Sciences Northwestern University\nPD-15 - R for Geospatial Analysis and Mapping, University Consortium for Geographic Information Science \nCRD 298: Spatial Methods in Community Research, Professor Noli Brazil, University of California, Davis\nCP6521 Advanced GIS, Yongsun Lee, Georgia Tech\nUrban Data Analytics in R, Nikhil Kaza, University of North Carolina at Chapel Hill\nGeospatial Analytics, taught by Dr Nick Tate as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.\nGEOG 28402 & 28403: Geographic Information Science II & III, Marynia Kolak at the Center for Spatial Data Science, Unversity of Chicago\n\n\n\nOther teaching courses/lectures/guides using the book\n\nData Science for Economists, EC 607\n11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health\nData Carpentry: Introduction to Geospatial Raster and Vector Data with R\nR: Mapping and Geospatial guide, Duke University\n\n\n\nBook reviews\n\nI first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought “this is great! but need to move on!”. A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.\n\n\nBeautiful book: A must-read if you’re into data analytics/science with R and do geospatial analysis.\n\nSee the rest of these reviews and maybe add your own review here.\n\n\nSocial media\n\n\n\n\n\n\n;document.getElementById(\"tweet-67815\").innerHTML = tweet[\"html\"];\n\n\n\n;document.getElementById(\"tweet-83637\").innerHTML = tweet[\"html\"];\n\n\n;document.getElementById(\"tweet-45280\").innerHTML = tweet[\"html\"];\n\n\n\n\n\n\n;document.getElementById(\"tweet-10909\").innerHTML = tweet[\"html\"];"
+    "text": "Geocomputation with R\n\nModules using the book\n\nCASA0005 Geographic Information Systems and Science, Andy MacLachlan and Adam Dennett, Centre for Advanced Spatial Analysis, Univeristy College London\nECS530 Analysing spatial data, Roger Bivand, Norwegian School of Economics\nGEOG 495 and 595: Geographic Data Analysis, University of Oregon\nESPM 288: Reproducible and Collaborative Data Science, Berkeley University of California \nENVR_SCI 390-0 “R Data Science” - Special Topics in Environmental Sciences Northwestern University\nPD-15 - R for Geospatial Analysis and Mapping, University Consortium for Geographic Information Science \nCRD 298: Spatial Methods in Community Research, Professor Noli Brazil, University of California, Davis\nCP6521 Advanced GIS, Yongsun Lee, Georgia Tech\nUrban Data Analytics in R, Nikhil Kaza, University of North Carolina at Chapel Hill\nGeospatial Analytics, taught by Dr Nick Tate as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.\nGEOG 28402 & 28403: Geographic Information Science II & III, Marynia Kolak at the Center for Spatial Data Science, Unversity of Chicago\n\n\n\nOther teaching courses/lectures/guides using the book\n\nData Science for Economists, EC 607\n11th International Summer School2019: Spatial and digital Epidemiology: Leveraging geo-referenced social media in the context of urban health\nData Carpentry: Introduction to Geospatial Raster and Vector Data with R\nR: Mapping and Geospatial guide, Duke University\n\n\n\nBook reviews\n\nI first read the first edition around 3 years ago and was astounded that everything I had been doing piecemeal in Q, Arc, and with some sf functions could be done in an orderly manner and finally the geospatial libraries were accessibly explained. Sadly at the time I did not get past the first part and thought “this is great! but need to move on!”. A month or so ago I sat down to reread the book in its entirety, with the move to terra etc.\n\n\nBeautiful book: A must-read if you’re into data analytics/science with R and do geospatial analysis.\n\nSee the rest of these reviews and maybe add your own review here.\n\n\nSocial media\n\n\n\n\n\n\n;document.getElementById(\"tweet-30343\").innerHTML = tweet[\"html\"];\n\n\n\n;document.getElementById(\"tweet-25470\").innerHTML = tweet[\"html\"];\n\n\n;document.getElementById(\"tweet-22258\").innerHTML = tweet[\"html\"];\n\n\n\n\n\n\n;document.getElementById(\"tweet-21838\").innerHTML = tweet[\"html\"];"
   },
   {
     "objectID": "jl.html",
@@ -417,42 +417,28 @@
     "href": "r.html",
     "title": "R resources",
     "section": "",
-    "text": "Geocomputation with R (geocompr) is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. The online version of the book is hosted at r.geocompx.org/.\nYou can buy it from:\n\nRoutledge.com\nAmazon.com\nAmazon.co.uk"
-  },
-  {
-    "objectID": "r.html#book",
-    "href": "r.html#book",
-    "title": "R resources",
-    "section": "",
-    "text": "Geocomputation with R (geocompr) is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. The online version of the book is hosted at r.geocompx.org/.\nYou can buy it from:\n\nRoutledge.com\nAmazon.com\nAmazon.co.uk"
+    "text": "Geocomputation with R (geocompr) is for people who want to analyze, visualize and model geographic data with open source software. It is based on R, a statistical programming language that has powerful data processing, visualization, and geospatial capabilities. The book equips you with the knowledge and skills to tackle a wide range of issues manifested in geographic data, including those with scientific, societal, and environmental implications. The online version of the book is hosted at r.geocompx.org/.\nYou can buy it from:\n\nRoutledge.com\nAmazon.com\nAmazon.co.uk\n\n\n\n\n\nYou can find all the solutions to the book’s exercises at r.geocompx.org/solutions.\n\n\n\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\nGeocomputation with R (in Japanese). Translation lead: Yoshihiko Baba\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean, and the second edition of the book has been officially translated into Chinese (check your local bookstore).\n\n\n\n\n\n\nSpatial Joins Extended\nMaking inset maps of the USA\nAlgorithms Extended\nPoint Pattern analysis, spatial interpolation and heatmaps\nDesire Lines Extended\nSpatial data and the tidyverse: pitfalls to avoid"
   },
   {
     "objectID": "r.html#solutions",
     "href": "r.html#solutions",
     "title": "R resources",
-    "section": "Solutions",
-    "text": "Solutions\nYou can find all the solutions to the book’s exercises at r.geocompx.org/solutions."
+    "section": "",
+    "text": "You can find all the solutions to the book’s exercises at r.geocompx.org/solutions."
   },
   {
     "objectID": "r.html#translations",
     "href": "r.html#translations",
     "title": "R resources",
-    "section": "Translations",
-    "text": "Translations\nThe Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\nGeocomputation with R (in Japanese). Translation lead: Yoshihiko Baba\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean, and the second edition of the book has been officially translated into Chinese (check your local bookstore)."
+    "section": "",
+    "text": "The Geocomputation with R book has a few community translations:\n\nGeocomputación con R (in Spanish). Translation lead: Mireia Camacho\nGeocomputation avec R (in French). Translation lead: Olivier Leroy\nGeocomputation with R (in Japanese). Translation lead: Yoshihiko Baba\n\nAdditionally, the first edition of the book has been officially translated into Japanese and Korean, and the second edition of the book has been officially translated into Chinese (check your local bookstore)."
   },
   {
     "objectID": "r.html#vignettes",
     "href": "r.html#vignettes",
     "title": "R resources",
-    "section": "Vignettes",
-    "text": "Vignettes\n\nThese vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R\n\nSpatial Joins Extended\nMaking inset maps of the USA\nAlgorithms Extended\nPoint Pattern analysis, spatial interpolation and heatmaps\nDesire Lines Extended\nSpatial data and the tidyverse: pitfalls to avoid"
-  },
-  {
-    "objectID": "r.html#other-recommended-books",
-    "href": "r.html#other-recommended-books",
-    "title": "R resources",
-    "section": "Other recommended books",
-    "text": "Other recommended books\n\nElegant and informative maps with tmap from Martijn Tennekes and Jakub Nowosad\nSpatial Data Science with applications in R from Edzer Pebesma and Roger Bivand; with solutions"
+    "section": "",
+    "text": "Spatial Joins Extended\nMaking inset maps of the USA\nAlgorithms Extended\nPoint Pattern analysis, spatial interpolation and heatmaps\nDesire Lines Extended\nSpatial data and the tidyverse: pitfalls to avoid"
   },
   {
     "objectID": "post.html",
