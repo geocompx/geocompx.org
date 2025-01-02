@@ -4,7 +4,7 @@ title: "R resources"
 page-layout: full
 ---
 
-## Book
+# The Geocomputation with R book
 
 ::: {.grid}
 
@@ -41,8 +41,6 @@ The Geocomputation with R book has a few community translations:
 
 Additionally, the first edition of the book has been officially translated into Japanese and Korean, and the second edition of the book has been officially translated into Chinese (check your local bookstore).
 
-
-
 ## Vignettes
 
 #### These vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R
@@ -54,9 +52,23 @@ Additionally, the first edition of the book has been officially translated into 
 - [Desire Lines Extended](https://geocompx.github.io/geocompkg/articles/linevia.html)
 - [Spatial data and the tidyverse: pitfalls to avoid](https://geocompx.github.io/geocompkg/articles/tidyverse-pitfalls.html)
 
-## Other recommended books
+# The *tmap* book
 
-- [Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes and Jakub Nowosad
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+:::
+
+::: {.g-col-12 .g-col-md-6}
+[Elegant and informative maps with tmap](https://tmap.geocompx.org/)
+
+<!-- - [Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes and Jakub Nowosad -->
+:::
+
+:::
+
+# Other recommended books
+
 - [Spatial Data Science with applications in R](https://r-spatial.org/book/) from Edzer Pebesma and Roger Bivand; with [solutions](https://edzer.github.io/sdsr_exercises/)
 
 <!--
