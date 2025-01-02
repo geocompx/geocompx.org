@@ -39,7 +39,27 @@ The Geocomputation with R book has a few community translations:
 - [Geocomputation avec R (in French)](https://r.geocompx.org/fr/). Translation lead: Olivier Leroy
 - [Geocomputation with R (in Japanese)](https://r.geocompx.org/jp/). Translation lead: Yoshihiko Baba
 
-Additionally, the first edition of the book has been officially translated into Japanese and Korean (check your local bookstore).
+Additionally, the first edition of the book has been officially translated into Japanese and Korean, and the second edition of the book has been officially translated into Chinese (check your local bookstore).
+
+
+
+## Vignettes
+
+#### These vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R
+
+- [Spatial Joins Extended](https://geocompx.github.io/geocompkg/articles/join.html)
+- [Making inset maps of the USA](https://geocompx.github.io/geocompkg/articles/us-map.html)
+- [Algorithms Extended](https://geocompx.github.io/geocompkg/articles/algorithm.html)
+- [Point Pattern analysis, spatial interpolation and heatmaps](https://geocompx.github.io/geocompkg/articles/point-pattern.html)
+- [Desire Lines Extended](https://geocompx.github.io/geocompkg/articles/linevia.html)
+- [Spatial data and the tidyverse: pitfalls to avoid](https://geocompx.github.io/geocompkg/articles/tidyverse-pitfalls.html)
+
+## Other recommended books
+
+- [Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes and Jakub Nowosad
+- [Spatial Data Science with applications in R](https://r-spatial.org/book/) from Edzer Pebesma and Roger Bivand; with [solutions](https://edzer.github.io/sdsr_exercises/)
+
+<!--
 
 ## Presentations
 
@@ -122,18 +142,4 @@ GIS Learning Community. Cincinnati, Ohio, 2017-11-01
 
 - [GitHub repo](https://github.com/Nowosad/gis_with_r_how_to_start/)
 
-## Vignettes
-
-#### These vignettes provide extended examples for several methods and functions mentioned in Geocomputation with R
-
-- [Spatial Joins Extended](https://geocompx.github.io/geocompkg/articles/join.html)
-- [Making inset maps of the USA](https://geocompx.github.io/geocompkg/articles/us-map.html)
-- [Algorithms Extended](https://geocompx.github.io/geocompkg/articles/algorithm.html)
-- [Point Pattern analysis, spatial interpolation and heatmaps](https://geocompx.github.io/geocompkg/articles/point-pattern.html)
-- [Desire Lines Extended](https://geocompx.github.io/geocompkg/articles/linevia.html)
-- [Spatial data and the tidyverse: pitfalls to avoid](https://geocompx.github.io/geocompkg/articles/tidyverse-pitfalls.html)
-
-## Other recommened books
-
-- [Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes and Jakub Nowosad
-- [Spatial Data Science with applications in R](https://r-spatial.org/book/) from Edzer Pebesma and Roger Bivand; with [solutions](https://edzer.github.io/sdsr_exercises/)
+-->
