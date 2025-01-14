@@ -2,7 +2,7 @@
 title: "*Geocomputation with Python* has arrived"
 author: Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace
 date: "2025-01-27"
-slug: geocompy
+slug: geocompy-bp2
 categories:
   - updates
   - python
