@@ -10,7 +10,70 @@
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.6.40</generator>
-<lastBuildDate>Fri, 06 Dec 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Geocomputation with Python has arrived</title>
+  <dc:creator>Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace</dc:creator>
+  <link>https://geocompx.org/post/2025/geocompy-bp2/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>We are excited to announce that the first edition of <em>Geocomputation with Python</em> is now complete. You can find the online version of the book at <a href="https://py.geocompx.org">py.geocompx.org</a>. The book is also available for purchase from <a href="https://www.routledge.com/9781032460659">Routledge.com</a>, <a href="https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/">Amazon.com</a>, <a href="https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/">Amazon.co.uk</a>, and other booksellers.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%" alt="The book cover"></a></p>
+</figure>
+</div>
+<figcaption>The book cover</figcaption>
+</figure>
+</div>
+<p><em>Geocomputation with Python</em> (<strong><em>geocompy</em></strong>) is an open-source, introductory resource for working with geographic data with Python. It covers the entire range of standard GIS operations for both vector and raster data models and provides a consistent learning curve. The book is designed to minimize surprises, with each section and chapter building on the previous. If you’re just starting out with Python to work with geographic data, we hope that the book will be an excellent place to start.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy2.png" class="img-fluid figure-img"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p>The book is open-source and you can find the code on <a href="https://github.com/geocompx/geocompy">GitHub</a>. This ensures that the content is reproducible, transparent, and accessible. It also lets you interact with the project by opening issues and submitting pull requests.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy3.png" class="img-fluid figure-img"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p><strong>Geocompy</strong> would not be possible without the support of the open-source community. We want to thank the authors and contributors of the <strong>numpy</strong>, <strong>pandas</strong>, <strong>shapely</strong>, <strong>geopandas</strong>, and <strong>rasterio</strong> packages, which are used extensively in the book, for building these wonderful tools. We also acknowledge the open-source community’s contributions during the book’s development, including Will Deakin, Sean Gillies, Josh Cole, and Jt Miclat. Many thanks also to Jannes Muenchow, whose work was essential for parts of the book.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy4.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">geocompx discord channel</a>. We also use the <code>#geocompx</code> hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.</p>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_michael_dorman,_anita_graser,_robin_lovelace2025,
+  author = {Nowosad, Michael Dorman, Anita Graser, Robin Lovelace,
+    Jakub},
+  title = {*Geocomputation with {Python*} Has Arrived},
+  date = {2025-01-27},
+  url = {https://geocompx.org/post/2025/geocompy-bp2/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_michael_dorman,_anita_graser,_robin_lovelace2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Michael Dorman, Anita Graser, Robin Lovelace, Jakub. 2025.
+<span>“*Geocomputation with Python* Has Arrived.”</span> January 27,
+2025. <a href="https://geocompx.org/post/2025/geocompy-bp2/">https://geocompx.org/post/2025/geocompy-bp2/</a>.
+</div></div></section></div> ]]></description>
+  <category>updates</category>
+  <category>python</category>
+  <guid>https://geocompx.org/post/2025/geocompy-bp2/</guid>
+  <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Support geocompx and the development of open-source geocomputation resources!</title>
   <dc:creator>Jakub Nowosad, Robin Lovelace</dc:creator>

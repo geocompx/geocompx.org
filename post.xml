@@ -10,7 +10,70 @@
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.6.40</generator>
-<lastBuildDate>Fri, 06 Dec 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Geocomputation with Python has arrived</title>
+  <dc:creator>Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace</dc:creator>
+  <link>https://geocompx.org/post/2025/geocompy-bp2/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>We are excited to announce that the first edition of <em>Geocomputation with Python</em> is now complete. You can find the online version of the book at <a href="https://py.geocompx.org">py.geocompx.org</a>. The book is also available for purchase from <a href="https://www.routledge.com/9781032460659">Routledge.com</a>, <a href="https://www.amazon.com/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/">Amazon.com</a>, <a href="https://www.amazon.co.uk/Geocomputation-Python-Chapman-Hall-CRC/dp/1032460652/">Amazon.co.uk</a>, and other booksellers.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%" alt="The book cover"></a></p>
+</figure>
+</div>
+<figcaption>The book cover</figcaption>
+</figure>
+</div>
+<p><em>Geocomputation with Python</em> (<strong><em>geocompy</em></strong>) is an open-source, introductory resource for working with geographic data with Python. It covers the entire range of standard GIS operations for both vector and raster data models and provides a consistent learning curve. The book is designed to minimize surprises, with each section and chapter building on the previous. If you’re just starting out with Python to work with geographic data, we hope that the book will be an excellent place to start.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy2.png" class="img-fluid figure-img"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p>The book is open-source and you can find the code on <a href="https://github.com/geocompx/geocompy">GitHub</a>. This ensures that the content is reproducible, transparent, and accessible. It also lets you interact with the project by opening issues and submitting pull requests.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy3.png" class="img-fluid figure-img"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p><strong>Geocompy</strong> would not be possible without the support of the open-source community. We want to thank the authors and contributors of the <strong>numpy</strong>, <strong>pandas</strong>, <strong>shapely</strong>, <strong>geopandas</strong>, and <strong>rasterio</strong> packages, which are used extensively in the book, for building these wonderful tools. We also acknowledge the open-source community’s contributions during the book’s development, including Will Deakin, Sean Gillies, Josh Cole, and Jt Miclat. Many thanks also to Jannes Muenchow, whose work was essential for parts of the book.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/geocompy-bp2/geocompy4.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>An image from the book</figcaption>
+</figure>
+</div>
+<p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">geocompx discord channel</a>. We also use the <code>#geocompx</code> hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.</p>
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_michael_dorman,_anita_graser,_robin_lovelace2025,
+  author = {Nowosad, Michael Dorman, Anita Graser, Robin Lovelace,
+    Jakub},
+  title = {*Geocomputation with {Python*} Has Arrived},
+  date = {2025-01-27},
+  url = {https://geocompx.org/post/2025/geocompy-bp2/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_michael_dorman,_anita_graser,_robin_lovelace2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Michael Dorman, Anita Graser, Robin Lovelace, Jakub. 2025.
+<span>“*Geocomputation with Python* Has Arrived.”</span> January 27,
+2025. <a href="https://geocompx.org/post/2025/geocompy-bp2/">https://geocompx.org/post/2025/geocompy-bp2/</a>.
+</div></div></section></div> ]]></description>
+  <category>updates</category>
+  <category>python</category>
+  <guid>https://geocompx.org/post/2025/geocompy-bp2/</guid>
+  <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Support geocompx and the development of open-source geocomputation resources!</title>
   <dc:creator>Jakub Nowosad, Robin Lovelace</dc:creator>
@@ -7799,340 +7862,6 @@ Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geoc
   <category>rstats</category>
   <guid>https://geocompx.org/post/2019/tmap-styles/</guid>
   <pubDate>Thu, 17 Oct 2019 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Grids and graticules in the tmap package</title>
-  <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/tmap-grid/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This vignette builds on the <a href="https://geocompr.robinlovelace.net/adv-map.html">making maps chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>. Its goal is to demonstrate how to set and modify grids and graticules in the <strong>tmap</strong> package.</p>
-<section id="prerequisites" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>The examples below assume the following packages are attached:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(spData) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># example datasets</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tmap)   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># map creation (&gt;=2.3)</span></span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)     <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># spatial data classes</span></span></code></pre></div>
-</div>
-</section>
-<section id="grids-and-graticules" class="level1">
-<h1>Grids and graticules</h1>
-<p>The <strong>tmap</strong> package offers two ways to draws coordinate lines - <code>tm_grid()</code> and <code>tm_graticules()</code>. The role of <code>tm_grid()</code> is to represent the input data’s coordinates. For example, the <code>nz</code> object uses the New Zealand Transverse Mercator projection, with meters as its units.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb2-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb2-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p><code>tm_graticules()</code> shows longitude lines (meridians) and latitude lines (parallels), with degrees as units (note the degree sign in the example below).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb3-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_graticules</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="layers-order" class="level1">
-<h1>Layers order</h1>
-<p>Both, <code>tm_grid()</code> and <code>tm_graticules()</code> could be placed above or below the main spatial data. Its position on the map depends on its place in the code. When <code>tm_grid()</code> or <code>tm_graticules()</code> are placed after the code drawing geometry (e.g.&nbsp;<code>tm_polygons()</code>), the grids or graticules are ploted on the top of the map. On the other hand, when <code>tm_grid()</code> or <code>tm_graticules()</code> are placed before the code drawing geometry (e.g.&nbsp;<code>tm_polygons()</code>), the grids or graticules are plotted behind the spatial data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_graticules</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb4-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="customization" class="level1">
-<h1>Customization</h1>
-<p>Grids and graticules can be easily customized in <strong>tmap</strong> using several arguments. The first one, <code>labels.inside.frame</code> moves the labels inside the map grid (it is set to <code>FALSE</code> as the default).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb5-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">labels.inside.frame =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb5-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The number of horizontal (<code>x</code>) and vertical (<code>y</code>) lines can be set using the <code>n.x</code> and <code>n.y</code> arguments. Importantly, <strong>tmap</strong> rounds coordinate values to equally spaced “round” values, so the number of actual labels may be slightly different than set with <code>n.x</code> and <code>n.y</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n.x =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n.y =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb6-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>By default, <code>tm_grid()</code> and <code>tm_graticules()</code> shows ticks and lines. They can be disabled using <code>ticks = FALSE</code> and <code>lines = FALSE</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ticks =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Especially, <code>lines = FALSE</code> could be useful when presenting raster data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">lines =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>It is also possible to customize <code>tm_grid()</code> and <code>tm_graticules()</code> apperance, for example by chaning the lines colors (<code>col</code>), width (<code>lwd</code>) or labels size (<code>labels.size</code>).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(nz) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_grid</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"red"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">lwd =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">labels.size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.4</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The above examples uses <code>tm_grid()</code>, but the same arguments apply to the <code>tm_graticules()</code>.</p>
-</section>
-<section id="layout-settings" class="level1">
-<h1>Layout settings</h1>
-<p>By default, <strong>tmap</strong> adds small inner margins between the presented data and the map frame. It works well in many cases, for example, see the map of New Zealand above. However, it does not look perfect for world maps.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb10-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_graticules</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb10-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>()</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The way to fix this is to use the <code>tm_layout()</code> function and set its <code>inner.margins</code> argument to <code>0</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb11-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_graticules</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb11-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb11-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">inner.margins =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-grid/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
-  author = {Nowosad, Jakub},
-  title = {Grids and Graticules in the Tmap Package},
-  date = {2019-09-04},
-  url = {https://geocompx.org/post/2019/tmap-grid/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
-Nowosad, Jakub. 2019. <span>“Grids and Graticules in the Tmap
-Package.”</span> September 4, 2019. <a href="https://geocompx.org/post/2019/tmap-grid/">https://geocompx.org/post/2019/tmap-grid/</a>.
-</div></div></section></div> ]]></description>
-  <category>vignette</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/tmap-grid/</guid>
-  <pubDate>Wed, 04 Sep 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
