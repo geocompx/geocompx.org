@@ -7,7 +7,7 @@ categories:
   - updates
   - python
 tags: [geocompx, geocompy, python, geopandas, shapely, rasterio]
-draft: true
+draft: false
 ---
 
 We are excited to announce that the first edition of *Geocomputation with Python* is now complete.
