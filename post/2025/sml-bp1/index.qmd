@@ -1,0 +1,232 @@
+---
+title: "" #to add later
+author: Jakub Nowosad
+date: "2025-04-27"
+slug: sml-bp1
+categories:
+  - rstats
+tags: [] #to add later
+draft: true
+---
+
+<!-- https://jakubnowosad.com/IIIRqueR_workshop/#/spatial-resampling-cross-validation-1 -->
+
+<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples -->
+<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/caret.qmd -->
+<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/tidymodels.qmd -->
+<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/mlr3.qmd -->
+
+# Inputs
+
+```{r}
+library(terra)
+library(sf)
+```
+
+```{r}
+predictor_stack <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
+predictor_names <- names(predictor_stack)[1:14]
+spain <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg")
+train_points <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
+temperature_train <- terra::extract(predictor_stack[[predictor_names]], 
+                                    train_points,
+                                    bind = TRUE) |>
+    sf::st_as_sf()
+```
+
+# Loading packages
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+library(caret)
+library(CAST)
+library(blockCV)
+```
+
+## tidymodels
+
+```{r}
+library(tidymodels)
+library(spatialsample)
+library(waywiser)
+library(vip)
+```
+
+## mlr3
+
+```{r}
+library(mlr3verse)
+library(mlr3spatiotempcv)
+lgr::get_logger("mlr3")$set_threshold("warn")
+```
+
+:::
+
+# Setting up the modeling workflow
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+knndm_folds <- CAST::knndm(
+    tpoints = temperature_train,
+    modeldomain = spain,
+    space = "geographical",
+    clustering = "kmeans",
+    k = 5
+)
+
+tr_control_knndm <- caret::trainControl(
+    method = "cv",
+    index = knndm_folds$indx_train,
+    indexOut = knndm_folds$indx_test,
+    savePredictions = TRUE
+)
+```
+
+## tidymodels
+
+```{r}
+# Define the recipe
+form = as.formula(paste0("temp ~ ", paste(predictor_names, collapse = " + ")))
+recipe <- recipes::recipe(form, data = temperature_train)
+
+rf_model <- parsnip::rand_forest(trees = 100, mode = "regression") |>
+    set_engine("ranger", importance = "impurity")
+
+# Create the workflow
+workflow <- workflows::workflow() |>
+    workflows::add_recipe(recipe) |>
+    workflows::add_model(rf_model)
+
+block_folds <- spatialsample::spatial_block_cv(temperature_train, v = 4, n = 2)
+spatialsample::autoplot(block_folds)
+```
+
+
+## mlr3
+
+```{r}
+task = mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
+learner = mlr3::lrn("regr.ranger", importance = "impurity_corrected")
+resampling = mlr3::rsmp("repeated_spcv_coords", folds = 5, repeats = 20) 
+```
+
+:::
+
+# Modeling
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+model_caret <- caret::train(
+    temp ~ .,
+    data = st_drop_geometry(temperature_train),
+    method = "ranger",
+    trControl = tr_control_knndm,
+    num.trees = 100
+)
+```
+
+## tidymodels
+
+```{r}
+rf_spatial <- tune::fit_resamples(
+    workflow,
+    resamples = block_folds,
+    control = tune::control_resamples(save_pred = TRUE, save_workflow = TRUE)
+)
+model_tidymodels <- fit_best(rf_spatial)
+```
+
+
+## mlr3
+
+```{r}
+model_mlr3 = mlr3::resample(task = task,
+                            learner = learner,
+                            resampling = resampling)
+learner$train(task)
+```
+
+
+:::
+
+# Predicting
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+pred_caret = predict(predictor_stack, model_caret, na.rm = TRUE)
+plot(pred_caret)
+```
+
+
+## tidymodels
+
+```{r}
+pred_tidymodels <- predict(predictor_stack, model_tidymodels, na.rm = TRUE)
+plot(pred_tidymodels)
+```
+
+
+## mlr3
+
+```{r}
+pred_mlr3 = terra::predict(predictor_stack, learner, na.rm = TRUE)
+plot(pred_mlr3)
+```
+
+
+:::
+
+# Area of applicability
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+AOA_caret <- CAST::aoa(
+    newdata = predictor_stack,
+    model = model_caret,
+    verbose = FALSE
+)
+plot(AOA_caret)
+```
+
+## tidymodels
+
+```{r}
+model_aoa <- waywiser::ww_area_of_applicability(
+    st_drop_geometry(temperature_train[, predictor_names]),
+    importance = vip::vi_model(model_tidymodels)
+)
+AOA_tidymodels <- terra::predict(predictor_stack, model_aoa)
+```
+
+
+## mlr3
+
+```{r}
+rsmp_cv <- resampling$instantiate(task)
+
+AOA_mlr3 = CAST::aoa(newdata = predictor_stack,
+                     train = as.data.frame(task$data()),
+                     variables = task$feature_names, 
+                     weight = data.frame(t(learner$importance())),
+                     CVtest = rsmp_cv$instance[order(row_id)]$fold,
+          verbose = FALSE)
+plot(AOA_mlr3)
+```
+
+
+:::
