@@ -77,6 +77,7 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 ## caret
 
 ```{r}
+set.seed(21)
 spatial_blocks <- blockCV::cv_spatial(
     temperature_train,
     k = 5,
@@ -103,6 +104,7 @@ tn_grid = expand.grid(
 ## tidymodels
 
 ```{r}
+set.seed(21)
 form <- as.formula(paste0("temp ~ ", paste(predictor_names, collapse = " + ")))
 recipe <- recipes::recipe(form, data = temperature_train)
 
@@ -126,6 +128,7 @@ spatialsample::autoplot(block_folds)
 ## mlr3
 
 ```{r}
+set.seed(21)
 task <- mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
 learner <- mlr3::lrn("regr.ranger",
     importance = "impurity_corrected",
