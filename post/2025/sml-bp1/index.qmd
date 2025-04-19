@@ -7,6 +7,9 @@ categories:
   - rstats
 tags: [] #to add later
 draft: true
+knitr:
+  opts_chunk:
+    message: false
 ---
 
 <!-- https://jakubnowosad.com/IIIRqueR_workshop/#/spatial-resampling-cross-validation-1 -->
@@ -27,10 +30,11 @@ library(sf)
 predictor_stack <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
 predictor_names <- names(predictor_stack)[1:14]
 spain <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg")
-train_points <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
-temperature_train <- terra::extract(predictor_stack[[predictor_names]], 
-                                    train_points,
-                                    bind = TRUE) |>
+train_points <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
+temperature_train <- terra::extract(predictor_stack[[predictor_names]],
+    train_points,
+    bind = TRUE
+) |>
     sf::st_as_sf()
 ```
 
@@ -51,6 +55,7 @@ library(blockCV)
 ```{r}
 library(tidymodels)
 library(spatialsample)
+library(tune)
 library(waywiser)
 library(vip)
 ```
@@ -72,38 +77,48 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 ## caret
 
 ```{r}
-knndm_folds <- CAST::knndm(
-    tpoints = temperature_train,
-    modeldomain = spain,
-    space = "geographical",
-    clustering = "kmeans",
-    k = 5
+spatial_blocks <- blockCV::cv_spatial(
+    temperature_train,
+    k = 5,
+    hexagon = FALSE,
+    progress = FALSE
+)
+train_ids <- lapply(spatial_blocks$folds_list, function(x) x[[1]])
+test_ids <- lapply(spatial_blocks$folds_list, function(x) x[[2]])
+
+tr_control <- caret::trainControl(
+    method = "cv",
+    index = train_ids,
+    indexOut = test_ids,
+    savePredictions = TRUE
 )
 
-tr_control_knndm <- caret::trainControl(
-    method = "cv",
-    index = knndm_folds$indx_train,
-    indexOut = knndm_folds$indx_test,
-    savePredictions = TRUE
+tn_grid = expand.grid(
+         mtry = 8,
+         splitrule = "extratrees",
+         min.node.size = 5
 )
 ```
 
 ## tidymodels
 
 ```{r}
-# Define the recipe
-form = as.formula(paste0("temp ~ ", paste(predictor_names, collapse = " + ")))
+form <- as.formula(paste0("temp ~ ", paste(predictor_names, collapse = " + ")))
 recipe <- recipes::recipe(form, data = temperature_train)
 
-rf_model <- parsnip::rand_forest(trees = 100, mode = "regression") |>
-    set_engine("ranger", importance = "impurity")
+rf_model <- parsnip::rand_forest(
+    trees = 100,
+    mtry = 8,
+    min_n = 5, 
+    mode = "regression"
+) |>
+    set_engine("ranger", splitrule = "extratrees", importance = "impurity_corrected")
 
-# Create the workflow
 workflow <- workflows::workflow() |>
     workflows::add_recipe(recipe) |>
     workflows::add_model(rf_model)
 
-block_folds <- spatialsample::spatial_block_cv(temperature_train, v = 4, n = 2)
+block_folds <- spatialsample::spatial_block_cv(temperature_train, v = 5)
 spatialsample::autoplot(block_folds)
 ```
 
@@ -111,9 +126,16 @@ spatialsample::autoplot(block_folds)
 ## mlr3
 
 ```{r}
-task = mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
-learner = mlr3::lrn("regr.ranger", importance = "impurity_corrected")
-resampling = mlr3::rsmp("repeated_spcv_coords", folds = 5, repeats = 20) 
+task <- mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
+learner <- mlr3::lrn("regr.ranger",
+    importance = "impurity_corrected",
+    num.trees = 100,
+    mtry = 8,
+    min.node.size = 5,
+    splitrule = "extratrees"
+)
+resampling <- mlr3::rsmp("spcv_block", folds = 5,
+                         cols = 10, rows = 10)
 ```
 
 :::
@@ -129,13 +151,15 @@ model_caret <- caret::train(
     temp ~ .,
     data = st_drop_geometry(temperature_train),
     method = "ranger",
-    trControl = tr_control_knndm,
+    tuneGrid = tn_grid,
+    trControl = tr_control,
     num.trees = 100
 )
+model_caret_final <- model_caret$finalModel
 ```
-
+    
 ## tidymodels
-
+    
 ```{r}
 rf_spatial <- tune::fit_resamples(
     workflow,
@@ -145,16 +169,41 @@ rf_spatial <- tune::fit_resamples(
 model_tidymodels <- fit_best(rf_spatial)
 ```
 
+## mlr3
+
+```{r}
+model_mlr3 <- mlr3::resample(
+    task = task,
+    learner = learner,
+    resampling = resampling
+)
+learner$train(task)
+```
+
+:::
+
+# Evaluating
+
+::: {.panel-tabset}
+
+## caret
+
+```{r}
+model_caret$results
+```
+
+## tidymodels
+
+```{r}
+tune::collect_metrics(rf_spatial)
+```
 
 ## mlr3
 
 ```{r}
-model_mlr3 = mlr3::resample(task = task,
-                            learner = learner,
-                            resampling = resampling)
-learner$train(task)
+my_measures <- c(mlr3::msr("regr.rmse"), mlr3::msr("regr.rsq"))
+model_mlr3$aggregate(measures = my_measures)
 ```
-
 
 :::
 
@@ -165,7 +214,7 @@ learner$train(task)
 ## caret
 
 ```{r}
-pred_caret = predict(predictor_stack, model_caret, na.rm = TRUE)
+pred_caret <- predict(predictor_stack, model_caret, na.rm = TRUE)
 plot(pred_caret)
 ```
 
@@ -181,10 +230,9 @@ plot(pred_tidymodels)
 ## mlr3
 
 ```{r}
-pred_mlr3 = terra::predict(predictor_stack, learner, na.rm = TRUE)
+pred_mlr3 <- terra::predict(predictor_stack, learner, na.rm = TRUE)
 plot(pred_mlr3)
 ```
-
 
 :::
 
@@ -200,7 +248,7 @@ AOA_caret <- CAST::aoa(
     model = model_caret,
     verbose = FALSE
 )
-plot(AOA_caret)
+plot(AOA_caret$AOA)
 ```
 
 ## tidymodels
@@ -211,6 +259,7 @@ model_aoa <- waywiser::ww_area_of_applicability(
     importance = vip::vi_model(model_tidymodels)
 )
 AOA_tidymodels <- terra::predict(predictor_stack, model_aoa)
+plot(AOA_tidymodels$aoa)
 ```
 
 
@@ -219,14 +268,15 @@ AOA_tidymodels <- terra::predict(predictor_stack, model_aoa)
 ```{r}
 rsmp_cv <- resampling$instantiate(task)
 
-AOA_mlr3 = CAST::aoa(newdata = predictor_stack,
-                     train = as.data.frame(task$data()),
-                     variables = task$feature_names, 
-                     weight = data.frame(t(learner$importance())),
-                     CVtest = rsmp_cv$instance[order(row_id)]$fold,
-          verbose = FALSE)
-plot(AOA_mlr3)
+AOA_mlr3 <- CAST::aoa(
+    newdata = predictor_stack,
+    train = as.data.frame(task$data()),
+    variables = task$feature_names,
+    weight = data.frame(t(learner$importance())),
+    CVtest = rsmp_cv$instance[order(row_id)]$fold,
+    verbose = FALSE
+)
+plot(AOA_mlr3$AOA)
 ```
-
 
 :::
