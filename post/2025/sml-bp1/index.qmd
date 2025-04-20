@@ -49,31 +49,34 @@ Now, our `temperature_train` dataset contains the temperature measurements and t
 
 # Loading packages
 
-::: {.panel-tabset}
+Using each of the frameworks requires loading the respective packages.
+
+::: {.panel-tabset group="language"}
 
 ## caret
 
 ```{r}
-library(caret)
-library(CAST)
-library(blockCV)
+library(caret)              # for modeling
+library(blockCV)            # for spatial cross-validation
+library(CAST)               # for area of applicability
 ```
 
 ## tidymodels
 
 ```{r}
-library(tidymodels)
-library(spatialsample)
-library(tune)
-library(waywiser)
-library(vip)
+library(tidymodels)         # metapackage for modeling
+library(spatialsample)      # for spatial cross-validation
+library(tune)               # for hyperparameter tuning 
+library(waywiser)           # for area of applicability
+library(vip)                # for variable importance (used in AOA)
 ```
 
 ## mlr3
 
 ```{r}
-library(mlr3verse)
-library(mlr3spatiotempcv)
+library(mlr3verse)          # metapackage for mlr3 modeling
+library(mlr3spatiotempcv)   # for spatial cross-validation
+library(CAST)               # for area of applicability
 lgr::get_logger("mlr3")$set_threshold("warn")
 ```
 
@@ -81,12 +84,37 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 
 # Setting up the modeling workflow
 
-::: {.panel-tabset}
+Each of the frameworks has its own way of setting up the modeling workflow.
+This may include defining the model, the resampling method, and the hyperparameter values^[Or the hyperparameter tuning grid, in a more advanced scenario.].
+In this example, we use a random forest models as implemented in the **ranger** package with the following hyperparameters:
+
+- `mtry`: the number of variables randomly sampled as candidates at each split of 8
+- `splitrule`: the splitting rule of `"extratrees"`
+- `min.node.size`: the minimum size of terminal nodes of 5
+
+We also use a spatial cross-validation method with 5 folds.
+It means that the data is divided into many spatial blocks, and each block is assigned to a fold.
+The model is trained on a set of blocks belonging to the training set and evaluated on the remaining blocks.
+Note that each framework has its own way of defining the resampling method, and thus, the implementation and the folds may differ slightly.
+
+::: {.panel-tabset group="language"}
 
 ## caret
 
+For **caret**, we define the hyperparameter grid using the `expand.grid()` function, and the resampling method using the `trainControl()` function.
+In this case, to use spatial cross-validation, we use the `blockCV` package to create the folds, and then pass them to the `trainControl()` function.
+
 ```{r}
 set.seed(21)
+
+# hyperparameters
+tn_grid = expand.grid(
+    mtry = 8,
+    splitrule = "extratrees",
+    min.node.size = 5
+)
+
+# resampling
 spatial_blocks <- blockCV::cv_spatial(
     temperature_train,
     k = 5,
@@ -102,15 +130,16 @@ tr_control <- caret::trainControl(
     indexOut = test_ids,
     savePredictions = TRUE
 )
-
-tn_grid = expand.grid(
-         mtry = 8,
-         splitrule = "extratrees",
-         min.node.size = 5
-)
 ```
 
 ## tidymodels
+
+In **tidymodels**, the steps are to:
+
+1. Specify the modeling formula using with the `recipe()` function.
+2. Define the model using a function from the **parsnip** package, including the hyperparameters.
+3. Create a workflow using the `workflow()` function, which combines the recipe and the model.
+4. Define the resampling method using the `spatial_block_cv()` function from the **spatialsample** package.
 
 ```{r}
 set.seed(21)
@@ -136,6 +165,13 @@ spatialsample::autoplot(block_folds)
 
 ## mlr3
 
+The basic **mlr3** steps are connected to its terminology:
+
+1. **Task**: define the task using the `as_task_regr_st()` function, which specifies the target variable and the data.
+2. **Learner**: define the model using the `lrn()` function, which specifies the model type and the hyperparameters.
+3. **Resampling**: define the resampling method using the `rsmp()` function, which specifies the type of resampling and the number of folds.
+Here, we use the `spcv_block` resampling method.
+
 ```{r}
 set.seed(21)
 task <- mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
@@ -154,9 +190,13 @@ resampling <- mlr3::rsmp("spcv_block", folds = 5,
 
 # Modeling
 
-::: {.panel-tabset}
+::: {.panel-tabset group="language"}
 
 ## caret
+
+The main function of the **caret** package is `train()`, which takes the formula, the data, the model type, the tune grid, the training control (including the resampling method), and some other arguments (e.g., the number of trees).
+The `train()` function will automatically perform the resampling and hyperparameter tuning (if applicable).
+The final model is stored in the `finalModel` object.
 
 ```{r}
 model_caret <- caret::train(
@@ -171,6 +211,10 @@ model_caret_final <- model_caret$finalModel
 ```
     
 ## tidymodels
+
+In **tidymodels**, the `fit_resamples()` function takes the previously defined workflow and the resampling folds.
+Here, we also use the `control` argument to save the predictions and the workflow, which can be useful for later analysis.
+The `fit_best()` function is used to fit the best model based on the resampling results.
     
 ```{r}
 rf_spatial <- tune::fit_resamples(
@@ -182,6 +226,9 @@ model_tidymodels <- fit_best(rf_spatial)
 ```
 
 ## mlr3
+
+The **mlr3** workflow applies the `resample()` function to the task, the learner, and the resampling method.
+Then, to get the final model, we use the `train()` function on previously defined task and learner.
 
 ```{r}
 model_mlr3 <- mlr3::resample(
@@ -196,9 +243,15 @@ learner$train(task)
 
 # Evaluating
 
-::: {.panel-tabset}
+After the models are trained, we want to evaluate their performance.
+Here, we use two of the most common metrics for regression tasks: the root mean square error (RMSE) and the coefficient of determination (R^2^).
+
+::: {.panel-tabset group="language"}
 
 ## caret
+
+RMSE and R^2^ are calculated by default in **caret**.
+The performance metrics are then stored in the `results` object of the model.
 
 ```{r}
 model_caret$results
@@ -206,11 +259,17 @@ model_caret$results
 
 ## tidymodels
 
+RMSE and R^2^ are calculated by default in **tidymodels**.
+The performance metrics are extracted from the resampling results using the `collect_metrics()` function.
+
 ```{r}
 tune::collect_metrics(rf_spatial)
 ```
 
 ## mlr3
+
+We need to specify the measures we want to calculate using the `msr()` function.
+Then, the `aggregate()` method is used to calculate the selected performance metrics.
 
 ```{r}
 my_measures <- c(mlr3::msr("regr.rmse"), mlr3::msr("regr.rsq"))
@@ -221,12 +280,16 @@ model_mlr3$aggregate(measures = my_measures)
 
 # Predicting
 
-::: {.panel-tabset}
+Our goal is to predict the temperature in Spain using the covariates from the `predictor_stack` dataset.
+Thus, we want to obtain a map of the predicted temperature values for the entire country.
+The `predict()` function of the **terra** package makes model predictions on the new raster data.
+
+::: {.panel-tabset group="language"}
 
 ## caret
 
 ```{r}
-pred_caret <- predict(predictor_stack, model_caret, na.rm = TRUE)
+pred_caret <- terra::predict(predictor_stack, model_caret, na.rm = TRUE)
 plot(pred_caret)
 ```
 
@@ -234,7 +297,7 @@ plot(pred_caret)
 ## tidymodels
 
 ```{r}
-pred_tidymodels <- predict(predictor_stack, model_tidymodels, na.rm = TRUE)
+pred_tidymodels <- terra::predict(predictor_stack, model_tidymodels, na.rm = TRUE)
 plot(pred_tidymodels)
 ```
 
@@ -250,9 +313,16 @@ plot(pred_mlr3)
 
 # Area of applicability
 
-::: {.panel-tabset}
+The area of applicability (AoA) is a method to assess the what is the area of the input space that is similar to the training data.
+It is a useful tool to evaluate the model performance and to identify the areas where the model can be applied.
+Areas outside the AoA are considered to be outside the model's applicability domain, and thus, the predictions in these areas should be interpreted with caution or not used at all.
+
+::: {.panel-tabset group="language"}
 
 ## caret
+
+The AoA method original implementation is in the **CAST** package -- a package that extends the **caret** package.
+The AoA is calculated using the `aoa()` function, which takes the new data (the covariates) and the model as input.
 
 ```{r}
 AOA_caret <- CAST::aoa(
@@ -265,6 +335,10 @@ plot(AOA_caret$AOA)
 
 ## tidymodels
 
+The **waywiser** package implements the AoA method for **tidymodels**^[It is not a wrapper for the **CAST** package, but a separate implementation with some differences as you may read in the function documentation -- `?ww_area_of_applicability`].
+The `ww_area_of_applicability()` function takes the training data and variable importance as input.
+Then, to obtain the AoA, we use the `predict()` function from the **terra** package.
+
 ```{r}
 model_aoa <- waywiser::ww_area_of_applicability(
     st_drop_geometry(temperature_train[, predictor_names]),
@@ -274,8 +348,10 @@ AOA_tidymodels <- terra::predict(predictor_stack, model_aoa)
 plot(AOA_tidymodels$aoa)
 ```
 
-
 ## mlr3
+
+The **CAST** package can calculate the AoA for **mlr3** models.
+However, then we need to specify various arguments, such as a raster with covariates, the training data, the variables to be used, the weights of the variables, and the cross-validation folds.
 
 ```{r}
 rsmp_cv <- resampling$instantiate(task)
@@ -292,3 +368,5 @@ plot(AOA_mlr3$AOA)
 ```
 
 :::
+
+# Conclusion
