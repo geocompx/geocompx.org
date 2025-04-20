@@ -19,24 +19,33 @@ knitr:
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/tidymodels.qmd -->
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/mlr3.qmd -->
 
+
 # Inputs
+
+Our task is to predict the temperature in Spain using a set of covariates. 
+We have two datasets for that purpose: the first one, `temperature_train`, contains the temperature measurements from 195 locations in Spain, and the second one, `predictor_stack`, contains the covariates we will use to predict the temperature.
+These covariates include variables such as population density (`popdens`), distance to the coast (`coast`), elevation (`elev`), among others.
 
 ```{r}
 library(terra)
 library(sf)
+train_points <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
+predictor_stack <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
 ```
 
+We use a subset of fourteen of the available covariates to predict the temperature.
+But before doing that, to prepare our data for modeling, we need to extract the covariate values at the locations of our training points.
+
 ```{r}
-predictor_stack <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
 predictor_names <- names(predictor_stack)[1:14]
-spain <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg")
-train_points <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
 temperature_train <- terra::extract(predictor_stack[[predictor_names]],
     train_points,
     bind = TRUE
 ) |>
     sf::st_as_sf()
 ```
+
+Now, our `temperature_train` dataset contains the temperature measurements and the covariate values at each location and is ready for modeling.
 
 # Loading packages
 
