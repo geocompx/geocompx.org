@@ -1,30 +1,69 @@
 ---
-title: "" #to add later
-author: Jakub Nowosad
+title: "Spatial machine learning with R: caret, tidymodels, and mlr3"
+description: "A comparison of three popular machine learning frameworks in R for spatial machine learning tasks."
+author:
+  - name: Jakub Nowosad
+    url: https://jakubnowosad.com
+    orcid:  0000-0002-1057-3721
 date: "2025-04-27"
 slug: sml-bp1
 categories:
   - rstats
-tags: [] #to add later
+  - sml
+tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
 draft: true
+mermaid-format: png
 knitr:
   opts_chunk:
     message: false
 ---
 
 <!-- https://jakubnowosad.com/IIIRqueR_workshop/#/spatial-resampling-cross-validation-1 -->
-
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples -->
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/caret.qmd -->
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/tidymodels.qmd -->
 <!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/mlr3.qmd -->
 
+::: {.callout-note appearance="simple"}
+
+This is the first part of a blog post series on spatial machine learning with R.
+
+:::
+
+The R language has a variety of packages for machine learning, and many of them can be used for machine learning tasks in a spatial context (*spatial machine learning*).
+Spatial machine learning is generally different from traditional machine learning, as variables located closer to each other are often more similar than those located further apart.
+Thus, we need to consider that when building machine learning models.
+
+In this blog post, we compare three of the most popular machine learning frameworks in R: **caret**, **tidymodels**, and **mlr3**.
+We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ.
+The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.
+
+<center>
+```{mermaid index-1}
+%%| fig-width: 8
+%%| fig-height: 6.5
+%%| echo: false
+%%| fig-cap: "A possible workflow of the spatial machine learning task."
+flowchart TB
+    A[Data] --> B(Model specification)
+    B --> C(Resampling #1)
+    B --> D(Resampling #2)
+    B --> E(Resampling #...)
+    B --> F(Resampling #N)
+    C --> G(Evaluation)
+    D --> G
+    E --> G
+    F --> G
+    G --> H[Prediction]
+    H --> I[Area of applicability]
+```
+</center>
 
 # Inputs
 
 Our task is to predict the temperature in Spain using a set of covariates. 
 We have two datasets for that purpose: the first one, `temperature_train`, contains the temperature measurements from 195 locations in Spain, and the second one, `predictor_stack`, contains the covariates we will use to predict the temperature.
-These covariates include variables such as population density (`popdens`), distance to the coast (`coast`), elevation (`elev`), among others.
+These covariates include variables such as population density (`popdens`), distance to the coast (`coast`), and elevation (`elev`), among others.
 
 ```{r}
 library(terra)
@@ -82,11 +121,11 @@ lgr::get_logger("mlr3")$set_threshold("warn")
 
 :::
 
-# Setting up the modeling workflow
+# Model specification
 
 Each of the frameworks has its own way of setting up the modeling workflow.
 This may include defining the model, the resampling method, and the hyperparameter values^[Or the hyperparameter tuning grid, in a more advanced scenario.].
-In this example, we use a random forest models as implemented in the **ranger** package with the following hyperparameters:
+In this example, we use random forest models as implemented in the **ranger** package with the following hyperparameters:
 
 - `mtry`: the number of variables randomly sampled as candidates at each split of 8
 - `splitrule`: the splitting rule of `"extratrees"`
@@ -136,7 +175,7 @@ tr_control <- caret::trainControl(
 
 In **tidymodels**, the steps are to:
 
-1. Specify the modeling formula using with the `recipe()` function.
+1. Specify the modeling formula using the `recipe()` function.
 2. Define the model using a function from the **parsnip** package, including the hyperparameters.
 3. Create a workflow using the `workflow()` function, which combines the recipe and the model.
 4. Define the resampling method using the `spatial_block_cv()` function from the **spatialsample** package.
@@ -194,7 +233,7 @@ resampling <- mlr3::rsmp("spcv_block", folds = 5,
 
 ## caret
 
-The main function of the **caret** package is `train()`, which takes the formula, the data, the model type, the tune grid, the training control (including the resampling method), and some other arguments (e.g., the number of trees).
+The main function of the **caret** package is `train()`, which takes the formula, the data, the model type, the tuning grid, the training control (including the resampling method), and some other arguments (e.g., the number of trees).
 The `train()` function will automatically perform the resampling and hyperparameter tuning (if applicable).
 The final model is stored in the `finalModel` object.
 
@@ -241,7 +280,7 @@ learner$train(task)
 
 :::
 
-# Evaluating
+# Evaluation
 
 After the models are trained, we want to evaluate their performance.
 Here, we use two of the most common metrics for regression tasks: the root mean square error (RMSE) and the coefficient of determination (R^2^).
@@ -278,7 +317,7 @@ model_mlr3$aggregate(measures = my_measures)
 
 :::
 
-# Predicting
+# Prediction
 
 Our goal is to predict the temperature in Spain using the covariates from the `predictor_stack` dataset.
 Thus, we want to obtain a map of the predicted temperature values for the entire country.
@@ -321,7 +360,7 @@ Areas outside the AoA are considered to be outside the model's applicability dom
 
 ## caret
 
-The AoA method original implementation is in the **CAST** package -- a package that extends the **caret** package.
+The AoA method's original implementation is in the **CAST** package -- a package that extends the **caret** package.
 The AoA is calculated using the `aoa()` function, which takes the new data (the covariates) and the model as input.
 
 ```{r}
@@ -370,3 +409,8 @@ plot(AOA_mlr3$AOA)
 :::
 
 # Conclusion
+
+In this blog post, we compared three of the most popular machine learning frameworks in R: **caret**, **tidymodels**, and **mlr3**.
+We demonstrated how to use these frameworks for a spatial machine learning task, including model specification, training, evaluation, prediction, and obtaining the area of applicability.
+At the same time, many additional steps can be added to the workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more.
+In the next blog posts, we will show the three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.
