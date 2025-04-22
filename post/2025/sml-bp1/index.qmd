@@ -145,7 +145,6 @@ In this case, to use spatial cross-validation, we use the `blockCV` package to c
 
 ```{r}
 set.seed(21)
-
 # hyperparameters
 tn_grid = expand.grid(
     mtry = 8,
