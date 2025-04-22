@@ -350,21 +350,20 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>For <strong>caret</strong>, we define the hyperparameter grid using the <code>expand.grid()</code> function, and the resampling method using the <code>trainControl()</code> function. In this case, to use spatial cross-validation, we use the <code>blockCV</code> package to create the folds, and then pass them to the <code>trainControl()</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperparameters</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>tn_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">8</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">splitrule =</span> <span class="st">"extratrees"</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="dv">5</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># resampling</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>spatial_blocks <span class="ot">&lt;-</span> blockCV<span class="sc">::</span><span class="fu">cv_spatial</span>(</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    temperature_train,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">5</span>,</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperparameters</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>tn_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">8</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">splitrule =</span> <span class="st">"extratrees"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="dv">5</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># resampling</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>spatial_blocks <span class="ot">&lt;-</span> blockCV<span class="sc">::</span><span class="fu">cv_spatial</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    temperature_train,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">5</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   train test
@@ -411,7 +410,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_n =</span> <span class="dv">5</span>, </span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">mode =</span> <span class="st">"regression"</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_engine</span>(<span class="st">"ranger"</span>, <span class="at">splitrule =</span> <span class="st">"extratrees"</span>, <span class="at">importance =</span> <span class="st">"impurity_corrected"</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_engine</span>(<span class="st">"ranger"</span>, <span class="at">splitrule =</span> <span class="st">"extratrees"</span>, <span class="at">importance =</span> <span class="st">"impurity"</span>)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>workflow <span class="ot">&lt;-</span> workflows<span class="sc">::</span><span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    workflows<span class="sc">::</span><span class="fu">add_recipe</span>(recipe) <span class="sc">|&gt;</span></span>
@@ -439,7 +438,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> mlr3spatiotempcv<span class="sc">::</span><span class="fu">as_task_regr_st</span>(temperature_train, <span class="at">target =</span> <span class="st">"temp"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> mlr3<span class="sc">::</span><span class="fu">lrn</span>(<span class="st">"regr.ranger"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity_corrected"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>,</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">8</span>,</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="dv">5</span>,</span>
@@ -489,30 +488,8 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">task =</span> task,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">learner =</span> learner,</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">resampling =</span> resampling</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(task)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>learner<span class="sc">$</span><span class="fu">train</span>(task)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -527,7 +504,7 @@ setting.</code></pre>
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <p>RMSE and R<sup>2</sup> are calculated by default in <strong>caret</strong>. The performance metrics are then stored in the <code>results</code> object of the model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model_caret<span class="sc">$</span>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model_caret<span class="sc">$</span>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  mtry  splitrule min.node.size     RMSE  Rsquared       MAE    RMSESD
 1    8 extratrees             5 1.124756 0.8567454 0.8880418 0.1571526
@@ -539,24 +516,24 @@ setting.</code></pre>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
 <p>RMSE and R<sup>2</sup> are calculated by default in <strong>tidymodels</strong>. The performance metrics are extracted from the resampling results using the <code>collect_metrics()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tune<span class="sc">::</span><span class="fu">collect_metrics</span>(rf_spatial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tune<span class="sc">::</span><span class="fu">collect_metrics</span>(rf_spatial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   1.44      5  0.0650 Preprocessor1_Model1
-2 rsq     standard   0.776     5  0.0692 Preprocessor1_Model1</code></pre>
+1 rmse    standard   1.19      5  0.0372 Preprocessor1_Model1
+2 rsq     standard   0.810     5  0.0633 Preprocessor1_Model1</code></pre>
 </div>
 </div>
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
 <p>We need to specify the measures we want to calculate using the <code>msr()</code> function. Then, the <code>aggregate()</code> method is used to calculate the selected performance metrics.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>my_measures <span class="ot">&lt;-</span> <span class="fu">c</span>(mlr3<span class="sc">::</span><span class="fu">msr</span>(<span class="st">"regr.rmse"</span>), mlr3<span class="sc">::</span><span class="fu">msr</span>(<span class="st">"regr.rsq"</span>))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>model_mlr3<span class="sc">$</span><span class="fu">aggregate</span>(<span class="at">measures =</span> my_measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>my_measures <span class="ot">&lt;-</span> <span class="fu">c</span>(mlr3<span class="sc">::</span><span class="fu">msr</span>(<span class="st">"regr.rmse"</span>), mlr3<span class="sc">::</span><span class="fu">msr</span>(<span class="st">"regr.rsq"</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model_mlr3<span class="sc">$</span><span class="fu">aggregate</span>(<span class="at">measures =</span> my_measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse       rsq 
-1.3726234 0.7428595 </code></pre>
+1.1027752 0.8343361 </code></pre>
 </div>
 </div>
 </div>
@@ -571,8 +548,8 @@ setting.</code></pre>
 <div class="tab-content" data-group="language">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pred_caret <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_caret, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pred_caret <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_caret, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -584,22 +561,8 @@ setting.</code></pre>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pred_tidymodels <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_tidymodels, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predict.ranger(object = object$fit, data = new_data, type =
-"response", : Forest was grown with 'impurity_corrected' variable importance.
-For prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(object = object$fit, data = new_data, type =
-"response", : Forest was grown with 'impurity_corrected' variable importance.
-For prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(object = object$fit, data = new_data, type =
-"response", : Forest was grown with 'impurity_corrected' variable importance.
-For prediction it is advised to grow another forest without this importance
-setting.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pred_tidymodels <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_tidymodels, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -611,22 +574,8 @@ setting.</code></pre>
 </div>
 <div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pred_mlr3 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, learner, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.
-Warning in predict.ranger(self$model, data = newdata, type = self$predict_type,
-: Forest was grown with 'impurity_corrected' variable importance. For
-prediction it is advised to grow another forest without this importance
-setting.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_mlr3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pred_mlr3 <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, learner, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pred_mlr3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -648,12 +597,12 @@ setting.</code></pre>
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <p>The AoA method’s original implementation is in the <strong>CAST</strong> package – a package that extends the <strong>caret</strong> package. The AoA is calculated using the <code>aoa()</code> function, which takes the new data (the covariates) and the model as input.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>AOA_caret <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">aoa</span>(</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> predictor_stack,</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> model_caret,</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_caret<span class="sc">$</span>AOA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>AOA_caret <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">aoa</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> predictor_stack,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> model_caret,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_caret<span class="sc">$</span>AOA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -666,12 +615,12 @@ setting.</code></pre>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
 <p>The <strong>waywiser</strong> package implements the AoA method for <strong>tidymodels</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The <code>ww_area_of_applicability()</code> function takes the training data and variable importance as input. Then, to obtain the AoA, we use the <code>predict()</code> function from the <strong>terra</strong> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>model_aoa <span class="ot">&lt;-</span> waywiser<span class="sc">::</span><span class="fu">ww_area_of_applicability</span>(</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_drop_geometry</span>(temperature_train[, predictor_names]),</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> vip<span class="sc">::</span><span class="fu">vi_model</span>(model_tidymodels)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>AOA_tidymodels <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_aoa)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_tidymodels<span class="sc">$</span>aoa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model_aoa <span class="ot">&lt;-</span> waywiser<span class="sc">::</span><span class="fu">ww_area_of_applicability</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_drop_geometry</span>(temperature_train[, predictor_names]),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> vip<span class="sc">::</span><span class="fu">vi_model</span>(model_tidymodels)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>AOA_tidymodels <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model_aoa)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_tidymodels<span class="sc">$</span>aoa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -684,17 +633,17 @@ setting.</code></pre>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
 <p>The <strong>CAST</strong> package can calculate the AoA for <strong>mlr3</strong> models. However, then we need to specify various arguments, such as a raster with covariates, the training data, the variables to be used, the weights of the variables, and the cross-validation folds.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rsmp_cv <span class="ot">&lt;-</span> resampling<span class="sc">$</span><span class="fu">instantiate</span>(task)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>AOA_mlr3 <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">aoa</span>(</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> predictor_stack,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">train =</span> <span class="fu">as.data.frame</span>(task<span class="sc">$</span><span class="fu">data</span>()),</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">variables =</span> task<span class="sc">$</span>feature_names,</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(learner<span class="sc">$</span><span class="fu">importance</span>())),</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">CVtest =</span> rsmp_cv<span class="sc">$</span>instance[<span class="fu">order</span>(row_id)]<span class="sc">$</span>fold,</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_mlr3<span class="sc">$</span>AOA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rsmp_cv <span class="ot">&lt;-</span> resampling<span class="sc">$</span><span class="fu">instantiate</span>(task)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>AOA_mlr3 <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">aoa</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> predictor_stack,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">train =</span> <span class="fu">as.data.frame</span>(task<span class="sc">$</span><span class="fu">data</span>()),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">variables =</span> task<span class="sc">$</span>feature_names,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(learner<span class="sc">$</span><span class="fu">importance</span>())),</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">CVtest =</span> rsmp_cv<span class="sc">$</span>instance[<span class="fu">order</span>(row_id)]<span class="sc">$</span>fold,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(AOA_mlr3<span class="sc">$</span>AOA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
