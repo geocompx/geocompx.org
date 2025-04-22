@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=rstats</link>
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.6.40</generator>
+<generator>quarto-1.6.43</generator>
 <lastBuildDate>Fri, 06 Dec 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Support geocompx and the development of open-source geocomputation resources!</title>
