@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jakub Nowosad">
+
+<title>Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo – geocompx</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-8061762d59fe42f7e7a7e0dd36bc024b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-PS0D9S7P17"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
+</script>
+<meta name="quarto:status" content="draft">
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html"> 
+<span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html"> 
+<span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../jl.html"> 
+<span class="menu-text">Julia resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html"> 
+<span class="menu-text">Guestbook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"> 
+<span class="menu-text">About us</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://donate.stripe.com/4gweWl94Q9E35AQ6oo"> 
+<span class="menu-text">Support this project</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp"> <i class="bi bi-discord" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../post.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#randomforestsgls" id="toc-randomforestsgls" class="nav-link active" data-scroll-target="#randomforestsgls">RandomForestsGLS</a></li>
+  <li><a href="#spatialrf" id="toc-spatialrf" class="nav-link" data-scroll-target="#spatialrf">spatialRF</a></li>
+  <li><a href="#meteo" id="toc-meteo" class="nav-link" data-scroll-target="#meteo">meteo</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">rstats</div>
+    <div class="quarto-category">sml</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://jakubnowosad.com">Jakub Nowosad</a> <a href="https://orcid.org/0000-0002-1057-3721" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the fifth part of a blog post series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<p>This document provides an overview of three R packages, <strong>RandomForestsGLS</strong>, <strong>spatialRF</strong>, and <strong>meteo</strong>, that implement spatial machine learning methods, but are outside of standard machine learning frameworks like <strong>caret</strong>, <strong>tidymodels</strong>, or <strong>mlr3</strong>.</p>
+<p>All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>spain <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>temperature <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>temperature <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(covariates, temperature, <span class="at">bind =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_as_sf</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="randomforestsgls" class="level1">
+<h1>RandomForestsGLS</h1>
+<p>The <strong>RandomForestsGLS</strong> (<a href="https://doi.org/10.21105/joss.03780" class="uri">https://doi.org/10.21105/joss.03780</a>) package implements <a href="https://doi.org/10.1080/01621459.2021.1950003">the Generalised Least Square (GLS) based Random Forest (RF-GLS) algorithm</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This approach is designed for spatial data modeling as it accounts for spatial dependencies in the data by:</p>
+<ol type="1">
+<li>Using a global dependency-adjusted split criterion and node representatives instead of the classification and regression tree (CART) criterion used in standard RF models</li>
+<li>Applying contrast resampling rather than the bootstrap method used in a standard RF model</li>
+<li>Employing residual kriging with covariance modeled using a Gaussian process framework</li>
+</ol>
+<p>The package provides four functions:</p>
+<ol type="1">
+<li><code>RFGLS_estimate_spatial()</code> for estimation in spatial data</li>
+<li><code>RFGLS_predict()</code> for prediction of the mean function</li>
+<li><code>RFGLS_predict_spatial()</code> for prediction of the spatial response</li>
+<li><code>RFGLS_estimate_timeseries()</code> for estimation in time series data (not discussed here)</li>
+</ol>
+<p>The package has rather unintuitive syntax and requires the data to be in a specific format. We need to provide the coordinates of the data (a matrix), the response variable (a vector), and the covariates (a matrix). In the example below, I limited the covariate matrix to the variables that are not spatial proxies.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RandomForestsGLS)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(temperature)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>temp_response <span class="ot">&lt;-</span> temperature<span class="sc">$</span>temp</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>temperature_df <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>covariate_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(temperature_df)[<span class="dv">2</span><span class="sc">:</span>(<span class="fu">ncol</span>(temperature_df) <span class="sc">-</span> <span class="dv">7</span>)]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>covariate_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(temperature_df[, covariate_names])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the example, we also split the data into training and testing sets based on created random indices.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span> <span class="sc">-</span> <span class="dv">01</span> <span class="sc">-</span> <span class="dv">30</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(coords), <span class="fu">floor</span>(<span class="fu">nrow</span>(coords) <span class="sc">*</span> <span class="fl">0.7</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>RFGLS_estimate_spatial()</code> function is used to fit the RF-GLS model. Here, we customize the number of trees to 100, but the function has many other parameters that can be adjusted.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>estimation_result <span class="ot">&lt;-</span> <span class="fu">RFGLS_estimate_spatial</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> coords[train_idx, ],</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> temp_response[train_idx],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">X =</span> covariate_matrix[train_idx, ],</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntree =</span> <span class="dv">100</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(estimation_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 7
+ $ P_matrix        : int [1:136, 1:100] 18 78 88 123 31 80 49 67 65 98 ...
+ $ predicted_matrix: num [1:136, 1:100] 17 17 13 14.9 13 ...
+ $ predicted       : num [1:136] 16 15.4 10.9 13.8 15 ...
+ $ X               : num [1:136, 1:15] 727 20.7 0 203.7 0 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:136] "88" "106" "24" "11" ...
+  .. ..$ : chr [1:15] "popdens" "coast" "dem" "imd" ...
+ $ y               : num [1:136] 16.13 15.21 7.53 13.61 15.59 ...
+ $ coords          : num [1:136, 1:2] 495960 523533 273723 618599 616251 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : NULL
+  .. ..$ : chr [1:2] "X" "Y"
+ $ RFGLS_object    :List of 6
+  ..$ ldaughter : int [1:273, 1:100] 2 4 6 8 0 10 12 0 14 0 ...
+  ..$ rdaughter : int [1:273, 1:100] 3 5 7 9 0 11 13 0 15 0 ...
+  ..$ nodestatus: int [1:273, 1:100] -3 -3 -3 -3 -1 -3 -3 -1 -3 -1 ...
+  ..$ upper     : num [1:273, 1:100] 27.029 0.216 76.038 0.287 0 ...
+  ..$ avnode    : num [1:273, 1:100] 0 0 0 0 15.3 ...
+  ..$ mbest     : int [1:273, 1:100] 14 10 2 8 0 2 8 0 2 0 ...</code></pre>
+</div>
+</div>
+<p>The result is a list with seven elements: a matrix of zero-indexed resamples, a matrix of predictions (ntest x ntree), a vector of predicted values, the covariate matrix, the response variable, the coordinates matrix, and the RF-GLS object.</p>
+<p>Now, we can use the fitted model to predict the mean function (<code>RFGLS_predict()</code>) or the spatial response (<code>RFGLS_predict_spatial()</code>). The difference (as far as I understand) is that the former returns the mean prediction, while the latter uses the spatial coordinates in addition to the covariates to predict the spatial response.</p>
+<p>The first function returns a list with two elements: a matrix of predictions (ntest x ntree) and a vector of predicted values, while the second function returns a list with just one element: a vector of predicted values. Just note that the predictions by the <code>RFGLS_predict()</code> are named <code>"predicted"</code> and the predictions by the <code>RFGLS_predict_spatial()</code> are named <code>"prediction"</code>.</p>
+<div class="cell" data-warnings="false">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>prediction_result <span class="ot">&lt;-</span> <span class="fu">RFGLS_predict</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">RFGLS_out =</span> estimation_result,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Xtest =</span> covariate_matrix[<span class="sc">-</span>train_idx, ]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>prediction_result_spatial <span class="ot">&lt;-</span> <span class="fu">RFGLS_predict_spatial</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RFGLS_out =</span> estimation_result,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords.0 =</span> coords[<span class="sc">-</span>train_idx, ],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Xtest =</span> covariate_matrix[<span class="sc">-</span>train_idx, ]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in BRISC_estimation(coords, x = matrix(1, nrow(coords), 1), y = rfgls_residual, : The ordering of inputs x (covariates) and y (response) in BRISC_estimation has been changed BRISC 1.0.0 onwards.
+Please check the new documentation with ?BRISC_estimation.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(prediction_result<span class="sc">$</span>predicted, prediction_result_spatial<span class="sc">$</span>prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The final results of these two approaches are v. similar, but not identical.</p>
+<p>Now, let’s predict the models’ results on the whole dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>covariate_coords_r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">crds</span>(covariates)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>covariate_matrix_r <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(covariates)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>covariate_matrix_r <span class="ot">&lt;-</span> covariate_matrix_r[, covariate_names]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>pred_s <span class="ot">&lt;-</span> <span class="fu">RFGLS_predict_spatial</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RFGLS_out =</span> estimation_result,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords.0 =</span> covariate_coords_r,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Xtest =</span> covariate_matrix_r</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in BRISC_estimation(coords, x = matrix(1, nrow(coords), 1), y = rfgls_residual, : The ordering of inputs x (covariates) and y (response) in BRISC_estimation has been changed BRISC 1.0.0 onwards.
+Please check the new documentation with ?BRISC_estimation.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in corr_pred$prediction + func_pred$predicted: longer object length is
+not a multiple of shorter object length</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pred_r <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">setValues</span>(covariates[[<span class="dv">1</span>]], pred_s<span class="sc">$</span>prediction)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pred_r) <span class="ot">&lt;-</span> <span class="st">"prediction"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(pred_r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatialrf" class="level1">
+<h1>spatialRF</h1>
+<p>The <strong>spatialRF</strong> (<a href="https://blasbenito.github.io/spatialRF/" class="uri">https://blasbenito.github.io/spatialRF/</a>) package’s aim is to provide a minimal code interface to fit spatial regression models with Random Forest. The internal calculations are based on three general methods to generate spatial predictors from the distance matrix of the data points: Distance matrix columns as explanatory variables (Hengl et al.&nbsp;2018), Moran’s Eigenvector Maps (Dray, Legendre, and Peres-Neto 2006) and PCAs. The <strong>ranger</strong> package is used here internally to fit the Random Forest model.</p>
+<p>This package also requires the data to be in a specific format. We need to provide the data as a data frame with the dependent variable, including spatial coordinates, and the distance matrix: a matrix with the distances among the records in the data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatialRF)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>coordinates <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(temperature)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(coordinates) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>coordinates <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(coordinates)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>temperature_df <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(temperature)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>temperature_df<span class="sc">$</span>x <span class="ot">&lt;-</span> coordinates[, <span class="dv">1</span>]</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>temperature_df<span class="sc">$</span>y <span class="ot">&lt;-</span> coordinates[, <span class="dv">2</span>]</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>distance_matrix <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">dist</span>(temperature_df[<span class="dv">2</span><span class="sc">:</span>(<span class="fu">ncol</span>(temperature_df) <span class="sc">-</span> <span class="dv">9</span>)]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We also need to define the dependent variable and the predictor variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>response_name <span class="ot">&lt;-</span> <span class="st">"temp"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>covariate_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(temperature_df)[<span class="dv">2</span><span class="sc">:</span>(<span class="fu">ncol</span>(temperature_df) <span class="sc">-</span> <span class="dv">9</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we can fit the models using one of the methods provided by the package. The package has 10 methods implemented, nine of which are based on the three components:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<ol type="1">
+<li>The method to generate spatial predictors (<code>"hengl"</code>, <code>"mem"</code>, or <code>"pca"</code>)</li>
+<li>The method to rank spatial predictors (<code>"moran"</code> or <code>"effect"</code>)</li>
+<li>The method to select spatial predictors (<code>"sequential"</code> or <code>"recursive"</code>)</li>
+</ol>
+<p>The main function of this package is <code>rf_spatial()</code>, which fits the Random Forest model with spatial predictors. Here, an example using Moran’s Eigenvector Maps method to generate spatial predictors, Moran’s I to rank them, and sequential selection of the predictors is shown.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rf_spatial_moran <span class="ot">&lt;-</span> <span class="fu">rf_spatial</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dependent.variable.name =</span> response_name,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">predictor.variable.names =</span> covariate_names,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance.matrix =</span> distance_matrix,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">distance.thresholds =</span> <span class="dv">0</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"mem.moran.sequential"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.cores =</span> <span class="dv">1</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>rf_spatial_moran</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+                         ┌──────────────┬────────────┐
+                         │ Variable     │ Importance │
+                         ├──────────────┼────────────┤
+                         │ lst_night    │      1.966 │
+                         ├──────────────┼────────────┤
+                         │ lst_day      │      1.342 │
+                         ├──────────────┼────────────┤
+                         │ dem          │      1.245 │
+                         ├──────────────┼────────────┤
+                         │ CAMSpm25     │      0.936 │
+                         ├──────────────┼────────────┤
+                         │ coast        │      0.745 │
+                         ├──────────────┼────────────┤
+                         │ ndvi         │      0.683 │
+                         ├──────────────┼────────────┤
+                         │ imd          │      0.420 │
+                         ├──────────────┼────────────┤
+                         │ ntl          │      0.401 │
+                         ├──────────────┼────────────┤
+                         │ industry     │      0.291 │
+                         ├──────────────┼────────────┤
+                         │ popdens      │      0.270 │
+                         ├──────────────┼────────────┤
+                         │ urban        │      0.218 │
+                         ├──────────────┼────────────┤
+                         │ natural      │      0.212 │
+                         ├──────────────┼────────────┤
+                         │ agriculture  │      0.196 │
+                         ├──────────────┼────────────┤
+                         │ otherroads   │      0.181 │
+                         ├──────────────┼────────────┤
+                         │ primaryroads │      0.095 │
+                         └──────────────┴────────────┘</code></pre>
+</div>
+</div>
+<p>The <code>rf_spatial()</code> returns a <strong>ranger</strong> model with several new slows, most importantly <code>residuals</code> that contain information about the residuals, and <code>spatial</code> that contains information about the selected spatial predictors and the method used to select them. Printing the model object provides a summary of the model, including its parameters, model performance, information on model residuals, and variable importance.</p>
+<p>The <strong>spatialRF</strong> package also provides a set of additional functions. It includes a function for reducing multicollinearity in the predictors and removing redundant spatial predictors (<code>filter_spatial_predictors()</code>); or finding promising variable interactions (<code>the_feature_engineer()</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>interactions <span class="ot">&lt;-</span> <span class="fu">the_feature_engineer</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">dependent.variable.name =</span> response_name,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">predictor.variable.names =</span> covariate_names,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">xy =</span> coordinates,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance.threshold =</span> <span class="fl">0.50</span>, <span class="co"># uses 50% best predictors</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cor.threshold =</span> <span class="fl">0.60</span>, <span class="co"># max corr between interactions and predictors</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">2025</span> <span class="sc">-</span> <span class="dv">01</span> <span class="sc">-</span> <span class="dv">30</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">repetitions =</span> <span class="dv">100</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ┌──────────────────┬──────────────────┬──────────────────┬──────────────────┐
+ │ Interaction      │ Importance (% of │        R-squared │     Max cor with │
+ │                  │             max) │      improvement │       predictors │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ dem..x..CAMSpm25 │             33.6 │            0.020 │            0.52&nbsp; │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ dem..x..imd      │             22.1 │            0.014 │            0.54&nbsp; │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ imd..pca..ntl    │             13.6 │            0.013 │            0.454 │
+ └──────────────────┴──────────────────┴──────────────────┴──────────────────┘</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <code>rf_evaluate()</code> function allows the evaluation of the model using spatial cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rf_eval <span class="ot">&lt;-</span> <span class="fu">rf_evaluate</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> rf_spatial_moran,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">xy =</span> coordinates,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">repetitions =</span> <span class="dv">30</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">training.fraction =</span> <span class="fl">0.75</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="st">"rmse"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">2025</span> <span class="sc">-</span> <span class="dv">01</span> <span class="sc">-</span> <span class="dv">30</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">TRUE</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+ Metric Median   MAD Minimum Maximum
+   rmse  1.428 0.221   0.815   1.968</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rf_eval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+                         ┌──────────────┬────────────┐
+                         │ Variable     │ Importance │
+                         ├──────────────┼────────────┤
+                         │ lst_night    │      1.966 │
+                         ├──────────────┼────────────┤
+                         │ lst_day      │      1.342 │
+                         ├──────────────┼────────────┤
+                         │ dem          │      1.245 │
+                         ├──────────────┼────────────┤
+                         │ CAMSpm25     │      0.936 │
+                         ├──────────────┼────────────┤
+                         │ coast        │      0.745 │
+                         ├──────────────┼────────────┤
+                         │ ndvi         │      0.683 │
+                         ├──────────────┼────────────┤
+                         │ imd          │      0.420 │
+                         ├──────────────┼────────────┤
+                         │ ntl          │      0.401 │
+                         ├──────────────┼────────────┤
+                         │ industry     │      0.291 │
+                         ├──────────────┼────────────┤
+                         │ popdens      │      0.270 │
+                         ├──────────────┼────────────┤
+                         │ urban        │      0.218 │
+                         ├──────────────┼────────────┤
+                         │ natural      │      0.212 │
+                         ├──────────────┼────────────┤
+                         │ agriculture  │      0.196 │
+                         ├──────────────┼────────────┤
+                         │ otherroads   │      0.181 │
+                         ├──────────────┼────────────┤
+                         │ primaryroads │      0.095 │
+                         └──────────────┴────────────┘
+
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+ Metric Median   MAD Minimum Maximum
+   rmse  1.428 0.221   0.815   1.968</code></pre>
+</div>
+</div>
+<p>The <code>rf_importance()</code> function allows for visualizing the variable importance of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rf_imp <span class="ot">&lt;-</span> <span class="fu">rf_importance</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    rf_spatial_moran,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">xy =</span> coordinates</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rf_imp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+           ┌────────────┬────────────┬─────────┬───────┬──────┬─────┐
+           │ Variable   │ Importance │         │       │      │     │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ lst_night  │      1.966 │  0.13&nbsp;&nbsp; │ 0.07&nbsp; │ 15.5 │ 8.4 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ lst_day    │      1.342 │  0.0695 │ 0.035 │  8.3 │ 4.2 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ dem        │      1.245 │  0.045&nbsp; │ 0.019 │  5.4 │ 2.3 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ CAMSpm25   │      0.936 │ -0.014&nbsp; │ 0.021 │ -1.7 │ 2.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ coast      │      0.745 │ -0.01&nbsp;&nbsp; │ 0.01&nbsp; │ -1.2 │ 1.1 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ ndvi       │      0.683 │  0.0055 │ 0.013 │  0.7 │ 1.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ imd        │      0.420 │ -0.005&nbsp; │ 0.004 │ -0.6 │ 0.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ ntl        │      0.401 │ -0.007&nbsp; │ 0.007 │ -0.8 │ 0.8 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ industry   │      0.291 │  0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │ 0.004 │  0&nbsp;&nbsp; │ 0.4 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ popdens    │      0.270 │ -0.003&nbsp; │ 0.005 │ -0.4 │ 0.6 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ urban      │      0.218 │ -0.001&nbsp; │ 0.006 │ -0.1 │ 0.7 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ natural    │      0.212 │ -0.007&nbsp; │ 0.009 │ -0.8 │ 1.1 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ agricultur │      0.196 │  0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │ 0.008 │  0&nbsp;&nbsp; │ 1&nbsp;&nbsp; │
+           │ e          │            │         │       │      │     │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ otherroads │      0.181 │ -0.004&nbsp; │ 0.004 │ -0.5 │ 0.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ primaryroa │      0.095 │ -0.003&nbsp; │ 0.004 │ -0.4 │ 0.5 │
+           │ ds         │            │         │       │      │     │
+           └────────────┴────────────┴─────────┴───────┴──────┴─────┘
+
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+    Metric Median   MAD Minimum Maximum
+ r.squared  0.838 0.073   0.591   0.924</code></pre>
+</div>
+</div>
+<p>The <code>mem()</code> function generates Moran Eigenvector Maps (MEM) from a distance matrix.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mem1 <span class="ot">&lt;-</span> <span class="fu">mem</span>(<span class="at">distance.matrix =</span> distance_matrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The package also contains a set of custom plot functions. One example is the <code>plot_response_curves()</code> function, which allows for the visualization of the response curves of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_response_curves</span>(rf_spatial_moran)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Additional interesting functions allow for tuning the model parameters (<code>rf_tuning()</code>) or comparing several models (<code>rf_compare()</code>). A complete list of this package’s functions is available at <a href="https://blasbenito.github.io/spatialRF/reference/index.html" class="uri">https://blasbenito.github.io/spatialRF/reference/index.html</a>.</p>
+<p>The final prediction can be made using the <code>predict()</code> function from the <strong>terra</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pred_srf <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(covariates, rf_spatial_moran)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(pred_srf[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="meteo" class="level1">
+<h1>meteo</h1>
+<p>Random Forest Spatial Interpolation (RFSI, Sekulić et al.&nbsp;(2020) <a href="doi:10.3390/rs12101687" class="uri">doi:10.3390/rs12101687</a>) is implemented in the <strong>meteo</strong> package. RFSI enhances traditional Random Forest by explicitly incorporating spatial autocorrelation through additional covariates. These covariates include (1) observations from the nn nearest locations and (2) their respective distances to the target location. Predictions follow the same principle, using the nearest observed values and distances to improve spatial accuracy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(meteo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This package allows to directly work with spatial R objects. First, we need to define our formula.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>response_name <span class="ot">&lt;-</span> <span class="st">"temp"</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>covariate_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(temperature)[<span class="dv">2</span><span class="sc">:</span>(<span class="fu">ncol</span>(temperature) <span class="sc">-</span> <span class="dv">8</span>)]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>fo <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    response_name,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"~"</span>,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(covariate_names, <span class="at">collapse =</span> <span class="st">" + "</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we use the main function in this package, <code>rfsi()</code>, to fit the RFSI model. The function requires the formula, the data, and the number of nearest observations used in the model. Additional arguments can be set, including the number of CPUs to use, the progress bar, and arguments passed to the <strong>ranger</strong> function, such as <code>seed</code>, <code>num.trees</code>, and <code>mtry</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rfsi_model <span class="ot">&lt;-</span> <span class="fu">rfsi</span>(</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.obs =</span> <span class="dv">5</span>, <span class="co"># number of nearest observations</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cpus =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">42</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">250</span>,</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">5</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>rfsi_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ranger result
+
+Call:
+ ranger(formula, data = data.df, ...) 
+
+Type:                             Regression 
+Number of trees:                  250 
+Sample size:                      195 
+Number of independent variables:  25 
+Mtry:                             5 
+Target node size:                 5 
+Variable importance mode:         impurity 
+Splitrule:                        variance 
+OOB prediction error (MSE):       0.9585029 
+R squared (OOB):                  0.8797822 </code></pre>
+</div>
+</div>
+<p>The outcome of this function is a standard <code>ranger</code> object.</p>
+<p>Another function, <code>cv.rfsi()</code>, allows for spatial (leave-location-out) cross-validation of the RFSI model. It requires the formula, the data, the tuning grid, the type of cross-validation, the number of folds, and few other arguments. The <code>tgrid</code> argument is a data frame with the tuning parameters to be tested that may include <code>mtry</code>, <code>num.trees</code>, <code>n.obs</code>, and <code>sample.fraction</code>. Here, we will only tune the <code>mtry</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>rfsi_model_cv <span class="ot">&lt;-</span> <span class="fu">cv.rfsi</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">tgrid =</span> <span class="fu">expand.grid</span>(<span class="at">mtry =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">22</span>),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tune.type =</span> <span class="st">"LLO"</span>, <span class="co"># Leave-Location-Out CV</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">5</span>, <span class="co"># number of folds</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">42</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">acc.metric =</span> <span class="st">"RMSE"</span>, <span class="co"># R2, CCC, MAE</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">output.format =</span> <span class="st">"sf"</span>, <span class="co"># "data.frame", # "SpatVector",</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">cpus =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>) <span class="co"># ranger parameter</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>rfsi_model_cv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 195 features and 4 fields
+Attribute-geometry relationships: constant (4)
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 35545.98 ymin: 3988816 xmax: 978546 ymax: 4858816
+Projected CRS: ED50 / UTM zone 30N
+First 10 features:
+   staid out.folds       obs      pred                 geometry
+1     10         1 15.619167 15.647846   POINT (978546 4655816)
+2     15         1 13.456851 14.526646   POINT (547546 4784816)
+3     16         1 14.185000 14.624209   POINT (539546 4802816)
+4     17         1 14.306761 14.877302   POINT (498546 4802816)
+5     24         1  7.530117 10.470688   POINT (273546 4762816)
+6     31         1 14.017564 14.943647 POINT (46545.98 4761816)
+7     32         1 14.717808 14.402137 POINT (38545.98 4713816)
+8     41         1 12.313699 12.306969   POINT (543546 4624816)
+9     43         1  8.626575  8.745711   POINT (460546 4560816)
+10    45         1 11.190560 11.511932   POINT (489546 4645816)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acc.metric.fun</span>(rfsi_model_cv<span class="sc">$</span>obs, rfsi_model_cv<span class="sc">$</span>pred, <span class="st">"RMSE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8828286</code></pre>
+</div>
+</div>
+<p>The result is an object of the desired output format (here, a <code>sf</code> object) with the observed and predicted values. The <code>acc.metric.fun()</code> function can be then use to calculate the accuracy metric (here, RMSE) between the observed and predicted values.</p>
+<p>Finally, we can use the <code>pred.rfsi()</code> function to predict the model on new data, with a selected output format (here, <code>SpatRaster</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prediction on new data</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>rfsi_prediction <span class="ot">&lt;-</span> <span class="fu">pred.rfsi</span>(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> rfsi_model,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs.col =</span> <span class="st">"temp"</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> covariates,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">output.format =</span> <span class="st">"SpatRaster"</span>, <span class="co"># "sf", # "SpatVector"</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">cpus =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>terra<span class="sc">::</span><span class="fu">plot</span>(rfsi_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/misc-sml-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Quoting the authors “RF-GLS extends RF in the same way generalized least squares (GLS) fundamentally extends ordinary least squares (OLS) to accommodate for dependence in linear models.”<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See <code>?rf_spatial</code> for more details. Also, the 10th method is <code>"hengl"</code> directly following the approach by Hengl et al.&nbsp;(2018).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><code>mem_multithreshold()</code> function allows for generating MEMs for multiple distance thresholds.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,
+  author = {Nowosad, Jakub},
+  title = {Specialized {R} Packages for Spatial Machine Learning: {An}
+    Introduction to {RandomForestsGLS,} {spatialRF,} and Meteo},
+  url = {https://geocompx.org/post/2025/sml-bp5/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. n.d. <span>“Specialized R Packages for Spatial Machine
+Learning: An Introduction to RandomForestsGLS, spatialRF, and
+Meteo.”</span> <a href="https://geocompx.org/post/2025/sml-bp5/">https://geocompx.org/post/2025/sml-bp5/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/geocompx\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>geocompx, 2016 - 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompx/geocompx.org">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

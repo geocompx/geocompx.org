@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.43">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Marvin Ludwig">
+
+<title>Spatial Machine Learning with mlr3 – geocompx</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../static/favicon.ico" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-8061762d59fe42f7e7a7e0dd36bc024b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-PS0D9S7P17"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
+</script>
+<meta name="quarto:status" content="draft">
+
+
+<link rel="stylesheet" href="../../../style.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../static/geocompx-logo-h.png" alt="geocompx" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../post.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../r.html"> 
+<span class="menu-text">R resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../py.html"> 
+<span class="menu-text">Python resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../jl.html"> 
+<span class="menu-text">Julia resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../guestbook.html"> 
+<span class="menu-text">Guestbook</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"> 
+<span class="menu-text">About us</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://donate.stripe.com/4gweWl94Q9E35AQ6oo"> 
+<span class="menu-text">Support this project</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/tags/geocompx"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://discord.gg/PMztXYgNxp"> <i class="bi bi-discord" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../../post.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#aims-of-this-post" id="toc-aims-of-this-post" class="nav-link active" data-scroll-target="#aims-of-this-post">Aims of this post</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#casestudy-data" id="toc-casestudy-data" class="nav-link" data-scroll-target="#casestudy-data">Casestudy data</a></li>
+  <li><a href="#official-documentation" id="toc-official-documentation" class="nav-link" data-scroll-target="#official-documentation">Official Documentation</a></li>
+  </ul></li>
+  <li><a href="#getting-started-with-mlr3" id="toc-getting-started-with-mlr3" class="nav-link" data-scroll-target="#getting-started-with-mlr3">Getting started with mlr3</a>
+  <ul class="collapse">
+  <li><a href="#task" id="toc-task" class="nav-link" data-scroll-target="#task">Task</a></li>
+  <li><a href="#learner" id="toc-learner" class="nav-link" data-scroll-target="#learner">Learner</a></li>
+  <li><a href="#measure" id="toc-measure" class="nav-link" data-scroll-target="#measure">Measure</a></li>
+  </ul></li>
+  <li><a href="#training-validation-and-prediction" id="toc-training-validation-and-prediction" class="nav-link" data-scroll-target="#training-validation-and-prediction">Training, Validation and Prediction</a></li>
+  <li><a href="#spatial-cross-validation-hyperparameter-tuning" id="toc-spatial-cross-validation-hyperparameter-tuning" class="nav-link" data-scroll-target="#spatial-cross-validation-hyperparameter-tuning">Spatial cross-validation hyperparameter tuning</a>
+  <ul class="collapse">
+  <li><a href="#define-the-c-v-strategy-and-hyperparameters" id="toc-define-the-c-v-strategy-and-hyperparameters" class="nav-link" data-scroll-target="#define-the-c-v-strategy-and-hyperparameters">Define the c-v strategy and hyperparameters</a></li>
+  <li><a href="#final-model-with-optimized-hyperparameter" id="toc-final-model-with-optimized-hyperparameter" class="nav-link" data-scroll-target="#final-model-with-optimized-hyperparameter">Final model with optimized hyperparameter</a></li>
+  </ul></li>
+  <li><a href="#feature-selection" id="toc-feature-selection" class="nav-link" data-scroll-target="#feature-selection">Feature Selection</a>
+  <ul class="collapse">
+  <li><a href="#define-the-feature-selection-strategy" id="toc-define-the-feature-selection-strategy" class="nav-link" data-scroll-target="#define-the-feature-selection-strategy">Define the feature selection strategy</a></li>
+  <li><a href="#final-model-with-selected-features" id="toc-final-model-with-selected-features" class="nav-link" data-scroll-target="#final-model-with-selected-features">Final model with selected features</a></li>
+  </ul></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a>
+  <ul class="collapse">
+  <li><a href="#strengths" id="toc-strengths" class="nav-link" data-scroll-target="#strengths">Strengths</a></li>
+  <li><a href="#weaknesses" id="toc-weaknesses" class="nav-link" data-scroll-target="#weaknesses">Weaknesses</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Spatial Machine Learning with mlr3</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">rstats</div>
+    <div class="quarto-category">sml</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Marvin Ludwig <a href="https://orcid.org/0000-0002-3010-018X" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the fourth part of a blog post series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<section id="aims-of-this-post" class="level2">
+<h2 class="anchored" data-anchor-id="aims-of-this-post">Aims of this post</h2>
+<p>This post aims to give a minimal example on how to use <strong>mlr3</strong> for a spatial prediction task. We want to get from measurements of temperature at specific locations in Spain to a spatially continuous map of temperature for all of Spain.</p>
+<p>Such a spatial prediction task is often done by applying machine learning algorithms that are not necessarily developed for spatial tasks specifically and hence do not consider problems we might encounter in the spatial world, e.g., spatial autocorrelation or map extrapolation. In the last decade, a lot of methodological developments were made by various research groups to consider and deal with such specialties of spatial mapping. Many of which found their way in software packages such as <strong>mlr3</strong>.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"mlr3verse"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"mlr3spatiotempcv"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sf"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"terra"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="casestudy-data" class="level3">
+<h3 class="anchored" data-anchor-id="casestudy-data">Casestudy data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>temperature <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>spain <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_cast</span>(<span class="st">"POLYGON"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="fu">st_crs</span>(temperature))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>temperature <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">extract</span>(covariates, temperature, <span class="at">bind =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_as_sf</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># the sf object cannot contain a column named "X" or "Y". Otherwise the task creation will fail because "Assertion on 'data' failed: Must have unique colnames"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>temperature<span class="sc">$</span>X <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>temperature<span class="sc">$</span>Y <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Some words about the terminology that is specific to the example data:</p>
+<ul>
+<li><code>spain</code> is the region outline - for visualization purposes and kNNDM setup</li>
+<li><code>covariates</code> are the spatially explicit data data to predict on (to prevent wording confusions with the predict function or the prediction)</li>
+<li><code>temperature</code> are the measured temperature data (i.e.&nbsp;the response variable, i.e., the ground truth) along with the covariates at the measurement location</li>
+</ul>
+</section>
+<section id="official-documentation" class="level3">
+<h3 class="anchored" data-anchor-id="official-documentation">Official Documentation</h3>
+<p>The best general introduction to <strong>mlr3</strong> is probably the official <strong>mlr3</strong> book which you can access for free here: <a href="https://mlr3book.mlr-org.com/" class="uri">https://mlr3book.mlr-org.com/</a>. The homepage <a href="https://mlr-org.com/" class="uri">https://mlr-org.com/</a> also gives a very detailed overview of all the associated packages an current developments.<br>
+The individual packages also have their own documentation pages, where you will find more specific topics. The “spatial” packages are the following:</p>
+<ul>
+<li><code>mlr3spatial</code> implements support for spatial data types in R – <a href="https://mlr3spatial.mlr-org.com/" class="uri">https://mlr3spatial.mlr-org.com/</a></li>
+<li><code>mlr3spatiotemporalcv</code> implements spatial cross-validation methods in the workflow – <a href="https://mlr3spatiotempcv.mlr-org.com/articles/mlr3spatiotempcv.html" class="uri">https://mlr3spatiotempcv.mlr-org.com/articles/mlr3spatiotempcv.html</a> – and also uses the <code>mlr3spatial</code> package for the spatial data types handling</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3verse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3spatiotempcv)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3viz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-hint">
+<p><strong>mlr3</strong> functions can be very verbose. For this blog post, I turned off messages for a less overwhelming tutorial.</p>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lgr<span class="sc">::</span><span class="fu">get_logger</span>(<span class="st">"mlr3"</span>)<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="st">"warn"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lgr<span class="sc">::</span><span class="fu">get_logger</span>(<span class="st">"bbotk"</span>)<span class="sc">$</span><span class="fu">set_threshold</span>(<span class="st">"warn"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="getting-started-with-mlr3" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started-with-mlr3">Getting started with mlr3</h2>
+<p>First of all, <strong>mlr3</strong> uses <code>R6</code> classes and therefor an object-oriented design paradigm. This might be not intuitive for a lot of R users and more in line with something like scikit-learn of Python. In general, with <code>R6</code> classes you define an object first, and this object contains all the methods and parameters you can access.</p>
+<p>The <code>R6</code> class in R has a significant drawback when it comes to RStudio’s convenience features. For example, it does not provide in-line popup help for available parameters in a model. This means you must manually look up the parameters, e.g., needed for the <code>ranger()</code> function.”</p>
+<p>Let’s define a minimum spatial prediction task example with <strong>mlr3</strong> classes:</p>
+<div class="callout-hint">
+<p><strong>mlr3</strong> uses its own terminology. You have to know a lot of specific terms in order to comfortably use the functions. I try to use the <strong>mlr3</strong> terminology here and give some alternative terms in parenthesis.</p>
+</div>
+<section id="task" class="level3">
+<h3 class="anchored" data-anchor-id="task">Task</h3>
+<p>The <code>task</code> defines general information about the data we have at hand. From our point observations we create the task and define what column the target (response / dependent) variable is, what column the geometry (coordinates) is and whether we want to use the coordinates as features (predictors). In this example, we also split the data in our task into a training and a test partition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>task_spain <span class="ot">&lt;-</span> mlr3spatial<span class="sc">::</span><span class="fu">as_task_regr_st</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    temperature,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">target =</span> <span class="st">"temp"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">coordinate_names =</span> <span class="st">"geometry"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords_as_features =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">crs =</span> <span class="fu">st_crs</span>(temperature)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>train_test_split <span class="ot">&lt;-</span> mlr3<span class="sc">::</span><span class="fu">partition</span>(task_spain, <span class="at">ratio =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>st_drop_geometry()</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In <strong>caret</strong>, if we want to use spatial data, we have to specifically exclude the geometry column of the <code>sf</code> object. We lose the spatial information in the process of model training and prediction. However, this information can be critical, e.g., if we want to use <code>CAST::errorprofiles()</code> or <code>CAST::knncv()</code>. In <strong>mlr3</strong> we can keep the geometry and can also directly define whether we want to use the coordinates as predictors.</p>
+</div>
+</div>
+</section>
+<section id="learner" class="level3">
+<h3 class="anchored" data-anchor-id="learner">Learner</h3>
+<p>The <code>learner</code> is the model type or algorithm we want to use with all its necessary or optional parameters. Here I define a Random Forest regression method from the <strong>ranger</strong> package with 100 decision trees and an <code>mtry</code> of 4.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rfmodel <span class="ot">&lt;-</span> mlr3<span class="sc">::</span><span class="fu">lrn</span>(<span class="st">"regr.ranger"</span>, <span class="at">num.trees =</span> <span class="dv">100</span>, <span class="at">mtry =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="measure" class="level3">
+<h3 class="anchored" data-anchor-id="measure">Measure</h3>
+<p>In order to evaluate the a score (model performance), e.g., from the previously defined test data partition, we need to define a <code>measure</code>. Here I use the Root Mean Squared Error (RMSE).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>measure_rmse <span class="ot">&lt;-</span> mlr3<span class="sc">::</span><span class="fu">msr</span>(<span class="st">"regr.rmse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="training-validation-and-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="training-validation-and-prediction">Training, Validation and Prediction</h2>
+<p>We now have everything defined to actually do something. To train the model we can use the <code>train</code> method from out defined learner. And we have to tell the <code>train</code> method on what to actually fit the model – in this case the data in <code>task_spain</code>, but only the subset we sampled as training data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rfmodel<span class="sc">$</span><span class="fu">train</span>(task_spain, <span class="at">row_ids =</span> train_test_split<span class="sc">$</span>train)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>rfmodel<span class="sc">$</span>model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ranger result
+
+Call:
+ ranger::ranger(dependent.variable.name = task$target_names, data = task$data(),      case.weights = task$weights$weight, mtry = 4L, num.threads = 1L,      num.trees = 100L) 
+
+Type:                             Regression 
+Number of trees:                  100 
+Sample size:                      136 
+Number of independent variables:  22 
+Mtry:                             4 
+Target node size:                 5 
+Variable importance mode:         none 
+Splitrule:                        variance 
+OOB prediction error (MSE):       0.7929512 
+R squared (OOB):                  0.8957356 </code></pre>
+</div>
+</div>
+<p>To test how well out model performs now on unseen data, we use the <code>predict</code> method of our fitted learner. Again, we tell the <code>predict</code> method on what data to predict. We can then calculate the <code>score</code> of this test prediction, i.e., the RMSE we defined earlier as out measure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>test_prediction <span class="ot">&lt;-</span> rfmodel<span class="sc">$</span><span class="fu">predict</span>(task_spain, <span class="at">row_ids =</span> train_test_split<span class="sc">$</span>test)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>test_prediction<span class="sc">$</span><span class="fu">score</span>(measure_rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>regr.rmse 
+  1.20498 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(test_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/mlr3-prediction-tabular-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we can also use the model to predict temperatures for the whole raster by using the <code>predict()</code> function from <strong>terra</strong>. Alternatively, we could use <code>predict_spatial()</code> for the <strong>mlr3spatial</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(covariates, rfmodel)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/mlr3-prediction-spatial-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatial-cross-validation-hyperparameter-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-cross-validation-hyperparameter-tuning">Spatial cross-validation hyperparameter tuning</h2>
+<p>In many cases, the ideal model hyperparameters are not obvious and we have the possibility to tune them based on the data we have.</p>
+<section id="define-the-c-v-strategy-and-hyperparameters" class="level3">
+<h3 class="anchored" data-anchor-id="define-the-c-v-strategy-and-hyperparameters">Define the c-v strategy and hyperparameters</h3>
+<p>Again, we first define the necessary <strong>mlr3</strong> objects for our tuning process. With <code>rsmp</code> we decide on a resampling strategy, i.e., the data partitions we use as cross-validation folds. The package <strong>mlr3spatiotemporalcv</strong> contains the popular spatial resampling strategies such as block CV (<code>spcv_block</code> used in the example below) or kNNDM.</p>
+<p>For the <code>learner</code> instead of predefined hyperparameters, we use the function <code>to_tune()</code> where we can specify different values for the hyperparameters we want to test.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3spatiotempcv)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>resampling_blockcv <span class="ot">&lt;-</span> <span class="fu">rsmp</span>(<span class="st">"spcv_block"</span>, <span class="at">folds =</span> <span class="dv">5</span>, <span class="at">range =</span> <span class="dv">5000</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>rfmodel <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"regr.ranger"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="fu">to_tune</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">12</span>)),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="fu">to_tune</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>)),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can assemble everything together in a <code>tuning instance</code> object with the <code>ti()</code> function. The first four arguments should be self explanatory: <code>terminator</code> means, if we want to stop with our search for the best hyperparameter combination after some criteria is met. <code>store_benchmark_results</code> and <code>store_models</code> regulates whether we want to keep the measures and models for all the hyperparameter combinations we test.</p>
+<p>Finally, we have to decide on a strategy on how to search with the <code>tuner</code> object. Here I use <code>grid_search</code> which is the brute force method that tests every possible combination once. We then execute the cross-validation with the <code>optimize</code> method from the <code>tuner</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv <span class="ot">&lt;-</span> <span class="fu">ti</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">task =</span> task_spain, <span class="co"># the data</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">resampling =</span> resampling_blockcv, <span class="co"># the folds</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">learner =</span> rfmodel, <span class="co"># the rfmodel with mtry and min.node.size to tune</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">measures =</span> measure_rmse, <span class="co"># how to measure performance</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">terminator =</span> <span class="fu">trm</span>(<span class="st">"none"</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">store_benchmark_result =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">store_models =</span> <span class="cn">TRUE</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>tuner_grid_search <span class="ot">&lt;-</span> mlr3tuning<span class="sc">::</span><span class="fu">tnr</span>(<span class="st">"grid_search"</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>tuner_grid_search<span class="sc">$</span><span class="fu">optimize</span>(tuning_blockcv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   min.node.size   mtry learner_param_vals  x_domain regr.rmse
+          &lt;char&gt; &lt;char&gt;             &lt;list&gt;    &lt;list&gt;     &lt;num&gt;
+1:             5     10          &lt;list[5]&gt; &lt;list[2]&gt; 0.8502591</code></pre>
+</div>
+</div>
+<p>The results are stored in the defined <code>tuning instance</code> object. We also have some nice plotting options with the <strong>mlr3viz</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv<span class="sc">$</span>result_learner_param_vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$importance
+[1] "impurity"
+
+$num.threads
+[1] 1
+
+$num.trees
+[1] 100
+
+$min.node.size
+[1] 5
+
+$mtry
+[1] 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv<span class="sc">$</span>result_y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>regr.rmse 
+0.8502591 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tuning_blockcv, <span class="at">type =</span> <span class="st">"parallel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/spatial-cv-results-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because we set <code>store_benchmark_result = TRUE</code> and <code>store_models = TRUE</code>, we also have a <code>archive</code> where all the other results are stored.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tuning Archive
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv<span class="sc">$</span>archive<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    min.node.size   mtry regr.rmse warnings errors runtime_learners
+           &lt;char&gt; &lt;char&gt;     &lt;num&gt;    &lt;int&gt;  &lt;int&gt;            &lt;num&gt;
+ 1:            10      6 0.8886297        0      0            0.155
+ 2:            10     10 0.8669719        0      0            0.219
+ 3:            10      4 0.9350052        0      0            0.137
+ 4:             5     12 0.8704249        0      0            0.428
+ 5:             5      2 1.0772490        0      0            0.175
+ 6:            10      2 1.1398420        0      0            0.299
+ 7:            15      6 0.9455481        0      0            0.306
+ 8:            15     10 0.8814374        0      0            0.495
+ 9:             5      4 0.9423924        0      0            0.289
+10:            15      4 0.9748035        0      0            0.261
+11:             5     10 0.8502591        0      0            0.446
+12:            15     12 0.8791684        0      0            0.384
+13:            10     12 0.8691632        0      0            0.527
+14:            15      2 1.1959131        0      0            0.152
+15:             5      6 0.8782246        0      0            0.248
+                                   uhash  x_domain           timestamp batch_nr
+                                  &lt;char&gt;    &lt;list&gt;              &lt;POSc&gt;    &lt;int&gt;
+ 1: 0cc98fb3-f518-430a-9c07-afc7ea13b38b &lt;list[2]&gt; 2025-04-26 20:45:58        1
+ 2: fb5ca604-1d2b-4464-bfa1-6dd15dea53ec &lt;list[2]&gt; 2025-04-26 20:45:59        2
+ 3: f0364e60-f4d9-42f8-81a3-e0988273cf44 &lt;list[2]&gt; 2025-04-26 20:45:59        3
+ 4: 1f11630d-70b1-4249-a6b3-66737c78c3c4 &lt;list[2]&gt; 2025-04-26 20:46:00        4
+ 5: 7d26d93a-187b-46ed-b611-36a49d88a7a1 &lt;list[2]&gt; 2025-04-26 20:46:00        5
+ 6: 4f14af99-889a-4adb-abb4-87382c18bfb2 &lt;list[2]&gt; 2025-04-26 20:46:01        6
+ 7: 397e754d-dc97-4b54-bc70-055b5c34651f &lt;list[2]&gt; 2025-04-26 20:46:01        7
+ 8: e3593858-5efb-4476-8fe5-153ff34f5f1c &lt;list[2]&gt; 2025-04-26 20:46:02        8
+ 9: 506c1307-2793-4b49-92dd-3aae2c9cb31e &lt;list[2]&gt; 2025-04-26 20:46:03        9
+10: 060bd362-813f-49ca-915f-3a5575699e2b &lt;list[2]&gt; 2025-04-26 20:46:03       10
+11: 130242d9-1bae-4e12-9742-b9199da35e5e &lt;list[2]&gt; 2025-04-26 20:46:04       11
+12: 41fcd3e3-5d0c-4199-a6ca-bf1fecb1c4fc &lt;list[2]&gt; 2025-04-26 20:46:05       12
+13: 937508c0-4ce4-4b77-ab43-a0beae982780 &lt;list[2]&gt; 2025-04-26 20:46:05       13
+14: 9550c226-e061-427c-8719-266b35883656 &lt;list[2]&gt; 2025-04-26 20:46:06       14
+15: b6fc8c09-621e-4886-9849-1aeb321fd95f &lt;list[2]&gt; 2025-04-26 20:46:06       15</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="final-model-with-optimized-hyperparameter" class="level3">
+<h3 class="anchored" data-anchor-id="final-model-with-optimized-hyperparameter">Final model with optimized hyperparameter</h3>
+<p>Once we found the optimal hyperparameter combination we can use them to train a final model on all the data. We define a new <code>learner</code> and assign the parameters from our <code>tuning instance</code> to it. Then we can train and predict again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tuned_rfmodel <span class="ot">&lt;-</span> <span class="fu">lrn</span>(<span class="st">"regr.ranger"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tuned_rfmodel<span class="sc">$</span>param_set<span class="sc">$</span>values <span class="ot">&lt;-</span> tuning_blockcv<span class="sc">$</span>result_learner_param_vals</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>tuned_rfmodel<span class="sc">$</span><span class="fu">train</span>(task_spain)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>tuned_prediction <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(covariates, tuned_rfmodel)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(tuned_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/mlr3-finalmodel-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-selection" class="level2">
+<h2 class="anchored" data-anchor-id="feature-selection">Feature Selection</h2>
+<section id="define-the-feature-selection-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="define-the-feature-selection-strategy">Define the feature selection strategy</h3>
+<p>Similar to the hyperparameter tuning, we can use the cross-validation strategy to test whether we can build a model with reduces predictors / covariates / features / variable. Here I demonstrate a forward variable selection, that starts out with the best performing pair of variables and appends additional variables, if there is still an increase in our cross-validation performance estimation.</p>
+<p>First we have to define the feature selection strategy with <code>fs()</code>. I use a learner here with fixed hyperparameters. Everything is put together in the <code>fselect()</code> function that creates a feature selection <code>instance</code> in which all the information, methods and results are stored.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3fselect)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlr3filters)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>select_mode <span class="ot">&lt;-</span> <span class="fu">fs</span>(<span class="st">"sequential"</span>, <span class="at">min_features =</span> <span class="dv">2</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>fs_rfmodel <span class="ot">&lt;-</span> <span class="fu">lrn</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"regr.ranger"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">50</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">2</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="dv">5</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>feature_selection <span class="ot">&lt;-</span> <span class="fu">fselect</span>(</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">fselector =</span> select_mode,</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">task =</span> task_spain,</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">learner =</span> fs_rfmodel,</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">resampling =</span> resampling_blockcv,</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">measure =</span> measure_rmse</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># selected variables</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>feature_selection<span class="sc">$</span>result_feature_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Y"         "dem"       "lst_day"   "lst_night" "ntl"       "popdens"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CV RMSE with the selected variables</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>feature_selection<span class="sc">$</span>result<span class="sc">$</span>regr.rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7795219</code></pre>
+</div>
+</div>
+</section>
+<section id="final-model-with-selected-features" class="level3">
+<h3 class="anchored" data-anchor-id="final-model-with-selected-features">Final model with selected features</h3>
+<p>Once we found the ideal combination of variables, we can reduce our task to those predictors, train a model and predict.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fs_task <span class="ot">&lt;-</span> task_spain<span class="sc">$</span><span class="fu">select</span>(feature_selection<span class="sc">$</span>result_feature_set)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fs_rfmodel<span class="sc">$</span><span class="fu">train</span>(fs_task)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>fs_prediction <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(covariates, fs_rfmodel)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fs_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<ul>
+<li>Utilizes an <strong>object-oriented approach</strong> with <code>R6</code> classes, offering flexibility but requiring familiarity with this system in R.</li>
+<li>Possible target audience: <strong>machine learning experts</strong> and <strong>Python users</strong> transitioning to R, especially those familiar with object-oriented programming.</li>
+</ul>
+<section id="strengths" class="level3">
+<h3 class="anchored" data-anchor-id="strengths">Strengths</h3>
+<ul>
+<li><strong>Spatially explicit methods are directly implemented</strong>: there is no need to exclude the geometry column of the <code>sf</code> object, allowing for the retention of spatial information.</li>
+<li><strong>Active development</strong>: continuously updated with improvements and bug fixes.</li>
+<li><strong>Very good introduction to the framework through the book</strong>: The book offers a well-structured guide for learning the <strong>mlr3</strong> framework.</li>
+<li><strong>Well-documented functions</strong>: Clear and comprehensive documentation helps users understand the functions easily.</li>
+</ul>
+</section>
+<section id="weaknesses" class="level3">
+<h3 class="anchored" data-anchor-id="weaknesses">Weaknesses</h3>
+<ul>
+<li><strong>Steep learning curve</strong>: The framework’s complexity can be challenging for beginners.</li>
+<li><strong>Overwhelming number of methods and options</strong>: The extensive methods can be difficult to navigate for new users.</li>
+<li><strong>Confusing help pages due to <code>R6</code> logic</strong>: Understanding the <code>R6</code> logic in help files can be tough for those unfamiliar with the system.</li>
+<li><strong>No in-Line help in RStudio</strong>: Lack of in-line help for <code>R6</code> methods in RStudio makes it harder to access function details quickly.</li>
+</ul>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{ludwig,
+  author = {Ludwig, Marvin},
+  title = {Spatial {Machine} {Learning} with Mlr3},
+  url = {https://geocompx.org/post/2025/sml-bp4/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-ludwig" class="csl-entry quarto-appendix-citeas" role="listitem">
+Ludwig, Marvin. n.d. <span>“Spatial Machine Learning with Mlr3.”</span>
+<a href="https://geocompx.org/post/2025/sml-bp4/">https://geocompx.org/post/2025/sml-bp4/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/geocompx\.org\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>geocompx, 2016 - 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/geocompx/geocompx.org">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
