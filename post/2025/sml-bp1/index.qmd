@@ -145,7 +145,6 @@ In this case, to use spatial cross-validation, we use the `blockCV` package to c
 
 ```{r}
 set.seed(21)
-
 # hyperparameters
 tn_grid = expand.grid(
     mtry = 8,
@@ -191,7 +190,7 @@ rf_model <- parsnip::rand_forest(
     min_n = 5, 
     mode = "regression"
 ) |>
-    set_engine("ranger", splitrule = "extratrees", importance = "impurity_corrected")
+    set_engine("ranger", splitrule = "extratrees", importance = "impurity")
 
 workflow <- workflows::workflow() |>
     workflows::add_recipe(recipe) |>
@@ -215,7 +214,7 @@ Here, we use the `spcv_block` resampling method.
 set.seed(21)
 task <- mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
 learner <- mlr3::lrn("regr.ranger",
-    importance = "impurity_corrected",
+    importance = "impurity",
     num.trees = 100,
     mtry = 8,
     min.node.size = 5,
