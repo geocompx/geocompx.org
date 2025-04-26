@@ -1,12 +1,15 @@
 ---
-title: ""
-author: ""
+title:  "Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo"
+author:
+  - name: Jakub Nowosad
+    url: https://jakubnowosad.com
+    orcid:  0000-0002-1057-3721
 date: ""
 slug: sml-bp5
 categories:
   - rstats
   - sml
-tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
+tags: [RandomForestsGLS, spatialRF, meteo, machine-learning, spatial-machine-learning]
 draft: true
 mermaid-format: png
 knitr:
@@ -22,3 +25,412 @@ You can find the list of other blog posts in this series [in part one](post/2025
 
 :::
 
+
+This document provides an overview of three R packages, **RandomForestsGLS**, **spatialRF**, and **meteo**, that implement spatial machine learning methods, but are outside of standard machine learning frameworks like **caret**, **tidymodels**, or **mlr3**.
+
+All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.
+
+```{r misc-sml-1 }
+#| message: false
+#| warning: false
+spain <- sf::read_sf(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"
+)
+covariates <- terra::rast(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"
+)
+temperature <- sf::read_sf(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"
+)
+
+temperature <- terra::extract(covariates, temperature, bind = TRUE) |>
+    sf::st_as_sf()
+```
+
+# RandomForestsGLS
+
+The **RandomForestsGLS** (<https://doi.org/10.21105/joss.03780>) package implements [the Generalised Least Square (GLS) based Random Forest (RF-GLS) algorithm](https://doi.org/10.1080/01621459.2021.1950003).^[Quoting the authors "RF-GLS extends RF in the same way generalized least squares (GLS) fundamentally extends ordinary
+least squares (OLS) to accommodate for dependence in linear models."]
+This approach is designed for spatial data modeling as it accounts for spatial dependencies in the data by:
+
+1. Using a global dependency-adjusted split criterion and node representatives instead of the classification and regression tree (CART) criterion used in standard RF models
+2. Applying contrast resampling rather than the bootstrap method used in a standard RF model
+3. Employing residual kriging with covariance modeled using a Gaussian process framework
+
+The package provides four functions:
+
+1. `RFGLS_estimate_spatial()` for estimation in spatial data
+2. `RFGLS_predict()` for prediction of the mean function
+3. `RFGLS_predict_spatial()` for prediction of the spatial response
+4. `RFGLS_estimate_timeseries()` for estimation in time series data (not discussed here)
+
+The package has rather unintuitive syntax and requires the data to be in a specific format. 
+We need to provide the coordinates of the data (a matrix), the response variable (a vector), and the covariates (a matrix).
+In the example below, I limited the covariate matrix to the variables that are not spatial proxies.
+
+```{r misc-sml-2 }
+library(RandomForestsGLS)
+
+coords <- sf::st_coordinates(temperature)
+temp_response <- temperature$temp
+
+temperature_df <- sf::st_drop_geometry(temperature)
+covariate_names <- colnames(temperature_df)[2:(ncol(temperature_df) - 7)]
+covariate_matrix <- as.matrix(temperature_df[, covariate_names])
+```
+
+For the example, we also split the data into training and testing sets based on created random indices.
+
+```{r misc-sml-3 }
+set.seed(2025 - 01 - 30)
+train_idx <- sample(1:nrow(coords), floor(nrow(coords) * 0.7))
+```
+
+The `RFGLS_estimate_spatial()` function is used to fit the RF-GLS model.
+Here, we customize the number of trees to 100, but the function has many other parameters that can be adjusted.
+
+```{r misc-sml-4 }
+estimation_result <- RFGLS_estimate_spatial(
+    coords = coords[train_idx, ],
+    y = temp_response[train_idx],
+    X = covariate_matrix[train_idx, ],
+    ntree = 100
+)
+str(estimation_result)
+```
+
+The result is a list with seven elements: a matrix of zero-indexed resamples, a matrix of predictions (ntest x ntree), a vector of predicted values, the covariate matrix, the response variable, the coordinates matrix, and the RF-GLS object.
+
+Now, we can use the fitted model to predict the mean function (`RFGLS_predict()`) or the spatial response (`RFGLS_predict_spatial()`).
+The difference (as far as I understand) is that the former returns the mean prediction, while the latter uses the spatial coordinates in addition to the covariates to predict the spatial response.
+
+The first function returns a list with two elements: a matrix of predictions (ntest x ntree) and a vector of predicted values, while the second function returns a list with just one element: a vector of predicted values.
+Just note that the predictions by the `RFGLS_predict()` are named `"predicted"` and the predictions by the `RFGLS_predict_spatial()` are named `"prediction"`.
+
+```{r misc-sml-5 }
+#| warnings: false
+prediction_result <- RFGLS_predict(
+    RFGLS_out = estimation_result,
+    Xtest = covariate_matrix[-train_idx, ]
+)
+prediction_result_spatial <- RFGLS_predict_spatial(
+    RFGLS_out = estimation_result,
+    coords.0 = coords[-train_idx, ],
+    Xtest = covariate_matrix[-train_idx, ]
+)
+plot(prediction_result$predicted, prediction_result_spatial$prediction)
+```
+
+The final results of these two approaches are v. similar, but not identical.
+
+Now, let's predict the models' results on the whole dataset.
+
+```{r misc-sml-6 }
+covariate_coords_r <- terra::crds(covariates)
+covariate_matrix_r <- as.matrix(covariates)
+covariate_matrix_r <- covariate_matrix_r[, covariate_names]
+
+pred_s <- RFGLS_predict_spatial(
+    RFGLS_out = estimation_result,
+    coords.0 = covariate_coords_r,
+    Xtest = covariate_matrix_r
+)
+
+pred_r <- terra::setValues(covariates[[1]], pred_s$prediction)
+names(pred_r) <- "prediction"
+terra::plot(pred_r)
+```
+
+# spatialRF
+
+The **spatialRF** (<https://blasbenito.github.io/spatialRF/>) package's aim is to provide a minimal code interface to fit spatial regression models with Random Forest.
+The internal calculations are based on three general methods to generate spatial predictors from the distance matrix of the data points: Distance matrix columns as explanatory variables (Hengl et al. 2018), Moran’s Eigenvector Maps (Dray, Legendre, and Peres-Neto 2006) and PCAs.
+The **ranger** package is used here internally to fit the Random Forest model.
+
+This package also requires the data to be in a specific format.
+We need to provide the data as a data frame with the dependent variable, including spatial coordinates, and the distance matrix: a matrix with the distances among the records in the data frame.
+
+```{r misc-sml-7 }
+library(spatialRF)
+library(sf)
+
+coordinates <- st_coordinates(temperature)
+colnames(coordinates) <- c("x", "y")
+coordinates <- as.data.frame(coordinates)
+
+temperature_df <- st_drop_geometry(temperature)
+temperature_df$x <- coordinates[, 1]
+temperature_df$y <- coordinates[, 2]
+
+distance_matrix <- as.matrix(dist(temperature_df[2:(ncol(temperature_df) - 9)]))
+```
+
+We also need to define the dependent variable and the predictor variables.
+
+```{r misc-sml-8 }
+response_name <- "temp"
+covariate_names <- colnames(temperature_df)[2:(ncol(temperature_df) - 9)]
+```
+
+Finally, we can fit the models using one of the methods provided by the package.
+The package has 10 methods implemented, nine of which are based on the three components:^[See `?rf_spatial` for more details. Also, the 10th method is `"hengl"` directly following the approach by Hengl et al. (2018).]
+
+1. The method to generate spatial predictors (`"hengl"`, `"mem"`, or `"pca"`)
+2. The method to rank spatial predictors (`"moran"` or `"effect"`)
+3. The method to select spatial predictors (`"sequential"` or `"recursive"`)
+
+The main function of this package is `rf_spatial()`, which fits the Random Forest model with spatial predictors.
+Here, an example using Moran's Eigenvector Maps method to generate spatial predictors, Moran's I to rank them, and sequential selection of the predictors is shown.
+```{r misc-sml-9 }
+rf_spatial_moran <- rf_spatial(
+    data = temperature_df,
+    dependent.variable.name = response_name,
+    predictor.variable.names = covariate_names,
+    distance.matrix = distance_matrix,
+    distance.thresholds = 0,
+    method = "mem.moran.sequential",
+    n.cores = 1
+)
+rf_spatial_moran
+```
+
+The `rf_spatial()` returns a **ranger** model with several new slows, most importantly `residuals` that contain information about the residuals, and `spatial` that contains information about the selected spatial predictors and the method used to select them.
+Printing the model object provides a summary of the model, including its parameters, model performance, information on model residuals, and variable importance. 
+
+The **spatialRF** package also provides a set of additional functions.
+It includes a function for reducing multicollinearity in the predictors and removing redundant spatial predictors (`filter_spatial_predictors()`); or finding promising variable interactions (`the_feature_engineer()`):
+
+```{r misc-sml-10 }
+interactions <- the_feature_engineer(
+    data = temperature_df,
+    dependent.variable.name = response_name,
+    predictor.variable.names = covariate_names,
+    xy = coordinates,
+    importance.threshold = 0.50, # uses 50% best predictors
+    cor.threshold = 0.60, # max corr between interactions and predictors
+    seed = 2025 - 01 - 30,
+    repetitions = 100,
+    verbose = TRUE
+)
+```
+
+The `rf_evaluate()` function allows the evaluation of the model using spatial cross-validation.
+
+```{r misc-sml-11 }
+rf_eval <- rf_evaluate(
+    model = rf_spatial_moran,
+    xy = coordinates,
+    repetitions = 30,
+    training.fraction = 0.75,
+    metrics = "rmse",
+    seed = 2025 - 01 - 30,
+    verbose = TRUE
+)
+rf_eval
+```
+
+The `rf_importance()` function allows for visualizing the variable importance of the model.
+```{r misc-sml-12 }
+rf_imp <- rf_importance(
+    rf_spatial_moran,
+    xy = coordinates
+)
+rf_imp
+```
+
+The `mem()` function generates Moran Eigenvector Maps (MEM) from a distance matrix.^[`mem_multithreshold()` function allows for generating MEMs for multiple distance thresholds.]
+
+```{r misc-sml-13 }
+mem1 <- mem(distance.matrix = distance_matrix)
+```
+
+The package also contains a set of custom plot functions. 
+One example is the `plot_response_curves()` function, which allows for the visualization of the response curves of the model.
+
+```{r misc-sml-14 }
+plot_response_curves(rf_spatial_moran)
+```
+
+Additional interesting functions allow for tuning the model parameters (`rf_tuning()`) or comparing several models (`rf_compare()`).
+A complete list of this package's functions is available at <https://blasbenito.github.io/spatialRF/reference/index.html>.
+
+The final prediction can be made using the `predict()` function from the **terra** package.
+
+```{r misc-sml-15 }
+pred_srf <- terra::predict(covariates, rf_spatial_moran)
+terra::plot(pred_srf[[1]])
+```
+
+# meteo
+
+Random Forest Spatial Interpolation (RFSI, Sekulić et al. (2020) <doi:10.3390/rs12101687>) is implemented in the **meteo** package.
+RFSI enhances traditional Random Forest by explicitly incorporating spatial autocorrelation through additional covariates. 
+These covariates include (1) observations from the nn nearest locations and (2) their respective distances to the target location. 
+Predictions follow the same principle, using the nearest observed values and distances to improve spatial accuracy.
+
+```{r misc-sml-16}
+library(meteo)
+```
+
+This package allows to directly work with spatial R objects.
+First, we need to define our formula.
+
+```{r misc-sml-17}
+response_name <- "temp"
+covariate_names <- colnames(temperature)[2:(ncol(temperature) - 8)]
+fo <- as.formula(paste(
+    response_name,
+    "~",
+    paste(covariate_names, collapse = " + ")
+))
+```
+
+Next, we use the main function in this package, `rfsi()`, to fit the RFSI model.
+The function requires the formula, the data, and the number of nearest observations used in the model.
+Additional arguments can be set, including the number of CPUs to use, the progress bar, and arguments passed to the **ranger** function, such as `seed`, `num.trees`, and `mtry`.
+
+```{r misc-sml-18}
+rfsi_model <- rfsi(
+    formula = fo,
+    data = temperature,
+    n.obs = 5, # number of nearest observations
+    cpus = parallel::detectCores() - 1,
+    progress = FALSE,
+    importance = "impurity",
+    seed = 42,
+    num.trees = 250,
+    mtry = 5
+)
+rfsi_model
+```
+
+The outcome of this function is a standard `ranger` object.
+
+Another function, `cv.rfsi()`, allows for spatial (leave-location-out) cross-validation of the RFSI model.
+It requires the formula, the data, the tuning grid, the type of cross-validation, the number of folds, and few other arguments.
+The `tgrid` argument is a data frame with the tuning parameters to be tested that may include `mtry`, `num.trees`, `n.obs`, and `sample.fraction`.
+Here, we will only tune the `mtry` parameter.
+
+```{r misc-sml-19}
+#| message: false
+#| warning: false
+rfsi_model_cv <- cv.rfsi(
+    formula = fo,
+    data = temperature,
+    tgrid = expand.grid(mtry = 3:22),
+    tune.type = "LLO", # Leave-Location-Out CV
+    k = 5, # number of folds
+    seed = 42,
+    acc.metric = "RMSE", # R2, CCC, MAE
+    output.format = "sf", # "data.frame", # "SpatVector",
+    cpus = parallel::detectCores() - 1,
+    progress = FALSE,
+    importance = "impurity"
+) # ranger parameter
+rfsi_model_cv
+acc.metric.fun(rfsi_model_cv$obs, rfsi_model_cv$pred, "RMSE")
+```
+
+The result is an object of the desired output format (here, a `sf` object) with the observed and predicted values.
+The `acc.metric.fun()` function can be then use to calculate the accuracy metric (here, RMSE) between the observed and predicted values.
+
+Finally, we can use the `pred.rfsi()` function to predict the model on new data, with a selected output format (here, `SpatRaster`).
+
+```{r misc-sml-20}
+# Prediction on new data
+rfsi_prediction <- pred.rfsi(
+    model = rfsi_model,
+    data = temperature,
+    obs.col = "temp",
+    newdata = covariates,
+    output.format = "SpatRaster", # "sf", # "SpatVector"
+    cpus = parallel::detectCores() - 1,
+    progress = FALSE
+)
+terra::plot(rfsi_prediction)
+```
+
+
+::: {.content-hidden}
+
+## ENMeval
+
+<https://jamiemkass.github.io/ENMeval/articles/ENMeval-2.0-vignette.html>
+
+Out-of-scope: a focus on the occurrence records (ecological niche models/species distribution models)
+
+## sits
+
+<https://github.com/e-sensing/sits>
+
+Out-of-scope: a focus on spatiotemporal data cubes
+
+## SpatialML {.}
+
+SpatialML implements a spatial extension of the random forest algorithm (Georganos et al. (2019) <doi:10.1080/10106049.2019.1595177>) based on the **randomForest**, **ranger**, and **caret** packages.
+This extension is called Geographical Random Forest (GRF).
+It extends traditional Random Forest by incorporating spatial heterogeneity through local sub-models, where each data point is used to train a localized RF using nearby observations, controlled by an adaptive kernel. 
+
+This package is not described in details here (nor the code is run) as it is aimed at predictions of rather small datasets (e.g., administrative polygons) -- the prediction of the example data takes a long time (~45 minutes).
+
+```{r misc-sml-21}
+#| eval: false
+library(SpatialML)
+```
+
+```{r misc-sml-22}
+#| eval: false
+coordinates <- sf::st_coordinates(temperature)
+temperature_df <- sf::st_drop_geometry(temperature)
+
+# define formula
+response_name <- "temp"
+covariate_names <- colnames(temperature_df)[2:(ncol(temperature_df) - 7)]
+fo <- as.formula(paste(
+    response_name,
+    "~",
+    paste(covariate_names, collapse = " + ")
+))
+
+sml <- grf(
+    fo,
+    dframe = temperature_df,
+    bw = 8,
+    kernel = "adaptive",
+    coords = coordinates
+)
+```
+
+```{r misc-sml-23}
+#| eval: false
+# 1
+covariates_df <- terra::as.data.frame(covariates)
+covariates_df <- na.omit(covariates_df)
+sml_prediction <- predict.grf(
+    sml,
+    covariates_df,
+    x.var.name = "X",
+    y.var.name = "Y"
+)
+
+# 2
+system.time({
+    sml_prediction <- terra::predict(
+        covariates,
+        sml,
+        fun = predict.grf,
+        x.var.name = "X",
+        y.var.name = "Y",
+        na.rm = TRUE
+    )
+})
+```
+
+:::
+
+::: {.callout-note appearance="simple"}
+
+This blog post was originally written as a supplement to the poster "An Inventory of Spatial Machine Learning Packages in R" presented at the FOSSGIS 2025 conference in Muenster, Germany.
+The poster is available at <https://doi.org/10.5281/zenodo.15088973>.
+
+:::

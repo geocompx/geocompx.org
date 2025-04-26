@@ -1,6 +1,11 @@
 ---
-title: ""
-author: ""
+title: "Spatial Machine Learning with the tidymodels framework"
+author:
+  - name: Hanna Meyer
+    orcid:  0000-0003-0556-0210
+  - name: Jakub Nowosad
+    url: https://jakubnowosad.com
+    orcid:  0000-0002-1057-3721
 date: ""
 slug: sml-bp3
 categories:
@@ -22,3 +27,235 @@ You can find the list of other blog posts in this series [in part one](post/2025
 
 :::
 
+## Introduction
+
+In this blog post, we will show how to use the **tidymodels** framework for spatial machine learning.
+The **tidymodels** framework is a collection of R packages for modeling and machine learning using *tidyverse* principles.
+
+## Prepare data
+
+```{r}
+#| results: hide
+#| message: false
+library(terra)
+library(sf)
+library(tidymodels)
+library(ranger)
+library(dplyr)
+library(spatialsample)
+library(waywiser)
+library(vip)
+```
+
+Read data:
+
+```{r}
+#| results: hide
+#| message: false
+trainingdata <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
+predictors <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
+```
+
+Prepare data:
+
+```{r}
+#| results: hide
+#| message: false
+trainDat <- sf::st_as_sf(terra::extract(predictors, trainingdata, bind = TRUE))
+predictor_names <- names(predictors) # Extract predictor names from the raster
+response_name <- "temp"
+```
+
+::: callout-note
+Compared to **caret**, no dropping of the geometries is required
+:::
+
+## A simple model training and prediction
+
+First, we train a random forest model.
+This is done by defining a recipe and a model, and then combining them into a workflow.
+Such a workflow can then be used to fit the model to the data.
+
+```{r}
+# Define the recipe
+formula <- as.formula(paste(
+    response_name,
+    "~",
+    paste(predictor_names, collapse = " + ")
+))
+recipe <- recipes::recipe(formula, data = trainDat)
+
+rf_model <- parsnip::rand_forest(trees = 100, mode = "regression") |>
+    set_engine("ranger", importance = "impurity")
+
+# Create the workflow
+workflow <- workflows::workflow() |>
+    workflows::add_recipe(recipe) |>
+    workflows::add_model(rf_model)
+
+# Fit the model
+rf_fit <- parsnip::fit(workflow, data = trainDat)
+```
+
+Now let's use the model for spatial prediction with `terra::predict()`.
+
+```{r}
+prediction_raster <- terra::predict(predictors, rf_fit)
+plot(prediction_raster)
+```
+
+## Spatial cross-validation
+
+Cross-validation requires to specify how the data is split into folds.
+Here, we define a non-spatial cross-validation with `rsample::vfold_cv()` and a spatial cross-validation with `spatialsample::spatial_block_cv()`.
+
+```{r}
+random_folds <- rsample::vfold_cv(trainDat, v = 4)
+block_folds <- spatialsample::spatial_block_cv(trainDat, v = 4, n = 2)
+spatialsample::autoplot(block_folds)
+
+# control cross-validation
+keep_pred <- tune::control_resamples(save_pred = TRUE, save_workflow = TRUE)
+```
+
+Next, we fit the model to the data using cross-validation with `tune::fit_resamples()`.
+
+```{r}
+### Cross-validation
+rf_random <- tune::fit_resamples(
+    workflow,
+    resamples = random_folds,
+    control = keep_pred
+)
+rf_spatial <- tune::fit_resamples(
+    workflow,
+    resamples = block_folds,
+    control = keep_pred
+)
+
+### get CV metrics
+# rf_spatial$.metrics # metrics from each fold
+tune::collect_metrics(rf_random)
+tune::collect_metrics(rf_spatial)
+```
+
+```{r}
+#| echo: false
+### analyze CV predictions
+rf_spatial_pred <- data.frame(
+    tune::collect_predictions(rf_spatial),
+    type = "spatial"
+)
+rf_random_pred <- data.frame(
+    tune::collect_predictions(rf_random),
+    type = "random"
+)
+pred_cv <- rbind(rf_spatial_pred, rf_random_pred)
+pred_cv |>
+    ggplot(aes(x = temp, y = .pred)) +
+    facet_wrap("type") +
+    geom_point(alpha = .15) +
+    geom_abline(color = "red") +
+    coord_obs_pred() +
+    ylab("Predicted")
+```
+
+::: callout-note
+Similar to **caret**, we first define folds and a definition of train control. 
+The final model, however, is still stored in a separate object.
+:::
+
+## Model tuning: spatial hyperparameter tuning and variable selection
+
+### Hyperparameter tuning
+
+Next, we tune the model hyperparameters.
+For this, we change the workflow to include the tuning specifications by using the `tune()` function inside the model definition and define a grid of hyperparameters to search over.
+The tuning is done with `tune::tune_grid()`.
+
+```{r}
+# mark two parameters for tuning:
+rf_model <- parsnip::rand_forest(
+    trees = 100,
+    mode = "regression",
+    mtry = tune(),
+    min_n = tune()
+) |>
+    set_engine("ranger", importance = "impurity")
+
+workflow <- update_model(workflow, rf_model)
+
+# define tune grid:
+grid_rf <-
+    grid_space_filling(
+        mtry(range = c(1, 20)),
+        min_n(range = c(2, 10)),
+        size = 30
+    )
+
+# tune:
+rf_tuning <- tune_grid(
+    workflow,
+    resamples = block_folds,
+    grid = grid_rf,
+    control = keep_pred
+)
+```
+
+The results can be extracted with `collect_metrics()` and then visualized.
+
+```{r}
+rf_tuning |>
+    collect_metrics()
+
+rf_tuning |>
+    collect_metrics() |>
+    mutate(min_n = factor(min_n)) |>
+    ggplot(aes(mtry, mean, color = min_n)) +
+    geom_line(linewidth = 1.5, alpha = 0.6) +
+    geom_point(size = 2) +
+    facet_wrap(~.metric, scales = "free", nrow = 2) +
+    scale_x_log10(labels = scales::label_number()) +
+    scale_color_viridis_d(option = "plasma", begin = .9, end = 0)
+```
+
+Finally, we can extract the best model and use it to get the variable importance and make predictions.
+
+```{r}
+finalmodel <- fit_best(rf_tuning)
+finalmodel
+
+imp <- extract_fit_parsnip(finalmodel) |>
+    vip::vip()
+imp
+
+final_pred <- terra::predict(predictors, finalmodel)
+plot(final_pred)
+```
+
+### Feature selection
+
+Still missing: <https://stevenpawley.github.io/recipeselectors/>
+
+## Area of Applicability, Uncertainties etc
+
+<https://applicable.tidymodels.org/>, <https://docs.ropensci.org/waywiser/>
+
+```{r}
+model_aoa <- waywiser::ww_area_of_applicability(
+    st_drop_geometry(trainDat[, predictor_names]),
+    importance = vip::vi_model(finalmodel)
+)
+
+AOA <- terra::predict(predictors, model_aoa)
+plot(AOA$di)
+plot(AOA$aoa)
+```
+
+
+::: {.callout-note appearance="simple"}
+
+This blog post was originally written as a supplement to the poster "An Inventory of Spatial Machine Learning Packages in R" presented at the FOSSGIS 2025 conference in Muenster, Germany.
+The poster is available at <https://doi.org/10.5281/zenodo.15088973>.
+
+:::
