@@ -1,0 +1,24 @@
+---
+title: ""
+author: ""
+date: ""
+slug: sml-bp5
+categories:
+  - rstats
+  - sml
+tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
+draft: true
+mermaid-format: png
+knitr:
+  opts_chunk:
+    message: false
+---
+
+::: {.callout-note appearance="simple"}
+
+This is the fifth part of a blog post series on spatial machine learning with R.
+
+You can find the list of other blog posts in this series [in part one](post/2025/sml-bp1/).
+
+:::
+
