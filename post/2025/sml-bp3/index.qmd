@@ -1,5 +1,5 @@
 ---
-title: "Spatial Machine Learning with the tidymodels framework"
+title: "Spatial machine learning with the tidymodels framework"
 author:
   - name: Hanna Meyer
     orcid:  0000-0003-0556-0210
@@ -34,6 +34,8 @@ The **tidymodels** framework is a collection of R packages for modeling and mach
 
 ## Prepare data
 
+Load the required packages:
+
 ```{r}
 #| results: hide
 #| message: false
@@ -56,7 +58,7 @@ trainingdata <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw
 predictors <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
 ```
 
-Prepare data:
+Prepare data by extracting the training data from the raster and converting it to a `sf` object.
 
 ```{r}
 #| results: hide
@@ -67,7 +69,7 @@ response_name <- "temp"
 ```
 
 ::: callout-note
-Compared to **caret**, no dropping of the geometries is required
+Compared to **caret**, no dropping of the geometries is required.
 :::
 
 ## A simple model training and prediction
@@ -97,10 +99,10 @@ workflow <- workflows::workflow() |>
 rf_fit <- parsnip::fit(workflow, data = trainDat)
 ```
 
-Now let's use the model for spatial prediction with `terra::predict()`.
+Now, let's use the model for spatial prediction with `terra::predict()`.
 
 ```{r}
-prediction_raster <- terra::predict(predictors, rf_fit)
+prediction_raster <- terra::predict(predictors, rf_fit, na.rm = TRUE)
 plot(prediction_raster)
 ```
 
@@ -132,12 +134,18 @@ rf_spatial <- tune::fit_resamples(
     resamples = block_folds,
     control = keep_pred
 )
+```
 
+To compare the fitted models, we can use the `tune::collect_metrics()` function to get the metrics.
+
+```{r}
 ### get CV metrics
-# rf_spatial$.metrics # metrics from each fold
 tune::collect_metrics(rf_random)
 tune::collect_metrics(rf_spatial)
+# rf_spatial$.metrics # metrics from each fold
 ```
+
+Additionally, we can visualize the models by extracting their predictions with `tune::collect_predictions()` and plotting them.
 
 ```{r}
 #| echo: false
@@ -153,10 +161,10 @@ rf_random_pred <- data.frame(
 pred_cv <- rbind(rf_spatial_pred, rf_random_pred)
 pred_cv |>
     ggplot(aes(x = temp, y = .pred)) +
-    facet_wrap("type") +
     geom_point(alpha = .15) +
     geom_abline(color = "red") +
     coord_obs_pred() +
+    facet_wrap("type") +
     ylab("Predicted")
 ```
 
@@ -229,29 +237,36 @@ imp <- extract_fit_parsnip(finalmodel) |>
     vip::vip()
 imp
 
-final_pred <- terra::predict(predictors, finalmodel)
+final_pred <- terra::predict(predictors, finalmodel, na.rm = TRUE)
 plot(final_pred)
 ```
 
-### Feature selection
+## Area of applicability
 
-Still missing: <https://stevenpawley.github.io/recipeselectors/>
-
-## Area of Applicability, Uncertainties etc
-
-<https://applicable.tidymodels.org/>, <https://docs.ropensci.org/waywiser/>
+The **waywiser** package provides a set of tools for assessing spatial models, including an implementation of multi-scale assessment and area of applicability.
+The area of applicability is a measure of how well the model (given the training data) can be applied to the prediction data.
+It can be calculated with the `ww_area_of_applicability()` function, and then predicted on the raster with `terra::predict()`.
 
 ```{r}
 model_aoa <- waywiser::ww_area_of_applicability(
     st_drop_geometry(trainDat[, predictor_names]),
     importance = vip::vi_model(finalmodel)
 )
-
 AOA <- terra::predict(predictors, model_aoa)
-plot(AOA$di)
 plot(AOA$aoa)
 ```
 
+More information on the **waywiser** package can be found in its [documentation](https://docs.ropensci.org/waywiser/).
+
+## Summary
+
+This blog post showed how to use the **tidymodels** framework for spatial machine learning.
+We demonstrated how to train a random forest model, perform spatial cross-validation, tune hyperparameters, and assess the area of applicability.
+We also showed how to visualize the results and extract variable importance.^[We have not, though, covered all the features of the **tidymodels** framework, such as feature selection (<https://stevenpawley.github.io/recipeselectors/>) or model ensembling.]
+
+The **tidymodels** framework with its packages **spatialsample** and **waywiser** provides a powerful and flexible way to perform spatial machine learning in R.
+At the same time, it is a bit more complex than **caret**: it requires getting familiar with several packages^[Including remembering their names and roles] and relationships between them. 
+Thus, the decision of which framework to use depends on the specific needs and preferences of the user.
 
 ::: {.callout-note appearance="simple"}
 
