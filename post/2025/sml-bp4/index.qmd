@@ -1,5 +1,5 @@
 ---
-title: "Spatial Machine Learning with mlr3"
+title: "Spatial machine learning with mlr3"
 author: 
   - name: Marvin Ludwig
     orcid:  0000-0002-3010-018X
@@ -357,7 +357,7 @@ plot(fs_prediction)
 - **Steep learning curve**: The framework’s complexity can be challenging for beginners.
 - **Overwhelming number of methods and options**: The extensive methods can be difficult to navigate for new users.
 - **Confusing help pages due to `R6` logic**: Understanding the `R6` logic in help files can be tough for those unfamiliar with the system.
-- **No in-Line help in RStudio**: Lack of in-line help for `R6` methods in RStudio makes it harder to access function details quickly.
+- **No in-line help in RStudio**: Lack of in-line help for `R6` methods in RStudio makes it harder to access function details quickly.
 
 ::: {.callout-note appearance="simple"}
 
