@@ -411,5 +411,11 @@ plot(AOA_mlr3$AOA)
 
 In this blog post, we compared three of the most popular machine learning frameworks in R: **caret**, **tidymodels**, and **mlr3**.
 We demonstrated how to use these frameworks for a spatial machine learning task, including model specification, training, evaluation, prediction, and obtaining the area of applicability.
-At the same time, many additional steps can be added to the workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more.
-In the next blog posts, we will show the three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.
+
+There is a lot of overlap in functionality between the three frameworks.
+Simultaneously, the frameworks differ in their design philosophy and implementation.
+Some, as **caret**, are more focused on providing a consistent and concise interface, but it offers limited flexibility.
+Others, like **tidymodels** and **mlr3**, are more modular and flexible, allowing for more complex workflows and customizations, which also makes them more complex to learn and use.
+
+Many additional steps can be added to the presented workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more.
+In the next blog posts, we will show these three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.
