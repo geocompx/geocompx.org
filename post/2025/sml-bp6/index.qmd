@@ -93,6 +93,7 @@ The sampling function is used to partition the data into training and testing se
 
 ```{r misc-scv-5 }
 # Spatial cross-validation
+set.seed(6)
 sp_res <- sperrorest(
     formula = fo,
     data = temperature_df,
@@ -116,6 +117,7 @@ We can contrast the obtained results with the non-spatial cross-validation by ch
 
 ```{r misc-scv-7 }
 # Non-spatial cross-validation
+set.seed(11)
 nsp_res <- sperrorest(
     formula = fo,
     data = temperature_df,
@@ -171,6 +173,7 @@ The block cross-validation is performed using the `cv_spatial()` function.
 It assigns blocks to the training and testing folds randomly, systematically or in a checkerboard pattern (the `selection` argument).
 
 ```{r misc-scv-10 }
+set.seed(61)
 sb1 <- cv_spatial(
     x = temperature,
     k = 10, # number of folds
@@ -198,6 +201,7 @@ cv_plot(sb1, temperature)
 Let's compare the results of the block cross-validation with systematic and checkerboard patterns.
 
 ```{r misc-scv-13 }
+set.seed(16)
 sb2 <- cv_spatial(
     x = temperature,
     k = 10,
@@ -209,6 +213,7 @@ cv_plot(sb2, temperature)
 ```
 
 ```{r misc-scv-14 }
+set.seed(12)
 sb3 <- cv_spatial(
     x = temperature,
     k = 10,
@@ -223,7 +228,7 @@ The clustering strategies (`cv_cluster()`) are used to group the data into clust
 The spatial similarity is based only on the clustering of the spatial coordinates. 
 
 ```{r misc-scv-15 }
-set.seed(6)
+set.seed(7)
 scv <- cv_cluster(x = temperature, k = 10)
 cv_plot(scv, temperature)
 ```
@@ -231,7 +236,7 @@ cv_plot(scv, temperature)
 The environmental clustering, on the other hand, is based on the clustering of the values of the covariates extracted from the raster data.
 
 ```{r misc-scv-16 }
-set.seed(6)
+set.seed(2)
 ecv <- cv_cluster(x = temperature, r = covariates, k = 5, scale = TRUE)
 cv_plot(ecv, temperature)
 ```
@@ -240,6 +245,7 @@ The next cross-validation strategy is buffering LOO (also known as Spatial LOO).
 It is performed using the `cv_buffer()` function, which selects a buffer around each point  (test point) and uses the points outside the buffer as the testing set.^[This approach is a form of leave-one-out cross-validation.]
 
 ```{r misc-scv-17 }
+set.seed(21)
 bloo <- cv_buffer(x = temperature, size = 300000, progress = FALSE)
 cv_plot(bloo, temperature, num_plots = c(1, 50, 100))
 ```
@@ -251,6 +257,7 @@ It is performed using the `cv_nndm()` function, which tries to match the nearest
 Thus, in this base, we need to provide more arguments, including a raster with the covariates, the number of samples, the sampling strategy, and the minimum training size.
 
 ```{r misc-scv-18 }
+set.seed(12)
 nncv <- cv_nndm(
     x = temperature,
     r = covariates,
