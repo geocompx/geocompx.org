@@ -17,6 +17,9 @@ knitr:
     message: false
 ---
 
+
+
+
 ::: {.callout-note appearance="simple"}
 
 This is the sixth part of a blog post series on spatial machine learning with R.
@@ -29,6 +32,9 @@ This document provides an overview of two R packages, **sperrorest** and **block
 
 All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.
 
+
+
+
 ```{r misc-scv-1 }
 #| message: false
 #| warning: false
@@ -39,6 +45,9 @@ temperature <- sf::read_sf("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/
 temperature <- terra::extract(covariates, temperature, bind = TRUE) |>
     sf::st_as_sf()
 ```
+
+
+
 
 # sperrorest
 
@@ -52,6 +61,9 @@ To use this function, we need to provide the formula, the data, the coordinates,
 Let's do it step by step.
 First, we need to prepare the data by extracting the coordinates and creating a data frame with the dependent variable, covariates, and coordinates.
 
+
+
+
 ```{r misc-scv-2 }
 library(sperrorest)
 library(ranger)
@@ -62,7 +74,13 @@ temperature_df$x <- coordinates[, 1]
 temperature_df$y <- coordinates[, 2]
 ```
 
+
+
+
 Second, we need to define the formula for the model and the prediction function.
+
+
+
 
 ```{r misc-scv-3 }
 response_name <- "temp"
@@ -74,10 +92,16 @@ fo <- as.formula(paste(
 ))
 ```
 
+
+
+
 Third, we need to define the custom prediction function.
 The **sperrorest** package works with many model functions, but it requires a custom prediction function to extract the predictions from the model object.
 In this example, we use the `ranger` model, so we need to define a custom prediction function that extracts the predictions from the `ranger` model object.
 The `predict()` function from the `ranger` package returns a list with several elements, so we need to extract the predictions from this list.^[More information on the custom prediction functions is at <https://cran.r-project.org/web/packages/sperrorest/vignettes/custom-pred-and-model-functions.html>.]
+
+
+
 
 ```{r misc-scv-4 }
 mypred <- function(object, newdata) {
@@ -85,11 +109,17 @@ mypred <- function(object, newdata) {
 }
 ```
 
+
+
+
 Fourth, we can perform the spatial cross-validation using the `sperrorest()` function.
 We just need to provide previously prepared data, the formula, the model function, and the prediction function.
 Moreover, we can also define some additional parameters of the model, such as the number of trees in the `ranger` model.
 Finally, the important part is to define the sampling function (`smp_fun`) and its arguments (`smp_args`).
 The sampling function is used to partition the data into training and testing sets: here, we use the `partition_kmeans()` function to partition the data spatially into folds using k-means clustering of the coordinates.^[There are several other partition functions available in the package, including `partition_disc()`, `partition_tiles()`, and  `partition_cv()`.]
+
+
+
 
 ```{r misc-scv-5 }
 # Spatial cross-validation
@@ -106,13 +136,25 @@ sp_res <- sperrorest(
 )
 ```
 
+
+
+
 The result is a list with several components, including the error at the repetition and fold levels, the resampling object, the variable importance (only when `importance = TRUE`), the benchmark, and the package version.
+
+
+
 
 ```{r misc-scv-6 }
 summary(sp_res$error_rep)
 ```
 
+
+
+
 We can contrast the obtained results with the non-spatial cross-validation by changing the sampling function to `partition_cv()`.
+
+
+
 
 ```{r misc-scv-7 }
 # Non-spatial cross-validation
@@ -129,7 +171,13 @@ nsp_res <- sperrorest(
 )
 ```
 
+
+
+
 To compare both results, we can plot the RMSE values for the training and testing sets of both spatial and non-spatial cross-validation.
+
+
+
 
 ```{r misc-scv-8 }
 library(ggplot2)
@@ -151,6 +199,9 @@ ggplot(rmse_df, aes(x = CV_Type, y = RMSE, fill = Set)) +
     labs(title = "RMSE Comparison", x = "CV Method", y = "RMSE")
 ```
 
+
+
+
 The results show that the estimation using the spatial-cross validation is less optimistic than the non-spatial cross-validation for the test set.
 
 More examples of the package use can be found at <https://giscience-fsu.github.io/sperrorest/articles/spatial-modeling-use-case.html>/
@@ -160,15 +211,24 @@ More examples of the package use can be found at <https://giscience-fsu.github.i
 The **blockCV** (<https://doi.org/10.1111/2041-210X.13107>) package provides a set of functions for block cross-validation, spatial and environmental clustering, and spatial autocorrelation estimation.
 The package itself does not fit the models.
 
+
+
+
 ```{r misc-scv-9 }
 library(blockCV)
 ```
+
+
+
 
 Cross-validation strategies separate the data into training and testing sets to evaluate the model's performance.
 The **blockCV** package provides several cross-validation strategies, including block cross-validation, spatial clustering, environmental clustering, buffering LOO, and Nearest Neighbour Distance Matching (NNDM) LOO.
 
 The block cross-validation is performed using the `cv_spatial()` function.
 It assigns blocks to the training and testing folds randomly, systematically or in a checkerboard pattern (the `selection` argument).
+
+
+
 
 ```{r misc-scv-10 }
 sb1 <- cv_spatial(
@@ -182,20 +242,38 @@ sb1 <- cv_spatial(
 )
 ```
 
+
+
+
 The result is a list with several components, including the folds list, the folds IDs, the biomod table, the number of folds, the input size, the column name, the blocks, and the records.
 For example, we can check the structure of the folds list with the `str()` function.
+
+
+
 
 ```{r misc-scv-11 }
 str(sb1$folds_list)
 ```
 
+
+
+
 The `cv_plot()` function additionally allows for the visualization of cross-validation results.
+
+
+
 
 ```{r misc-scv-12 }
 cv_plot(sb1, temperature)
 ```
 
+
+
+
 Let's compare the results of the block cross-validation with systematic and checkerboard patterns.
+
+
+
 
 ```{r misc-scv-13 }
 sb2 <- cv_spatial(
@@ -219,8 +297,14 @@ sb3 <- cv_spatial(
 cv_plot(sb3, temperature)
 ```
 
+
+
+
 The clustering strategies (`cv_cluster()`) are used to group the data into clusters based on spatial or environmental similarity.
 The spatial similarity is based only on the clustering of the spatial coordinates. 
+
+
+
 
 ```{r misc-scv-15 }
 set.seed(6)
@@ -228,7 +312,13 @@ scv <- cv_cluster(x = temperature, k = 10)
 cv_plot(scv, temperature)
 ```
 
+
+
+
 The environmental clustering, on the other hand, is based on the clustering of the values of the covariates extracted from the raster data.
+
+
+
 
 ```{r misc-scv-16 }
 set.seed(6)
@@ -236,19 +326,31 @@ ecv <- cv_cluster(x = temperature, r = covariates, k = 5, scale = TRUE)
 cv_plot(ecv, temperature)
 ```
 
+
+
+
 The next cross-validation strategy is buffering LOO (also known as Spatial LOO).
 It is performed using the `cv_buffer()` function, which selects a buffer around each point  (test point) and uses the points outside the buffer as the testing set.^[This approach is a form of leave-one-out cross-validation.]
+
+
+
 
 ```{r misc-scv-17 }
 bloo <- cv_buffer(x = temperature, size = 300000, progress = FALSE)
 cv_plot(bloo, temperature, num_plots = c(1, 50, 100))
 ```
 
+
+
+
 Note that above, we plot only the first, 50th, and 100th points to avoid overplotting.
 
 The last cross-validation strategy implemented in the **blockCV** package is the Nearest Neighbour Distance Matching (NNDM) LOO.
 It is performed using the `cv_nndm()` function, which tries to match the nearest neighbor distance distribution function between the test and training data to the nearest neighbor distance distribution function between the target prediction and training points.
 Thus, in this base, we need to provide more arguments, including a raster with the covariates, the number of samples, the sampling strategy, and the minimum training size.
+
+
+
 
 ```{r misc-scv-18 }
 nncv <- cv_nndm(
@@ -263,7 +365,13 @@ nncv <- cv_nndm(
 cv_plot(nncv, temperature, num_plots = c(1, 50, 100))
 ```
 
+
+
+
 Let's now use the block cross-validation to fit and evaluate a model.
+
+
+
 
 ```{r misc-scv-19 }
 # define formula
@@ -292,18 +400,33 @@ for (k in seq_along(folds)) {
 model_rmse
 ```
 
+
+
+
 The **blockCV** package also provides functions for checking the similarity between the folds (`cv_similarity()`) and estimating the effective range of spatial autocorrelation (`cv_spatial_autocor()`).
 The first function is used to check the similarity between the folds in the cross-validation.
+
+
+
 
 ```{r misc-scv-20 }
 cv_similarity(cv = sb1, x = temperature, r = covariates, progress = FALSE)
 ```
 
+
+
+
 The second function is used to estimate the effective range of spatial autocorrelation of all input raster layers or the response data -- its role is to help to determine the size of the blocks in the block cross-validation.
+
+
+
 
 ```{r misc-scv-21 }
 cv_spatial_autocor(r = covariates, num_sample = 5000, progress = FALSE)
 ```
+
+
+
 
 More examples of the package's use can be found at <https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html>.
 
