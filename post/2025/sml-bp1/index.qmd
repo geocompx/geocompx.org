@@ -5,24 +5,18 @@ author:
   - name: Jakub Nowosad
     url: https://jakubnowosad.com
     orcid:  0000-0002-1057-3721
-date: "2025-04-27"
+date: "2025-04-30"
 slug: sml-bp1
 categories:
   - rstats
   - sml
 tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
-draft: true
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:
     message: false
 ---
-
-<!-- https://jakubnowosad.com/IIIRqueR_workshop/#/spatial-resampling-cross-validation-1 -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/caret.qmd -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/tidymodels.qmd -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/mlr3.qmd -->
 
 ::: {.callout-note appearance="simple"}
 
@@ -105,7 +99,6 @@ library(CAST)               # for area of applicability
 ```{r}
 library(tidymodels)         # metapackage for modeling
 library(spatialsample)      # for spatial cross-validation
-library(tune)               # for hyperparameter tuning 
 library(waywiser)           # for area of applicability
 library(vip)                # for variable importance (used in AOA)
 ```
@@ -144,7 +137,7 @@ For **caret**, we define the hyperparameter grid using the `expand.grid()` funct
 In this case, to use spatial cross-validation, we use the `blockCV` package to create the folds, and then pass them to the `trainControl()` function.
 
 ```{r}
-set.seed(21)
+set.seed(22)
 # hyperparameters
 tn_grid = expand.grid(
     mtry = 8,
@@ -180,7 +173,7 @@ In **tidymodels**, the steps are to:
 4. Define the resampling method using the `spatial_block_cv()` function from the **spatialsample** package.
 
 ```{r}
-set.seed(21)
+set.seed(22)
 form <- as.formula(paste0("temp ~ ", paste(predictor_names, collapse = " + ")))
 recipe <- recipes::recipe(form, data = temperature_train)
 
@@ -211,11 +204,11 @@ The basic **mlr3** steps are connected to its terminology:
 Here, we use the `spcv_block` resampling method.
 
 ```{r}
-set.seed(21)
+set.seed(22)
 task <- mlr3spatiotempcv::as_task_regr_st(temperature_train, target = "temp")
 learner <- mlr3::lrn("regr.ranger",
-    importance = "impurity",
     num.trees = 100,
+    importance = "impurity",
     mtry = 8,
     min.node.size = 5,
     splitrule = "extratrees"
@@ -243,7 +236,8 @@ model_caret <- caret::train(
     method = "ranger",
     tuneGrid = tn_grid,
     trControl = tr_control,
-    num.trees = 100
+    num.trees = 100,
+    importance = "impurity"
 )
 model_caret_final <- model_caret$finalModel
 ```
@@ -375,7 +369,7 @@ plot(AOA_caret$AOA)
 
 The **waywiser** package implements the AoA method for **tidymodels**^[It is not a wrapper for the **CAST** package, but a separate implementation with some differences as you may read in the function documentation -- `?ww_area_of_applicability`].
 The `ww_area_of_applicability()` function takes the training data and variable importance as input.
-Then, to obtain the AoA, we use the `predict()` function from the **terra** package.
+Then, to obtain the AoA, we use the `predict()` function from the **terra** package.^[Thus, this approach allow to check the AoA for each new data set, not only the training data.]
 
 ```{r}
 model_aoa <- waywiser::ww_area_of_applicability(
