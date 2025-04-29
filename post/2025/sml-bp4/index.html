@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.10">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-8061762d59fe42f7e7a7e0dd36bc024b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-42518cbbde1bd1be495acd849c9e9fa2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -406,8 +406,8 @@ Mtry:                             4
 Target node size:                 5 
 Variable importance mode:         none 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.7929512 
-R squared (OOB):                  0.8957356 </code></pre>
+OOB prediction error (MSE):       1.171878 
+R squared (OOB):                  0.8521981 </code></pre>
 </div>
 </div>
 <p>To test how well out model performs now on unseen data, we use the <code>predict</code> method of our fitted learner. Again, we tell the <code>predict</code> method on what data to predict. We can then calculate the <code>score</code> of this test prediction, i.e., the RMSE we defined earlier as out measure.</p>
@@ -416,7 +416,7 @@ R squared (OOB):                  0.8957356 </code></pre>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>test_prediction<span class="sc">$</span><span class="fu">score</span>(measure_rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse 
-  1.20498 </code></pre>
+0.8742688 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(test_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -479,7 +479,7 @@ R squared (OOB):                  0.8957356 </code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>   min.node.size   mtry learner_param_vals  x_domain regr.rmse
           &lt;char&gt; &lt;char&gt;             &lt;list&gt;    &lt;list&gt;     &lt;num&gt;
-1:             5     10          &lt;list[5]&gt; &lt;list[2]&gt; 0.8502591</code></pre>
+1:            10     10          &lt;list[5]&gt; &lt;list[2]&gt; 0.8727164</code></pre>
 </div>
 </div>
 <p>The results are stored in the defined <code>tuning instance</code> object. We also have some nice plotting options with the <strong>mlr3viz</strong> package.</p>
@@ -496,7 +496,7 @@ $num.trees
 [1] 100
 
 $min.node.size
-[1] 5
+[1] 10
 
 $mtry
 [1] 10</code></pre>
@@ -504,7 +504,7 @@ $mtry
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv<span class="sc">$</span>result_y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse 
-0.8502591 </code></pre>
+0.8727164 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tuning_blockcv, <span class="at">type =</span> <span class="st">"parallel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -533,38 +533,38 @@ Tuning Archive
 <div class="cell-output cell-output-stdout">
 <pre><code>    min.node.size   mtry regr.rmse warnings errors runtime_learners
            &lt;char&gt; &lt;char&gt;     &lt;num&gt;    &lt;int&gt;  &lt;int&gt;            &lt;num&gt;
- 1:            10      6 0.8886297        0      0            0.155
- 2:            10     10 0.8669719        0      0            0.219
- 3:            10      4 0.9350052        0      0            0.137
- 4:             5     12 0.8704249        0      0            0.428
- 5:             5      2 1.0772490        0      0            0.175
- 6:            10      2 1.1398420        0      0            0.299
- 7:            15      6 0.9455481        0      0            0.306
- 8:            15     10 0.8814374        0      0            0.495
- 9:             5      4 0.9423924        0      0            0.289
-10:            15      4 0.9748035        0      0            0.261
-11:             5     10 0.8502591        0      0            0.446
-12:            15     12 0.8791684        0      0            0.384
-13:            10     12 0.8691632        0      0            0.527
-14:            15      2 1.1959131        0      0            0.152
-15:             5      6 0.8782246        0      0            0.248
+ 1:            10     10 0.8727164        0      0            0.237
+ 2:             5      2 1.0612209        0      0            0.151
+ 3:             5     12 0.9025742        0      0            0.413
+ 4:             5      4 0.9718021        0      0            0.209
+ 5:            10      6 0.8981735        0      0            0.193
+ 6:            15      2 1.1555988        0      0            0.141
+ 7:            15     10 0.9061243        0      0            0.215
+ 8:            15     12 0.9080667        0      0            0.238
+ 9:             5     10 0.8799594        0      0            0.328
+10:            10      4 0.9894942        0      0            0.165
+11:            10      2 1.1106076        0      0            0.131
+12:            15      4 0.9530194        0      0            0.144
+13:            10     12 0.8903134        0      0            0.270
+14:            15      6 0.9659378        0      0            0.175
+15:             5      6 0.9194231        0      0            0.224
                                    uhash  x_domain           timestamp batch_nr
                                   &lt;char&gt;    &lt;list&gt;              &lt;POSc&gt;    &lt;int&gt;
- 1: 0cc98fb3-f518-430a-9c07-afc7ea13b38b &lt;list[2]&gt; 2025-04-26 20:45:58        1
- 2: fb5ca604-1d2b-4464-bfa1-6dd15dea53ec &lt;list[2]&gt; 2025-04-26 20:45:59        2
- 3: f0364e60-f4d9-42f8-81a3-e0988273cf44 &lt;list[2]&gt; 2025-04-26 20:45:59        3
- 4: 1f11630d-70b1-4249-a6b3-66737c78c3c4 &lt;list[2]&gt; 2025-04-26 20:46:00        4
- 5: 7d26d93a-187b-46ed-b611-36a49d88a7a1 &lt;list[2]&gt; 2025-04-26 20:46:00        5
- 6: 4f14af99-889a-4adb-abb4-87382c18bfb2 &lt;list[2]&gt; 2025-04-26 20:46:01        6
- 7: 397e754d-dc97-4b54-bc70-055b5c34651f &lt;list[2]&gt; 2025-04-26 20:46:01        7
- 8: e3593858-5efb-4476-8fe5-153ff34f5f1c &lt;list[2]&gt; 2025-04-26 20:46:02        8
- 9: 506c1307-2793-4b49-92dd-3aae2c9cb31e &lt;list[2]&gt; 2025-04-26 20:46:03        9
-10: 060bd362-813f-49ca-915f-3a5575699e2b &lt;list[2]&gt; 2025-04-26 20:46:03       10
-11: 130242d9-1bae-4e12-9742-b9199da35e5e &lt;list[2]&gt; 2025-04-26 20:46:04       11
-12: 41fcd3e3-5d0c-4199-a6ca-bf1fecb1c4fc &lt;list[2]&gt; 2025-04-26 20:46:05       12
-13: 937508c0-4ce4-4b77-ab43-a0beae982780 &lt;list[2]&gt; 2025-04-26 20:46:05       13
-14: 9550c226-e061-427c-8719-266b35883656 &lt;list[2]&gt; 2025-04-26 20:46:06       14
-15: b6fc8c09-621e-4886-9849-1aeb321fd95f &lt;list[2]&gt; 2025-04-26 20:46:06       15</code></pre>
+ 1: 131c9e16-a48f-4c7b-8a99-7a1f70f1061e &lt;list[2]&gt; 2025-04-27 16:32:46        1
+ 2: 1bc7769c-81d2-476d-9f87-3cbdd0bccedf &lt;list[2]&gt; 2025-04-27 16:32:46        2
+ 3: bc7a3722-8d80-490a-a0ae-51b278329d54 &lt;list[2]&gt; 2025-04-27 16:32:47        3
+ 4: 874b943d-8f6d-4f2a-b67b-d7f03d681726 &lt;list[2]&gt; 2025-04-27 16:32:47        4
+ 5: 2720c883-d5a9-47db-b71f-10aba596201d &lt;list[2]&gt; 2025-04-27 16:32:48        5
+ 6: 8030e57d-02da-4507-9cb5-f3f98199e88d &lt;list[2]&gt; 2025-04-27 16:32:48        6
+ 7: 358a7251-734b-4944-b49e-0907d6caf946 &lt;list[2]&gt; 2025-04-27 16:32:49        7
+ 8: 5b5fe61f-77ac-4be6-a490-067a7f25d29d &lt;list[2]&gt; 2025-04-27 16:32:49        8
+ 9: 73dd9fd8-09bb-4338-b5d5-3f1f2195a900 &lt;list[2]&gt; 2025-04-27 16:32:49        9
+10: bd0023a2-6718-4607-a162-0137fbb0e940 &lt;list[2]&gt; 2025-04-27 16:32:50       10
+11: 540776f9-3edb-45f4-b5a3-94086d539e69 &lt;list[2]&gt; 2025-04-27 16:32:50       11
+12: 8a23040d-f4f3-4f9c-8d94-4e35e6959949 &lt;list[2]&gt; 2025-04-27 16:32:50       12
+13: e9ab95c0-431e-4aea-baef-4c7baa9eae61 &lt;list[2]&gt; 2025-04-27 16:32:51       13
+14: 023635de-6bd3-4175-ae94-2ad19065498c &lt;list[2]&gt; 2025-04-27 16:32:51       14
+15: d671e100-4f3f-4059-867f-0c0b15eee650 &lt;list[2]&gt; 2025-04-27 16:32:52       15</code></pre>
 </div>
 </div>
 </div>
@@ -674,7 +674,7 @@ Tuning Archive
 <li><strong>Steep learning curve</strong>: The framework’s complexity can be challenging for beginners.</li>
 <li><strong>Overwhelming number of methods and options</strong>: The extensive methods can be difficult to navigate for new users.</li>
 <li><strong>Confusing help pages due to <code>R6</code> logic</strong>: Understanding the <code>R6</code> logic in help files can be tough for those unfamiliar with the system.</li>
-<li><strong>No in-Line help in RStudio</strong>: Lack of in-line help for <code>R6</code> methods in RStudio makes it harder to access function details quickly.</li>
+<li><strong>No in-line help in RStudio</strong>: Lack of in-line help for <code>R6</code> methods in RStudio makes it harder to access function details quickly.</li>
 </ul>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
@@ -693,7 +693,7 @@ Tuning Archive
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{ludwig,
   author = {Ludwig, Marvin},
-  title = {Spatial {Machine} {Learning} with Mlr3},
+  title = {Spatial Machine Learning with Mlr3},
   url = {https://geocompx.org/post/2025/sml-bp4/},
   langid = {en}
 }
@@ -783,6 +783,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -893,6 +895,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

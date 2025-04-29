@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.10">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jakub Nowosad">
-<meta name="dcterms.date" content="2025-04-27">
+<meta name="dcterms.date" content="2025-04-30">
 <meta name="description" content="A comparison of three popular machine learning frameworks in R for spatial machine learning tasks.">
 
 <title>Spatial machine learning with R: caret, tidymodels, and mlr3 – geocompx</title>
@@ -73,10 +73,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-8061762d59fe42f7e7a7e0dd36bc024b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-42518cbbde1bd1be495acd849c9e9fa2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -113,7 +113,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
-<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../../style.css">
@@ -122,7 +121,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -239,7 +238,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 27, 2025</p>
+      <p class="date">April 30, 2025</p>
     </div>
   </div>
   
@@ -251,11 +250,6 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </header>
 
 
-<!-- https://jakubnowosad.com/IIIRqueR_workshop/#/spatial-resampling-cross-validation-1 -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/caret.qmd -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/tidymodels.qmd -->
-<!-- https://github.com/LOEK-RS/FOSSGIS2025-examples/blob/main/mlr3.qmd -->
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -318,9 +312,8 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)         <span class="co"># metapackage for modeling</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spatialsample)      <span class="co"># for spatial cross-validation</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tune)               <span class="co"># for hyperparameter tuning </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(waywiser)           <span class="co"># for area of applicability</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)                <span class="co"># for variable importance (used in AOA)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(waywiser)           <span class="co"># for area of applicability</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)                <span class="co"># for variable importance (used in AOA)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
@@ -349,7 +342,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <p>For <strong>caret</strong>, we define the hyperparameter grid using the <code>expand.grid()</code> function, and the resampling method using the <code>trainControl()</code> function. In this case, to use spatial cross-validation, we use the <code>blockCV</code> package to create the folds, and then pass them to the <code>trainControl()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperparameters</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>tn_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">8</span>,</span>
@@ -367,10 +360,10 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="cell-output cell-output-stdout">
 <pre><code>
   train test
-1   156   39
-2   156   39
-3   157   38
-4   155   40
+1   155   40
+2   160   35
+3   155   40
+4   154   41
 5   156   39</code></pre>
 </div>
 <div class="cell-output-display">
@@ -400,7 +393,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <li>Define the resampling method using the <code>spatial_block_cv()</code> function from the <strong>spatialsample</strong> package.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>form <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste0</span>(<span class="st">"temp ~ "</span>, <span class="fu">paste</span>(predictor_names, <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>recipe <span class="ot">&lt;-</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(form, <span class="at">data =</span> temperature_train)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -435,11 +428,11 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <li><strong>Resampling</strong>: define the resampling method using the <code>rsmp()</code> function, which specifies the type of resampling and the number of folds. Here, we use the <code>spcv_block</code> resampling method.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">22</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>task <span class="ot">&lt;-</span> mlr3spatiotempcv<span class="sc">::</span><span class="fu">as_task_regr_st</span>(temperature_train, <span class="at">target =</span> <span class="st">"temp"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>learner <span class="ot">&lt;-</span> mlr3<span class="sc">::</span><span class="fu">lrn</span>(<span class="st">"regr.ranger"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span>,</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="dv">8</span>,</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">min.node.size =</span> <span class="dv">5</span>,</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">splitrule =</span> <span class="st">"extratrees"</span></span>
@@ -465,9 +458,10 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> tn_grid,</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> tr_control,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>model_caret_final <span class="ot">&lt;-</span> model_caret<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">importance =</span> <span class="st">"impurity"</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>model_caret_final <span class="ot">&lt;-</span> model_caret<span class="sc">$</span>finalModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
@@ -507,9 +501,9 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>model_caret<span class="sc">$</span>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  mtry  splitrule min.node.size     RMSE  Rsquared       MAE    RMSESD
-1    8 extratrees             5 1.124756 0.8567454 0.8880418 0.1571526
+1    8 extratrees             5 1.119936 0.8406388 0.9008884 0.2269326
   RsquaredSD     MAESD
-1  0.0440535 0.1366193</code></pre>
+1 0.06159361 0.1399976</code></pre>
 </div>
 </div>
 </div>
@@ -521,8 +515,8 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   1.19      5  0.0372 Preprocessor1_Model1
-2 rsq     standard   0.810     5  0.0633 Preprocessor1_Model1</code></pre>
+1 rmse    standard   1.10      5  0.0903 Preprocessor1_Model1
+2 rsq     standard   0.858     5  0.0424 Preprocessor1_Model1</code></pre>
 </div>
 </div>
 </div>
@@ -533,7 +527,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model_mlr3<span class="sc">$</span><span class="fu">aggregate</span>(<span class="at">measures =</span> my_measures)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse       rsq 
-1.1027752 0.8343361 </code></pre>
+1.1391701 0.8209292 </code></pre>
 </div>
 </div>
 </div>
@@ -613,7 +607,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </div>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<p>The <strong>waywiser</strong> package implements the AoA method for <strong>tidymodels</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The <code>ww_area_of_applicability()</code> function takes the training data and variable importance as input. Then, to obtain the AoA, we use the <code>predict()</code> function from the <strong>terra</strong> package.</p>
+<p>The <strong>waywiser</strong> package implements the AoA method for <strong>tidymodels</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. The <code>ww_area_of_applicability()</code> function takes the training data and variable importance as input. Then, to obtain the AoA, we use the <code>predict()</code> function from the <strong>terra</strong> package.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>model_aoa <span class="ot">&lt;-</span> waywiser<span class="sc">::</span><span class="fu">ww_area_of_applicability</span>(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_drop_geometry</span>(temperature_train[, predictor_names]),</span>
@@ -658,7 +652,9 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p>In this blog post, we compared three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We demonstrated how to use these frameworks for a spatial machine learning task, including model specification, training, evaluation, prediction, and obtaining the area of applicability. At the same time, many additional steps can be added to the workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more. In the next blog posts, we will show the three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.</p>
+<p>In this blog post, we compared three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We demonstrated how to use these frameworks for a spatial machine learning task, including model specification, training, evaluation, prediction, and obtaining the area of applicability.</p>
+<p>There is a lot of overlap in functionality between the three frameworks. Simultaneously, the frameworks differ in their design philosophy and implementation. Some, as <strong>caret</strong>, are more focused on providing a consistent and concise interface, but it offers limited flexibility. Others, like <strong>tidymodels</strong> and <strong>mlr3</strong>, are more modular and flexible, allowing for more complex workflows and customizations, which also makes them more complex to learn and use.</p>
+<p>Many additional steps can be added to the presented workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more. In the next blog posts, we will show these three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.</p>
 
 
 </section>
@@ -669,18 +665,19 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <ol>
 <li id="fn1"><p>Or the hyperparameter tuning grid, in a more advanced scenario.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>It is not a wrapper for the <strong>CAST</strong> package, but a separate implementation with some differences as you may read in the function documentation – <code>?ww_area_of_applicability</code><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Thus, this approach allow to check the AoA for each new data set, not only the training data.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
   author = {Nowosad, Jakub},
   title = {Spatial Machine Learning with {R:} Caret, Tidymodels, and
     Mlr3},
-  date = {2025-04-27},
+  date = {2025-04-30},
   url = {https://geocompx.org/post/2025/sml-bp1/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas" role="listitem">
 Nowosad, Jakub. 2025. <span>“Spatial Machine Learning with R: Caret,
-Tidymodels, and Mlr3.”</span> April 27, 2025. <a href="https://geocompx.org/post/2025/sml-bp1/">https://geocompx.org/post/2025/sml-bp1/</a>.
+Tidymodels, and Mlr3.”</span> April 30, 2025. <a href="https://geocompx.org/post/2025/sml-bp1/">https://geocompx.org/post/2025/sml-bp1/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -764,6 +761,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -874,6 +873,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

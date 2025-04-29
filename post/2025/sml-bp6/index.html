@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.43">
+<meta name="generator" content="quarto-1.6.10">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-8061762d59fe42f7e7a7e0dd36bc024b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-42518cbbde1bd1be495acd849c9e9fa2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -286,53 +286,55 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>Fourth, we can perform the spatial cross-validation using the <code>sperrorest()</code> function. We just need to provide previously prepared data, the formula, the model function, and the prediction function. Moreover, we can also define some additional parameters of the model, such as the number of trees in the <code>ranger</code> model. Finally, the important part is to define the sampling function (<code>smp_fun</code>) and its arguments (<code>smp_args</code>). The sampling function is used to partition the data into training and testing sets: here, we use the <code>partition_kmeans()</code> function to partition the data spatially into folds using k-means clustering of the coordinates.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial cross-validation</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sp_res <span class="ot">&lt;-</span> <span class="fu">sperrorest</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_fun =</span> ranger,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_args =</span> <span class="fu">list</span>(<span class="at">num.trees =</span> <span class="dv">100</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred_fun =</span> mypred,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_fun =</span> partition_kmeans,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_args =</span> <span class="fu">list</span>(<span class="at">repetition =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">nfold =</span> <span class="dv">3</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">6</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sp_res <span class="ot">&lt;-</span> <span class="fu">sperrorest</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_fun =</span> ranger,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_args =</span> <span class="fu">list</span>(<span class="at">num.trees =</span> <span class="dv">100</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred_fun =</span> mypred,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_fun =</span> partition_kmeans,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_args =</span> <span class="fu">list</span>(<span class="at">repetition =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">nfold =</span> <span class="dv">3</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The result is a list with several components, including the error at the repetition and fold levels, the resampling object, the variable importance (only when <code>importance = TRUE</code>), the benchmark, and the package version.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sp_res<span class="sc">$</span>error_rep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                     mean           sd       median          IQR
-train_bias   5.127946e-03 0.0001277217 5.127946e-03 9.031289e-05
-train_stddev 4.007223e-01 0.0034732541 4.007223e-01 2.455962e-03
-train_rmse   4.002411e-01 0.0034701500 4.002411e-01 2.453767e-03
-train_mad    3.135509e-01 0.0029861634 3.135509e-01 2.111536e-03
-train_median 3.997293e-02 0.0070255805 3.997293e-02 4.967836e-03
-train_iqr    4.263311e-01 0.0047776762 4.263311e-01 3.378327e-03
-train_count  3.900000e+02 0.0000000000 3.900000e+02 0.000000e+00
-test_bias    6.128049e-02 0.0177457673 6.128049e-02 1.254815e-02
-test_stddev  1.452102e+00 0.0461388407 1.452102e+00 3.262509e-02
-test_rmse    1.449736e+00 0.0452270144 1.449736e+00 3.198033e-02
-test_mad     1.422254e+00 0.0817311915 1.422254e+00 5.779268e-02
-test_median  1.510339e-01 0.0789036088 1.510339e-01 5.579328e-02
-test_iqr     1.931140e+00 0.1207903094 1.931140e+00 8.541165e-02
-test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
+<pre><code>                      mean           sd        median          IQR
+train_bias     0.003667002 0.0224183696   0.003667002 0.0158521812
+train_stddev   0.399217628 0.0044832845   0.399217628 0.0031701609
+train_rmse     0.399038491 0.0042677806   0.399038491 0.0030177766
+train_mad      0.316892003 0.0078406248   0.316892003 0.0055441590
+train_median   0.033006028 0.0001897285   0.033006028 0.0001341583
+train_iqr      0.427813987 0.0083456683   0.427813987 0.0059012787
+train_count  390.000000000 0.0000000000 390.000000000 0.0000000000
+test_bias     -0.009090677 0.0742284999  -0.009090677 0.0524874756
+test_stddev    1.447676903 0.0934364402   1.447676903 0.0660695405
+test_rmse      1.444959463 0.0926651037   1.444959463 0.0655241232
+test_mad       1.341466967 0.1144815717   1.341466967 0.0809506957
+test_median    0.101932523 0.0950544902   0.101932523 0.0672136746
+test_iqr       1.876642239 0.1533036116   1.876642239 0.1084020233
+test_count   195.000000000 0.0000000000 195.000000000 0.0000000000</code></pre>
 </div>
 </div>
 <p>We can contrast the obtained results with the non-spatial cross-validation by changing the sampling function to <code>partition_cv()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Non-spatial cross-validation</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>nsp_res <span class="ot">&lt;-</span> <span class="fu">sperrorest</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_fun =</span> ranger,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_args =</span> <span class="fu">list</span>(<span class="at">num.trees =</span> <span class="dv">100</span>),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred_fun =</span> mypred,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_fun =</span> partition_cv,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_args =</span> <span class="fu">list</span>(<span class="at">repetition =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">nfold =</span> <span class="dv">3</span>),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">11</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>nsp_res <span class="ot">&lt;-</span> <span class="fu">sperrorest</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">formula =</span> fo,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> temperature_df,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_fun =</span> ranger,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model_args =</span> <span class="fu">list</span>(<span class="at">num.trees =</span> <span class="dv">100</span>),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred_fun =</span> mypred,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_fun =</span> partition_cv,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">smp_args =</span> <span class="fu">list</span>(<span class="at">repetition =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">nfold =</span> <span class="dv">3</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To compare both results, we can plot the RMSE values for the training and testing sets of both spatial and non-spatial cross-validation.</p>
 <div class="cell">
@@ -373,28 +375,29 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 <p>Cross-validation strategies separate the data into training and testing sets to evaluate the model’s performance. The <strong>blockCV</strong> package provides several cross-validation strategies, including block cross-validation, spatial clustering, environmental clustering, buffering LOO, and Nearest Neighbour Distance Matching (NNDM) LOO.</p>
 <p>The block cross-validation is performed using the <code>cv_spatial()</code> function. It assigns blocks to the training and testing folds randomly, systematically or in a checkerboard pattern (the <code>selection</code> argument).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sb1 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>, <span class="co"># number of folds</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>, <span class="co"># size of the blocks in meters</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"random"</span>, <span class="co"># random blocks-to-fold</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">iteration =</span> <span class="dv">50</span>, <span class="co"># find evenly dispersed folds</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">biomod2 =</span> <span class="cn">TRUE</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">61</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sb1 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>, <span class="co"># number of folds</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>, <span class="co"># size of the blocks in meters</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"random"</span>, <span class="co"># random blocks-to-fold</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">iteration =</span> <span class="dv">50</span>, <span class="co"># find evenly dispersed folds</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">biomod2 =</span> <span class="cn">TRUE</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
    train test
-1    175   20
-2    182   13
-3    179   16
-4    169   26
-5    165   30
-6    182   13
-7    180   15
-8    171   24
-9    181   14
-10   171   24</code></pre>
+1    170   25
+2    169   26
+3    171   24
+4    180   15
+5    181   14
+6    183   12
+7    182   13
+8    165   30
+9    179   16
+10   175   20</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -410,35 +413,35 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 10
  $ :List of 2
-  ..$ : int [1:175] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:20] 180 72 65 185 71 66 186 183 157 181 ...
+  ..$ : int [1:170] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:25] 23 31 57 39 58 60 21 22 32 27 ...
  $ :List of 2
-  ..$ : int [1:182] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:13] 131 116 123 130 132 124 129 126 128 127 ...
+  ..$ : int [1:169] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:26] 153 155 93 108 95 91 88 154 94 140 ...
  $ :List of 2
-  ..$ : int [1:179] 33 32 59 60 27 34 37 58 21 40 ...
-  ..$ : int [1:16] 87 119 100 97 98 117 96 102 105 121 ...
+  ..$ : int [1:171] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:24] 12 45 175 176 166 20 177 19 167 16 ...
  $ :List of 2
-  ..$ : int [1:169] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:26] 93 90 114 115 108 106 144 94 89 111 ...
+  ..$ : int [1:180] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:15] 134 138 136 133 187 192 174 173 189 190 ...
  $ :List of 2
-  ..$ : int [1:165] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:30] 80 77 62 52 42 78 61 74 48 81 ...
+  ..$ : int [1:181] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:14] 161 142 143 150 160 149 146 147 158 151 ...
  $ :List of 2
-  ..$ : int [1:182] 87 119 100 97 98 117 96 102 105 121 ...
-  ..$ : int [1:13] 33 1 3 7 6 8 194 2 164 4 ...
+  ..$ : int [1:183] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:12] 4 8 5 2 193 1 6 194 164 3 ...
  $ :List of 2
-  ..$ : int [1:180] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:15] 133 136 134 138 173 187 190 192 9 189 ...
+  ..$ : int [1:182] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:13] 128 124 129 130 127 132 131 120 126 125 ...
  $ :List of 2
-  ..$ : int [1:171] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:24] 15 177 47 170 165 11 45 169 14 17 ...
+  ..$ : int [1:165] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:30] 61 70 75 52 77 83 79 86 50 48 ...
  $ :List of 2
-  ..$ : int [1:181] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:14] 148 158 151 149 143 156 160 147 150 146 ...
+  ..$ : int [1:179] 23 31 57 39 58 60 21 22 32 27 ...
+  ..$ : int [1:16] 117 87 103 84 105 99 119 101 98 97 ...
  $ :List of 2
-  ..$ : int [1:171] 33 87 119 100 97 98 117 96 102 105 ...
-  ..$ : int [1:24] 32 59 60 27 34 37 58 21 40 25 ...</code></pre>
+  ..$ : int [1:175] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:20] 163 181 159 157 186 67 71 41 178 179 ...</code></pre>
 </div>
 </div>
 <p>The <code>cv_plot()</code> function additionally allows for the visualization of cross-validation results.</p>
@@ -454,13 +457,14 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 </div>
 <p>Let’s compare the results of the block cross-validation with systematic and checkerboard patterns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sb2 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rows_cols =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>),</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"systematic"</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">16</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sb2 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">rows_cols =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"systematic"</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
    train test
@@ -492,13 +496,14 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sb3 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>,</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"checkerboard"</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sb3 <span class="ot">&lt;-</span> <span class="fu">cv_spatial</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">10</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">hexagon =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">selection =</span> <span class="st">"checkerboard"</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   train test
@@ -523,20 +528,20 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 </div>
 <p>The clustering strategies (<code>cv_cluster()</code>) are used to group the data into clusters based on spatial or environmental similarity. The spatial similarity is based only on the clustering of the spatial coordinates.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">6</span>)</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>scv <span class="ot">&lt;-</span> <span class="fu">cv_cluster</span>(<span class="at">x =</span> temperature, <span class="at">k =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   train test
-1    178   17
-2    173   22
-3    182   13
-4    169   26
+1    169   26
+2    169   26
+3    173   22
+4    178   17
 5    179   16
-6    176   19
-7    178   17
-8    180   15
-9    171   24
-10   169   26</code></pre>
+6    182   13
+7    176   19
+8    171   24
+9    178   17
+10   180   15</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cv_plot</span>(scv, temperature)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -549,15 +554,15 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 </div>
 <p>The environmental clustering, on the other hand, is based on the clustering of the values of the covariates extracted from the raster data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">6</span>)</span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ecv <span class="ot">&lt;-</span> <span class="fu">cv_cluster</span>(<span class="at">x =</span> temperature, <span class="at">r =</span> covariates, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  train test
-1    90  105
-2   154   41
+1   164   31
+2   190    5
 3   182   13
-4   164   31
-5   190    5</code></pre>
+4   154   41
+5    90  105</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cv_plot</span>(ecv, temperature)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -570,7 +575,8 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 </div>
 <p>The next cross-validation strategy is buffering LOO (also known as Spatial LOO). It is performed using the <code>cv_buffer()</code> function, which selects a buffer around each point (test point) and uses the points outside the buffer as the testing set.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bloo <span class="ot">&lt;-</span> <span class="fu">cv_buffer</span>(<span class="at">x =</span> temperature, <span class="at">size =</span> <span class="dv">300000</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>bloo <span class="ot">&lt;-</span> <span class="fu">cv_buffer</span>(<span class="at">x =</span> temperature, <span class="at">size =</span> <span class="dv">300000</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     train            test  
  Min.   : 97.0   Min.   :1  
@@ -589,15 +595,16 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 <p>Note that above, we plot only the first, 50th, and 100th points to avoid overplotting.</p>
 <p>The last cross-validation strategy implemented in the <strong>blockCV</strong> package is the Nearest Neighbour Distance Matching (NNDM) LOO. It is performed using the <code>cv_nndm()</code> function, which tries to match the nearest neighbor distance distribution function between the test and training data to the nearest neighbor distance distribution function between the target prediction and training points. Thus, in this base, we need to provide more arguments, including a raster with the covariates, the number of samples, the sampling strategy, and the minimum training size.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>nncv <span class="ot">&lt;-</span> <span class="fu">cv_nndm</span>(</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">r =</span> covariates,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_sample =</span> <span class="dv">5000</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sampling =</span> <span class="st">"regular"</span>,</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_train =</span> <span class="fl">0.1</span>,</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="cn">TRUE</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>nncv <span class="ot">&lt;-</span> <span class="fu">cv_nndm</span>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> temperature,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">r =</span> covariates,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">300000</span>,</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">num_sample =</span> <span class="dv">5000</span>,</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">sampling =</span> <span class="st">"regular"</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_train =</span> <span class="fl">0.1</span>,</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot =</span> <span class="cn">TRUE</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     train            test  
  Min.   :192.0   Min.   :1  
@@ -648,16 +655,16 @@ test_count   1.950000e+02 0.0000000000 1.950000e+02 0.000000e+00</code></pre>
 <span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>model_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   fold      rmse
-1     1 0.8331044
-2     2 0.7775615
-3     3 1.0933047
-4     4 0.7392696
-5     5 1.2805223
-6     6 1.2542253
-7     7 0.8975916
-8     8 0.8741182
-9     9 0.6560563
-10   10 1.1616981</code></pre>
+1     1 1.1401856
+2     2 0.7848595
+3     3 0.9219486
+4     4 0.8007453
+5     5 0.6485726
+6     6 1.2989341
+7     7 0.8140209
+8     8 1.2050918
+9     9 0.9696801
+10   10 0.8681127</code></pre>
 </div>
 </div>
 <p>The <strong>blockCV</strong> package also provides functions for checking the similarity between the folds (<code>cv_similarity()</code>) and estimating the effective range of spatial autocorrelation (<code>cv_spatial_autocor()</code>). The first function is used to check the similarity between the folds in the cross-validation.</p>
@@ -682,302 +689,6 @@ colour.
 <p>The second function is used to estimate the effective range of spatial autocorrelation of all input raster layers or the response data – its role is to help to determine the size of the blocks in the block cross-validation.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cv_spatial_autocor</span>(<span class="at">r =</span> covariates, <span class="at">num_sample =</span> <span class="dv">5000</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'
-Warning in fit.variogram(object, model, fit.sills = fit.sills, fit.ranges =
-fit.ranges, : value out of range in 'bessel_k'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'
-Warning in fit.variogram(experimental_variogram, model = vgm(psill = psill, :
-value out of range in 'bessel_k'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in automap::autofitVariogram(target ~ 1, points): Some models where removed for being either NULL or having a negative sill/range/nugget, 
-    set verbose == TRUE for more information</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -990,6 +701,11 @@ value out of range in 'bessel_k'</code></pre>
 </div>
 </div>
 <p>More examples of the package’s use can be found at <a href="https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html" class="uri">https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html</a>.</p>
+<!-- # Closing remarks
+
+other tools, methods, packages
+deep learning is not covered in this series
+more in the future -->
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1105,6 +821,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -1215,6 +933,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

@@ -9,8 +9,1019 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.6.43</generator>
-<lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.6.10</generator>
+<lastBuildDate>Wed, 30 Apr 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Spatial machine learning with R: caret, tidymodels, and mlr3</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2025/sml-bp1/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the first part of a blog post series on spatial machine learning with R.</p>
+</div>
+</div>
+</div>
+<p>The R language has a variety of packages for machine learning, and many of them can be used for machine learning tasks in a spatial context (<em>spatial machine learning</em>). Spatial machine learning is generally different from traditional machine learning, as variables located closer to each other are often more similar than those located further apart. Thus, we need to consider that when building machine learning models.</p>
+<p>In this blog post, we compare three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ. The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.</p>
+<center>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/mermaid-figure-1.png" style="width:8in;height:6.5in" class="figure-img"></p>
+</div>
+<p></p><figcaption> A possible workflow of the spatial machine learning task.</figcaption> </figure><p></p>
+</div>
+</div>
+</div>
+</center>
+<section id="inputs" class="level1">
+<h1>Inputs</h1>
+<p>Our task is to predict the temperature in Spain using a set of covariates. We have two datasets for that purpose: the first one, <code>temperature_train</code>, contains the temperature measurements from 195 locations in Spain, and the second one, <code>predictor_stack</code>, contains the covariates we will use to predict the temperature. These covariates include variables such as population density (<code>popdens</code>), distance to the coast (<code>coast</code>), and elevation (<code>elev</code>), among others.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(terra)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb1-3">train_points <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span>
+<span id="cb1-4">predictor_stack <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span></code></pre></div>
+</div>
+<p>We use a subset of fourteen of the available covariates to predict the temperature. But before doing that, to prepare our data for modeling, we need to extract the covariate values at the locations of our training points.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">predictor_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(predictor_stack)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>]</span>
+<span id="cb2-2">temperature_train <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract</span>(predictor_stack[[predictor_names]],</span>
+<span id="cb2-3">    train_points,</span>
+<span id="cb2-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bind =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb2-5">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb2-6">    sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>()</span></code></pre></div>
+</div>
+<p>Now, our <code>temperature_train</code> dataset contains the temperature measurements and the covariate values at each location and is ready for modeling.</p>
+</section>
+<section id="loading-packages" class="level1">
+<h1>Loading packages</h1>
+<p>Using each of the frameworks requires loading the respective packages.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" aria-controls="tabset-1-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" aria-controls="tabset-1-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" aria-controls="tabset-1-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-1-1" class="tab-pane active" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(caret)              <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for modeling</span></span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(blockCV)            <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for spatial cross-validation</span></span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(CAST)               <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for area of applicability</span></span></code></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tidymodels)         <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># metapackage for modeling</span></span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(spatialsample)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for spatial cross-validation</span></span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(waywiser)           <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for area of applicability</span></span>
+<span id="cb4-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(vip)                <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for variable importance (used in AOA)</span></span></code></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3verse)          <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># metapackage for mlr3 modeling</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3spatiotempcv)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for spatial cross-validation</span></span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(CAST)               <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># for area of applicability</span></span>
+<span id="cb5-4">lgr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_logger</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mlr3"</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_threshold</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"warn"</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-specification" class="level1">
+<h1>Model specification</h1>
+<p>Each of the frameworks has its own way of setting up the modeling workflow. This may include defining the model, the resampling method, and the hyperparameter values<sup>1</sup>. In this example, we use random forest models as implemented in the <strong>ranger</strong> package with the following hyperparameters:</p>
+<ul>
+<li><code>mtry</code>: the number of variables randomly sampled as candidates at each split of 8</li>
+<li><code>splitrule</code>: the splitting rule of <code>"extratrees"</code></li>
+<li><code>min.node.size</code>: the minimum size of terminal nodes of 5</li>
+</ul>
+<p>We also use a spatial cross-validation method with 5 folds. It means that the data is divided into many spatial blocks, and each block is assigned to a fold. The model is trained on a set of blocks belonging to the training set and evaluated on the remaining blocks. Note that each framework has its own way of defining the resampling method, and thus, the implementation and the folds may differ slightly.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" aria-controls="tabset-2-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" aria-controls="tabset-2-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" aria-controls="tabset-2-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-2-1" class="tab-pane active" aria-labelledby="tabset-2-1-tab">
+<p>For <strong>caret</strong>, we define the hyperparameter grid using the <code>expand.grid()</code> function, and the resampling method using the <code>trainControl()</code> function. In this case, to use spatial cross-validation, we use the <code>blockCV</code> package to create the folds, and then pass them to the <code>trainControl()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">22</span>)</span>
+<span id="cb6-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># hyperparameters</span></span>
+<span id="cb6-3">tn_grid <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">expand.grid</span>(</span>
+<span id="cb6-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>,</span>
+<span id="cb6-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">splitrule =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extratrees"</span>,</span>
+<span id="cb6-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.node.size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb6-7">)</span>
+<span id="cb6-8"></span>
+<span id="cb6-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># resampling</span></span>
+<span id="cb6-10">spatial_blocks <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> blockCV<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_spatial</span>(</span>
+<span id="cb6-11">    temperature_train,</span>
+<span id="cb6-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,</span>
+<span id="cb6-13">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">hexagon =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb6-14">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb6-15">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  train test
+1   155   40
+2   160   35
+3   155   40
+4   154   41
+5   156   39</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">train_ids <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(spatial_blocks<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>folds_list, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(x) x[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]])</span>
+<span id="cb8-2">test_ids <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(spatial_blocks<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>folds_list, <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(x) x[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]])</span>
+<span id="cb8-3"></span>
+<span id="cb8-4">tr_control <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> caret<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trainControl</span>(</span>
+<span id="cb8-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cv"</span>,</span>
+<span id="cb8-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">index =</span> train_ids,</span>
+<span id="cb8-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">indexOut =</span> test_ids,</span>
+<span id="cb8-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">savePredictions =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb8-9">)</span></code></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" aria-labelledby="tabset-2-2-tab">
+<p>In <strong>tidymodels</strong>, the steps are to:</p>
+<ol type="1">
+<li>Specify the modeling formula using the <code>recipe()</code> function.</li>
+<li>Define the model using a function from the <strong>parsnip</strong> package, including the hyperparameters.</li>
+<li>Create a workflow using the <code>workflow()</code> function, which combines the recipe and the model.</li>
+<li>Define the resampling method using the <code>spatial_block_cv()</code> function from the <strong>spatialsample</strong> package.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">22</span>)</span>
+<span id="cb9-2">form <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.formula</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp ~ "</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(predictor_names, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" + "</span>)))</span>
+<span id="cb9-3">recipe <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> recipes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">recipe</span>(form, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature_train)</span>
+<span id="cb9-4"></span>
+<span id="cb9-5">rf_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsnip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rand_forest</span>(</span>
+<span id="cb9-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb9-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>,</span>
+<span id="cb9-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, </span>
+<span id="cb9-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regression"</span></span>
+<span id="cb9-10">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-11">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_engine</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ranger"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">splitrule =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extratrees"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span>)</span>
+<span id="cb9-12"></span>
+<span id="cb9-13">workflow <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">workflow</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-14">    workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_recipe</span>(recipe) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-15">    workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_model</span>(rf_model)</span>
+<span id="cb9-16"></span>
+<span id="cb9-17">block_folds <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> spatialsample<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">spatial_block_cv</span>(temperature_train, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">v =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb9-18">spatialsample<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">autoplot</span>(block_folds)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" aria-labelledby="tabset-2-3-tab">
+<p>The basic <strong>mlr3</strong> steps are connected to its terminology:</p>
+<ol type="1">
+<li><strong>Task</strong>: define the task using the <code>as_task_regr_st()</code> function, which specifies the target variable and the data.</li>
+<li><strong>Learner</strong>: define the model using the <code>lrn()</code> function, which specifies the model type and the hyperparameters.</li>
+<li><strong>Resampling</strong>: define the resampling method using the <code>rsmp()</code> function, which specifies the type of resampling and the number of folds. Here, we use the <code>spcv_block</code> resampling method.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">22</span>)</span>
+<span id="cb10-2">task <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3spatiotempcv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_task_regr_st</span>(temperature_train, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">target =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span>)</span>
+<span id="cb10-3">learner <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lrn</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.ranger"</span>,</span>
+<span id="cb10-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb10-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span>,</span>
+<span id="cb10-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>,</span>
+<span id="cb10-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.node.size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,</span>
+<span id="cb10-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">splitrule =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extratrees"</span></span>
+<span id="cb10-9">)</span>
+<span id="cb10-10">resampling <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rsmp</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"spcv_block"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">folds =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,</span>
+<span id="cb10-11">                         <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cols =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">rows =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="modeling" class="level1">
+<h1>Modeling</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" aria-controls="tabset-3-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" aria-controls="tabset-3-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" aria-controls="tabset-3-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-3-1" class="tab-pane active" aria-labelledby="tabset-3-1-tab">
+<p>The main function of the <strong>caret</strong> package is <code>train()</code>, which takes the formula, the data, the model type, the tuning grid, the training control (including the resampling method), and some other arguments (e.g., the number of trees). The <code>train()</code> function will automatically perform the resampling and hyperparameter tuning (if applicable). The final model is stored in the <code>finalModel</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">model_caret <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> caret<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">train</span>(</span>
+<span id="cb11-2">    temp <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> .,</span>
+<span id="cb11-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(temperature_train),</span>
+<span id="cb11-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ranger"</span>,</span>
+<span id="cb11-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tuneGrid =</span> tn_grid,</span>
+<span id="cb11-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">trControl =</span> tr_control,</span>
+<span id="cb11-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb11-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span></span>
+<span id="cb11-9">)</span>
+<span id="cb11-10">model_caret_final <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> model_caret<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>finalModel</span></code></pre></div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" aria-labelledby="tabset-3-2-tab">
+<p>In <strong>tidymodels</strong>, the <code>fit_resamples()</code> function takes the previously defined workflow and the resampling folds. Here, we also use the <code>control</code> argument to save the predictions and the workflow, which can be useful for later analysis. The <code>fit_best()</code> function is used to fit the best model based on the resampling results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">rf_spatial <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit_resamples</span>(</span>
+<span id="cb12-2">    workflow,</span>
+<span id="cb12-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resamples =</span> block_folds,</span>
+<span id="cb12-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">control =</span> tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">control_resamples</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">save_pred =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">save_workflow =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb12-5">)</span>
+<span id="cb12-6">model_tidymodels <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit_best</span>(rf_spatial)</span></code></pre></div>
+</div>
+</div>
+<div id="tabset-3-3" class="tab-pane" aria-labelledby="tabset-3-3-tab">
+<p>The <strong>mlr3</strong> workflow applies the <code>resample()</code> function to the task, the learner, and the resampling method. Then, to get the final model, we use the <code>train()</code> function on previously defined task and learner.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">model_mlr3 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">resample</span>(</span>
+<span id="cb13-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">task =</span> task,</span>
+<span id="cb13-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">learner =</span> learner,</span>
+<span id="cb13-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resampling =</span> resampling</span>
+<span id="cb13-5">)</span>
+<span id="cb13-6">learner<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">train</span>(task)</span></code></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
+<p>After the models are trained, we want to evaluate their performance. Here, we use two of the most common metrics for regression tasks: the root mean square error (RMSE) and the coefficient of determination (R<sup>2</sup>).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" aria-controls="tabset-4-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" aria-controls="tabset-4-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" aria-controls="tabset-4-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-4-1" class="tab-pane active" aria-labelledby="tabset-4-1-tab">
+<p>RMSE and R<sup>2</sup> are calculated by default in <strong>caret</strong>. The performance metrics are then stored in the <code>results</code> object of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">model_caret<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>results</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  mtry  splitrule min.node.size     RMSE  Rsquared       MAE    RMSESD
+1    8 extratrees             5 1.119936 0.8406388 0.9008884 0.2269326
+  RsquaredSD     MAESD
+1 0.06159361 0.1399976</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" aria-labelledby="tabset-4-2-tab">
+<p>RMSE and R<sup>2</sup> are calculated by default in <strong>tidymodels</strong>. The performance metrics are extracted from the resampling results using the <code>collect_metrics()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect_metrics</span>(rf_spatial)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator  mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   1.10      5  0.0903 Preprocessor1_Model1
+2 rsq     standard   0.858     5  0.0424 Preprocessor1_Model1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-3" class="tab-pane" aria-labelledby="tabset-4-3-tab">
+<p>We need to specify the measures we want to calculate using the <code>msr()</code> function. Then, the <code>aggregate()</code> method is used to calculate the selected performance metrics.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">my_measures <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">msr</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.rmse"</span>), mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">msr</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.rsq"</span>))</span>
+<span id="cb18-2">model_mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aggregate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">measures =</span> my_measures)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>regr.rmse       rsq 
+1.1391701 0.8209292 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="prediction" class="level1">
+<h1>Prediction</h1>
+<p>Our goal is to predict the temperature in Spain using the covariates from the <code>predictor_stack</code> dataset. Thus, we want to obtain a map of the predicted temperature values for the entire country. The <code>predict()</code> function of the <strong>terra</strong> package makes model predictions on the new raster data.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" aria-controls="tabset-5-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" aria-controls="tabset-5-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" aria-controls="tabset-5-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-5-1" class="tab-pane active" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">pred_caret <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictor_stack, model_caret, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb20-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(pred_caret)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">pred_tidymodels <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictor_stack, model_tidymodels, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb21-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(pred_tidymodels)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">pred_mlr3 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictor_stack, learner, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb22-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(pred_mlr3)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="area-of-applicability" class="level1">
+<h1>Area of applicability</h1>
+<p>The area of applicability (AoA) is a method to assess the what is the area of the input space that is similar to the training data. It is a useful tool to evaluate the model performance and to identify the areas where the model can be applied. Areas outside the AoA are considered to be outside the model’s applicability domain, and thus, the predictions in these areas should be interpreted with caution or not used at all.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" aria-controls="tabset-6-1" aria-selected="true">caret</a></li><li class="nav-item"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" aria-controls="tabset-6-2" aria-selected="false">tidymodels</a></li><li class="nav-item"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" aria-controls="tabset-6-3" aria-selected="false">mlr3</a></li></ul>
+<div class="tab-content" data-group="language">
+<div id="tabset-6-1" class="tab-pane active" aria-labelledby="tabset-6-1-tab">
+<p>The AoA method’s original implementation is in the <strong>CAST</strong> package – a package that extends the <strong>caret</strong> package. The AoA is calculated using the <code>aoa()</code> function, which takes the new data (the covariates) and the model as input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">AOA_caret <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> CAST<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aoa</span>(</span>
+<span id="cb23-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">newdata =</span> predictor_stack,</span>
+<span id="cb23-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model =</span> model_caret,</span>
+<span id="cb23-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb23-5">)</span>
+<span id="cb23-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(AOA_caret<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>AOA)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" aria-labelledby="tabset-6-2-tab">
+<p>The <strong>waywiser</strong> package implements the AoA method for <strong>tidymodels</strong><sup>2</sup>. The <code>ww_area_of_applicability()</code> function takes the training data and variable importance as input. Then, to obtain the AoA, we use the <code>predict()</code> function from the <strong>terra</strong> package.<sup>3</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">model_aoa <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> waywiser<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ww_area_of_applicability</span>(</span>
+<span id="cb24-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(temperature_train[, predictor_names]),</span>
+<span id="cb24-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> vip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vi_model</span>(model_tidymodels)</span>
+<span id="cb24-4">)</span>
+<span id="cb24-5">AOA_tidymodels <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictor_stack, model_aoa)</span>
+<span id="cb24-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(AOA_tidymodels<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>aoa)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-3" class="tab-pane" aria-labelledby="tabset-6-3-tab">
+<p>The <strong>CAST</strong> package can calculate the AoA for <strong>mlr3</strong> models. However, then we need to specify various arguments, such as a raster with covariates, the training data, the variables to be used, the weights of the variables, and the cross-validation folds.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">rsmp_cv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> resampling<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">instantiate</span>(task)</span>
+<span id="cb25-2"></span>
+<span id="cb25-3">AOA_mlr3 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> CAST<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aoa</span>(</span>
+<span id="cb25-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">newdata =</span> predictor_stack,</span>
+<span id="cb25-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">train =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.data.frame</span>(task<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data</span>()),</span>
+<span id="cb25-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">variables =</span> task<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>feature_names,</span>
+<span id="cb25-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">weight =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(learner<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">importance</span>())),</span>
+<span id="cb25-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CVtest =</span> rsmp_cv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>instance[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(row_id)]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>fold,</span>
+<span id="cb25-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb25-10">)</span>
+<span id="cb25-11"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(AOA_mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>AOA)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this blog post, we compared three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We demonstrated how to use these frameworks for a spatial machine learning task, including model specification, training, evaluation, prediction, and obtaining the area of applicability.</p>
+<p>There is a lot of overlap in functionality between the three frameworks. Simultaneously, the frameworks differ in their design philosophy and implementation. Some, as <strong>caret</strong>, are more focused on providing a consistent and concise interface, but it offers limited flexibility. Others, like <strong>tidymodels</strong> and <strong>mlr3</strong>, are more modular and flexible, allowing for more complex workflows and customizations, which also makes them more complex to learn and use.</p>
+<p>Many additional steps can be added to the presented workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more. In the next blog posts, we will show these three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Or the hyperparameter tuning grid, in a more advanced scenario.↩︎</p></li>
+<li id="fn2"><p>It is not a wrapper for the <strong>CAST</strong> package, but a separate implementation with some differences as you may read in the function documentation – <code>?ww_area_of_applicability</code>↩︎</p></li>
+<li id="fn3"><p>Thus, this approach allow to check the AoA for each new data set, not only the training data.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
+  author = {Nowosad, Jakub},
+  title = {Spatial Machine Learning with {R:} Caret, Tidymodels, and
+    Mlr3},
+  date = {2025-04-30},
+  url = {https://geocompx.org/post/2025/sml-bp1/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2025. <span>“Spatial Machine Learning with R: Caret,
+Tidymodels, and Mlr3.”</span> April 30, 2025. <a href="https://geocompx.org/post/2025/sml-bp1/">https://geocompx.org/post/2025/sml-bp1/</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <category>sml</category>
+  <guid>https://geocompx.org/post/2025/sml-bp1/</guid>
+  <pubDate>Wed, 30 Apr 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Geocomputation with Python has arrived</title>
   <dc:creator>Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace</dc:creator>
@@ -6856,1012 +7867,6 @@ Nowosad, Jakub. 2019. <span>“Inset Maps with Ggplot2.”</span> December
   <category>rstats</category>
   <guid>https://geocompx.org/post/2019/ggplot2-inset-maps/</guid>
   <pubDate>Sun, 08 Dec 2019 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Map coloring: the color scale styles available in the tmap package</title>
-  <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/tmap-styles/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This vignette builds on the <a href="https://geocompr.robinlovelace.net/adv-map.html">making maps chapter</a> of <a href="https://geocompr.github.io/">the Geocomputation with R book</a>. Its goal is to demonstrate all possible map styles available in the <strong>tmap</strong> package.</p>
-<section id="prerequisites" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>The examples below assume the following packages are attached:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(spData) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># example datasets</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tmap)   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># map creation</span></span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)     <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># spatial data reprojection</span></span></code></pre></div>
-</div>
-<p>The <code>world</code> object containing a world map data from <a href="https://www.naturalearthdata.com/">Natural Earth</a> and information about countries’ names, regions, and subregions they belong to, areas, life expectancies, and populations. This object is in geographical coordinates using the WGS84 datum, however, for mapping purposes, the Mollweide projection is a better alternative (learn more in <a href="https://geocompr.robinlovelace.net/reproj-geo-data.html#modifying-map-projections">the modifying map projections section</a>). The <code>st_tranform</code> function from the <strong>sf</strong> package allows for quick reprojection to the selected coordinate reference system (e.g., <code>"+proj=moll"</code> represents the Mollweide projection).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">world_moll <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(world, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"+proj=moll"</span>)</span></code></pre></div>
-</div>
-</section>
-<section id="one-color" class="level1">
-<h1>One color</h1>
-<p>Let’s start with the basics. To create a simple world map, we need to specify the data object (<code>world_moll</code>) inside the <code>tm_shape()</code> function, and the way we want to visualize it. The <strong>tmap</strong> package offers several visualisation possibilities for polygons, including <code>tm_borders()</code>, <code>tm_fill()</code>, and <code>tm_polygons()</code>. The last one draws the filled polygons with borders, where the fill color can be specified with the <code>col</code> argument:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lightblue"</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The output is a map of world countries, where each country is filled with a light blue color.</p>
-</section>
-<section id="coloring-of-adjacent-polygons" class="level1">
-<h1>Coloring of adjacent polygons</h1>
-<p>The <code>col</code> argument is very flexible, and its action depends on the value provided. In the previous example, we provided a single color value resulting in a map with one color. To create a map, where adjacent polygons do not get the same color, we need to provide a keyword <code>"MAP_COLORS"</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"MAP_COLORS"</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The default color can be changed using the <code>palette</code> argument - run the <code>tmaptools::palette_explorer()</code> function to see possible palettes’ names.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb5-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"MAP_COLORS"</span>,</span>
-<span id="cb5-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">palette =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Pastel1"</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<!-- Additionally, the number of classes can be set using the `n` argument. -->
-<p>Additionally, in this case, it is possible to use the <code>minimize</code> argument, which triggers the internal algorithm to search for a minimal number of colors for visualization.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"MAP_COLORS"</span>,</span>
-<span id="cb6-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">minimize =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The new map uses five colors<!-- except for Angola (blue color)-->. On a side note, in theory, no more than four colors are required to color the polygons of the map so that no two adjacent polygons have the same color (learn more about the four color map theorem on <a href="https://en.wikipedia.org/wiki/Four_color_theorem">Wikipedia</a>).</p>
-</section>
-<section id="categorical-maps" class="level1">
-<h1>Categorical maps</h1>
-<p>The third use of the <code>col</code> argument is by providing the variable (column) name. In this case, the map will represent the given variable. By default, <strong>tmap</strong> behaves differently depending on the input variable type. For example, it will create a categorical map when the provided variable contains characters or factors. The <code>tm_polygons(col = "subregion", style = "cat")</code> code will be run automatically in this case.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"subregion"</span>)<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="discrete-maps" class="level1">
-<h1>Discrete maps</h1>
-<p>Discrete maps represents continuous numerical variables using discrete class intervals. There are several ways to convert continuous variables to discrete ones implemented in <strong>tmap</strong>.</p>
-<section id="pretty" class="level2">
-<h2 class="anchored" data-anchor-id="pretty">Pretty</h2>
-<p>When the variable provided as the <code>col</code> argument is numeric, <strong>tmap</strong> will use the <code>"pretty"</code> style as a default. In other words, it runs <code>tm_polygons(col = "lifeExp", style = "pretty")</code> invisibly to the user. This style rounds breaks into whole numbers where possible and spaces them evenly.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb8-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>A histogram is added using <code>legend.hist = TRUE</code> in this and several next examples to show how the selected map style relates to the distribution of values.</p>
-<p>It is possible to indicate a preferred number of classes using the <code>n</code> argument. Importantly, not every <code>n</code> is possible depending on the range of the values in the data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb9-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>,</span>
-<span id="cb9-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="fixed" class="level2">
-<h2 class="anchored" data-anchor-id="fixed">Fixed</h2>
-<p>The <code>"fixed"</code> style allows for a manual selection of the breaks in conjunction with the <code>breaks</code> argument.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb10-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb10-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fixed"</span>,</span>
-<span id="cb10-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">breaks =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">45</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">60</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">75</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">90</span>),</span>
-<span id="cb10-5">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb10-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Additionally, the default labels can be overwritten using the <code>labels</code> argument.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb11-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb11-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fixed"</span>,</span>
-<span id="cb11-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">breaks =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">45</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">60</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">75</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">90</span>),</span>
-<span id="cb11-5">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">labels =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"low"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"medium"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"high"</span>),</span>
-<span id="cb11-6">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb11-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="breaks-based-on-the-standard-deviation-value" class="level2">
-<h2 class="anchored" data-anchor-id="breaks-based-on-the-standard-deviation-value">Breaks based on the standard deviation value</h2>
-<p>The <code>"sd"</code> style calculates a standard deviation of a given variable, and next use this value as the break width.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb12-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb12-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sd"</span>,</span>
-<span id="cb12-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb12-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="fisher-algorithm" class="level2">
-<h2 class="anchored" data-anchor-id="fisher-algorithm">Fisher algorithm</h2>
-<p>The <code>"fisher"</code> style creates groups with maximalized homogeneity.<sup>1</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb13-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb13-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fisher"</span>,</span>
-<span id="cb13-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb13-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="jenks-natural-breaks" class="level2">
-<h2 class="anchored" data-anchor-id="jenks-natural-breaks">Jenks natural breaks</h2>
-<p>The <code>"jenks"</code> style identifies groups of similar values in the data and maximizes the differences between categories.<sup>2</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb14-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb14-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jenks"</span>,</span>
-<span id="cb14-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb14-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="hierarchical-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="hierarchical-clustering">Hierarchical clustering</h2>
-<p>In the <code>"hclust"</code> style, breaks are created using hierarchical clustering.<sup>3</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb15-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hclust"</span>,</span>
-<span id="cb15-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="bagged-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="bagged-clustering">Bagged clustering</h2>
-<p>The <code>"bclust"</code> style uses the <code>bclust</code> function to generate the breaks using bagged clustering.<sup>4</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb16-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb16-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"bclust"</span>,</span>
-<span id="cb16-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb16-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Committee Member: 1(1) 2(1) 3(1) 4(1) 5(1) 6(1) 7(1) 8(1) 9(1) 10(1)
-Computing Hierarchical Clustering</code></pre>
-</div>
-</div>
-</section>
-<section id="k-means-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="k-means-clustering">k-means clustering</h2>
-<p>The <code>"kmeans"</code> style uses the <code>kmeans</code> function to generate the breaks.<sup>5</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb18-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb18-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"kmeans"</span>,</span>
-<span id="cb18-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb18-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="quantile-breaks" class="level2">
-<h2 class="anchored" data-anchor-id="quantile-breaks">Quantile breaks</h2>
-<p>The <code>"quantile"</code> style creates breaks with an equal number of features (polygons).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb19-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb19-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"quantile"</span>,</span>
-<span id="cb19-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb19-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="equal-breaks" class="level2">
-<h2 class="anchored" data-anchor-id="equal-breaks">Equal breaks</h2>
-<p>The <code>"equal"</code> style divides input values into bins of equal range and is appropriate for variables with a uniform distribution. It is not recommended for variables with a skewed distribution as the resulting map may end-up having little color diversity.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb20-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>, </span>
-<span id="cb20-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"equal"</span>,</span>
-<span id="cb20-4">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.hist =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb20-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Learn more about the implementation of discrete scales in <a href="https://r-spatial.github.io/classInt/index.html">the <strong>classInt</strong> package’s documentation</a>.</p>
-</section>
-</section>
-<section id="continuous-maps" class="level1">
-<h1>Continuous maps</h1>
-<p>The <strong>tmap</strong> package also allows for creating continuous maps.</p>
-<section id="continuous" class="level2">
-<h2 class="anchored" data-anchor-id="continuous">Continuous</h2>
-<p>The <code>"cont"</code> style presents a large number of colors over the continuous color field.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb21-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb21-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cont"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb21-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="order" class="level2">
-<h2 class="anchored" data-anchor-id="order">Order</h2>
-<p>The <code>"order"</code> style also presents a large number of colors over the continuous color field. However, this style is suited to visualize skewed distributions; notice that the values on the legend do not change linearly.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb22-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lifeExp"</span>,</span>
-<span id="cb22-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"order"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb22-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="logarithmic-scales" class="level1">
-<h1>Logarithmic scales</h1>
-<p>The default numeric style, <code>pretty</code>, is easy to understand, but it is not proper for maps of variables with skewed distributions.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb23-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pop"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb23-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Another possible style, <code>order</code> works better in this case; however, it is not easy to interpret.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb24-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pop"</span>, </span>
-<span id="cb24-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"order"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb24-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>A better alternative, in this case, is to use a common logarithm (the logarithm to base 10) scale. The <strong>tmap</strong> package gives two possibilities in this case - <code>"log10_pretty"</code> and <code>"log10"</code>. The <code>"log10_pretty"</code> style is a common logarithmic version of the regular <code>pretty</code> style.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb25-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pop"</span>, </span>
-<span id="cb25-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"log10_pretty"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb25-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>On the other hand, the <code>"log10"</code> style is a version of a continuous scale.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_shape</span>(world_moll) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb26-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_polygons</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pop"</span>, </span>
-<span id="cb26-3">              <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"log10"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb26-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tm_layout</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.outside =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) </span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/tmap-styles/index_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="conclusions" class="level1">
-<h1>Conclusions</h1>
-<p>Selecting a color scale style is not an easy task. It depends on the type of input variable and its distribution, but also the intended audience. Therefore, it is worth to spend some time and think about your readers (e.g., would they be able to understand the logarithmic scale or should you use the manual breaks instead?) and your data (e.g., how many breaks should there be to show different subgroups?). Now you know different color scale styles implemented in <strong>tmap</strong>, so let’s try using them for your own projects!</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>https://www.tandfonline.com/doi/abs/10.1080/01621459.1958.10501479↩︎</p></li>
-<li id="fn2"><p>https://en.wikipedia.org/wiki/Jenks_natural_breaks_optimization↩︎</p></li>
-<li id="fn3"><p>See the <code>?hclust</code> documentation for more details.↩︎</p></li>
-<li id="fn4"><p>See the <code>?bclust</code> documentation for more details.↩︎</p></li>
-<li id="fn5"><p>See the <code>?kmeans</code> documentation for more details.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
-  author = {Nowosad, Jakub},
-  title = {Map Coloring: The Color Scale Styles Available in the Tmap
-    Package},
-  date = {2019-10-17},
-  url = {https://geocompx.org/post/2019/tmap-styles/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
-Nowosad, Jakub. 2019. <span>“Map Coloring: The Color Scale Styles
-Available in the Tmap Package.”</span> October 17, 2019. <a href="https://geocompx.org/post/2019/tmap-styles/">https://geocompx.org/post/2019/tmap-styles/</a>.
-</div></div></section></div> ]]></description>
-  <category>vignette</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/tmap-styles/</guid>
-  <pubDate>Thu, 17 Oct 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
