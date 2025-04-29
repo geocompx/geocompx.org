@@ -3,7 +3,7 @@ title: "Spatial machine learning with caret"
 author:
   - name: Jan Linnenbrink
     orcid: 0000-0003-0991-8646
-date: ""
+date: "2025-05-14"
 slug: sml-bp2
 categories:
   - rstats
