@@ -38,8 +38,8 @@ We use **sf** and **terra** for processing vector and raster data, respectively.
 ## The caret package
 
 The **caret** package contains functions to train machine-learning models, as well as for, e.g., model selection. 
-Its main function is the `caret::train()`, which provides a uniform interface to over 200 machine-learning algorithms. 
-(User-specified-) cross-Validation methods can be defined via `caret::trainControl()`.
+Its main function is `caret::train()`, which provides a uniform interface to over 200 machine-learning algorithms. 
+(User-specified-) Cross-Validation methods can be defined via `caret::trainControl()`.
 An extensive online tutorial is available at <https://topepo.github.io/caret/>. 
 Furthermore, a paper (<https://doi.org/10.18637/jss.v028.i05>), as well as a book (<http://appliedpredictivemodeling.com/>), describing the use of **caret** are available.
 
@@ -78,11 +78,17 @@ Load data needed in this modelling example:
 ```{r}
 #| message: false
 #| warning: false
-predictor_stack <- terra::rast("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif")
+predictor_stack <- terra::rast(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"
+)
 predictor_names <- names(predictor_stack)
-spain <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg")
+spain <- sf::st_read(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"
+)
 
-train_points <- sf::st_read("https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg")
+train_points <- sf::st_read(
+    "https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"
+)
 train_data <- terra::extract(
     predictor_stack,
     train_points,
@@ -125,7 +131,7 @@ temperature_test <- train_data[-trainIndex, ]
 # 2. model training
 model <- caret::train(
     temp ~ .,
-    data = st_drop_geometry(temperature_train),
+    data = sf::st_drop_geometry(temperature_train),
     method = "ranger",
     tuneGrid = expand.grid(
         "mtry" = 4,
@@ -198,7 +204,7 @@ hyperparameter_grid <- expand.grid(
 
 model_spatial <- caret::train(
     temp ~ .,
-    data = st_drop_geometry(temperature_train),
+    data = sf::st_drop_geometry(temperature_train),
     method = "ranger",
     trControl = tr_control_block,
     tuneGrid = hyperparameter_grid,
@@ -210,7 +216,7 @@ model_spatial$finalModel
 
 ### Hyperparameter tuning using target-oriented CV
 
-Another spatial CV method is kNNDM, which is implemented in the CAST package and aims at emulating the prediction situation encountered by the model during CV. 
+Another spatial CV method is kNNDM, which is implemented in the **CAST** package and aims at emulating the prediction situation encountered by the model during CV. 
 In this case, the prediction situation is to predict from the temperature measurement stations to the whole area of Spain. 
 Since the temperature measurement stations are rather randomly distributed over the area of Spain, no spatial blocking is needed and kNNDM randomly assigns training points to CV folds. 
 The output of kNNDM contains a list of row indices of training data points that are used in each CV-iteration (`indx_train`), as well as of indices that are left out in each iteration (`indx_test`).
@@ -242,7 +248,7 @@ hyperparameter_grid <- expand.grid(
 
 model_knndm <- caret::train(
     temp ~ .,
-    data = st_drop_geometry(temperature_train),
+    data = sf::st_drop_geometry(temperature_train),
     method = "ranger",
     trControl = tr_control_knndm,
     tuneGrid = hyperparameter_grid,
@@ -265,8 +271,8 @@ Plotting the results of `FFS()` shows that the variables `DEM`, `Y`, `EDF5` and 
 selected_hyperparams <- model_knndm$bestTune
 
 model_ffs <- CAST::ffs(
-    predictors = st_drop_geometry(temperature_train)[, predictor_names],
-    response = st_drop_geometry(temperature_train)$temp,
+    predictors = sf::st_drop_geometry(temperature_train)[, predictor_names],
+    response = sf::st_drop_geometry(temperature_train)$temp,
     method = "ranger",
     num.trees = 100,
     trControl = tr_control_knndm,
@@ -284,7 +290,7 @@ prediction_ffs <- terra::predict(predictor_stack, model_ffs, na.rm = TRUE)
 
 Lastly, the area which is too dissimilar from the training data for the models to make reliable predictions (area of applicability, AOA) is delineated using the function `CAST::aoa()`.
 The function `CAST::aoa()` takes as inputs the predictor stack, as well as the trained **caret** model. 
-The resulting object contains the Dissimilarity values, the threshold used to delineate the AOA (every DI above this threshold is considered outside the AOA), as well as the final AOA raster.
+The resulting object contains the dissimilarity values, the threshold used to delineate the AOA (every dissimilarity value above this threshold is considered outside the AOA), as well as the final AOA raster.
 Since our training data are randomly distributed in the study area, most of the area falls within the AOA.
 
 ```{r}
