@@ -413,3 +413,7 @@ Others, like **tidymodels** and **mlr3**, are more modular and flexible, allowin
 
 Many additional steps can be added to the presented workflow, such as feature engineering, variable selection, hyperparameter tuning, model interpretation, and more.
 In the next blog posts, we will show these three frameworks in more detail, and then also present some other packages that can be used for spatial machine learning in R.
+
+# Acknowledgments
+
+This blog post series is possible due to the financial support of the European Union’s Horizon Europe research and innovation programme under the Marie Skłodowska-Curie grant agreement No. 101147446.
