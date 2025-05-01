@@ -119,6 +119,7 @@ Geometry column needs to be dropped before using `caret::train()`.
 #| warning: false
 
 # 1. train-test split
+set.seed(321)
 trainIndex <- caret::createDataPartition(
     train_data$temp,
     p = .8,
@@ -181,6 +182,7 @@ The combination of `mtry` and `min.node.size` that minimizes the RMSE is then au
 ```{r}
 #| message: false
 #| warning: false
+set.seed(333)
 spatial_blocks <- blockCV::cv_spatial(
     temperature_train,
     k = 5,
