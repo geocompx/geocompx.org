@@ -298,7 +298,7 @@ window.Quarto = {
 </section>
 <section id="the-caret-package" class="level2">
 <h2 class="anchored" data-anchor-id="the-caret-package">The caret package</h2>
-<p>The <strong>caret</strong> package contains functions to train machine-learning models, as well as for, e.g., model selection. Its main function is the <code>caret::train()</code>, which provides a uniform interface to over 200 machine-learning algorithms. (User-specified-) cross-Validation methods can be defined via <code>caret::trainControl()</code>. An extensive online tutorial is available at <a href="https://topepo.github.io/caret/" class="uri">https://topepo.github.io/caret/</a>. Furthermore, a paper (<a href="https://doi.org/10.18637/jss.v028.i05" class="uri">https://doi.org/10.18637/jss.v028.i05</a>), as well as a book (<a href="http://appliedpredictivemodeling.com/" class="uri">http://appliedpredictivemodeling.com/</a>), describing the use of <strong>caret</strong> are available.</p>
+<p>The <strong>caret</strong> package contains functions to train machine-learning models, as well as for, e.g., model selection. Its main function is <code>caret::train()</code>, which provides a uniform interface to over 200 machine-learning algorithms. (User-specified-) Cross-Validation methods can be defined via <code>caret::trainControl()</code>. An extensive online tutorial is available at <a href="https://topepo.github.io/caret/" class="uri">https://topepo.github.io/caret/</a>. Furthermore, a paper (<a href="https://doi.org/10.18637/jss.v028.i05" class="uri">https://doi.org/10.18637/jss.v028.i05</a>), as well as a book (<a href="http://appliedpredictivemodeling.com/" class="uri">http://appliedpredictivemodeling.com/</a>), describing the use of <strong>caret</strong> are available.</p>
 </section>
 <section id="install-and-load-required-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="install-and-load-required-r-packages">Install and load required R-packages</h2>
@@ -326,9 +326,13 @@ window.Quarto = {
 <li><strong>spain</strong>: region for which predictions are made</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>predictor_stack <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>predictor_names <span class="ot">&lt;-</span> <span class="fu">names</span>(predictor_stack)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>spain <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>predictor_stack <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">rast</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>predictor_names <span class="ot">&lt;-</span> <span class="fu">names</span>(predictor_stack)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>spain <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `spain' from data source 
   `https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg' 
@@ -339,7 +343,9 @@ Dimension:     XY
 Bounding box:  xmin: -13454.15 ymin: 3988025 xmax: 1020771 ymax: 4859816
 Projected CRS: ED50 / UTM zone 30N</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>train_points <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>train_points <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `temp_train' from data source 
   `https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg' 
@@ -393,44 +399,45 @@ Note
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. train-test split</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">createDataPartition</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    train_data<span class="sc">$</span>temp,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">8</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">times =</span> <span class="dv">1</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>temperature_train <span class="ot">&lt;-</span> train_data[trainIndex, ]</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>temperature_test <span class="ot">&lt;-</span> train_data[<span class="sc">-</span>trainIndex, ]</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. model training</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">train</span>(</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    temp <span class="sc">~</span> .,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">st_drop_geometry</span>(temperature_train),</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mtry"</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"splitrule"</span> <span class="ot">=</span> <span class="st">"variance"</span>,</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"min.node.size"</span> <span class="ot">=</span> <span class="dv">5</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. predict on test data</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>test_df <span class="ot">&lt;-</span> temperature_test[, <span class="st">"temp"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>test_df<span class="sc">$</span>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, temperature_test)</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>test_metrics <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">postResample</span>(</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred =</span> test_df<span class="sc">$</span>prediction,</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> test_df<span class="sc">$</span>temp</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>()</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test_metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">321</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>trainIndex <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">createDataPartition</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    train_data<span class="sc">$</span>temp,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> .<span class="dv">8</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">list =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">times =</span> <span class="dv">1</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>temperature_train <span class="ot">&lt;-</span> train_data[trainIndex, ]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>temperature_test <span class="ot">&lt;-</span> train_data[<span class="sc">-</span>trainIndex, ]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. model training</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">train</span>(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    temp <span class="sc">~</span> .,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature_train),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mtry"</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"splitrule"</span> <span class="ot">=</span> <span class="st">"variance"</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"min.node.size"</span> <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. predict on test data</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>test_df <span class="ot">&lt;-</span> temperature_test[, <span class="st">"temp"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>test_df<span class="sc">$</span>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, temperature_test)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>test_metrics <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">postResample</span>(</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred =</span> test_df<span class="sc">$</span>prediction,</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">obs =</span> test_df<span class="sc">$</span>temp</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>()</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(test_metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   RMSE Rsquared MAE
-1 1.088    0.917 0.8</code></pre>
+<pre><code>   RMSE Rsquared   MAE
+1 0.913    0.901 0.741</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. predict to raster stack</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>prediction_spatial <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">predict</span>(predictor_stack, model, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -444,19 +451,20 @@ Note
 <h3 class="anchored" data-anchor-id="hyperparameter-tuning-using-spatial-block-cross-validation">Hyperparameter tuning using spatial block cross-validation</h3>
 <p>The <strong>blockCV</strong> package implements different blocking methods for spatial CV. The resulting object of the main function <code>blockCV::cv_spatial()</code> contains a nested list of the <span class="math inline">\(k\)</span> folds and the training data rows that belong to each fold, as well as a list of the test data left out in each of the <span class="math inline">\(k\)</span> iteration. These lists can be obtained using <code>lapply()</code> and then be used as an input to the <code>caret::trainControl()</code> function of caret that defines the CV strategy used in <code>caret::train()</code>. The grid of hyperparameter values tested during CV is defined using the <code>tune_grid</code> argument in <code>caret::train()</code>. Here, we test <code>mtry</code> values from 2 to 12 and <code>min.node.size</code> values between 5 and 15. The combination of <code>mtry</code> and <code>min.node.size</code> that minimizes the RMSE is then automatically used to re-train a final model with the complete training data set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>spatial_blocks <span class="ot">&lt;-</span> blockCV<span class="sc">::</span><span class="fu">cv_spatial</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    temperature_train,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">5</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">333</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>spatial_blocks <span class="ot">&lt;-</span> blockCV<span class="sc">::</span><span class="fu">cv_spatial</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    temperature_train,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">k =</span> <span class="dv">5</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
   train test
-1   127   32
-2   128   31
-3   127   32
-4   127   32
-5   127   32</code></pre>
+1   126   33
+2   126   33
+3   128   31
+4   128   31
+5   128   31</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
@@ -483,7 +491,7 @@ Note
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>model_spatial <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">train</span>(</span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    temp <span class="sc">~</span> .,</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">st_drop_geometry</span>(temperature_train),</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature_train),</span>
 <span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
 <span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> tr_control_block,</span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> hyperparameter_grid,</span>
@@ -505,14 +513,14 @@ Mtry:                             10
 Target node size:                 5 
 Variable importance mode:         none 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.7245096 
-R squared (OOB):                  0.9005452 </code></pre>
+OOB prediction error (MSE):       0.8557959 
+R squared (OOB):                  0.8952759 </code></pre>
 </div>
 </div>
 </section>
 <section id="hyperparameter-tuning-using-target-oriented-cv" class="level3">
 <h3 class="anchored" data-anchor-id="hyperparameter-tuning-using-target-oriented-cv">Hyperparameter tuning using target-oriented CV</h3>
-<p>Another spatial CV method is kNNDM, which is implemented in the CAST package and aims at emulating the prediction situation encountered by the model during CV. In this case, the prediction situation is to predict from the temperature measurement stations to the whole area of Spain. Since the temperature measurement stations are rather randomly distributed over the area of Spain, no spatial blocking is needed and kNNDM randomly assigns training points to CV folds. The output of kNNDM contains a list of row indices of training data points that are used in each CV-iteration (<code>indx_train</code>), as well as of indices that are left out in each iteration (<code>indx_test</code>). These lists can easily be used as input to the <code>caret::trainControl()</code> function of <strong>caret</strong> that defines the CV used in <code>caret::train()</code>.</p>
+<p>Another spatial CV method is kNNDM, which is implemented in the <strong>CAST</strong> package and aims at emulating the prediction situation encountered by the model during CV. In this case, the prediction situation is to predict from the temperature measurement stations to the whole area of Spain. Since the temperature measurement stations are rather randomly distributed over the area of Spain, no spatial blocking is needed and kNNDM randomly assigns training points to CV folds. The output of kNNDM contains a list of row indices of training data points that are used in each CV-iteration (<code>indx_train</code>), as well as of indices that are left out in each iteration (<code>indx_test</code>). These lists can easily be used as input to the <code>caret::trainControl()</code> function of <strong>caret</strong> that defines the CV used in <code>caret::train()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>knndm_folds <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">knndm</span>(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">tpoints =</span> temperature_train,</span>
@@ -537,7 +545,7 @@ R squared (OOB):                  0.9005452 </code></pre>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>model_knndm <span class="ot">&lt;-</span> caret<span class="sc">::</span><span class="fu">train</span>(</span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    temp <span class="sc">~</span> .,</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">st_drop_geometry</span>(temperature_train),</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature_train),</span>
 <span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
 <span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> tr_control_knndm,</span>
 <span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> hyperparameter_grid,</span>
@@ -555,12 +563,12 @@ Type:                             Regression
 Number of trees:                  100 
 Sample size:                      159 
 Number of independent variables:  22 
-Mtry:                             10 
-Target node size:                 5 
+Mtry:                             12 
+Target node size:                 10 
 Variable importance mode:         none 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.8051026 
-R squared (OOB):                  0.8894821 </code></pre>
+OOB prediction error (MSE):       0.8728343 
+R squared (OOB):                  0.8931909 </code></pre>
 </div>
 </div>
 </section>
@@ -571,8 +579,8 @@ R squared (OOB):                  0.8894821 </code></pre>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>selected_hyperparams <span class="ot">&lt;-</span> model_knndm<span class="sc">$</span>bestTune</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>model_ffs <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">ffs</span>(</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">predictors =</span> <span class="fu">st_drop_geometry</span>(temperature_train)[, predictor_names],</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">response =</span> <span class="fu">st_drop_geometry</span>(temperature_train)<span class="sc">$</span>temp,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">predictors =</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature_train)[, predictor_names],</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">response =</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(temperature_train)<span class="sc">$</span>temp,</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
 <span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">num.trees =</span> <span class="dv">100</span>,</span>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> tr_control_knndm,</span>
@@ -595,7 +603,7 @@ R squared (OOB):                  0.8894821 </code></pre>
 </section>
 <section id="aoa" class="level2">
 <h2 class="anchored" data-anchor-id="aoa">AOA</h2>
-<p>Lastly, the area which is too dissimilar from the training data for the models to make reliable predictions (area of applicability, AOA) is delineated using the function <code>CAST::aoa()</code>. The function <code>CAST::aoa()</code> takes as inputs the predictor stack, as well as the trained <strong>caret</strong> model. The resulting object contains the Dissimilarity values, the threshold used to delineate the AOA (every DI above this threshold is considered outside the AOA), as well as the final AOA raster. Since our training data are randomly distributed in the study area, most of the area falls within the AOA.</p>
+<p>Lastly, the area which is too dissimilar from the training data for the models to make reliable predictions (area of applicability, AOA) is delineated using the function <code>CAST::aoa()</code>. The function <code>CAST::aoa()</code> takes as inputs the predictor stack, as well as the trained <strong>caret</strong> model. The resulting object contains the dissimilarity values, the threshold used to delineate the AOA (every dissimilarity value above this threshold is considered outside the AOA), as well as the final AOA raster. Since our training data are randomly distributed in the study area, most of the area falls within the AOA.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>AOA_without_tuning <span class="ot">&lt;-</span> CAST<span class="sc">::</span><span class="fu">aoa</span>(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">newdata =</span> predictor_stack,</span>
