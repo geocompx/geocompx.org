@@ -56,7 +56,7 @@ flowchart TB
 # Inputs
 
 Our task is to predict the temperature in Spain using a set of covariates. 
-We have two datasets for that purpose: the first one, `temperature_train`, contains the temperature measurements from 195 locations in Spain, and the second one, `predictor_stack`, contains the covariates we will use to predict the temperature.
+We have two datasets for that purpose: the first one, `temperature_train`, contains the temperature measurements from 195 locations in Spain, and the second one, `predictor_stack`, contains the covariates we will use to predict the temperature.^[Source of the data: Milà et al. (2024), https://doi.org/10.5194/gmd-17-6007-2024]
 These covariates include variables such as population density (`popdens`), distance to the coast (`coast`), and elevation (`elev`), among others.
 
 ```{r}
