@@ -9,7 +9,7 @@ categories:
   - rstats
   - sml
 tags: [caret, CAST, blockcv, machine-learning, spatial-machine-learning]
-draft: true
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:

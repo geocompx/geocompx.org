@@ -22,6 +22,8 @@ knitr:
 
 This is the first part of a blog post series on spatial machine learning with R.
 
+- [Part 2](post/2025/sml-bp2/): Spatial machine learning with caret
+
 :::
 
 The R language has a variety of packages for machine learning, and many of them can be used for machine learning tasks in a spatial context (*spatial machine learning*).
