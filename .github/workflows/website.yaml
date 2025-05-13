@@ -17,7 +17,7 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: 1.8.4
+          version: 1.6.43
         
       # - name: Install extensions
       #   run: |
