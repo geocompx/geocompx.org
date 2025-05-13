@@ -27,7 +27,7 @@
 </div>
 <div class="callout-body-container">
 <p>This is the second part of a blog post series on spatial machine learning with R.</p>
-<p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
+<p>You can find the list of other blog posts in this series <a href="../../../post/2025/sml-bp1/">in part one</a>.</p>
 </div>
 </div>
 </div>
@@ -1006,7 +1006,7 @@ Caret.”</span> May 14, 2025. <a href="https://geocompx.org/post/2025/sml-bp2/"
 <div class="callout-body-container">
 <p>This is the first part of a blog post series on spatial machine learning with R.</p>
 <ul>
-<li><a href="post/2025/sml-bp2/">Part 2</a>: Spatial machine learning with caret</li>
+<li><a href="../../../post/2025/sml-bp2/">Part 2</a>: Spatial machine learning with caret</li>
 </ul>
 </div>
 </div>

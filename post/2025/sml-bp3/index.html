@@ -258,7 +258,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </div>
 <div class="callout-body-container">
 <p>This is the third part of a blog post series on spatial machine learning with R.</p>
-<p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
+<p>You can find the list of other blog posts in this series <a href="../../../post/2025/sml-bp1/">in part one</a>.</p>
 </div>
 </div>
 </div>
@@ -379,16 +379,16 @@ Note
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   0.961     4 0.0977  Preprocessor1_Model1
-2 rsq     standard   0.903     4 0.00821 Preprocessor1_Model1</code></pre>
+1 rmse    standard   0.963     4  0.0839 Preprocessor1_Model1
+2 rsq     standard   0.902     4  0.0177 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tune<span class="sc">::</span><span class="fu">collect_metrics</span>(rf_spatial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   1.35      4  0.267  Preprocessor1_Model1
-2 rsq     standard   0.734     4  0.0607 Preprocessor1_Model1</code></pre>
+1 rmse    standard   1.35      4  0.275  Preprocessor1_Model1
+2 rsq     standard   0.741     4  0.0613 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rf_spatial$.metrics # metrics from each fold</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -457,16 +457,16 @@ Note
 <pre><code># A tibble: 60 × 8
     mtry min_n .metric .estimator  mean     n std_err .config              
    &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
- 1     1     5 rmse    standard   1.96      4  0.310  Preprocessor1_Model01
- 2     1     5 rsq     standard   0.556     4  0.147  Preprocessor1_Model01
- 3     1     9 rmse    standard   1.95      4  0.260  Preprocessor1_Model02
- 4     1     9 rsq     standard   0.572     4  0.106  Preprocessor1_Model02
- 5     2     4 rmse    standard   1.58      4  0.298  Preprocessor1_Model03
- 6     2     4 rsq     standard   0.666     4  0.108  Preprocessor1_Model03
- 7     2     2 rmse    standard   1.64      4  0.293  Preprocessor1_Model04
- 8     2     2 rsq     standard   0.671     4  0.0798 Preprocessor1_Model04
- 9     3     7 rmse    standard   1.49      4  0.292  Preprocessor1_Model05
-10     3     7 rsq     standard   0.706     4  0.0831 Preprocessor1_Model05
+ 1     1     5 rmse    standard   1.88      4  0.275  Preprocessor1_Model01
+ 2     1     5 rsq     standard   0.597     4  0.0996 Preprocessor1_Model01
+ 3     1     9 rmse    standard   1.90      4  0.274  Preprocessor1_Model02
+ 4     1     9 rsq     standard   0.593     4  0.113  Preprocessor1_Model02
+ 5     2     4 rmse    standard   1.63      4  0.269  Preprocessor1_Model03
+ 6     2     4 rsq     standard   0.659     4  0.0993 Preprocessor1_Model03
+ 7     2     2 rmse    standard   1.57      4  0.289  Preprocessor1_Model04
+ 8     2     2 rsq     standard   0.655     4  0.0852 Preprocessor1_Model04
+ 9     3     7 rmse    standard   1.50      4  0.318  Preprocessor1_Model05
+10     3     7 rsq     standard   0.703     4  0.0650 Preprocessor1_Model05
 # ℹ 50 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rf_tuning <span class="sc">|&gt;</span></span>
@@ -502,18 +502,18 @@ Model: rand_forest()
 Ranger result
 
 Call:
- ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~18L,      x), num.trees = ~100, min.node.size = min_rows(~5L, x), importance = ~"impurity",      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) 
+ ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~20L,      x), num.trees = ~100, min.node.size = min_rows(~7L, x), importance = ~"impurity",      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) 
 
 Type:                             Regression 
 Number of trees:                  100 
 Sample size:                      195 
 Number of independent variables:  22 
-Mtry:                             18 
-Target node size:                 5 
+Mtry:                             20 
+Target node size:                 7 
 Variable importance mode:         impurity 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.7857228 
-R squared (OOB):                  0.9014527 </code></pre>
+OOB prediction error (MSE):       0.8050308 
+R squared (OOB):                  0.8990311 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>imp <span class="ot">&lt;-</span> <span class="fu">extract_fit_parsnip</span>(finalmodel) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    vip<span class="sc">::</span><span class="fu">vip</span>()</span>
