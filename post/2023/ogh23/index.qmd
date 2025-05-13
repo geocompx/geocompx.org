@@ -29,7 +29,7 @@ draft: false
 #| include: false
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 # install python packages needed for this document:
-pkgs = c("geopandas", "shapely", "pandas", "rasterio", "matplotlib", "folium", "mapclassify")
+pkgs <- c("geopandas", "shapely", "pandas", "rasterio", "matplotlib", "folium", "mapclassify")
 reticulate::py_install(pkgs)
 ```
 
@@ -115,14 +115,14 @@ poi = gpd.GeoDataFrame([
 ## R
 
 ```{r}
-poi_df = tribble(
-  ~name, ~lon, ~lat,
-  "Faculty",        16.9418, 52.4643,
-  "Hotel ForZa",    16.9474, 52.4436,
-  "Hotel Lechicka", 16.9308, 52.4437,
-  "FairPlayce",     16.9497, 52.4604
+poi_df <- tribble(
+    ~name, ~lon, ~lat,
+    "Faculty", 16.9418, 52.4643,
+    "Hotel ForZa", 16.9474, 52.4436,
+    "Hotel Lechicka", 16.9308, 52.4437,
+    "FairPlayce", 16.9497, 52.4604
 )
-poi_sf = sf::st_as_sf(poi_df, coords = c("lon", "lat"), crs = "EPSG:4326")
+poi_sf <- sf::st_as_sf(poi_df, coords = c("lon", "lat"), crs = "EPSG:4326")
 ```
 
 :::
@@ -148,10 +148,10 @@ if not os.path.exists("data"):
 ## R
 
 ```{r}
-u = "https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"
-f = basename(u)
+u <- "https://github.com/Robinlovelace/opengeohub2023/releases/download/data/data.zip"
+f <- basename(u)
 if (!dir.exists("data")) {
-  download.file(u, f)
+    download.file(u, f)
 }
 ```
 
@@ -198,7 +198,7 @@ pol_all
 ## R
 
 ```{r}
-pol_all = sf::read_sf("/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp")
+pol_all <- sf::read_sf("/vsizip/data.zip/data/osm/gis_osm_transport_a_free_1.shp")
 pol_all
 ```
 
@@ -208,16 +208,20 @@ Note: in both R and Python, you can read-in the dataset from the URL in a single
 
 ::: {.panel-tabset group="language"}
 
+## Python
+
 ```{python}
 #| eval: false
 pol_all = gpd.read_file("zip+" + u + "/data/osm/gis_osm_transport_a_free_1.shp")
 pol_all
 ```
 
+## R
+
 ```{r}
 #| eval: false
-uz = paste0("/vsizip//vsicurl/", u, "/data/osm/gis_osm_transport_a_free_1.shp")
-pol_all = sf::read_sf(uz)
+uz <- paste0("/vsizip//vsicurl/", u, "/data/osm/gis_osm_transport_a_free_1.shp")
+pol_all <- sf::read_sf(uz)
 ```
 
 :::
@@ -238,8 +242,8 @@ pol
 ## R
 
 ```{r}
-pol = pol_all |>
-  filter(str_detect(name, "Port*.+Poz"))
+pol <- pol_all |>
+    filter(str_detect(name, "Port*.+Poz"))
 pol
 ```
 
@@ -308,9 +312,9 @@ stops
 ## R
 
 ```{r}
-stops = read_csv("data/gtfs/stops.txt") |>
-  select(-stop_code) |>
-  st_as_sf(coords = c("stop_lon", "stop_lat"), crs = "EPSG:4326")
+stops <- read_csv("data/gtfs/stops.txt") |>
+    select(-stop_code) |>
+    st_as_sf(coords = c("stop_lon", "stop_lat"), crs = "EPSG:4326")
 stops
 ```
 
@@ -333,7 +337,7 @@ stops.plot(markersize=1, column='zone_id', legend=True);
 
 ```{r}
 tm_shape(stops) +
-  tm_symbols(size = 0.1, col = "zone_id")
+    tm_symbols(size = 0.1, col = "zone_id")
 ```
 
 :::
@@ -381,7 +385,7 @@ stops.explore(column='zone_id', legend=True, cmap='Dark2')
 ```{r}
 tmap_mode("view")
 tm_shape(stops) +
-  tm_symbols(size = 0.1, col = "zone_id")
+    tm_symbols(size = 0.1, col = "zone_id")
 ```
 
 :::
@@ -404,8 +408,8 @@ stops_projected = stops.to_crs(2180)
 
 ```{r}
 st_crs(poi_sf)
-poi_projected = st_transform(poi_sf, 2180)
-stops_projected = st_transform(stops, 2180)
+poi_projected <- st_transform(poi_sf, 2180)
+stops_projected <- st_transform(stops, 2180)
 ```
 
 :::
@@ -434,7 +438,7 @@ poi_buffer.geometry = poi_projected.buffer(150).to_crs(4326)
 ## R
 
 ```{r}
-poi_buffer = st_buffer(poi_sf, 150)
+poi_buffer <- st_buffer(poi_sf, 150)
 ```
 
 :::
@@ -481,7 +485,7 @@ stops_in_b
 ## R
 
 ```{r}
-stops_in_b = stops[poi_buffer, ]
+stops_in_b <- stops[poi_buffer, ]
 stops_in_b
 ```
 
