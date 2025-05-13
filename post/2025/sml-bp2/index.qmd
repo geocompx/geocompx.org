@@ -20,7 +20,7 @@ knitr:
 
 This is the second part of a blog post series on spatial machine learning with R.
 
-You can find the list of other blog posts in this series [in part one](post/2025/sml-bp1/).
+You can find the list of other blog posts in this series [in part one](/post/2025/sml-bp1/).
 
 :::
 
