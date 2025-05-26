@@ -3,7 +3,7 @@ title: "Spatial machine learning with mlr3"
 author: 
   - name: Marvin Ludwig
     orcid:  0000-0002-3010-018X
-date: ""
+date: "2025-06-11"
 slug: sml-bp5
 categories:
   - rstats
