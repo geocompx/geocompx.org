@@ -35,8 +35,8 @@ In this blog post, we compare three of the most popular machine learning framewo
 We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ.
 The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.
 
-<center>
-```{mermaid index-1}
+<!-- <center> -->
+```{mermaid}
 %%| fig-width: 8
 %%| fig-height: 6.5
 %%| echo: false
@@ -54,7 +54,7 @@ flowchart TB
     G --> H[Prediction]
     H --> I[Area of applicability]
 ```
-</center>
+<!-- </center> -->
 
 # Inputs
 
