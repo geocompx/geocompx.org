@@ -9,7 +9,7 @@
 <link>https://geocompx.org/post.html#category=python</link>
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.7.31</generator>
+<generator>quarto-1.6.10</generator>
 <lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Geocomputation with Python has arrived</title>
@@ -25,7 +25,7 @@
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%"></a></p>
+<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%" alt="The book cover"></a></p>
 </figure>
 </div>
 <figcaption>The book cover</figcaption>
@@ -154,6 +154,9 @@ Development of Open-Source Geocomputation Resources!”</span> December 6,
 <section id="geocompy" class="level1">
 <h1>geocompy</h1>
 <p>The <strong>geocompy</strong> book is motivated by the need for an introductory yet rigorous and up-to-date resource on geographic data with (arguably) the most popular programming language in the world. It presents the foundations of geographic data analysis in Python, with an equal focus on vector and raster data.</p>
+<div>
+
+</div>
 <div id="figs1" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -170,6 +173,9 @@ Development of Open-Source Geocomputation Resources!”</span> December 6,
 </div>
 </div>
 <p>It starts by explaining the basic concepts of geographic data analysis, such as vector and raster data models (using <a href="https://geopandas.org/">GeoPandas</a> and <a href="https://rasterio.readthedocs.io/en/latest/">Rasterio</a>), coordinate reference systems, and spatial units. Next, it shows how to perform various attribute and spatial operations on geographic data, such as data subsetting, joins, aggregations, and raster algebra. The book also covers geometric operations, such as buffering, clipping, and intersecting. The next part of the book focuses on interactions between vector and raster data: extraction, rasterization, and raster to vector conversion. Then, the book deeply dives into the coordinate reference systems, including their definition and projections. The next chapter is about reading and writing geographic data, including getting data from the web, geocoding, and working with the most popular formats, such as GeoPackage and GeoTIFF. The last chapter covers the basics of data visualization, including static and interactive maps.</p>
+<div>
+
+</div>
 <div id="figs2" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">

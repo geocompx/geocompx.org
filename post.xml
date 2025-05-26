@@ -9,8 +9,803 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.7.31</generator>
-<lastBuildDate>Wed, 14 May 2025 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.6.10</generator>
+<lastBuildDate>Wed, 28 May 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Spatial machine learning with the tidymodels framework</title>
+  <dc:creator>Hanna Meyer</dc:creator>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2025/sml-bp3/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the third part of a blog post series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="../../../post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In this blog post, we will show how to use the <strong>tidymodels</strong> framework for spatial machine learning. The <strong>tidymodels</strong> framework is a collection of R packages for modeling and machine learning using <em>tidyverse</em> principles.</p>
+</section>
+<section id="prepare-data" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-data">Prepare data</h2>
+<p>Load the required packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(terra)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tidymodels)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ranger)</span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span>
+<span id="cb1-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(spatialsample)</span>
+<span id="cb1-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(waywiser)</span>
+<span id="cb1-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(vip)</span></code></pre></div>
+</div>
+<p>Read data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">trainingdata <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_read</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span>
+<span id="cb2-2">predictors <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span></code></pre></div>
+</div>
+<p>Prepare data by extracting the training data from the raster and converting it to a <code>sf</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">trainDat <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>(terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract</span>(predictors, trainingdata, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bind =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>))</span>
+<span id="cb3-2">predictor_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(predictors) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Extract predictor names from the raster</span></span>
+<span id="cb3-3">response_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span></span></code></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compared to <strong>caret</strong>, no dropping of the geometries is required.</p>
+</div>
+</div>
+</section>
+<section id="a-simple-model-training-and-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-model-training-and-prediction">A simple model training and prediction</h2>
+<p>First, we train a random forest model. This is done by defining a recipe and a model, and then combining them into a workflow. Such a workflow can then be used to fit the model to the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Define the recipe</span></span>
+<span id="cb4-2">formula <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.formula</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(</span>
+<span id="cb4-3">    response_name,</span>
+<span id="cb4-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~"</span>,</span>
+<span id="cb4-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(predictor_names, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" + "</span>)</span>
+<span id="cb4-6">))</span>
+<span id="cb4-7">recipe <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> recipes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">recipe</span>(formula, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> trainDat)</span>
+<span id="cb4-8"></span>
+<span id="cb4-9">rf_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsnip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rand_forest</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regression"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-10">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_engine</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ranger"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span>)</span>
+<span id="cb4-11"></span>
+<span id="cb4-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Create the workflow</span></span>
+<span id="cb4-13">workflow <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">workflow</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-14">    workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_recipe</span>(recipe) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-15">    workflows<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_model</span>(rf_model)</span>
+<span id="cb4-16"></span>
+<span id="cb4-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Fit the model</span></span>
+<span id="cb4-18">rf_fit <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsnip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit</span>(workflow, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> trainDat)</span></code></pre></div>
+</div>
+<p>Now, let’s use the model for spatial prediction with <code>terra::predict()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">prediction_raster <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictors, rf_fit, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(prediction_raster)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatial-cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-cross-validation">Spatial cross-validation</h2>
+<p>Cross-validation requires to specify how the data is split into folds. Here, we define a non-spatial cross-validation with <code>rsample::vfold_cv()</code> and a spatial cross-validation with <code>spatialsample::spatial_block_cv()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">random_folds <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> rsample<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vfold_cv</span>(trainDat, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">v =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>)</span>
+<span id="cb6-2">block_folds <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> spatialsample<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">spatial_block_cv</span>(trainDat, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">v =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb6-3">spatialsample<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">autoplot</span>(block_folds)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># control cross-validation</span></span>
+<span id="cb7-2">keep_pred <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">control_resamples</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">save_pred =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">save_workflow =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Next, we fit the model to the data using cross-validation with <code>tune::fit_resamples()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">### Cross-validation</span></span>
+<span id="cb8-2">rf_random <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit_resamples</span>(</span>
+<span id="cb8-3">    workflow,</span>
+<span id="cb8-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resamples =</span> random_folds,</span>
+<span id="cb8-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">control =</span> keep_pred</span>
+<span id="cb8-6">)</span>
+<span id="cb8-7">rf_spatial <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit_resamples</span>(</span>
+<span id="cb8-8">    workflow,</span>
+<span id="cb8-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resamples =</span> block_folds,</span>
+<span id="cb8-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">control =</span> keep_pred</span>
+<span id="cb8-11">)</span></code></pre></div>
+</div>
+<p>To compare the fitted models, we can use the <code>tune::collect_metrics()</code> function to get the metrics.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="do" style="color: #5E5E5E;
+background-color: null;
+font-style: italic;">### get CV metrics</span></span>
+<span id="cb9-2">tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect_metrics</span>(rf_random)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator  mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   0.934     4  0.0610 Preprocessor1_Model1
+2 rsq     standard   0.908     4  0.0154 Preprocessor1_Model1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">tune<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect_metrics</span>(rf_spatial)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .metric .estimator  mean     n std_err .config             
+  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+1 rmse    standard   1.33      4  0.271  Preprocessor1_Model1
+2 rsq     standard   0.740     4  0.0783 Preprocessor1_Model1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># rf_spatial$.metrics # metrics from each fold</span></span></code></pre></div>
+</div>
+<p>Additionally, we can visualize the models by extracting their predictions with <code>tune::collect_predictions()</code> and plotting them.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Similar to <strong>caret</strong>, we first define folds and a definition of train control. The final model, however, is still stored in a separate object.</p>
+</div>
+</div>
+</section>
+<section id="model-tuning-spatial-hyperparameter-tuning-and-variable-selection" class="level2">
+<h2 class="anchored" data-anchor-id="model-tuning-spatial-hyperparameter-tuning-and-variable-selection">Model tuning: spatial hyperparameter tuning and variable selection</h2>
+<section id="hyperparameter-tuning" class="level3">
+<h3 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter tuning</h3>
+<p>Next, we tune the model hyperparameters. For this, we change the workflow to include the tuning specifications by using the <code>tune()</code> function inside the model definition and define a grid of hyperparameters to search over. The tuning is done with <code>tune::tune_grid()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># mark two parameters for tuning:</span></span>
+<span id="cb14-2">rf_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsnip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rand_forest</span>(</span>
+<span id="cb14-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb14-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regression"</span>,</span>
+<span id="cb14-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tune</span>(),</span>
+<span id="cb14-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_n =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tune</span>()</span>
+<span id="cb14-7">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb14-8">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_engine</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ranger"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span>)</span>
+<span id="cb14-9"></span>
+<span id="cb14-10">workflow <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">update_model</span>(workflow, rf_model)</span>
+<span id="cb14-11"></span>
+<span id="cb14-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># define tune grid:</span></span>
+<span id="cb14-13">grid_rf <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span></span>
+<span id="cb14-14">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grid_space_filling</span>(</span>
+<span id="cb14-15">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mtry</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>)),</span>
+<span id="cb14-16">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">min_n</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)),</span>
+<span id="cb14-17">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span></span>
+<span id="cb14-18">    )</span>
+<span id="cb14-19"></span>
+<span id="cb14-20"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tune:</span></span>
+<span id="cb14-21">rf_tuning <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tune_grid</span>(</span>
+<span id="cb14-22">    workflow,</span>
+<span id="cb14-23">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resamples =</span> block_folds,</span>
+<span id="cb14-24">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">grid =</span> grid_rf,</span>
+<span id="cb14-25">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">control =</span> keep_pred</span>
+<span id="cb14-26">)</span></code></pre></div>
+</div>
+<p>The results can be extracted with <code>collect_metrics()</code> and then visualized.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">rf_tuning <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb15-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect_metrics</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 60 × 8
+    mtry min_n .metric .estimator  mean     n std_err .config              
+   &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+ 1     1     5 rmse    standard   1.91      4  0.307  Preprocessor1_Model01
+ 2     1     5 rsq     standard   0.613     4  0.0849 Preprocessor1_Model01
+ 3     1     9 rmse    standard   1.93      4  0.311  Preprocessor1_Model02
+ 4     1     9 rsq     standard   0.582     4  0.103  Preprocessor1_Model02
+ 5     2     4 rmse    standard   1.61      4  0.318  Preprocessor1_Model03
+ 6     2     4 rsq     standard   0.697     4  0.0692 Preprocessor1_Model03
+ 7     2     2 rmse    standard   1.68      4  0.285  Preprocessor1_Model04
+ 8     2     2 rsq     standard   0.654     4  0.111  Preprocessor1_Model04
+ 9     3     7 rmse    standard   1.47      4  0.304  Preprocessor1_Model05
+10     3     7 rsq     standard   0.713     4  0.0837 Preprocessor1_Model05
+# ℹ 50 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">rf_tuning <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb17-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">collect_metrics</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb17-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_n =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">factor</span>(min_n)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb17-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(mtry, mean, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> min_n)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb17-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_line</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">linewidth =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">alpha =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.6</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb17-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_point</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb17-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span>.metric, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scales =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"free"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb17-8">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_x_log10</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">labels =</span> scales<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">label_number</span>()) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb17-9">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">scale_color_viridis_d</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">option =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"plasma"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">begin =</span> .<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">end =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we can extract the best model and use it to get the variable importance and make predictions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">finalmodel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fit_best</span>(rf_tuning)</span>
+<span id="cb18-2">finalmodel</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: rand_forest()
+
+── Preprocessor ────────────────────────────────────────────────────────────────
+0 Recipe Steps
+
+── Model ───────────────────────────────────────────────────────────────────────
+Ranger result
+
+Call:
+ ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~19L,      x), num.trees = ~100, min.node.size = min_rows(~3L, x), importance = ~"impurity",      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) 
+
+Type:                             Regression 
+Number of trees:                  100 
+Sample size:                      195 
+Number of independent variables:  22 
+Mtry:                             19 
+Target node size:                 3 
+Variable importance mode:         impurity 
+Splitrule:                        variance 
+OOB prediction error (MSE):       0.7477837 
+R squared (OOB):                  0.9062111 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">imp <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_fit_parsnip</span>(finalmodel) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb20-2">    vip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vip</span>()</span>
+<span id="cb20-3">imp</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">final_pred <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictors, finalmodel, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb21-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(final_pred)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="area-of-applicability" class="level2">
+<h2 class="anchored" data-anchor-id="area-of-applicability">Area of applicability</h2>
+<p>The <strong>waywiser</strong> package provides a set of tools for assessing spatial models, including an implementation of multi-scale assessment and area of applicability. The area of applicability is a measure of how well the model (given the training data) can be applied to the prediction data. It can be calculated with the <code>ww_area_of_applicability()</code> function, and then predicted on the raster with <code>terra::predict()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">model_aoa <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> waywiser<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ww_area_of_applicability</span>(</span>
+<span id="cb22-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(trainDat[, predictor_names]),</span>
+<span id="cb22-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> vip<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vi_model</span>(finalmodel)</span>
+<span id="cb22-4">)</span>
+<span id="cb22-5">AOA <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(predictors, model_aoa)</span>
+<span id="cb22-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(AOA<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>aoa)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp3/index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>More information on the <strong>waywiser</strong> package can be found in its <a href="https://docs.ropensci.org/waywiser/">documentation</a>.</p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This blog post showed how to use the <strong>tidymodels</strong> framework for spatial machine learning. We demonstrated how to train a random forest model, perform spatial cross-validation, tune hyperparameters, and assess the area of applicability. We also showed how to visualize the results and extract variable importance.<sup>1</sup></p>
+<p>The <strong>tidymodels</strong> framework with its packages <strong>spatialsample</strong> and <strong>waywiser</strong> provides a powerful and flexible way to perform spatial machine learning in R. At the same time, it is a bit more complex than <strong>caret</strong>: it requires getting familiar with several packages<sup>2</sup> and relationships between them. Thus, the decision of which framework to use depends on the specific needs and preferences of the user.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>We have not, though, covered all the features of the <strong>tidymodels</strong> framework, such as feature selection (<a href="https://stevenpawley.github.io/recipeselectors/" class="uri">https://stevenpawley.github.io/recipeselectors/</a>) or model ensembling.↩︎</p></li>
+<li id="fn2"><p>Including remembering their names and roles↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{meyer2025,
+  author = {Meyer, Hanna and Nowosad, Jakub},
+  title = {Spatial Machine Learning with the Tidymodels Framework},
+  date = {2025-05-28},
+  url = {https://geocompx.org/post/2025/sml-bp3/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-meyer2025" class="csl-entry quarto-appendix-citeas">
+Meyer, Hanna, and Jakub Nowosad. 2025. <span>“Spatial Machine Learning
+with the Tidymodels Framework.”</span> May 28, 2025. <a href="https://geocompx.org/post/2025/sml-bp3/">https://geocompx.org/post/2025/sml-bp3/</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <category>sml</category>
+  <guid>https://geocompx.org/post/2025/sml-bp3/</guid>
+  <pubDate>Wed, 28 May 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Spatial machine learning with caret</title>
   <dc:creator>Jan Linnenbrink</dc:creator>
@@ -1007,25 +1802,44 @@ Caret.”</span> May 14, 2025. <a href="https://geocompx.org/post/2025/sml-bp2/"
 <p>This is the first part of a blog post series on spatial machine learning with R.</p>
 <ul>
 <li><a href="../../../post/2025/sml-bp2/">Part 2</a>: Spatial machine learning with caret</li>
+<li><a href="../../../post/2025/sml-bp3/">Part 3</a>: Spatial machine learning with the tidymodels framework</li>
 </ul>
 </div>
 </div>
 </div>
 <p>The R language has a variety of packages for machine learning, and many of them can be used for machine learning tasks in a spatial context (<em>spatial machine learning</em>). Spatial machine learning is generally different from traditional machine learning, as variables located closer to each other are often more similar than those located further apart. Thus, we need to consider that when building machine learning models.</p>
 <p>In this blog post, we compare three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ. The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.</p>
-<center>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/mermaid-figure-1.png" style="width:8in;height:6.5in" class="figure-img"></p>
+<!-- 
+
+
+
+
+::::::{.cell eval=false layout-align="default"}
+
+:::::{.cell-output-display}
+
+::::{}
+`<figure class=''>`{=html}
+
+:::{}
+:::
+
+
+`<figcaption>`{=html} A possible workflow of the spatial machine learning task.`</figcaption>`{=html} `</figure>`{=html}
+::::
+:::::
+::::::
+
+
+
+
+-->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp1/mermaid-figure-1.png" class="img-fluid figure-img"></p>
+<figcaption>A possible workflow of the spatial machine learning task.</figcaption>
+</figure>
 </div>
-<p></p><figcaption> A possible workflow of the spatial machine learning task.</figcaption> </figure><p></p>
-</div>
-</div>
-</div>
-</center>
 <section id="inputs" class="level1">
 <h1>Inputs</h1>
 <p>Our task is to predict the temperature in Spain using a set of covariates. We have two datasets for that purpose: the first one, <code>temperature_train</code>, contains the temperature measurements from 195 locations in Spain, and the second one, <code>predictor_stack</code>, contains the covariates we will use to predict the temperature.<sup>1</sup> These covariates include variables such as population density (<code>popdens</code>), distance to the coast (<code>coast</code>), and elevation (<code>elev</code>), among others.</p>
@@ -1260,7 +2074,7 @@ font-style: inherit;">FALSE</span></span>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1439,7 +2253,7 @@ font-style: inherit;">autoplot</span>(block_folds)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1748,7 +2562,7 @@ font-style: inherit;">plot</span>(pred_caret)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1773,7 +2587,7 @@ font-style: inherit;">plot</span>(pred_tidymodels)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1798,7 +2612,7 @@ font-style: inherit;">plot</span>(pred_mlr3)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1843,7 +2657,7 @@ font-style: inherit;">$</span>AOA)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1885,7 +2699,7 @@ font-style: inherit;">$</span>aoa)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1960,7 +2774,7 @@ font-style: inherit;">$</span>AOA)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2022,7 +2836,7 @@ Tidymodels, and Mlr3.”</span> April 30, 2025. <a href="https://geocompx.org/po
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%"></a></p>
+<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%" alt="The book cover"></a></p>
 </figure>
 </div>
 <figcaption>The book cover</figcaption>
@@ -3092,6 +3906,9 @@ January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geoc
 <section id="geocompy" class="level1">
 <h1>geocompy</h1>
 <p>The <strong>geocompy</strong> book is motivated by the need for an introductory yet rigorous and up-to-date resource on geographic data with (arguably) the most popular programming language in the world. It presents the foundations of geographic data analysis in Python, with an equal focus on vector and raster data.</p>
+<div>
+
+</div>
 <div id="figs1" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -3108,6 +3925,9 @@ January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geoc
 </div>
 </div>
 <p>It starts by explaining the basic concepts of geographic data analysis, such as vector and raster data models (using <a href="https://geopandas.org/">GeoPandas</a> and <a href="https://rasterio.readthedocs.io/en/latest/">Rasterio</a>), coordinate reference systems, and spatial units. Next, it shows how to perform various attribute and spatial operations on geographic data, such as data subsetting, joins, aggregations, and raster algebra. The book also covers geometric operations, such as buffering, clipping, and intersecting. The next part of the book focuses on interactions between vector and raster data: extraction, rasterization, and raster to vector conversion. Then, the book deeply dives into the coordinate reference systems, including their definition and projections. The next chapter is about reading and writing geographic data, including getting data from the web, geocoding, and working with the most popular formats, such as GeoPackage and GeoTIFF. The last chapter covers the basics of data visualization, including static and interactive maps.</p>
+<div>
+
+</div>
 <div id="figs2" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -3185,6 +4005,9 @@ Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org/pos
 <section id="a-bit-of-history" class="level1 page-columns page-full">
 <h1>A bit of history</h1>
 <p><a href="https://marcosci.github.io/">Marco Sciaini</a> won the competition for the book cover of the first edition of Geocomputation with R. His winning entry is shown on the left below. After some <a href="https://github.com/geocompx/geocompr/issues/284">iteration</a> on this winning idea, the concept was refined, resulting in a reproducible image (see its source code at <a href="https://github.com/geocompx/geocompr/blob/main/code/frontcover.R">github.com/geocompx/geocompr/</a>) (center). Then, the image was incorporated into the official cover of the book’s first edition (right).</p>
+<div>
+
+</div>
 <div class="column-page-inset quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
@@ -6586,6 +7409,8 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
+
+
 </div>
 </div>
 </section>
@@ -6714,6 +7539,8 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
+
+
 </div>
 </div>
 </section>
@@ -7915,292 +8742,6 @@ Analysis: Mapping Covid-19 Data with R.”</span> April 23, 2020. <a href="https
   <category>rstats</category>
   <guid>https://geocompx.org/post/2020/r-spatial-demo-covid-19/</guid>
   <pubDate>Thu, 23 Apr 2020 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Installing spatial R packages on Ubuntu</title>
-  <dc:creator>Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>This post explains how to quickly get key R packages for geographic research installed on <a href="https://ubuntu.com/">Ubuntu</a>, a popular Linux distribution.</p>
-<!-- ![](/home/robin/geocompr/geocompr.github.io/static/img/geocompr-linux.png) -->
-<p>A recent thread on the <a href="https://github.com/r-spatial/discuss/issues/35">r-spatial GitHub organization</a> alludes to many considerations when choosing a Linux set-up for work with geographic data, ranging from the choice of Linux distribution (distro) to the use of binary vs or compiled versions (binaries are faster to install). This post touches on some of these things. Its main purpose, though, is to provide advice on getting R’s key spatial packages up-and-running on a future-proof Linux operating system (Ubuntu).</p>
-<p>Now is a good time to be thinking about your R set-up because changes are in the pipeline and getting set-up (or preparing to get set-up) now could save hours in the future. These imminent changes include:</p>
-<ul>
-<li>The next major release of R (<a href="https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.html">4.0.0</a>), scheduled for the 24<sup>th</sup> April (<a href="https://developer.r-project.org/">2020-04-24</a>)</li>
-<li>The next major release of Ubuntu (<a href="https://www.omgubuntu.co.uk/2019/10/ubuntu-20-04-release-features">20.04</a>), a Long Term Support (<a href="https://wiki.ubuntu.com/LTS">LTS</a>) version that will be used by millions of servers and research computers worldwide for years to come. Coincidentally, Ubuntu 20.04 will be released a day earlier than R 4.0.0, on 23<sup>rd</sup> April (<a href="https://itsfoss.com/ubuntu-20-04-release-features/">2020-04-23</a>).</li>
-<li>Ongoing changes to the OSGeo stack on which key geographic R packages depend, as documented in <a href="https://github.com/r-spatial/">r-spatial</a> repos and a recent blog post on how recent versions of PROJ enable more precise <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html">coordinate reference system definitions</a>.</li>
-</ul>
-<p>To keep-up with these changes, this post will be updated in late April when some of the dust has settled around these changes. However, the advice presented here should be future-proof. Upgrading Ubuntu is covered in the next section.</p>
-<p>There many ways of getting Ubuntu set-up for spatial R packages. A benefit of Linux operating systems is that they offer choice and prevent ‘lock-in’. However, the guidance in the next section should reduce set-up time and improve maintainability (with updates managed by Ubuntu) compared with other ways of doing things, especially for beginners. If you’re planning to switch to Linux as the basis of your geographic work, this advice may be particularly useful. (The post was written in response to colleagues asking me how to set-up R on their new Ubuntu computers. If you would like a a computer running Ubuntu, check out <a href="https://itsfoss.com/get-linux-laptops/">companies that support open source operating systems</a> and <a href="https://ubuntu.com/tutorials/tutorial-install-ubuntu-desktop#1-overview">guides on installing Ubuntu on an existing machine</a>).</p>
-<p>By ‘key packages’ I mean the following, which enable the majority of day-to-day geographic data processing and visualization tasks:</p>
-<ul>
-<li><a href="https://github.com/r-spatial/sf#installing"><strong>sf</strong></a> for reading, writing and working with a range geographic vector file formats and geometry types</li>
-<li><a href="https://github.com/rspatial/raster/"><strong>raster</strong></a>, a mature package for working with geographic raster data (see the <a href="https://github.com/rspatial/terra/"><strong>terra</strong></a> for an in-development replacement for <strong>raster</strong>)</li>
-<li><a href="https://github.com/mtennekes/tmap"><strong>tmap</strong></a>, a flexible package for making static and interactive maps</li>
-</ul>
-<p>The focus is on Ubuntu because that’s what I’ve got most experience with and it is well supported by the community. Links for installing geographic R packages on other distros are provided in section 3.</p>
-<section id="installing-spatial-r-packages-on-ubuntu" class="level1">
-<h1>1. Installing spatial R packages on Ubuntu</h1>
-<!-- Of course, it depends on what Linux distribution you're running, and we'll cover installation on some of the most popular [distros](https://distrowatch.com/). -->
-<!-- ## Ubuntu -->
-<p>R’s spatial packages can be installed from source on the latest version of this popular operating system, once the appropriate repository has been set-up, meaning faster install times (only a few minutes including the installation of upstream dependencies). The following bash commands should install key geographic R packages on Ubuntu 19.10:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># add a repository that ships the latest version of R:</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> add-apt-repository ppa:marutter/rrutter3.5</span>
-<span id="cb1-3"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># update the repositories so the software can be found:</span></span>
-<span id="cb1-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt update</span>
-<span id="cb1-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install system dependencies:</span></span>
-<span id="cb1-6"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libfontconfig1-dev</span>
-<span id="cb1-7"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># binary versions of key R packages:</span></span>
-<span id="cb1-8"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava</span></code></pre></div>
-<p>To test your installation of R has worked, try running R in an IDE such as RStudio or in the terminal by entering <code>R</code>. You should be able to run the following commands without problem:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)</span>
-<span id="cb2-2"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span></span>
-<span id="cb2-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"tmap"</span>)</span></code></pre></div>
-<p>If you are using an older version of Ubuntu and don’t want to upgrade to 19.10, which will upgrade to (20.04) by the end of April 2020, see instructions at <a href="https://github.com/r-spatial/sf#installing">github.com/r-spatial/sf</a> and detailed instructions on the blog <a href="https://rtask.thinkr.fr/blog/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/">rtask.thinkr.fr</a>, which contains this additional shell command:</p>
-<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># for Ubuntu 18.04</span></span>
-<span id="cb3-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> add-apt-repository ppa:marutter/c2d4u3.5</span></code></pre></div>
-<p>That adds a repository that ships hundreds of binary versions of R packages, meaning faster install times for packages (see the <a href="https://r-pkgs.org/package-structure-state.html#binary-package">Binary package section of the open source book R Packages</a> for more on binary packages). An updated repository, called c2d4u4.0 or similar, will be available for Ubuntu 20.04 in late April.</p>
-<!-- The c2d4u3.5 repository only supports LTS Ubuntu versions, meaning it is unavailable for Ubuntu 19.10, but will be available for Ubuntu 20.04, allowing hundreds of packages to be installed quickly from the system terminal. -->
-<!-- The following command, for example, will install **tmap** on LTS versions of Ubuntu that have the `c2d4u3.5` repository enabled much faster than the alternative `install.packages()` approach. -->
-<p>If you have issues with the instructions in this post here, you can find a wealth of answers on site such as <a href="https://stackoverflow.com/">StackOverflow</a>, the <a href="https://github.com/r-spatial/sf/issues">sf issue tracker</a>, <a href="https://stat.ethz.ch/pipermail/r-sig-geo/">r-sig-geo</a> and <a href="https://stat.ethz.ch/pipermail/r-sig-debian/2020-March/thread.html">Debian</a> special interest group (SIG) email lists (the latter of which provided input into this blog post, thanks to Dirk Eddelbuettel and Michael Rutter).</p>
-</section>
-<section id="updating-r-packages-and-upstream-dependencies" class="level1">
-<h1>2. Updating R packages and upstream dependencies</h1>
-<p>Linux operating systems allow you to customize your set-up in myriad ways. This can be enlightening but it can also be wasteful, so it’s worth considering the stability/cutting-edge continuum before diving into a particular set-up and potentially wasting time (if the previous section hasn’t already made-up your mind).</p>
-<!-- For me, a good set-up, that means the latest version of Ubuntu plus CRAN versions of most R packages. -->
-<!-- For most people I recommend installing the release version as follows: -->
-<p>A reliable way to keep close (but not too close) to the cutting edge on the R side on any operating system is simply to keep your packages up-to-date. Running the following command (or using the Tools menu in RStudio) every week or so will ensure you have up-to-date package versions:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update.packages</span>()</span></code></pre></div>
-</div>
-<p>Keeping system dependencies, software that R relies on but that is not maintained by R developers, is also important but can be tricky, especially for large and complex libraries like GDAL. On Ubuntu dependencies are managed by apt, and the following commands will update the ‘OSGeo stack’, composed of PROJ, GEOS and GDAL, if changes are detected in the default repositories (from 18.10 onwards):</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt update <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># see if things have changed</span></span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt upgrade <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install changes</span></span></code></pre></div>
-<p>The following commands will upgrade to a newer version of Ubuntu (it may be worth waiting until the <a href="https://ubuntu.com/blog/first-point-release-of-18-04-lts-available-today">point release</a> of Ubuntu 20.04 — 20.04.1 — is released in summer before upgrading if you’re currently running Ubuntu 18.04 if high stability and low set-up times are priorities; also see instructions <a href="https://ubuntu.com/tutorials/tutorial-upgrading-ubuntu-desktop#3-check-for-updates">here</a>):</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">apt</span> dist-upgrade</span></code></pre></div>
-<p>To get more up-to-date upstream geographic libraries than provided in the default Ubuntu repositories, you can add the <code>ubuntugis</code> repository as follows. This is a pre-requisite on Ubuntu 18.04 and earlier but also works with later versions (warning, adding this repository could cause complications if you already have software such as QGIS that uses a particular version of GDAL installed):</p>
-<div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
-<span id="cb7-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt update</span>
-<span id="cb7-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> apt upgrade</span></code></pre></div>
-<p>That will give you more up-to-date versions of GDAL, GEOS and PROJ which may offer some performance improvements. Note: if you do update dependencies such as GDAL you will need to re-install the relevant packages, e.g.&nbsp;with <code>install.packages("sf")</code>. You can revert that change with the following <a href="https://askubuntu.com/questions/904010/how-to-remove-a-ppa-from-cli">little-known command</a>:</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> add-apt-repository <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--remove</span> ppa:ubuntugis/ubuntugis-unstable</span></code></pre></div>
-<p>If you also want the development versions of key R packages, e.g.&nbsp;to test new features and support development efforts, you can install them from GitHub, e.g.&nbsp;as follows:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"r-spatial/sf"</span>)</span>
-<span id="cb9-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rspatial/raster"</span>)</span>
-<span id="cb9-3">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mtennekes/tmaptools"</span>) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># required for dev version of tmap</span></span>
-<span id="cb9-4">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mtennekes/tmap"</span>)</span></code></pre></div>
-</div>
-</section>
-<section id="installing-geographic-r-packages-on-other-linux-operating-systems" class="level1">
-<h1>3. Installing geographic R packages on other Linux operating systems</h1>
-<p>If you are in the fortunate position of switching to Linux and being able to choose the distribution that best fits your needs, it’s worth thinking about which distribution will be both user-friendly (more on that soon), performant and future-proof. Ubuntu is a solid choice, with a large user community and repositories such as ‘ubuntugis’ providing more up-to-date versions of upstream geographic libraries such as GDAL.</p>
-<p>QGIS is also well-supported on Ubuntu.</p>
-<p>However, you can install R and key geographic packages on other operating systems, although it may take longer. Useful links on installing R and geographic libraries are provided below for reference:</p>
-<ul>
-<li><p>Installing R on <strong>Debian</strong> is covered on the <a href="https://cran.r-project.org/bin/linux/debian/">CRAN website</a>. Upstream dependencies such as GDAL can be installed on recent versions of Debian, such as <a href="https://www.debian.org/releases/">buster</a>, with commands such as <code>apt install libgdal-dev</code> as per instructions on the <a href="https://github.com/rocker-org/geospatial/blob/eaf5e92f90737ce9771753cab48f3a2f1d779216/Dockerfile">rocker/geospatial</a>.</p></li>
-<li><p>Installing R on <strong>Fedora/Red Hat</strong> is straightforward, as outlined on <a href="https://cran.r-project.org/bin/linux/redhat/README">CRAN</a>. GDAL and other spatial libraries can be installed from Fedora’s <code>dnf</code> package manager, e.g.&nbsp;as documented <a href="https://github.com/r-spatial/sf#fedora">here</a> for <strong>sf</strong>.</p></li>
-<li><p><strong>Arch Linux</strong> has a growing R community. Information on installing and setting-up R can be found on the <a href="https://wiki.archlinux.org/index.php/R">ArchLinux wiki</a>. Installing upstream dependencies such as <a href="https://www.archlinux.org/packages/community/x86_64/gdal/">GDAL on Arch</a> is also relatively straightforward. There is also a detailed guide for installing R plus geographic packages by <a href="https://pat-s.me/post/arch-install-guide-for-r/">Patrick Schratz</a>.</p></li>
-</ul>
-</section>
-<section id="geographic-r-packages-on-docker" class="level1">
-<h1>4. Geographic R packages on Docker</h1>
-<!-- As with cars, ease of use is important for the popularity of computer technology. -->
-<!-- ^[ -->
-<!-- The history of cars can provide insight into the importance of ease of use of technologies today. -->
-<!-- Cars, have arguably transformed our settlements and lifestyles more than any other technology, were initially hard to use. -->
-<!-- Before they became a consumer product in the 1950s (by the end of which 1/6^th^ of jobs in the USA were in the [car industry](https://en.wikipedia.org/wiki/1950s_American_automobile_culture)) relied on a [hand cranks](https://www.youtube.com/watch?v=iFd8uo7ogpM) to start them until the proliferation of electric starter motors following U.S. Patent [1,150,523](https://patents.google.com/patent/US1150523), which was subsequently used by Cadillac in [1912](https://www.hemmings.com/blog/2012/02/27/the-accident-that-started-it-all/) and onwards. -->
-<!-- Like cars, people tend to go for computer technologies that are easy to use, that are 'plug and play', so it's important for the future of open-source software that the solutions I recommend are easy to set-up and use. -->
-<!-- ] -->
-<p>The Ubuntu installation instructions outlined above provide such an easy and future-proof set-up. But if you want an even easier way to get the power of key geographic packages running on Linux, and have plenty of RAM and HD space, running R on the ‘<a href="https://docs.docker.com/install/">Docker Engine</a>’ may be an attractive option.</p>
-<p>Advantages of using Docker include <strong>reproducibility</strong> (code will always run the same on any given image, and images can be saved), <strong>portability</strong> (Docker can run on Linux, Windows and Mac) and <strong>scalability</strong> (Docker provides a platform for scaling-up computations across multiple nodes).</p>
-<p>For an introduction to using R/RStudio in Docker, see the <a href="https://www.rocker-project.org/">Rocker project</a>.</p>
-<p>Using that approach, I recommend the following Docker images for using R as a basis for geographic research:</p>
-<ul>
-<li><a href="https://hub.docker.com/r/rocker/geospatial"><code>rocker/geospatial</code></a> which contains key geographic packages, including those listed above</li>
-<li><a href="https://hub.docker.com/r/robinlovelace/geocompr/"><code>robinlovelace/geocompr</code></a> which contains all the packages needed to reproduce the contents of the <a href="https://geocompr.robinlovelace.net/">book</a>, and which you can run with the following command in a shell in which Docker is installed:</li>
-</ul>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">docker</span> run <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-e</span> PASSWORD=yourpassword <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">--rm</span> <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-p</span> 8787:8787 robinlovelace/geocompr</span></code></pre></div>
-<p>To test-out the Ubuntu 19.10 set-up recommended above I created a <a href="https://github.com/Robinlovelace/geocompr/blob/master/docker/ubuntu-eoan/Dockerfile">Dockerfile</a> and associated image on Dockerhub that you can test-out as follows:</p>
-<div class="sourceCode" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">docker</span> run <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-it</span> robinlovelace/geocompr:ubuntu-eoan</span>
-<span id="cb11-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">R</span></span>
-<span id="cb11-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">library</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">sf</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb11-4"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span></span>
-<span id="cb11-5"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">library</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">raster</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb11-6"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">library</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">tmap</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span> </span></code></pre></div>
-<p>The previous commands should take you to a terminal inside the docker container where you try out the Linux command line and R. If you want to use more cutting-edge versions of the geographic libraries, you can use the <code>ubuntu-bionic</code> image (note the more recent version numbers, with PROJ 7.0.0 for example):</p>
-<div class="sourceCode" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sudo</span> docker run <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">-it</span> robinlovelace/geocompr:ubuntu-bionic</span>
-<span id="cb12-2"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">R</span></span>
-<span id="cb12-3"><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">library</span><span class="er" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">(</span><span class="ex" style="color: null;
-background-color: null;
-font-style: inherit;">sf</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">)</span></span>
-<span id="cb12-4"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 7.0.0</span></span></code></pre></div>
-<p>These images do not currently contain all the dependencies needed to reproduce the code in <em>Geocomputation with R</em>. <!-- , if you're looking for a production-ready Docker image that has both RStudio Server and a wide range of geographic packages pre-installed, building from the `rocker/geospatial` image, this could be a good place to start: --></p>
-<p>However, as documented in <a href="https://github.com/Robinlovelace/geocompr/issues/476">issue 476</a> in the <code>geocompr</code> GitHub repo, there is a plan to provide Docker images with this full ‘R-spatial’ stack installed, building on strong foundations such as <code>rocker/geospatial</code> and the <code>ubuntugis</code> repositories, to support different versions of GDAL and other dependencies. We welcome any comments or tech support to help make this happen. Suggested changes to this post are also welcome, see the source code <a href="https://github.com/geocompr/geocompr.github.io/blob/source/content/post/2020/installing-r-spatial-packages-linux.Rmd">here</a>.</p>
-</section>
-<section id="fin" class="level1">
-<h1>5. Fin</h1>
-<p>R is an open-source language heavily inspired by Unix/Linux so it should come as no surprise that it runs well on a variety of Linux distributions, Ubuntu (covered in this post) in particular. The guidance in this post should get geographic R packages set-up quickly in a future-proof way. A sensible next step is to sharpen you system administration (sysadmin) and shell coding skills, e.g.&nbsp;with reference to <a href="https://help.ubuntu.com/community/SystemAdministration">Ubuntu wiki pages</a> and <a href="https://www.datascienceatthecommandline.com/chapter-2-getting-started.html#essential-gnulinux-concepts">Chapter 2</a> of the open source book <a href="https://www.datascienceatthecommandline.com">Data Science at the Command Line</a>.</p>
-<p>This will take time but, building on <a href="https://www.osgeo.org/">OSGeo</a> libraries, a well set-up Linux machine is an ideal platform to install, run and develop key geographic R packages in a performant, stable and future-proof way. <!-- I hope that this tutorial provides some useful pointers and encourages more people to switch from proprietary software to open source solutions as the basis of their geographic and computational work. --></p>
-<p><img src="https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg" class="img-fluid"></p>
-<p>Be the <a href="https://wiki.osgeo.org/wiki/FOSS4G">FOSS4G</a> change you want to see in the world!</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{lovelace2020,
-  author = {Lovelace, Robin},
-  title = {Installing Spatial {R} Packages on {Ubuntu}},
-  date = {2020-03-30},
-  url = {https://geocompx.org/post/2020/installing-r-spatial-packages-linux/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lovelace2020" class="csl-entry quarto-appendix-citeas">
-Lovelace, Robin. 2020. <span>“Installing Spatial R Packages on
-Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org/post/2020/installing-r-spatial-packages-linux/">https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</a>.
-</div></div></section></div> ]]></description>
-  <category>setup</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</guid>
-  <pubDate>Mon, 30 Mar 2020 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
