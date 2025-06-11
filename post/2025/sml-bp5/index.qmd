@@ -4,7 +4,7 @@ author:
   - name: Jakub Nowosad
     url: https://jakubnowosad.com
     orcid:  0000-0002-1057-3721
-date: ""
+date: "2025-06-25"
 slug: sml-bp5
 categories:
   - rstats
