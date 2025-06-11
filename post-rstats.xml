@@ -10,7 +10,899 @@
 <atom:link href="https://geocompx.org/post-rstats.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.6.10</generator>
-<lastBuildDate>Wed, 28 May 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 11 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Spatial machine learning with mlr3</title>
+  <dc:creator>Marvin Ludwig</dc:creator>
+  <link>https://geocompx.org/post/2025/sml-bp4/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the fourth part of a blog post series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="../../../post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<section id="aims-of-this-post" class="level2">
+<h2 class="anchored" data-anchor-id="aims-of-this-post">Aims of this post</h2>
+<p>This post aims to give a minimal example on how to use <strong>mlr3</strong> for a spatial prediction task. We want to get from measurements of temperature at specific locations in Spain to a spatially continuous map of temperature for all of Spain.</p>
+<p>Such a spatial prediction task is often done by applying machine learning algorithms that are not necessarily developed for spatial tasks specifically and hence do not consider problems we might encounter in the spatial world, e.g., spatial autocorrelation or map extrapolation. In the last decade, a lot of methodological developments were made by various research groups to consider and deal with such specialties of spatial mapping. Many of which found their way in software packages such as <strong>mlr3</strong>.</p>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mlr3verse"</span>)</span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mlr3spatiotempcv"</span>)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sf"</span>)</span>
+<span id="cb1-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"terra"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(terra)</span></code></pre></div>
+</div>
+<section id="casestudy-data" class="level3">
+<h3 class="anchored" data-anchor-id="casestudy-data">Casestudy data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">covariates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span>
+<span id="cb3-2">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span>
+<span id="cb3-3"></span>
+<span id="cb3-4">spain <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_cast</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"POLYGON"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_transform</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_crs</span>(temperature))</span>
+<span id="cb3-7"></span>
+<span id="cb3-8">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract</span>(covariates, temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bind =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb3-9">    sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>()</span>
+<span id="cb3-10"></span>
+<span id="cb3-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the sf object cannot contain a column named "X" or "Y". Otherwise the task creation will fail because "Assertion on 'data' failed: Must have unique colnames"</span></span>
+<span id="cb3-12">temperature<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>X <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb3-13">temperature<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>Y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span></code></pre></div>
+</div>
+<p>Some words about the terminology that is specific to the example data:</p>
+<ul>
+<li><code>spain</code> is the region outline - for visualization purposes and kNNDM setup</li>
+<li><code>covariates</code> are the spatially explicit data data to predict on (to prevent wording confusions with the predict function or the prediction)</li>
+<li><code>temperature</code> are the measured temperature data (i.e.&nbsp;the response variable, i.e., the ground truth) along with the covariates at the measurement location</li>
+</ul>
+</section>
+<section id="official-documentation" class="level3">
+<h3 class="anchored" data-anchor-id="official-documentation">Official Documentation</h3>
+<p>The best general introduction to <strong>mlr3</strong> is probably the official <strong>mlr3</strong> book which you can access for free here: <a href="https://mlr3book.mlr-org.com/" class="uri">https://mlr3book.mlr-org.com/</a>. The homepage <a href="https://mlr-org.com/" class="uri">https://mlr-org.com/</a> also gives a very detailed overview of all the associated packages an current developments.<br>
+The individual packages also have their own documentation pages, where you will find more specific topics. The “spatial” packages are the following:</p>
+<ul>
+<li><code>mlr3spatial</code> implements support for spatial data types in R – <a href="https://mlr3spatial.mlr-org.com/" class="uri">https://mlr3spatial.mlr-org.com/</a></li>
+<li><code>mlr3spatiotemporalcv</code> implements spatial cross-validation methods in the workflow – <a href="https://mlr3spatiotempcv.mlr-org.com/articles/mlr3spatiotempcv.html" class="uri">https://mlr3spatiotempcv.mlr-org.com/articles/mlr3spatiotempcv.html</a> – and also uses the <code>mlr3spatial</code> package for the spatial data types handling</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3verse)</span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3spatiotempcv)</span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3viz)</span></code></pre></div>
+</div>
+<div class="callout-hint">
+<p><strong>mlr3</strong> functions can be very verbose. For this blog post, I turned off messages for a less overwhelming tutorial.</p>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">lgr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_logger</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mlr3"</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_threshold</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"warn"</span>)</span>
+<span id="cb5-2">lgr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_logger</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bbotk"</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set_threshold</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"warn"</span>)</span></code></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="getting-started-with-mlr3" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started-with-mlr3">Getting started with mlr3</h2>
+<p>First of all, <strong>mlr3</strong> uses <code>R6</code> classes and therefor an object-oriented design paradigm. This might be not intuitive for a lot of R users and more in line with something like scikit-learn of Python. In general, with <code>R6</code> classes you define an object first, and this object contains all the methods and parameters you can access.</p>
+<p>The <code>R6</code> class in R has a significant drawback when it comes to RStudio’s convenience features. For example, it does not provide in-line popup help for available parameters in a model. This means you must manually look up the parameters, e.g., needed for the <code>ranger()</code> function.”</p>
+<p>Let’s define a minimum spatial prediction task example with <strong>mlr3</strong> classes:</p>
+<div class="callout-hint">
+<p><strong>mlr3</strong> uses its own terminology. You have to know a lot of specific terms in order to comfortably use the functions. I try to use the <strong>mlr3</strong> terminology here and give some alternative terms in parenthesis.</p>
+</div>
+<section id="task" class="level3">
+<h3 class="anchored" data-anchor-id="task">Task</h3>
+<p>The <code>task</code> defines general information about the data we have at hand. From our point observations we create the task and define what column the target (response / dependent) variable is, what column the geometry (coordinates) is and whether we want to use the coordinates as features (predictors). In this example, we also split the data in our task into a training and a test partition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">task_spain <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3spatial<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_task_regr_st</span>(</span>
+<span id="cb6-2">    temperature,</span>
+<span id="cb6-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">target =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span>,</span>
+<span id="cb6-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coordinate_names =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"geometry"</span>,</span>
+<span id="cb6-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords_as_features =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>,</span>
+<span id="cb6-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">crs =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_crs</span>(temperature)</span>
+<span id="cb6-7">)</span>
+<span id="cb6-8"></span>
+<span id="cb6-9">train_test_split <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">partition</span>(task_spain, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ratio =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>)</span></code></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>st_drop_geometry()</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In <strong>caret</strong>, if we want to use spatial data, we have to specifically exclude the geometry column of the <code>sf</code> object. We lose the spatial information in the process of model training and prediction. However, this information can be critical, e.g., if we want to use <code>CAST::errorprofiles()</code> or <code>CAST::knncv()</code>. In <strong>mlr3</strong> we can keep the geometry and can also directly define whether we want to use the coordinates as predictors.</p>
+</div>
+</div>
+</section>
+<section id="learner" class="level3">
+<h3 class="anchored" data-anchor-id="learner">Learner</h3>
+<p>The <code>learner</code> is the model type or algorithm we want to use with all its necessary or optional parameters. Here I define a Random Forest regression method from the <strong>ranger</strong> package with 100 decision trees and an <code>mtry</code> of 4.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">rfmodel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lrn</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.ranger"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="measure" class="level3">
+<h3 class="anchored" data-anchor-id="measure">Measure</h3>
+<p>In order to evaluate the a score (model performance), e.g., from the previously defined test data partition, we need to define a <code>measure</code>. Here I use the Root Mean Squared Error (RMSE).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">measure_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">msr</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.rmse"</span>)</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="training-validation-and-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="training-validation-and-prediction">Training, Validation and Prediction</h2>
+<p>We now have everything defined to actually do something. To train the model we can use the <code>train</code> method from out defined learner. And we have to tell the <code>train</code> method on what to actually fit the model – in this case the data in <code>task_spain</code>, but only the subset we sampled as training data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">train</span>(task_spain, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">row_ids =</span> train_test_split<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>train)</span>
+<span id="cb9-2">rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>model</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ranger result
+
+Call:
+ ranger::ranger(dependent.variable.name = task$target_names, data = task$data(),      case.weights = task$weights$weight, mtry = 4L, num.threads = 1L,      num.trees = 100L) 
+
+Type:                             Regression 
+Number of trees:                  100 
+Sample size:                      136 
+Number of independent variables:  22 
+Mtry:                             4 
+Target node size:                 5 
+Variable importance mode:         none 
+Splitrule:                        variance 
+OOB prediction error (MSE):       0.8517061 
+R squared (OOB):                  0.8846182 </code></pre>
+</div>
+</div>
+<p>To test how well out model performs now on unseen data, we use the <code>predict</code> method of our fitted learner. Again, we tell the <code>predict</code> method on what data to predict. We can then calculate the <code>score</code> of this test prediction, i.e., the RMSE we defined earlier as out measure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">test_prediction <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(task_spain, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">row_ids =</span> train_test_split<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>test)</span>
+<span id="cb11-2">test_prediction<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">score</span>(measure_rmse)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>regr.rmse 
+ 1.169592 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(test_prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp4/index_files/figure-html/mlr3-prediction-tabular-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we can also use the model to predict temperatures for the whole raster by using the <code>predict()</code> function from <strong>terra</strong>. Alternatively, we could use <code>predict_spatial()</code> for the <strong>mlr3spatial</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">prediction <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(covariates, rfmodel)</span>
+<span id="cb14-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp4/index_files/figure-html/mlr3-prediction-spatial-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatial-cross-validation-hyperparameter-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-cross-validation-hyperparameter-tuning">Spatial cross-validation hyperparameter tuning</h2>
+<p>In many cases, the ideal model hyperparameters are not obvious and we have the possibility to tune them based on the data we have.</p>
+<section id="define-the-c-v-strategy-and-hyperparameters" class="level3">
+<h3 class="anchored" data-anchor-id="define-the-c-v-strategy-and-hyperparameters">Define the c-v strategy and hyperparameters</h3>
+<p>Again, we first define the necessary <strong>mlr3</strong> objects for our tuning process. With <code>rsmp</code> we decide on a resampling strategy, i.e., the data partitions we use as cross-validation folds. The package <strong>mlr3spatiotemporalcv</strong> contains the popular spatial resampling strategies such as block CV (<code>spcv_block</code> used in the example below) or kNNDM.</p>
+<p>For the <code>learner</code> instead of predefined hyperparameters, we use the function <code>to_tune()</code> where we can specify different values for the hyperparameters we want to test.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3spatiotempcv)</span>
+<span id="cb15-2"></span>
+<span id="cb15-3">resampling_blockcv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rsmp</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"spcv_block"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">folds =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">range =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>)</span>
+<span id="cb15-4"></span>
+<span id="cb15-5">rfmodel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lrn</span>(</span>
+<span id="cb15-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.ranger"</span>,</span>
+<span id="cb15-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb15-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">to_tune</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>)),</span>
+<span id="cb15-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.node.size =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">to_tune</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>)),</span>
+<span id="cb15-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span></span>
+<span id="cb15-11">)</span></code></pre></div>
+</div>
+<p>Now we can assemble everything together in a <code>tuning instance</code> object with the <code>ti()</code> function. The first four arguments should be self explanatory: <code>terminator</code> means, if we want to stop with our search for the best hyperparameter combination after some criteria is met. <code>store_benchmark_results</code> and <code>store_models</code> regulates whether we want to keep the measures and models for all the hyperparameter combinations we test.</p>
+<p>Finally, we have to decide on a strategy on how to search with the <code>tuner</code> object. Here I use <code>grid_search</code> which is the brute force method that tests every possible combination once. We then execute the cross-validation with the <code>optimize</code> method from the <code>tuner</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">tuning_blockcv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ti</span>(</span>
+<span id="cb16-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">task =</span> task_spain, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the data</span></span>
+<span id="cb16-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resampling =</span> resampling_blockcv, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the folds</span></span>
+<span id="cb16-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">learner =</span> rfmodel, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the rfmodel with mtry and min.node.size to tune</span></span>
+<span id="cb16-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">measures =</span> measure_rmse, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># how to measure performance</span></span>
+<span id="cb16-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">terminator =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trm</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span>),</span>
+<span id="cb16-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">store_benchmark_result =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>,</span>
+<span id="cb16-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">store_models =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb16-9">)</span>
+<span id="cb16-10"></span>
+<span id="cb16-11">tuner_grid_search <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> mlr3tuning<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tnr</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"grid_search"</span>)</span>
+<span id="cb16-12"></span>
+<span id="cb16-13">tuner_grid_search<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">optimize</span>(tuning_blockcv)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   min.node.size   mtry learner_param_vals  x_domain regr.rmse
+          &lt;char&gt; &lt;char&gt;             &lt;list&gt;    &lt;list&gt;     &lt;num&gt;
+1:             5     10          &lt;list[5]&gt; &lt;list[2]&gt; 0.8371396</code></pre>
+</div>
+</div>
+<p>The results are stored in the defined <code>tuning instance</code> object. We also have some nice plotting options with the <strong>mlr3viz</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">tuning_blockcv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result_learner_param_vals</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$importance
+[1] "impurity"
+
+$num.threads
+[1] 1
+
+$num.trees
+[1] 100
+
+$min.node.size
+[1] 5
+
+$mtry
+[1] 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">tuning_blockcv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result_y</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>regr.rmse 
+0.8371396 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">autoplot</span>(tuning_blockcv, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"parallel"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp4/index_files/figure-html/spatial-cv-results-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Because we set <code>store_benchmark_result = TRUE</code> and <code>store_models = TRUE</code>, we also have a <code>archive</code> where all the other results are stored.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tuning Archive
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">tuning_blockcv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>archive<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>data</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    min.node.size   mtry regr.rmse warnings errors runtime_learners
+           &lt;char&gt; &lt;char&gt;     &lt;num&gt;    &lt;int&gt;  &lt;int&gt;            &lt;num&gt;
+ 1:            10      2 1.0967280        0      0            0.088
+ 2:             5     12 0.8445786        0      0            0.194
+ 3:             5      2 1.0611523        0      0            0.100
+ 4:            10     10 0.8664100        0      0            0.143
+ 5:            15      2 1.1328312        0      0            0.076
+ 6:            15      6 0.8977785        0      0            0.115
+ 7:            15     12 0.8584339        0      0            0.130
+ 8:             5     10 0.8371396        0      0            0.173
+ 9:             5      6 0.8751873        0      0            0.135
+10:            15      4 0.9558697        0      0            0.096
+11:            10     12 0.8686075        0      0            0.150
+12:            15     10 0.8482450        0      0            0.124
+13:            10      4 0.9337196        0      0            0.098
+14:            10      6 0.9080175        0      0            0.112
+15:             5      4 0.9093173        0      0            0.120
+                                   uhash  x_domain           timestamp batch_nr
+                                  &lt;char&gt;    &lt;list&gt;              &lt;POSc&gt;    &lt;int&gt;
+ 1: ea0ec2ec-61ea-491b-89d6-0199f7911c86 &lt;list[2]&gt; 2025-06-10 15:23:25        1
+ 2: c6e3dafc-d8f8-45de-8e33-e697bf03043c &lt;list[2]&gt; 2025-06-10 15:23:25        2
+ 3: 6cee1b95-a51e-424d-a83c-1803a0129bd3 &lt;list[2]&gt; 2025-06-10 15:23:26        3
+ 4: d5158623-9d5a-4364-8892-44f5d35474c1 &lt;list[2]&gt; 2025-06-10 15:23:26        4
+ 5: e0b4d893-6eb7-4296-9cef-d7581b8a67e4 &lt;list[2]&gt; 2025-06-10 15:23:26        5
+ 6: fad242aa-4690-49a5-8441-839497e051de &lt;list[2]&gt; 2025-06-10 15:23:26        6
+ 7: 623348f6-dcc2-44e6-b1fa-3dd6c3275e31 &lt;list[2]&gt; 2025-06-10 15:23:27        7
+ 8: 58234e7f-0886-47ca-9c03-ba2aa25ef475 &lt;list[2]&gt; 2025-06-10 15:23:27        8
+ 9: 9ff77763-ca89-4d9d-9d29-68e8e4209483 &lt;list[2]&gt; 2025-06-10 15:23:27        9
+10: 5b63b98f-536c-47ac-bbc5-09a968005885 &lt;list[2]&gt; 2025-06-10 15:23:27       10
+11: f89ed101-fa0f-4050-813b-66c1ee24bcc7 &lt;list[2]&gt; 2025-06-10 15:23:28       11
+12: 5ab5bad0-126a-466c-8980-c0531ff01fdd &lt;list[2]&gt; 2025-06-10 15:23:28       12
+13: b953b8fd-26b2-4b05-8d45-f522bac498e4 &lt;list[2]&gt; 2025-06-10 15:23:28       13
+14: ad5f6183-d75f-41de-8b24-891a9c9f26cb &lt;list[2]&gt; 2025-06-10 15:23:28       14
+15: 8d6ef31e-8c86-40fc-9a2a-02a533025c62 &lt;list[2]&gt; 2025-06-10 15:23:29       15</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="final-model-with-optimized-hyperparameter" class="level3">
+<h3 class="anchored" data-anchor-id="final-model-with-optimized-hyperparameter">Final model with optimized hyperparameter</h3>
+<p>Once we found the optimal hyperparameter combination we can use them to train a final model on all the data. We define a new <code>learner</code> and assign the parameters from our <code>tuning instance</code> to it. Then we can train and predict again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">tuned_rfmodel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lrn</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.ranger"</span>)</span>
+<span id="cb25-2">tuned_rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>param_set<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>values <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tuning_blockcv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result_learner_param_vals</span>
+<span id="cb25-3"></span>
+<span id="cb25-4">tuned_rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">train</span>(task_spain)</span>
+<span id="cb25-5">tuned_prediction <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(covariates, tuned_rfmodel)</span>
+<span id="cb25-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(tuned_prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp4/index_files/figure-html/mlr3-finalmodel-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="feature-selection" class="level2">
+<h2 class="anchored" data-anchor-id="feature-selection">Feature Selection</h2>
+<section id="define-the-feature-selection-strategy" class="level3">
+<h3 class="anchored" data-anchor-id="define-the-feature-selection-strategy">Define the feature selection strategy</h3>
+<p>Similar to the hyperparameter tuning, we can use the cross-validation strategy to test whether we can build a model with reduces predictors / covariates / features / variable. Here I demonstrate a forward variable selection, that starts out with the best performing pair of variables and appends additional variables, if there is still an increase in our cross-validation performance estimation.</p>
+<p>First we have to define the feature selection strategy with <code>fs()</code>. I use a learner here with fixed hyperparameters. Everything is put together in the <code>fselect()</code> function that creates a feature selection <code>instance</code> in which all the information, methods and results are stored.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3fselect)</span>
+<span id="cb26-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(mlr3filters)</span>
+<span id="cb26-3"></span>
+<span id="cb26-4">select_mode <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fs</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sequential"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_features =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb26-5"></span>
+<span id="cb26-6">fs_rfmodel <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lrn</span>(</span>
+<span id="cb26-7">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regr.ranger"</span>,</span>
+<span id="cb26-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>,</span>
+<span id="cb26-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>,</span>
+<span id="cb26-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min.node.size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,</span>
+<span id="cb26-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span></span>
+<span id="cb26-12">)</span>
+<span id="cb26-13"></span>
+<span id="cb26-14"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>)</span>
+<span id="cb26-15">feature_selection <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fselect</span>(</span>
+<span id="cb26-16">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fselector =</span> select_mode,</span>
+<span id="cb26-17">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">task =</span> task_spain,</span>
+<span id="cb26-18">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">learner =</span> fs_rfmodel,</span>
+<span id="cb26-19">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">resampling =</span> resampling_blockcv,</span>
+<span id="cb26-20">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">measure =</span> measure_rmse</span>
+<span id="cb26-21">)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># selected variables</span></span>
+<span id="cb27-2">feature_selection<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result_feature_set</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Y"         "dem"       "lst_day"   "lst_night" "ntl"       "popdens"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># CV RMSE with the selected variables</span></span>
+<span id="cb29-2">feature_selection<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>regr.rmse</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7795219</code></pre>
+</div>
+</div>
+</section>
+<section id="final-model-with-selected-features" class="level3">
+<h3 class="anchored" data-anchor-id="final-model-with-selected-features">Final model with selected features</h3>
+<p>Once we found the ideal combination of variables, we can reduce our task to those predictors, train a model and predict.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1">fs_task <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> task_spain<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(feature_selection<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>result_feature_set)</span>
+<span id="cb31-2"></span>
+<span id="cb31-3">fs_rfmodel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">train</span>(fs_task)</span>
+<span id="cb31-4"></span>
+<span id="cb31-5">fs_prediction <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(covariates, fs_rfmodel)</span>
+<span id="cb31-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(fs_prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp4/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<ul>
+<li>Utilizes an <strong>object-oriented approach</strong> with <code>R6</code> classes, offering flexibility but requiring familiarity with this system in R.</li>
+<li>Possible target audience: <strong>machine learning experts</strong> and <strong>Python users</strong> transitioning to R, especially those familiar with object-oriented programming.</li>
+</ul>
+<section id="strengths" class="level3">
+<h3 class="anchored" data-anchor-id="strengths">Strengths</h3>
+<ul>
+<li><strong>Spatially explicit methods are directly implemented</strong>: there is no need to exclude the geometry column of the <code>sf</code> object, allowing for the retention of spatial information.</li>
+<li><strong>Active development</strong>: continuously updated with improvements and bug fixes.</li>
+<li><strong>Very good introduction to the framework through the book</strong>: The book offers a well-structured guide for learning the <strong>mlr3</strong> framework.</li>
+<li><strong>Well-documented functions</strong>: Clear and comprehensive documentation helps users understand the functions easily.</li>
+</ul>
+</section>
+<section id="weaknesses" class="level3">
+<h3 class="anchored" data-anchor-id="weaknesses">Weaknesses</h3>
+<ul>
+<li><strong>Steep learning curve</strong>: The framework’s complexity can be challenging for beginners.</li>
+<li><strong>Overwhelming number of methods and options</strong>: The extensive methods can be difficult to navigate for new users.</li>
+<li><strong>Confusing help pages due to <code>R6</code> logic</strong>: Understanding the <code>R6</code> logic in help files can be tough for those unfamiliar with the system.</li>
+<li><strong>No in-line help in RStudio</strong>: Lack of in-line help for <code>R6</code> methods in RStudio makes it harder to access function details quickly.</li>
+</ul>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{ludwig2025,
+  author = {Ludwig, Marvin},
+  title = {Spatial Machine Learning with Mlr3},
+  date = {2025-06-11},
+  url = {https://geocompx.org/post/2025/sml-bp4/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-ludwig2025" class="csl-entry quarto-appendix-citeas">
+Ludwig, Marvin. 2025. <span>“Spatial Machine Learning with Mlr3.”</span>
+June 11, 2025. <a href="https://geocompx.org/post/2025/sml-bp4/">https://geocompx.org/post/2025/sml-bp4/</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <category>sml</category>
+  <guid>https://geocompx.org/post/2025/sml-bp4/</guid>
+  <pubDate>Wed, 11 Jun 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Spatial machine learning with the tidymodels framework</title>
   <dc:creator>Hanna Meyer</dc:creator>
@@ -8869,710 +9761,6 @@ Ubuntu.”</span> March 30, 2020. <a href="https://geocompx.org/post/2020/instal
   <category>rstats</category>
   <guid>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/</guid>
   <pubDate>Mon, 30 Mar 2020 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Inset maps with ggplot2</title>
-  <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2019/ggplot2-inset-maps/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Inset maps enable multiple places to be shown in the same geographic data visualisation, as described in the <a href="https://geocompr.robinlovelace.net/adv-map.html#inset-maps">Inset maps section (8.2.7)</a> of our open source book Geocomputation with R. The topic of inset maps has gained attention and recently <a href="https://twitter.com/espinielli/">Enrico Spinielli</a> <a href="systemshttps://twitter.com/espinielli/status/1191452410394361863">asked inset maps could be created for data in unusual coordinate</a>.</p>
-<p>R’s flexibility allows inset maps to be created in various ways, using different approaches and packages. However, the main idea stays the same: we need to create at least two maps: a larger one, called the main map, that shows the central story and a smaller one, called the inset map, that puts the main map in context.</p>
-<p>This blog post shows how to create inset maps with <strong>ggplot2</strong> for visualization. The approach also uses the <strong>sf</strong> package for spatial data reading and handling, <strong>cowplot</strong> to arrange inset maps, and <strong>rcartocolor</strong> for additional color palettes. To reproduce the results on your own computer, after installing them, these packages can be attached as follows:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)</span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(ggplot2)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(cowplot)</span>
-<span id="cb1-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(rcartocolor)</span></code></pre></div>
-</div>
-<section id="basic-inset-map" class="level1">
-<h1>Basic inset map</h1>
-<p>Let’s start by creating a basic inset map.</p>
-<section id="data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation">Data preparation</h2>
-<p>The first step is to read and prepare the data we want to visualize. We use the <code>us_states</code> data from the <strong>spData</strong> package as the source of the inset map, and <code>north_carolina</code> from the <strong>sf</strong> package as the source of the main map.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(spData)</span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"us_states"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"spData"</span>)</span>
-<span id="cb2-3">north_carolina <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_sf</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"shape/nc.shp"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sf"</span>))</span></code></pre></div>
-</div>
-<p>Both objects should have the same coordinate reference system (<code>crs</code>). Here, we use <code>crs = 2163</code>, which represents the US National Atlas Equal Area projection.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">us_states_2163 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(us_states, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2163</span>)</span>
-<span id="cb3-2">north_carolina_2163 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(north_carolina, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2163</span>)</span></code></pre></div>
-</div>
-<p>We also need to have the borders of the area we want to highlight (use in the main map). This can be done by extracting the bounding box of our <code>north_carolina_2163</code> object.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">north_carolina_2163_bb <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sfc</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_bbox</span>(north_carolina_2163))</span></code></pre></div>
-</div>
-</section>
-<section id="maps-creation" class="level2">
-<h2 class="anchored" data-anchor-id="maps-creation">Maps creation</h2>
-<p>The second step is to create both inset and main maps independently. The inset map should show the context (larger area) and highlight the area of interest.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">ggm1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb5-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> us_states_2163, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb5-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> north_carolina_2163_bb, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"red"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.2</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb5-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_void</span>()</span>
-<span id="cb5-5"></span>
-<span id="cb5-6">ggm1</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The main map’s role is to tell the story. Here we show the number of births between 1974 and 1978 in the North Carolina counties (the <code>BIR74</code> variable) using the Mint color palette from the <strong>rcartocolor</strong> palette. We also customize the legend position and size - this way, the legend is a part of the map, instead of being somewhere outside the map frame.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">ggm2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb6-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> north_carolina_2163, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> BIR74)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">scale_fill_carto_c</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">palette =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Mint"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_void</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.position =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.4</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.05</span>),</span>
-<span id="cb6-6">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.direction =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"horizontal"</span>,</span>
-<span id="cb6-7">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.key.width =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unit</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mm"</span>))</span>
-<span id="cb6-8"></span>
-<span id="cb6-9">ggm2</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="maps-joining" class="level2">
-<h2 class="anchored" data-anchor-id="maps-joining">Maps joining</h2>
-<p>The final step is to join two maps. This can be done using functions from the <strong>cowplot</strong> package. We create an empty ggplot layer using <code>ggdraw()</code>, fill it with out main map (<code>draw_plot(ggm2)</code>), and add an inset map by specifing its position and size:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">gg_inset_map1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">draw_plot</span>(ggm2) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">draw_plot</span>(ggm1, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.05</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.65</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">width =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.3</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.3</span>)</span>
-<span id="cb7-4"></span>
-<span id="cb7-5">gg_inset_map1</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The final map can be saved using the <code>ggsave()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggsave</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">filename =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"01_gg_inset_map.png"</span>, </span>
-<span id="cb8-2">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">plot =</span> gg_inset_map1,</span>
-<span id="cb8-3">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">width =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">8</span>, </span>
-<span id="cb8-4">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>,</span>
-<span id="cb8-5">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dpi =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">150</span>)</span></code></pre></div>
-</div>
-</section>
-</section>
-<section id="advanced-inset-map" class="level1">
-<h1>Advanced inset map</h1>
-<p>Let’s expand the idea of the inset map in <strong>ggplot2</strong> based on the previous example.</p>
-<section id="data-preparation-1" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation-1">Data preparation</h2>
-<p>This map will use the US states borders (<code>states()</code>) as the source of the inset map and the Kentucky Senate legislative districts (<code>state_legislative_districts()</code>) as the main map.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tigris)</span>
-<span id="cb9-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">options</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">tigris_use_cache =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb9-3">us_states <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">states</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cb =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sf"</span>)</span>
-<span id="cb9-4">ky_districts <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">state_legislative_districts</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"KY"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">house =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"upper"</span>,</span>
-<span id="cb9-5">                                           <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">cb =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sf"</span>)</span></code></pre></div>
-</div>
-<p>The <code>states()</code> function, in addition to the 50 states, also returns the District of Columbia, Puerto Rico, American Samoa, the Commonwealth of the Northern Mariana Islands, Guam, and the US Virgin Islands. For our purpose, we are interested in the continental 48 states and the District of Columbia only; therefore, we remove the rest of the divisions using <code>subset()</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">us_states <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">subset</span>(us_states, </span>
-<span id="cb10-2">                   <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>NAME <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb10-3">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"United States Virgin Islands"</span>,</span>
-<span id="cb10-4">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Commonwealth of the Northern Mariana Islands"</span>,</span>
-<span id="cb10-5">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Guam"</span>,</span>
-<span id="cb10-6">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"American Samoa"</span>,</span>
-<span id="cb10-7">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Puerto Rico"</span>,</span>
-<span id="cb10-8">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Alaska"</span>,</span>
-<span id="cb10-9">                     <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Hawaii"</span></span>
-<span id="cb10-10">                   ))</span></code></pre></div>
-</div>
-<p>The same as in the example above, we transform both objects to have the same projection.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">ky_districts_2163 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(ky_districts, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2163</span>)</span>
-<span id="cb11-2">us_states_2163 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_transform</span>(us_states, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">crs =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2163</span>)</span></code></pre></div>
-</div>
-<p>We also extract the bounding box of the main object here. However, instead of using it directly, we add a buffer of 10,000 meters around it. This output will be handy in both inset and main maps.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">ky_districts_2163_bb <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sfc</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_bbox</span>(ky_districts_2163))</span>
-<span id="cb12-2">ky_districts_2163_bb <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_buffer</span>(ky_districts_2163_bb, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dist =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10000</span>)</span></code></pre></div>
-</div>
-<p>The <code>ky_districts_2163</code> object does not have any interesting variables to visualize, so we create some random values here. However, we could also join the districts’ data with another dataset in this step.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">ky_districts_2163<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>values <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">runif</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">nrow</span>(ky_districts_2163))</span></code></pre></div>
-</div>
-</section>
-<section id="map-creation" class="level2">
-<h2 class="anchored" data-anchor-id="map-creation">Map creation</h2>
-<p>The inset map should be as clear and simple as possible.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">ggm3 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb14-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> us_states_2163, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.2</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb14-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> ky_districts_2163_bb, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"blue"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">size =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.2</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb14-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_void</span>()</span>
-<span id="cb14-5"></span>
-<span id="cb14-6">ggm3</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>On the other hand, the main map looks better when we provide some additional context to our data. One of the ways to achieve it is to add the borders of the neighboring states.</p>
-<p>Importantly, we also need to limit the extent of our main map to the range of the frame in the inset map. This can be done with the <code>coord_sf()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">ggm4 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb15-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> us_states_2163, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#F5F5DC"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> ky_districts_2163, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> values)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">scale_fill_carto_c</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">palette =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Sunset"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_void</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.position =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.07</span>),</span>
-<span id="cb15-7">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.direction =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"horizontal"</span>,</span>
-<span id="cb15-8">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.key.width =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unit</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mm"</span>),</span>
-<span id="cb15-9">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#BFD5E3"</span>)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb15-10">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">coord_sf</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xlim =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_bbox</span>(ky_districts_2163_bb)[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>)],</span>
-<span id="cb15-11">           <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ylim =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_bbox</span>(ky_districts_2163_bb)[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)])</span>
-<span id="cb15-12"></span>
-<span id="cb15-13">ggm4</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Finally, we draw two maps together, trying to find the best location and size for the inset map.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">gg_inset_map2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb16-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">draw_plot</span>(ggm4) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb16-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">draw_plot</span>(ggm3, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.02</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.65</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">width =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.35</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.35</span>)</span>
-<span id="cb16-4"></span>
-<span id="cb16-5">gg_inset_map2</span></code></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://geocompx.org/post/2019/ggplot2-inset-maps/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="768"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The final map can be saved using the <code>ggsave()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggsave</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">filename =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"02_gg_inset_map.png"</span>, </span>
-<span id="cb17-2">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">plot =</span> gg_inset_map2,</span>
-<span id="cb17-3">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">width =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7.05</span>, </span>
-<span id="cb17-4">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>,</span>
-<span id="cb17-5">       <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">dpi =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">150</span>)</span></code></pre></div>
-</div>
-</section>
-</section>
-<section id="summary" class="level1">
-<h1>Summary</h1>
-<p>The above examples can be adjusted to any spatial data and location. It is also possible to put more context on the map, including adding main cities’ names, neighboring states’ names, and annotations (using <code>geom_text()</code>, <code>geom_label()</code>). The main map can also be enhanced with the north arrow and scale bar using the <a href="https://github.com/oswaldosantos/ggsn"><strong>ggsn</strong></a> package.</p>
-<p>As always with R, there are many possible options to create inset maps. You can find two examples of inset maps created using the <strong>tmap</strong> package in <a href="https://geocompr.robinlovelace.net/adv-map.html#inset-maps">the Geocomputation with R book</a>. The second example is a classic map of the United States, which consists of the contiguous United States, Hawaii, and Alaska. However, Hawaii and Alaska are displayed at different geographic scales than the main map there. This problem can also be solved in R, which you can see in <a href="https://nowosad.github.io/post/making-alternative-inset-maps-of-the-usa/">the Making maps of the USA with R: alternative layout</a> blogpost and the <a href="https://github.com/Nowosad/us-map-alternative-layout">Alternative layout for maps of the United States</a> repository.</p>
-<p>The presented approaches also apply to other areas. For example, you can find three ways on how to create an inset map of Spain in the <a href="https://github.com/Nowosad/spain-map-layout">Alternative layout for maps of Spain</a> repository. Other examples of inset maps with <strong>ggplot2</strong> can be found in the <a href="https://ryanpeek.github.io/mapping-in-R-workshop/vig_making_inset_maps.html">Inset Maps</a> vignette by <a href="https://twitter.com/riverpeek">Ryan Peek</a> and the blog post <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf-3.html">Drawing beautiful maps programmatically with R, sf and ggplot2</a> by <a href="https://twitter.com/melimore86">Mel Moreno</a> and <a href="https://twitter.com/MabLabUF">Mathieu Basille</a>.</p>
-<p>The decision which option to use depends on the expected map type preferred R packages, etc. Try different approaches on your own data and decide what works best for you!</p>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2019,
-  author = {Nowosad, Jakub},
-  title = {Inset Maps with Ggplot2},
-  date = {2019-12-08},
-  url = {https://geocompx.org/post/2019/ggplot2-inset-maps/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2019" class="csl-entry quarto-appendix-citeas">
-Nowosad, Jakub. 2019. <span>“Inset Maps with Ggplot2.”</span> December
-8, 2019. <a href="https://geocompx.org/post/2019/ggplot2-inset-maps/">https://geocompx.org/post/2019/ggplot2-inset-maps/</a>.
-</div></div></section></div> ]]></description>
-  <category>vignette</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2019/ggplot2-inset-maps/</guid>
-  <pubDate>Sun, 08 Dec 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

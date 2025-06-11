@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-72b90eecc85eaced6776491fc4e282e7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-3440db54f37f925dbdcba40f507786c0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -112,7 +112,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
-<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../../style.css">
@@ -121,7 +120,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -413,8 +412,8 @@ Mtry:                             4
 Target node size:                 5 
 Variable importance mode:         none 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.9364762 
-R squared (OOB):                  0.8884541 </code></pre>
+OOB prediction error (MSE):       0.8517061 
+R squared (OOB):                  0.8846182 </code></pre>
 </div>
 </div>
 <p>To test how well out model performs now on unseen data, we use the <code>predict</code> method of our fitted learner. Again, we tell the <code>predict</code> method on what data to predict. We can then calculate the <code>score</code> of this test prediction, i.e., the RMSE we defined earlier as out measure.</p>
@@ -423,7 +422,7 @@ R squared (OOB):                  0.8884541 </code></pre>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>test_prediction<span class="sc">$</span><span class="fu">score</span>(measure_rmse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse 
-0.8861325 </code></pre>
+ 1.169592 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(test_prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -486,7 +485,7 @@ R squared (OOB):                  0.8884541 </code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>   min.node.size   mtry learner_param_vals  x_domain regr.rmse
           &lt;char&gt; &lt;char&gt;             &lt;list&gt;    &lt;list&gt;     &lt;num&gt;
-1:             5     12          &lt;list[5]&gt; &lt;list[2]&gt; 0.8240886</code></pre>
+1:             5     10          &lt;list[5]&gt; &lt;list[2]&gt; 0.8371396</code></pre>
 </div>
 </div>
 <p>The results are stored in the defined <code>tuning instance</code> object. We also have some nice plotting options with the <strong>mlr3viz</strong> package.</p>
@@ -506,12 +505,12 @@ $min.node.size
 [1] 5
 
 $mtry
-[1] 12</code></pre>
+[1] 10</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tuning_blockcv<span class="sc">$</span>result_y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>regr.rmse 
-0.8240886 </code></pre>
+0.8371396 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tuning_blockcv, <span class="at">type =</span> <span class="st">"parallel"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -540,38 +539,38 @@ Tuning Archive
 <div class="cell-output cell-output-stdout">
 <pre><code>    min.node.size   mtry regr.rmse warnings errors runtime_learners
            &lt;char&gt; &lt;char&gt;     &lt;num&gt;    &lt;int&gt;  &lt;int&gt;            &lt;num&gt;
- 1:             5     12 0.8240886        0      0            0.152
- 2:            10     10 0.8389132        0      0            0.121
- 3:            15      2 1.1667164        0      0            0.062
- 4:            15      4 0.9604586        0      0            0.067
- 5:            10     12 0.8256289        0      0            0.137
- 6:             5      6 0.8644747        0      0            0.119
- 7:            10      6 0.8789176        0      0            0.091
- 8:             5     10 0.8279590        0      0            0.130
- 9:            10      4 0.9155011        0      0            0.099
-10:             5      2 1.0621923        0      0            0.083
-11:            10      2 1.1164149        0      0            0.066
-12:            15      6 0.8945759        0      0            0.102
-13:            15     12 0.8272889        0      0            0.112
-14:             5      4 0.9561456        0      0            0.097
-15:            15     10 0.8382722        0      0            0.121
+ 1:            10      2 1.0967280        0      0            0.088
+ 2:             5     12 0.8445786        0      0            0.194
+ 3:             5      2 1.0611523        0      0            0.100
+ 4:            10     10 0.8664100        0      0            0.143
+ 5:            15      2 1.1328312        0      0            0.076
+ 6:            15      6 0.8977785        0      0            0.115
+ 7:            15     12 0.8584339        0      0            0.130
+ 8:             5     10 0.8371396        0      0            0.173
+ 9:             5      6 0.8751873        0      0            0.135
+10:            15      4 0.9558697        0      0            0.096
+11:            10     12 0.8686075        0      0            0.150
+12:            15     10 0.8482450        0      0            0.124
+13:            10      4 0.9337196        0      0            0.098
+14:            10      6 0.9080175        0      0            0.112
+15:             5      4 0.9093173        0      0            0.120
                                    uhash  x_domain           timestamp batch_nr
                                   &lt;char&gt;    &lt;list&gt;              &lt;POSc&gt;    &lt;int&gt;
- 1: 333d3f76-1ae2-4c3b-8f34-d050c71397fd &lt;list[2]&gt; 2025-05-26 12:28:16        1
- 2: 31947258-a9ba-48be-b961-a9970b3e94cf &lt;list[2]&gt; 2025-05-26 12:28:16        2
- 3: f88ad08c-4efa-450d-b1d4-978b867937e6 &lt;list[2]&gt; 2025-05-26 12:28:16        3
- 4: 6459c97f-a4ed-4fdc-aca8-cbb5be56b0d3 &lt;list[2]&gt; 2025-05-26 12:28:16        4
- 5: 0a66e015-8b20-4c2d-88fc-3c0a60556fa0 &lt;list[2]&gt; 2025-05-26 12:28:16        5
- 6: 857f48c3-7cf1-4aaf-ab55-c287cc699da1 &lt;list[2]&gt; 2025-05-26 12:28:17        6
- 7: a0dddade-58bb-45ef-9240-3f367608ff9f &lt;list[2]&gt; 2025-05-26 12:28:17        7
- 8: d54fea12-1a76-4e42-a250-c74185598682 &lt;list[2]&gt; 2025-05-26 12:28:17        8
- 9: 8e35a79f-b78d-45f0-a21e-3e1abc14ebac &lt;list[2]&gt; 2025-05-26 12:28:17        9
-10: e1591abe-9178-44f2-b063-7e9ec22d3866 &lt;list[2]&gt; 2025-05-26 12:28:17       10
-11: e41ce69e-bc21-4407-8ccb-3d7a396c9397 &lt;list[2]&gt; 2025-05-26 12:28:18       11
-12: 6f6163e0-d697-44f9-92ec-bc867f669644 &lt;list[2]&gt; 2025-05-26 12:28:18       12
-13: 24228220-8666-43c0-9fc1-fa2058e2497e &lt;list[2]&gt; 2025-05-26 12:28:18       13
-14: 787ca12d-3e79-4b81-a32e-54a0276e2120 &lt;list[2]&gt; 2025-05-26 12:28:18       14
-15: a987fac8-1117-4d49-8b28-4c643f08fa39 &lt;list[2]&gt; 2025-05-26 12:28:18       15</code></pre>
+ 1: ea0ec2ec-61ea-491b-89d6-0199f7911c86 &lt;list[2]&gt; 2025-06-10 15:23:25        1
+ 2: c6e3dafc-d8f8-45de-8e33-e697bf03043c &lt;list[2]&gt; 2025-06-10 15:23:25        2
+ 3: 6cee1b95-a51e-424d-a83c-1803a0129bd3 &lt;list[2]&gt; 2025-06-10 15:23:26        3
+ 4: d5158623-9d5a-4364-8892-44f5d35474c1 &lt;list[2]&gt; 2025-06-10 15:23:26        4
+ 5: e0b4d893-6eb7-4296-9cef-d7581b8a67e4 &lt;list[2]&gt; 2025-06-10 15:23:26        5
+ 6: fad242aa-4690-49a5-8441-839497e051de &lt;list[2]&gt; 2025-06-10 15:23:26        6
+ 7: 623348f6-dcc2-44e6-b1fa-3dd6c3275e31 &lt;list[2]&gt; 2025-06-10 15:23:27        7
+ 8: 58234e7f-0886-47ca-9c03-ba2aa25ef475 &lt;list[2]&gt; 2025-06-10 15:23:27        8
+ 9: 9ff77763-ca89-4d9d-9d29-68e8e4209483 &lt;list[2]&gt; 2025-06-10 15:23:27        9
+10: 5b63b98f-536c-47ac-bbc5-09a968005885 &lt;list[2]&gt; 2025-06-10 15:23:27       10
+11: f89ed101-fa0f-4050-813b-66c1ee24bcc7 &lt;list[2]&gt; 2025-06-10 15:23:28       11
+12: 5ab5bad0-126a-466c-8980-c0531ff01fdd &lt;list[2]&gt; 2025-06-10 15:23:28       12
+13: b953b8fd-26b2-4b05-8d45-f522bac498e4 &lt;list[2]&gt; 2025-06-10 15:23:28       13
+14: ad5f6183-d75f-41de-8b24-891a9c9f26cb &lt;list[2]&gt; 2025-06-10 15:23:28       14
+15: 8d6ef31e-8c86-40fc-9a2a-02a533025c62 &lt;list[2]&gt; 2025-06-10 15:23:29       15</code></pre>
 </div>
 </div>
 </div>
