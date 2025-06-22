@@ -25,6 +25,8 @@ This is the first part of a blog post series on spatial machine learning with R.
 - [Part 2](/post/2025/sml-bp2/): Spatial machine learning with caret
 - [Part 3](/post/2025/sml-bp3/): Spatial machine learning with the tidymodels framework
 - [Part 4](/post/2025/sml-bp4/): Spatial machine learning with mlr3
+- [Part 5](/post/2025/sml-bp5/): Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo
+- [Part 6](/post/2025/sml-bp6/): Specialized R packages for spatial cross-validation: sperrorest and blockCV
 
 :::
 
