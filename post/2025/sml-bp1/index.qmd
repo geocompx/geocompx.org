@@ -1,21 +1,20 @@
 ---
 title: "Spatial machine learning with R: caret, tidymodels, and mlr3"
-# description: "A comparison of three popular machine learning frameworks in R for spatial machine learning tasks."
 author:
-  - name: Jakub Nowosad
-    url: https://jakubnowosad.com
-    orcid:  0000-0002-1057-3721
+    - name: Jakub Nowosad
+      url: https://jakubnowosad.com
+      orcid:  0000-0002-1057-3721
 date: "2025-04-30"
 slug: sml-bp1
 categories:
-  - rstats
-  - sml
+    - rstats
+    - sml
 tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
 draft: false
 mermaid-format: png
 knitr:
-  opts_chunk:
-    message: false
+    opts_chunk:
+        message: false
 ---
 
 ::: {.callout-note appearance="simple"}
