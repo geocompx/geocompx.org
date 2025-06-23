@@ -9,8 +9,1297 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
-<generator>quarto-1.6.10</generator>
-<lastBuildDate>Wed, 11 Jun 2025 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.7.32</generator>
+<lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2025/sml-bp5/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the fifth part of a blog post series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="../../../post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<p>This document provides an overview of three R packages, <strong>RandomForestsGLS</strong>, <strong>spatialRF</strong>, and <strong>meteo</strong>, that implement spatial machine learning methods, but are outside of standard machine learning frameworks like <strong>caret</strong>, <strong>tidymodels</strong>, or <strong>mlr3</strong>.<sup>1</sup></p>
+<p>All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">spain <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(</span>
+<span id="cb1-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span></span>
+<span id="cb1-3">)</span>
+<span id="cb1-4">covariates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(</span>
+<span id="cb1-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span></span>
+<span id="cb1-6">)</span>
+<span id="cb1-7">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(</span>
+<span id="cb1-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span></span>
+<span id="cb1-9">)</span>
+<span id="cb1-10"></span>
+<span id="cb1-11">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract</span>(covariates, temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bind =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb1-12">    sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>()</span></code></pre></div>
+</div>
+<section id="randomforestsgls" class="level1">
+<h1>RandomForestsGLS</h1>
+<p>The <strong>RandomForestsGLS</strong> (<a href="https://doi.org/10.21105/joss.03780" class="uri">https://doi.org/10.21105/joss.03780</a>) package implements <a href="https://doi.org/10.1080/01621459.2021.1950003">the Generalised Least Square (GLS) based Random Forest (RF-GLS) algorithm</a>.<sup>2</sup> This approach is designed for spatial data modeling as it accounts for spatial dependencies in the data by:</p>
+<ol type="1">
+<li>Using a global dependency-adjusted split criterion and node representatives instead of the classification and regression tree (CART) criterion used in standard RF models</li>
+<li>Applying contrast resampling rather than the bootstrap method used in a standard RF model</li>
+<li>Employing residual kriging with covariance modeled using a Gaussian process framework</li>
+</ol>
+<p>The package provides four functions:</p>
+<ol type="1">
+<li><code>RFGLS_estimate_spatial()</code> for estimation in spatial data</li>
+<li><code>RFGLS_predict()</code> for prediction of the mean function</li>
+<li><code>RFGLS_predict_spatial()</code> for prediction of the spatial response</li>
+<li><code>RFGLS_estimate_timeseries()</code> for estimation in time series data (not discussed here)</li>
+</ol>
+<p>The package has rather unintuitive syntax and requires the data to be in a specific format. We need to provide the coordinates of the data (a matrix), the response variable (a vector), and the covariates (a matrix). In the example below, I limited the covariate matrix to the variables that are not spatial proxies.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(RandomForestsGLS)</span>
+<span id="cb2-2"></span>
+<span id="cb2-3">coords <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_coordinates</span>(temperature)</span>
+<span id="cb2-4">temp_response <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> temperature<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>temp</span>
+<span id="cb2-5"></span>
+<span id="cb2-6">temperature_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(temperature)</span>
+<span id="cb2-7">covariate_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(temperature_df)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature_df) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>)]</span>
+<span id="cb2-8">covariate_matrix <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.matrix</span>(temperature_df[, covariate_names])</span></code></pre></div>
+</div>
+<p>I also split the data into training and testing sets based on created random indices.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">01</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>)</span>
+<span id="cb3-2">train_idx <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(coords), <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">floor</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(coords) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.7</span>))</span></code></pre></div>
+</div>
+<p>The <code>RFGLS_estimate_spatial()</code> function is used to fit the RF-GLS model. Here, we customize the number of trees to 100, but the function has many other parameters that can be adjusted.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">estimation_result <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RFGLS_estimate_spatial</span>(</span>
+<span id="cb4-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords =</span> coords[train_idx, ],</span>
+<span id="cb4-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> temp_response[train_idx],</span>
+<span id="cb4-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> covariate_matrix[train_idx, ],</span>
+<span id="cb4-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ntree =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span></span>
+<span id="cb4-6">)</span>
+<span id="cb4-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(estimation_result)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 7
+ $ P_matrix        : int [1:136, 1:100] 18 78 88 123 31 80 49 67 65 98 ...
+ $ predicted_matrix: num [1:136, 1:100] 17 17 13 14.9 13 ...
+ $ predicted       : num [1:136] 16 15.4 10.9 13.8 15 ...
+ $ X               : num [1:136, 1:15] 727 20.7 0 203.7 0 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : chr [1:136] "88" "106" "24" "11" ...
+  .. ..$ : chr [1:15] "popdens" "coast" "dem" "imd" ...
+ $ y               : num [1:136] 16.13 15.21 7.53 13.61 15.59 ...
+ $ coords          : num [1:136, 1:2] 495960 523533 273723 618599 616251 ...
+  ..- attr(*, "dimnames")=List of 2
+  .. ..$ : NULL
+  .. ..$ : chr [1:2] "X" "Y"
+ $ RFGLS_object    :List of 6
+  ..$ ldaughter : int [1:273, 1:100] 2 4 6 8 0 10 12 0 14 0 ...
+  ..$ rdaughter : int [1:273, 1:100] 3 5 7 9 0 11 13 0 15 0 ...
+  ..$ nodestatus: int [1:273, 1:100] -3 -3 -3 -3 -1 -3 -3 -1 -3 -1 ...
+  ..$ upper     : num [1:273, 1:100] 27.029 0.216 76.038 0.287 0 ...
+  ..$ avnode    : num [1:273, 1:100] 0 0 0 0 15.3 ...
+  ..$ mbest     : int [1:273, 1:100] 14 10 2 8 0 2 8 0 2 0 ...</code></pre>
+</div>
+</div>
+<p>The result is a list with seven elements: a matrix of zero-indexed resamples, a matrix of predictions (ntest x ntree), a vector of predicted values, the covariate matrix, the response variable, the coordinates matrix, and the RF-GLS object.</p>
+<p>Now, we can use the fitted model to predict the mean function (<code>RFGLS_predict()</code>) or the spatial response (<code>RFGLS_predict_spatial()</code>). The difference (as far as I understand) is that the former returns the mean prediction, while the latter uses the spatial coordinates in addition to the covariates to predict the spatial response.</p>
+<p>The first function returns a list with two elements: a matrix of predictions (ntest x ntree) and a vector of predicted values, while the second function returns a list with just one element: a vector of predicted values. Just note that the predictions by the <code>RFGLS_predict()</code> are named <code>"predicted"</code> and the predictions by the <code>RFGLS_predict_spatial()</code> are named <code>"prediction"</code>.</p>
+<div class="cell" data-warnings="false">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">prediction_result <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RFGLS_predict</span>(</span>
+<span id="cb6-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">RFGLS_out =</span> estimation_result,</span>
+<span id="cb6-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Xtest =</span> covariate_matrix[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>train_idx, ]</span>
+<span id="cb6-4">)</span>
+<span id="cb6-5">prediction_result_spatial <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RFGLS_predict_spatial</span>(</span>
+<span id="cb6-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">RFGLS_out =</span> estimation_result,</span>
+<span id="cb6-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords.0 =</span> coords[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>train_idx, ],</span>
+<span id="cb6-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Xtest =</span> covariate_matrix[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>train_idx, ]</span>
+<span id="cb6-9">)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in BRISC_estimation(coords, x = matrix(1, nrow(coords), 1), y = rfgls_residual, : The ordering of inputs x (covariates) and y (response) in BRISC_estimation has been changed BRISC 1.0.0 onwards.
+Please check the new documentation with ?BRISC_estimation.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(prediction_result<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>predicted, prediction_result_spatial<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The final results of these two approaches are v. similar, but not identical.</p>
+<p>Now, let’s predict the models’ results on the whole dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">covariate_coords_r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">crds</span>(covariates)</span>
+<span id="cb9-2">covariate_matrix_r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.matrix</span>(covariates)</span>
+<span id="cb9-3">covariate_matrix_r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> covariate_matrix_r[, covariate_names]</span>
+<span id="cb9-4"></span>
+<span id="cb9-5">pred_s <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">RFGLS_predict_spatial</span>(</span>
+<span id="cb9-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">RFGLS_out =</span> estimation_result,</span>
+<span id="cb9-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords.0 =</span> covariate_coords_r,</span>
+<span id="cb9-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Xtest =</span> covariate_matrix_r</span>
+<span id="cb9-9">)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in BRISC_estimation(coords, x = matrix(1, nrow(coords), 1), y = rfgls_residual, : The ordering of inputs x (covariates) and y (response) in BRISC_estimation has been changed BRISC 1.0.0 onwards.
+Please check the new documentation with ?BRISC_estimation.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in corr_pred$prediction + func_pred$predicted: longer object length is
+not a multiple of shorter object length</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">pred_r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setValues</span>(covariates[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]], pred_s<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>prediction)</span>
+<span id="cb12-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(pred_r) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"prediction"</span></span>
+<span id="cb12-3">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(pred_r)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatialrf" class="level1">
+<h1>spatialRF</h1>
+<p>The <strong>spatialRF</strong> (<a href="https://blasbenito.github.io/spatialRF/" class="uri">https://blasbenito.github.io/spatialRF/</a>) package’s aim is to provide a minimal code interface to fit spatial regression models with Random Forest. The internal calculations are based on three general methods to generate spatial predictors from the distance matrix of the data points: Distance matrix columns as explanatory variables (Hengl et al.&nbsp;2018), Moran’s Eigenvector Maps (Dray, Legendre, and Peres-Neto 2006) and PCAs. The <strong>ranger</strong> package is used here internally to fit the Random Forest model.</p>
+<p>This package also requires the data to be in a specific format. We need to provide the data as a data frame with the dependent variable, including spatial coordinates, and the distance matrix: a matrix with the distances among the records in the data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(spatialRF)</span>
+<span id="cb13-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sf)</span>
+<span id="cb13-3"></span>
+<span id="cb13-4">coordinates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_coordinates</span>(temperature)</span>
+<span id="cb13-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(coordinates) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>)</span>
+<span id="cb13-6">coordinates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.data.frame</span>(coordinates)</span>
+<span id="cb13-7"></span>
+<span id="cb13-8">temperature_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(temperature)</span>
+<span id="cb13-9">temperature_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> coordinates[, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb13-10">temperature_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> coordinates[, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span>
+<span id="cb13-11"></span>
+<span id="cb13-12">distance_matrix <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dist</span>(temperature_df[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature_df) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>)]))</span></code></pre></div>
+</div>
+<p>We also need to define the dependent variable and the predictor variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">response_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span></span>
+<span id="cb14-2">covariate_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(temperature_df)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature_df) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>)]</span></code></pre></div>
+</div>
+<p>Finally, we can fit the models using one of the methods provided by the package. The package has 10 methods implemented, nine of which are based on the three components:<sup>3</sup></p>
+<ol type="1">
+<li>The method to generate spatial predictors (<code>"hengl"</code>, <code>"mem"</code>, or <code>"pca"</code>)</li>
+<li>The method to rank spatial predictors (<code>"moran"</code> or <code>"effect"</code>)</li>
+<li>The method to select spatial predictors (<code>"sequential"</code> or <code>"recursive"</code>)</li>
+</ol>
+<p>The main function of this package is <code>rf_spatial()</code>, which fits the Random Forest model with spatial predictors. Here, an example using Moran’s Eigenvector Maps method to generate spatial predictors, Moran’s I to rank them, and sequential selection of the predictors is shown.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">rf_spatial_moran <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rf_spatial</span>(</span>
+<span id="cb15-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature_df,</span>
+<span id="cb15-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dependent.variable.name =</span> response_name,</span>
+<span id="cb15-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">predictor.variable.names =</span> covariate_names,</span>
+<span id="cb15-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">distance.matrix =</span> distance_matrix,</span>
+<span id="cb15-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">distance.thresholds =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb15-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mem.moran.sequential"</span>,</span>
+<span id="cb15-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n.cores =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb15-9">)</span>
+<span id="cb15-10">rf_spatial_moran</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+                         ┌──────────────┬────────────┐
+                         │ Variable     │ Importance │
+                         ├──────────────┼────────────┤
+                         │ lst_night    │      1.966 │
+                         ├──────────────┼────────────┤
+                         │ lst_day      │      1.342 │
+                         ├──────────────┼────────────┤
+                         │ dem          │      1.245 │
+                         ├──────────────┼────────────┤
+                         │ CAMSpm25     │      0.936 │
+                         ├──────────────┼────────────┤
+                         │ coast        │      0.745 │
+                         ├──────────────┼────────────┤
+                         │ ndvi         │      0.683 │
+                         ├──────────────┼────────────┤
+                         │ imd          │      0.420 │
+                         ├──────────────┼────────────┤
+                         │ ntl          │      0.401 │
+                         ├──────────────┼────────────┤
+                         │ industry     │      0.291 │
+                         ├──────────────┼────────────┤
+                         │ popdens      │      0.270 │
+                         ├──────────────┼────────────┤
+                         │ urban        │      0.218 │
+                         ├──────────────┼────────────┤
+                         │ natural      │      0.212 │
+                         ├──────────────┼────────────┤
+                         │ agriculture  │      0.196 │
+                         ├──────────────┼────────────┤
+                         │ otherroads   │      0.181 │
+                         ├──────────────┼────────────┤
+                         │ primaryroads │      0.095 │
+                         └──────────────┴────────────┘</code></pre>
+</div>
+</div>
+<p>The <code>rf_spatial()</code> returns a <strong>ranger</strong> model with several new slows, most importantly <code>residuals</code> that contain information about the residuals, and <code>spatial</code> that contains information about the selected spatial predictors and the method used to select them. Printing the model object provides a summary of the model, including its parameters, model performance, information on model residuals, and variable importance.</p>
+<p>The <strong>spatialRF</strong> package also provides a set of additional functions. It includes a function for reducing multicollinearity in the predictors and removing redundant spatial predictors (<code>filter_spatial_predictors()</code>); or finding promising variable interactions (<code>the_feature_engineer()</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">interactions <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">the_feature_engineer</span>(</span>
+<span id="cb17-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature_df,</span>
+<span id="cb17-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dependent.variable.name =</span> response_name,</span>
+<span id="cb17-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">predictor.variable.names =</span> covariate_names,</span>
+<span id="cb17-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xy =</span> coordinates,</span>
+<span id="cb17-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance.threshold =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.50</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># uses 50% best predictors</span></span>
+<span id="cb17-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cor.threshold =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.60</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># max corr between interactions and predictors</span></span>
+<span id="cb17-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">seed =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">01</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>,</span>
+<span id="cb17-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">repetitions =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb17-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb17-11">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ┌──────────────────┬──────────────────┬──────────────────┬──────────────────┐
+ │ Interaction      │ Importance (% of │        R-squared │     Max cor with │
+ │                  │             max) │      improvement │       predictors │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ dem..x..CAMSpm25 │             33.6 │            0.020 │            0.52&nbsp; │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ dem..x..imd      │             22.1 │            0.014 │            0.54&nbsp; │
+ ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤
+ │ imd..pca..ntl    │             13.6 │            0.013 │            0.454 │
+ └──────────────────┴──────────────────┴──────────────────┴──────────────────┘</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <code>rf_evaluate()</code> function allows the evaluation of the model using spatial cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">rf_eval <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rf_evaluate</span>(</span>
+<span id="cb19-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model =</span> rf_spatial_moran,</span>
+<span id="cb19-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xy =</span> coordinates,</span>
+<span id="cb19-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">repetitions =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>,</span>
+<span id="cb19-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">training.fraction =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.75</span>,</span>
+<span id="cb19-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">metrics =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rmse"</span>,</span>
+<span id="cb19-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">seed =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">01</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>,</span>
+<span id="cb19-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">verbose =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb19-9">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+ Metric Median   MAD Minimum Maximum
+   rmse  1.428 0.221   0.815   1.968</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">rf_eval</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+                         ┌──────────────┬────────────┐
+                         │ Variable     │ Importance │
+                         ├──────────────┼────────────┤
+                         │ lst_night    │      1.966 │
+                         ├──────────────┼────────────┤
+                         │ lst_day      │      1.342 │
+                         ├──────────────┼────────────┤
+                         │ dem          │      1.245 │
+                         ├──────────────┼────────────┤
+                         │ CAMSpm25     │      0.936 │
+                         ├──────────────┼────────────┤
+                         │ coast        │      0.745 │
+                         ├──────────────┼────────────┤
+                         │ ndvi         │      0.683 │
+                         ├──────────────┼────────────┤
+                         │ imd          │      0.420 │
+                         ├──────────────┼────────────┤
+                         │ ntl          │      0.401 │
+                         ├──────────────┼────────────┤
+                         │ industry     │      0.291 │
+                         ├──────────────┼────────────┤
+                         │ popdens      │      0.270 │
+                         ├──────────────┼────────────┤
+                         │ urban        │      0.218 │
+                         ├──────────────┼────────────┤
+                         │ natural      │      0.212 │
+                         ├──────────────┼────────────┤
+                         │ agriculture  │      0.196 │
+                         ├──────────────┼────────────┤
+                         │ otherroads   │      0.181 │
+                         ├──────────────┼────────────┤
+                         │ primaryroads │      0.095 │
+                         └──────────────┴────────────┘
+
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+ Metric Median   MAD Minimum Maximum
+   rmse  1.428 0.221   0.815   1.968</code></pre>
+</div>
+</div>
+<p>The <code>rf_importance()</code> function allows for visualizing the variable importance of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">rf_imp <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rf_importance</span>(</span>
+<span id="cb23-2">    rf_spatial_moran,</span>
+<span id="cb23-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xy =</span> coordinates</span>
+<span id="cb23-4">)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">rf_imp</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model type
+  - Fitted with:                     ranger()
+  - Response variable:               temp
+
+Random forest parameters
+  - Type:                            Regression
+  - Number of trees:                 500
+  - Sample size:                     195
+  - Number of predictors:            15
+  - Mtry:                            3
+  - Minimum node size:               5
+
+
+Model performance 
+  - R squared (oob):                  0.887361
+  - R squared (cor(obs, pred)^2):     0.9844978
+  - Pseudo R squared (cor(obs, pred)):0.9922186
+  - RMSE (oob):                       0.9476691
+  - RMSE:                             0.4131
+  - Normalized RMSE:                  0.103203
+
+Model residuals 
+  - Stats: 
+               ┌───────┬────────┬────────┬──────┬────────┬──────┐
+               │ Min.  │ 1st Q. │ Median │ Mean │ 3rd Q. │ Max. │
+               ├───────┼────────┼────────┼──────┼────────┼──────┤
+               │ -1.87 │  -0.24 │   0.02 │ 0.00 │   0.26 │ 1.53 │
+               └───────┴────────┴────────┴──────┴────────┴──────┘
+  - Normality: 
+      - Shapiro-Wilks W: 0.971 
+      - p-value        : 4e-04 
+      - Interpretation : Residuals are not normal 
+
+  - Spatial autocorrelation: 
+             ┌──────────┬───────────┬─────────┬──────────────────┐
+             │ Distance │ Moran's I │ P value │ Interpretation   │
+             ├──────────┼───────────┼─────────┼──────────────────┤
+             │      0.0 │     0.005 │   0.258 │ No spatial       │
+             │          │           │         │ correlation      │
+             └──────────┴───────────┴─────────┴──────────────────┘
+
+Variable importance: 
+           ┌────────────┬────────────┬─────────┬───────┬──────┬─────┐
+           │ Variable   │ Importance │         │       │      │     │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ lst_night  │      1.966 │  0.13&nbsp;&nbsp; │ 0.07&nbsp; │ 15.5 │ 8.4 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ lst_day    │      1.342 │  0.0695 │ 0.035 │  8.3 │ 4.2 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ dem        │      1.245 │  0.045&nbsp; │ 0.019 │  5.4 │ 2.3 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ CAMSpm25   │      0.936 │ -0.014&nbsp; │ 0.021 │ -1.7 │ 2.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ coast      │      0.745 │ -0.01&nbsp;&nbsp; │ 0.01&nbsp; │ -1.2 │ 1.1 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ ndvi       │      0.683 │  0.0055 │ 0.013 │  0.7 │ 1.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ imd        │      0.420 │ -0.005&nbsp; │ 0.004 │ -0.6 │ 0.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ ntl        │      0.401 │ -0.007&nbsp; │ 0.007 │ -0.8 │ 0.8 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ industry   │      0.291 │  0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │ 0.004 │  0&nbsp;&nbsp; │ 0.4 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ popdens    │      0.270 │ -0.003&nbsp; │ 0.005 │ -0.4 │ 0.6 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ urban      │      0.218 │ -0.001&nbsp; │ 0.006 │ -0.1 │ 0.7 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ natural    │      0.212 │ -0.007&nbsp; │ 0.009 │ -0.8 │ 1.1 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ agricultur │      0.196 │  0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; │ 0.008 │  0&nbsp;&nbsp; │ 1&nbsp;&nbsp; │
+           │ e          │            │         │       │      │     │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ otherroads │      0.181 │ -0.004&nbsp; │ 0.004 │ -0.5 │ 0.5 │
+           ├────────────┼────────────┼─────────┼───────┼──────┼─────┤
+           │ primaryroa │      0.095 │ -0.003&nbsp; │ 0.004 │ -0.4 │ 0.5 │
+           │ ds         │            │         │       │      │     │
+           └────────────┴────────────┴─────────┴───────┴──────┴─────┘
+
+Spatial evaluation 
+  - Training fraction:             0.75
+  - Spatial folds:                 30
+
+    Metric Median   MAD Minimum Maximum
+ r.squared  0.838 0.073   0.591   0.924</code></pre>
+</div>
+</div>
+<p>The <code>mem()</code> function generates Moran Eigenvector Maps (MEM) from a distance matrix.<sup>4</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">mem1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mem</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">distance.matrix =</span> distance_matrix)</span></code></pre></div>
+</div>
+<p>The package also contains a set of custom plot functions. One example is the <code>plot_response_curves()</code> function, which allows for the visualization of the response curves of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot_response_curves</span>(rf_spatial_moran)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Additional interesting functions allow for tuning the model parameters (<code>rf_tuning()</code>) or comparing several models (<code>rf_compare()</code>). A complete list of this package’s functions is available at <a href="https://blasbenito.github.io/spatialRF/reference/index.html" class="uri">https://blasbenito.github.io/spatialRF/reference/index.html</a>.</p>
+<p>The final prediction can be made using the <code>predict()</code> function from the <strong>terra</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1">pred_srf <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(covariates, rf_spatial_moran)</span>
+<span id="cb28-2">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(pred_srf[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]])</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="meteo" class="level1">
+<h1>meteo</h1>
+<p>Random Forest Spatial Interpolation (RFSI, Sekulić et al.&nbsp;(2020) <a href="doi:10.3390/rs12101687" class="uri">doi:10.3390/rs12101687</a>) is implemented in the <strong>meteo</strong> package. RFSI enhances traditional Random Forest by explicitly incorporating spatial autocorrelation through additional covariates. These covariates include (1) observations from the nn nearest locations and (2) their respective distances to the target location. Predictions follow the same principle, using the nearest observed values and distances to improve spatial accuracy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(meteo)</span></code></pre></div>
+</div>
+<p>This package allows to directly work with spatial R objects. First, we need to define our formula.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1">response_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span></span>
+<span id="cb30-2">covariate_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(temperature)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>)]</span>
+<span id="cb30-3">fo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.formula</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(</span>
+<span id="cb30-4">    response_name,</span>
+<span id="cb30-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~"</span>,</span>
+<span id="cb30-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(covariate_names, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" + "</span>)</span>
+<span id="cb30-7">))</span></code></pre></div>
+</div>
+<p>Next, we use the main function in this package, <code>rfsi()</code>, to fit the RFSI model. The function requires the formula, the data, and the number of nearest observations used in the model. Additional arguments can be set, including the number of CPUs to use, the progress bar, and arguments passed to the <strong>ranger</strong> function, such as <code>seed</code>, <code>num.trees</code>, and <code>mtry</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1">rfsi_model <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rfsi</span>(</span>
+<span id="cb31-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">formula =</span> fo,</span>
+<span id="cb31-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature,</span>
+<span id="cb31-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n.obs =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># number of nearest observations</span></span>
+<span id="cb31-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cpus =</span> parallel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">detectCores</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb31-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb31-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span>,</span>
+<span id="cb31-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">seed =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>,</span>
+<span id="cb31-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">250</span>,</span>
+<span id="cb31-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb31-11">)</span>
+<span id="cb31-12">rfsi_model</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ranger result
+
+Call:
+ ranger(formula, data = data.df, ...) 
+
+Type:                             Regression 
+Number of trees:                  250 
+Sample size:                      195 
+Number of independent variables:  25 
+Mtry:                             5 
+Target node size:                 5 
+Variable importance mode:         impurity 
+Splitrule:                        variance 
+OOB prediction error (MSE):       0.9585029 
+R squared (OOB):                  0.8797822 </code></pre>
+</div>
+</div>
+<p>The outcome of this function is a standard <code>ranger</code> object.</p>
+<p>Another function, <code>cv.rfsi()</code>, allows for spatial (leave-location-out) cross-validation of the RFSI model. It requires the formula, the data, the tuning grid, the type of cross-validation, the number of folds, and few other arguments. The <code>tgrid</code> argument is a data frame with the tuning parameters to be tested that may include <code>mtry</code>, <code>num.trees</code>, <code>n.obs</code>, and <code>sample.fraction</code>. Here, we will only tune the <code>mtry</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1">rfsi_model_cv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv.rfsi</span>(</span>
+<span id="cb33-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">formula =</span> fo,</span>
+<span id="cb33-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature,</span>
+<span id="cb33-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tgrid =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">expand.grid</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mtry =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">22</span>),</span>
+<span id="cb33-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tune.type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"LLO"</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Leave-Location-Out CV</span></span>
+<span id="cb33-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># number of folds</span></span>
+<span id="cb33-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">seed =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>,</span>
+<span id="cb33-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">acc.metric =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RMSE"</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># R2, CCC, MAE</span></span>
+<span id="cb33-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output.format =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sf"</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># "data.frame", # "SpatVector",</span></span>
+<span id="cb33-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cpus =</span> parallel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">detectCores</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb33-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb33-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">importance =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"impurity"</span></span>
+<span id="cb33-13">) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ranger parameter</span></span>
+<span id="cb33-14">rfsi_model_cv</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 195 features and 4 fields
+Attribute-geometry relationships: constant (4)
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 35545.98 ymin: 3988816 xmax: 978546 ymax: 4858816
+Projected CRS: ED50 / UTM zone 30N
+First 10 features:
+   staid out.folds       obs      pred                 geometry
+1     10         1 15.619167 15.647846   POINT (978546 4655816)
+2     15         1 13.456851 14.526646   POINT (547546 4784816)
+3     16         1 14.185000 14.624209   POINT (539546 4802816)
+4     17         1 14.306761 14.877302   POINT (498546 4802816)
+5     24         1  7.530117 10.470688   POINT (273546 4762816)
+6     31         1 14.017564 14.943647 POINT (46545.98 4761816)
+7     32         1 14.717808 14.402137 POINT (38545.98 4713816)
+8     41         1 12.313699 12.306969   POINT (543546 4624816)
+9     43         1  8.626575  8.745711   POINT (460546 4560816)
+10    45         1 11.190560 11.511932   POINT (489546 4645816)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">acc.metric.fun</span>(rfsi_model_cv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>obs, rfsi_model_cv<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>pred, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RMSE"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8828286</code></pre>
+</div>
+</div>
+<p>The result is an object of the desired output format (here, a <code>sf</code> object) with the observed and predicted values. The <code>acc.metric.fun()</code> function can be then use to calculate the accuracy metric (here, RMSE) between the observed and predicted values.</p>
+<p>Finally, we can use the <code>pred.rfsi()</code> function to predict the model on new data, with a selected output format (here, <code>SpatRaster</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Prediction on new data</span></span>
+<span id="cb37-2">rfsi_prediction <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pred.rfsi</span>(</span>
+<span id="cb37-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model =</span> rfsi_model,</span>
+<span id="cb37-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature,</span>
+<span id="cb37-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">obs.col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span>,</span>
+<span id="cb37-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">newdata =</span> covariates,</span>
+<span id="cb37-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">output.format =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SpatRaster"</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># "sf", # "SpatVector"</span></span>
+<span id="cb37-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cpus =</span> parallel<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">detectCores</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb37-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb37-10">)</span>
+<span id="cb37-11">terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(rfsi_prediction)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp5/index_files/figure-html/misc-sml-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>There are several other packages that implement spatial machine learning methods, such as <strong>SpatialML</strong> or <strong>ENMeval</strong>, but they are not discussed here. Moreover, new methods and packages in this domain are being developed all the time, so this list is definitely not exhaustive.↩︎</p></li>
+<li id="fn2"><p>Quoting the authors “RF-GLS extends RF in the same way generalized least squares (GLS) fundamentally extends ordinary least squares (OLS) to accommodate for dependence in linear models.”↩︎</p></li>
+<li id="fn3"><p>See <code>?rf_spatial</code> for more details. Also, the 10th method is <code>"hengl"</code> directly following the approach by Hengl et al.&nbsp;(2018).↩︎</p></li>
+<li id="fn4"><p><code>mem_multithreshold()</code> function allows for generating MEMs for multiple distance thresholds.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
+  author = {Nowosad, Jakub},
+  title = {Specialized {R} Packages for Spatial Machine Learning: {An}
+    Introduction to {RandomForestsGLS,} {spatialRF,} and Meteo},
+  date = {2025-06-25},
+  url = {https://geocompx.org/post/2025/sml-bp5/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2025. <span>“Specialized R Packages for Spatial Machine
+Learning: An Introduction to RandomForestsGLS, spatialRF, and
+Meteo.”</span> June 25, 2025. <a href="https://geocompx.org/post/2025/sml-bp5/">https://geocompx.org/post/2025/sml-bp5/</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <category>sml</category>
+  <guid>https://geocompx.org/post/2025/sml-bp5/</guid>
+  <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Spatial machine learning with mlr3</title>
   <dc:creator>Marvin Ludwig</dc:creator>
@@ -1259,8 +2548,8 @@ font-style: inherit;">collect_metrics</span>(rf_random)</span></code></pre></div
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   0.934     4  0.0610 Preprocessor1_Model1
-2 rsq     standard   0.908     4  0.0154 Preprocessor1_Model1</code></pre>
+1 rmse    standard   0.944     4  0.0923 Preprocessor1_Model1
+2 rsq     standard   0.903     4  0.0192 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">tune<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -1271,8 +2560,8 @@ font-style: inherit;">collect_metrics</span>(rf_spatial)</span></code></pre></di
 <pre><code># A tibble: 2 × 6
   .metric .estimator  mean     n std_err .config             
   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
-1 rmse    standard   1.33      4  0.271  Preprocessor1_Model1
-2 rsq     standard   0.740     4  0.0783 Preprocessor1_Model1</code></pre>
+1 rmse    standard   1.41      4  0.292  Preprocessor1_Model1
+2 rsq     standard   0.719     4  0.0744 Preprocessor1_Model1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -1427,16 +2716,16 @@ font-style: inherit;">collect_metrics</span>()</span></code></pre></div>
 <pre><code># A tibble: 60 × 8
     mtry min_n .metric .estimator  mean     n std_err .config              
    &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
- 1     1     5 rmse    standard   1.91      4  0.307  Preprocessor1_Model01
- 2     1     5 rsq     standard   0.613     4  0.0849 Preprocessor1_Model01
- 3     1     9 rmse    standard   1.93      4  0.311  Preprocessor1_Model02
- 4     1     9 rsq     standard   0.582     4  0.103  Preprocessor1_Model02
- 5     2     4 rmse    standard   1.61      4  0.318  Preprocessor1_Model03
- 6     2     4 rsq     standard   0.697     4  0.0692 Preprocessor1_Model03
- 7     2     2 rmse    standard   1.68      4  0.285  Preprocessor1_Model04
- 8     2     2 rsq     standard   0.654     4  0.111  Preprocessor1_Model04
- 9     3     7 rmse    standard   1.47      4  0.304  Preprocessor1_Model05
-10     3     7 rsq     standard   0.713     4  0.0837 Preprocessor1_Model05
+ 1     1     5 rmse    standard   1.87      4  0.297  Preprocessor1_Model01
+ 2     1     5 rsq     standard   0.611     4  0.0806 Preprocessor1_Model01
+ 3     1     9 rmse    standard   1.91      4  0.257  Preprocessor1_Model02
+ 4     1     9 rsq     standard   0.594     4  0.0930 Preprocessor1_Model02
+ 5     2     4 rmse    standard   1.62      4  0.315  Preprocessor1_Model03
+ 6     2     4 rsq     standard   0.662     4  0.0924 Preprocessor1_Model03
+ 7     2     2 rmse    standard   1.52      4  0.263  Preprocessor1_Model04
+ 8     2     2 rsq     standard   0.712     4  0.0795 Preprocessor1_Model04
+ 9     3     7 rmse    standard   1.48      4  0.292  Preprocessor1_Model05
+10     3     7 rsq     standard   0.702     4  0.0747 Preprocessor1_Model05
 # ℹ 50 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">rf_tuning <span class="sc" style="color: #5E5E5E;
@@ -1556,18 +2845,18 @@ Model: rand_forest()
 Ranger result
 
 Call:
- ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~19L,      x), num.trees = ~100, min.node.size = min_rows(~3L, x), importance = ~"impurity",      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) 
+ ranger::ranger(x = maybe_data_frame(x), y = y, mtry = min_cols(~15L,      x), num.trees = ~100, min.node.size = min_rows(~7L, x), importance = ~"impurity",      num.threads = 1, verbose = FALSE, seed = sample.int(10^5,          1)) 
 
 Type:                             Regression 
 Number of trees:                  100 
 Sample size:                      195 
 Number of independent variables:  22 
-Mtry:                             19 
-Target node size:                 3 
+Mtry:                             15 
+Target node size:                 7 
 Variable importance mode:         impurity 
 Splitrule:                        variance 
-OOB prediction error (MSE):       0.7477837 
-R squared (OOB):                  0.9062111 </code></pre>
+OOB prediction error (MSE):       0.7108042 
+R squared (OOB):                  0.9108492 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">imp <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -2695,37 +3984,15 @@ Caret.”</span> May 14, 2025. <a href="https://geocompx.org/post/2025/sml-bp2/"
 <ul>
 <li><a href="../../../post/2025/sml-bp2/">Part 2</a>: Spatial machine learning with caret</li>
 <li><a href="../../../post/2025/sml-bp3/">Part 3</a>: Spatial machine learning with the tidymodels framework</li>
+<li><a href="../../../post/2025/sml-bp4/">Part 4</a>: Spatial machine learning with mlr3</li>
+<li><a href="../../../post/2025/sml-bp5/">Part 5</a>: Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo</li>
+<li><a href="../../../post/2025/sml-bp6/">Part 6</a>: Specialized R packages for spatial cross-validation: sperrorest and blockCV</li>
 </ul>
 </div>
 </div>
 </div>
 <p>The R language has a variety of packages for machine learning, and many of them can be used for machine learning tasks in a spatial context (<em>spatial machine learning</em>). Spatial machine learning is generally different from traditional machine learning, as variables located closer to each other are often more similar than those located further apart. Thus, we need to consider that when building machine learning models.</p>
 <p>In this blog post, we compare three of the most popular machine learning frameworks in R: <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ. The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.</p>
-<!-- 
-
-
-
-
-::::::{.cell eval=false layout-align="default"}
-
-:::::{.cell-output-display}
-
-::::{}
-`<figure class=''>`{=html}
-
-:::{}
-:::
-
-
-`<figcaption>`{=html} A possible workflow of the spatial machine learning task.`</figcaption>`{=html} `</figure>`{=html}
-::::
-:::::
-::::::
-
-
-
-
--->
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://geocompx.org/post/2025/sml-bp1/mermaid-figure-1.png" class="img-fluid figure-img"></p>
@@ -2808,17 +4075,17 @@ font-style: inherit;">st_as_sf</span>()</span></code></pre></div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(caret)              <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(caret) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for modeling</span></span>
 <span id="cb3-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(blockCV)            <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(blockCV) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for spatial cross-validation</span></span>
 <span id="cb3-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(CAST)               <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(CAST) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for area of applicability</span></span></code></pre></div>
 </div>
@@ -2827,22 +4094,22 @@ font-style: inherit;"># for area of applicability</span></span></code></pre></di
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(tidymodels)         <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(tidymodels) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># metapackage for modeling</span></span>
 <span id="cb4-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(spatialsample)      <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(spatialsample) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for spatial cross-validation</span></span>
 <span id="cb4-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(waywiser)           <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(waywiser) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for area of applicability</span></span>
 <span id="cb4-4"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(vip)                <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(vip) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for variable importance (used in AOA)</span></span></code></pre></div>
 </div>
@@ -2851,17 +4118,17 @@ font-style: inherit;"># for variable importance (used in AOA)</span></span></cod
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(mlr3verse)          <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(mlr3verse) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># metapackage for mlr3 modeling</span></span>
 <span id="cb5-2"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(mlr3spatiotempcv)   <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(mlr3spatiotempcv) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for spatial cross-validation</span></span>
 <span id="cb5-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(CAST)               <span class="co" style="color: #5E5E5E;
+font-style: inherit;">library</span>(CAST) <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># for area of applicability</span></span>
 <span id="cb5-4">lgr<span class="sc" style="color: #5E5E5E;
@@ -2907,7 +4174,7 @@ background-color: null;
 font-style: inherit;"># hyperparameters</span></span>
 <span id="cb6-3">tn_grid <span class="ot" style="color: #003B4F;
 background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">expand.grid</span>(</span>
 <span id="cb6-4">    <span class="at" style="color: #657422;
@@ -2966,7 +4233,7 @@ font-style: inherit;">FALSE</span></span>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-7-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3081,7 +4348,7 @@ font-style: inherit;">8</span>,</span>
 background-color: null;
 font-style: inherit;">min_n =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">5</span>, </span>
+font-style: inherit;">5</span>,</span>
 <span id="cb9-9">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
@@ -3145,7 +4412,7 @@ font-style: inherit;">autoplot</span>(block_folds)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3218,12 +4485,13 @@ font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">rsmp</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"spcv_block"</span>, <span class="at" style="color: #657422;
+font-style: inherit;">"spcv_block"</span>,</span>
+<span id="cb10-11">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">folds =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>,</span>
-<span id="cb10-11">                         <span class="at" style="color: #657422;
+<span id="cb10-12">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">cols =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -3231,7 +4499,8 @@ font-style: inherit;">10</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">rows =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">10</span>)</span></code></pre></div>
+font-style: inherit;">10</span></span>
+<span id="cb10-13">)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -3454,7 +4723,7 @@ font-style: inherit;">plot</span>(pred_caret)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-16-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3479,7 +4748,7 @@ font-style: inherit;">plot</span>(pred_tidymodels)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3504,7 +4773,7 @@ font-style: inherit;">plot</span>(pred_mlr3)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-18-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3549,7 +4818,7 @@ font-style: inherit;">$</span>AOA)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3591,7 +4860,7 @@ font-style: inherit;">$</span>aoa)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3666,7 +4935,7 @@ font-style: inherit;">$</span>AOA)</span></code></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://geocompx.org/post/2025/sml-bp1/index_files/figure-html/index-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3728,7 +4997,7 @@ Tidymodels, and Mlr3.”</span> April 30, 2025. <a href="https://geocompx.org/po
 <figure class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%" alt="The book cover"></a></p>
+<p><a href="https://www.routledge.com/9781032460659"><img src="https://geocompx.org/static/img/book_cover_py.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:33.0%"></a></p>
 </figure>
 </div>
 <figcaption>The book cover</figcaption>
@@ -4798,9 +6067,6 @@ January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geoc
 <section id="geocompy" class="level1">
 <h1>geocompy</h1>
 <p>The <strong>geocompy</strong> book is motivated by the need for an introductory yet rigorous and up-to-date resource on geographic data with (arguably) the most popular programming language in the world. It presents the foundations of geographic data analysis in Python, with an equal focus on vector and raster data.</p>
-<div>
-
-</div>
 <div id="figs1" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -4817,9 +6083,6 @@ January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geoc
 </div>
 </div>
 <p>It starts by explaining the basic concepts of geographic data analysis, such as vector and raster data models (using <a href="https://geopandas.org/">GeoPandas</a> and <a href="https://rasterio.readthedocs.io/en/latest/">Rasterio</a>), coordinate reference systems, and spatial units. Next, it shows how to perform various attribute and spatial operations on geographic data, such as data subsetting, joins, aggregations, and raster algebra. The book also covers geometric operations, such as buffering, clipping, and intersecting. The next part of the book focuses on interactions between vector and raster data: extraction, rasterization, and raster to vector conversion. Then, the book deeply dives into the coordinate reference systems, including their definition and projections. The next chapter is about reading and writing geographic data, including getting data from the web, geocoding, and working with the most popular formats, such as GeoPackage and GeoTIFF. The last chapter covers the basics of data visualization, including static and interactive maps.</p>
-<div>
-
-</div>
 <div id="figs2" class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
@@ -4897,9 +6160,6 @@ Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org/pos
 <section id="a-bit-of-history" class="level1 page-columns page-full">
 <h1>A bit of history</h1>
 <p><a href="https://marcosci.github.io/">Marco Sciaini</a> won the competition for the book cover of the first edition of Geocomputation with R. His winning entry is shown on the left below. After some <a href="https://github.com/geocompx/geocompr/issues/284">iteration</a> on this winning idea, the concept was refined, resulting in a reproducible image (see its source code at <a href="https://github.com/geocompx/geocompr/blob/main/code/frontcover.R">github.com/geocompx/geocompr/</a>) (center). Then, the image was incorporated into the official cover of the book’s first edition (right).</p>
-<div>
-
-</div>
 <div class="column-page-inset quarto-layout-panel" data-layout-ncol="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
@@ -8301,8 +9561,6 @@ font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -8431,8 +9689,6 @@ font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -8498,45 +9754,6 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org/post/2021/s
   <category>rstats</category>
   <guid>https://geocompx.org/post/2021/spatial-classes-conversion/</guid>
   <pubDate>Thu, 17 Jun 2021 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Recent changes in R spatial and how to be ready for them</title>
-  <dc:creator>Jakub Nowosad, Robin Lovelace</dc:creator>
-  <link>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>Currently, hundreds of R packages are related to spatial data analysis. They range from ecology and earth observation, hydrology and soil science, to transportation and demography. These packages support various stages of analysis, including data preparation, visualization, modeling, or communicating the results. One common feature of most R spatial packages is that they are built upon some of the main representations of spatial data in R, available in key geographic R packages such as:</p>
-<ul>
-<li><strong>sf</strong>, which replaces <strong>sp</strong></li>
-<li><strong>terra</strong>, which aims to replace <strong>raster</strong></li>
-<li><strong>stars</strong></li>
-</ul>
-<p>Those packages are also not entirely independent. They are using external libraries, namely GEOS for spatial data operations, GDAL for reading and writing spatial data, and PROJ for conversions of spatial coordinates.</p>
-<p>Therefore, R spatial packages are interwoven with each other and depend partially on external software developments. This has several positives, including the ability to use cutting-edge features and algorithms. On the other hand, it also makes R spatial packages vulnerable to changes in the upstream packages and libraries.</p>
-<p>In the first part of the talk, we showcase several recent advances in R packages. It includes the largest recent change related to the developments in the PROJ library. We explain why the changes happened and how they impact R users. The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker (briefly covered in a previous <a href="https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/">post</a> and outlined in the new <a href="https://github.com/geocompr/docker#geocomputation-with-r-in-docker">geocompr/docker</a> repo). We outline important considerations when setting-up operating systems for geographic R packages. To reduce set-up times you can use geographic R packages Docker, a flexible and scalable technology containerization technology. Docker can run on modern computers and on your browser via services such as Binder, greatly reducing set-up times. Discussing these set-up options, and questions of compatibility between geographic R packages and paradigms such as the tidyverse and data.table, ensure that after the talk everyone can empower themselves with open source software for geographic data analysis in a powerful and flexible statistical programming environment.</p>
-<p>You can find the slides for the talk at https://nowosad.github.io/whyr_webinar004/.</p>
-<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/Va0STgco7-4" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-
-
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace2020,
-  author = {Nowosad, Robin Lovelace, Jakub},
-  title = {Recent Changes in {R} Spatial and How to Be Ready for Them},
-  date = {2020-04-25},
-  url = {https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace2020" class="csl-entry quarto-appendix-citeas">
-Nowosad, Robin Lovelace, Jakub. 2020. <span>“Recent Changes in R Spatial
-and How to Be Ready for Them.”</span> April 25, 2020. <a href="https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/">https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</a>.
-</div></div></section></div> ]]></description>
-  <category>announcement</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/</guid>
-  <pubDate>Sat, 25 Apr 2020 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
