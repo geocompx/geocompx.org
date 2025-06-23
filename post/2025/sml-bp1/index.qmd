@@ -37,30 +37,6 @@ In this blog post, we compare three of the most popular machine learning framewo
 We use a simple example to demonstrate how to use these frameworks for a spatial machine learning task and how their workflows differ.
 The goal here is to provide a general sense of how the spatial machine learning workflow looks like, and how different frameworks can be used to achieve the same goal.
 
-<!-- 
-
-```{mermaid index-1}
-%%| fig-width: 8
-%%| fig-height: 6.5
-%%| echo: false
-%%| eval: false
-%%| fig-cap: "A possible workflow of the spatial machine learning task."
-flowchart TB
-    A[Data] --> B(Model specification)
-    B --> C(Resampling #1)
-    B --> D(Resampling #2)
-    B --> E(Resampling #...)
-    B --> F(Resampling #N)
-    C --> G(Evaluation)
-    D --> G
-    E --> G
-    F --> G
-    G --> H[Prediction]
-    H --> I[Area of applicability]
-``` 
-
--->
-
 ![A possible workflow of the spatial machine learning task.](mermaid-figure-1.png)
 
 # Inputs
