@@ -6,7 +6,7 @@ page-layout: full
 
 The **geocompx** project is a community-driven initiative focused on reproducible geographic data analysis, modeling, and visualization using open source software across multiple programming languages.
 
-We aim to support learning, teaching, and collaboration in the field of geocomputation by creating and maintaining accessible, high-quality learning resources—including open-source books and related materials --- for R, Python, Julia, and beyond.
+We aim to support learning, teaching, and collaboration in the field of geocomputation by creating and maintaining accessible, high-quality learning resources --- including open-source books and related materials --- for R, Python, Julia, and beyond.
 
 ## Our Mission
 
@@ -22,7 +22,6 @@ We believe that by sharing methods and insights across programming environments,
 
 The project began with [**Geocomputation with R**](https://r.geocompx.org/), which helped spark a community of learners and contributors. 
 As interest grew in other languages and cross-platform approaches, the need for a broader, language-agnostic home became clear.
-
 Thus, **geocompx** was born --- a name reflecting our evolving focus on geocomputation across languages and tools.
 
 Learn about the story behind the **geocomp*x*** project in [our presentation at FOSS4G Europe 2024](https://jakubnowosad.com/foss4ge2024/#/title-slide).
@@ -33,6 +32,8 @@ This talk explores the origins, development, and future directions of our open-s
 **geocomp*x*** is open by design: we welcome contributions, feedback, and ideas from learners, educators, and practitioners around the world.
 
 If you'd like to suggest improvements, report issues, or contribute content, please visit the relevant [GitHub repositories](https://github.com/geocompx) or open a discussion on our [Discord](https://discord.gg/PMztXYgNxp).
+
+## Contributors
 
 ::: {.grid}
 
@@ -45,7 +46,6 @@ If you'd like to suggest improvements, report issues, or contribute content, ple
 
 [Olivier Leroy](https://www.branchtwigleaf.com/)
 
-Many contibutors to [geocompr](https://github.com/geocompx/geocompr/graphs/contributors), [geocompy](https://github.com/geocompx/geocompy/graphs/contributors), and [geocompx](https://github.com/geocompx/geocompx.org/graphs/contributors)
 :::
 
 ::: {.g-col-12 .g-col-md-6}
@@ -57,6 +57,8 @@ Many contibutors to [geocompr](https://github.com/geocompx/geocompr/graphs/contr
 
 [Baba Yoshihiko](https://github.com/babayoshihiko)
 :::
+
+Many contibutors to [geocompr](https://github.com/geocompx/geocompr/graphs/contributors), [geocompy](https://github.com/geocompx/geocompy/graphs/contributors), and [geocompx](https://github.com/geocompx/geocompx.org/graphs/contributors)
 
 :::
 
