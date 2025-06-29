@@ -4,13 +4,13 @@ author:
   - name: Jakub Nowosad
     url: https://jakubnowosad.com
     orcid:  0000-0002-1057-3721
-date: ""
+date: "2025-06-25"
 slug: sml-bp5
 categories:
   - rstats
   - sml
 tags: [RandomForestsGLS, spatialRF, meteo, machine-learning, spatial-machine-learning]
-draft: true
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:
@@ -26,7 +26,7 @@ You can find the list of other blog posts in this series [in part one](/post/202
 :::
 
 
-This document provides an overview of three R packages, **RandomForestsGLS**, **spatialRF**, and **meteo**, that implement spatial machine learning methods, but are outside of standard machine learning frameworks like **caret**, **tidymodels**, or **mlr3**.
+This document provides an overview of three R packages, **RandomForestsGLS**, **spatialRF**, and **meteo**, that implement spatial machine learning methods, but are outside of standard machine learning frameworks like **caret**, **tidymodels**, or **mlr3**.^[There are several other packages that implement spatial machine learning methods, such as **SpatialML** or **ENMeval**, but they are not discussed here. Moreover, new methods and packages in this domain are being developed all the time, so this list is definitely not exhaustive.]
 
 All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.
 
@@ -79,7 +79,7 @@ covariate_names <- colnames(temperature_df)[2:(ncol(temperature_df) - 7)]
 covariate_matrix <- as.matrix(temperature_df[, covariate_names])
 ```
 
-For the example, we also split the data into training and testing sets based on created random indices.
+I also split the data into training and testing sets based on created random indices.
 
 ```{r misc-sml-3 }
 set.seed(2025 - 01 - 30)
@@ -181,6 +181,7 @@ The package has 10 methods implemented, nine of which are based on the three com
 
 The main function of this package is `rf_spatial()`, which fits the Random Forest model with spatial predictors.
 Here, an example using Moran's Eigenvector Maps method to generate spatial predictors, Moran's I to rank them, and sequential selection of the predictors is shown.
+
 ```{r misc-sml-9 }
 rf_spatial_moran <- rf_spatial(
     data = temperature_df,

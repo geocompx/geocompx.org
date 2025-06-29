@@ -3,13 +3,13 @@ title: "Spatial machine learning with mlr3"
 author: 
   - name: Marvin Ludwig
     orcid:  0000-0002-3010-018X
-date: ""
+date: "2025-06-11"
 slug: sml-bp5
 categories:
   - rstats
   - sml
-tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
-draft: true
+tags: [mlr3, machine-learning, spatial-machine-learning]
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:

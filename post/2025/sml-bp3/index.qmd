@@ -11,8 +11,8 @@ slug: sml-bp3
 categories:
   - rstats
   - sml
-tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
-draft: true
+tags: [tidymodels, machine-learning, spatial-machine-learning]
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:
