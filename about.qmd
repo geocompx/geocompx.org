@@ -58,8 +58,8 @@ If you'd like to suggest improvements, report issues, or contribute content, ple
 [Baba Yoshihiko](https://github.com/babayoshihiko)
 :::
 
-Many contibutors to [geocompr](https://github.com/geocompx/geocompr/graphs/contributors), [geocompy](https://github.com/geocompx/geocompy/graphs/contributors), and [geocompx](https://github.com/geocompx/geocompx.org/graphs/contributors)
-
 :::
+
+Many contributors to [geocompr](https://github.com/geocompx/geocompr/graphs/contributors), [geocompy](https://github.com/geocompx/geocompy/graphs/contributors), and [geocompx](https://github.com/geocompx/geocompx.org/graphs/contributors)
 
 
