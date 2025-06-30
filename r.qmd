@@ -57,12 +57,11 @@ Additionally, the first edition of the book has been officially translated into 
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
+<a href="https://tmap.geocompx.org/"><img width=80% src="https://tmap.geocompx.org/images/cover_tmp_all_mockup.png"/></a>
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-[Elegant and informative maps with tmap](https://tmap.geocompx.org/)
-
-<!-- - [Elegant and informative maps with tmap](https://r-tmap.github.io/tmap-book/) from Martijn Tennekes and Jakub Nowosad -->
+[Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R](https://tmap.geocompx.org/) by Martijn Tennekes and Jakub Nowosad is a comprehensive guide to creating maps using the **tmap** package in R.
 :::
 
 :::
