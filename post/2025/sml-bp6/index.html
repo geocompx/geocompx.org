@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2025-07-09">
 
 <title>Specialized R packages for spatial cross-validation: sperrorest and blockCV – geocompx</title>
 <style>
@@ -113,7 +114,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
-<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../../style.css">
@@ -122,7 +122,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -199,6 +199,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
   <ul>
   <li><a href="#sperrorest" id="toc-sperrorest" class="nav-link active" data-scroll-target="#sperrorest">sperrorest</a></li>
   <li><a href="#blockcv" id="toc-blockcv" class="nav-link" data-scroll-target="#blockcv">blockCV</a></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks">Closing remarks</a></li>
   </ul>
 </nav>
     </div>
@@ -225,6 +226,12 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 9, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -240,7 +247,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>This is the sixth part of a blog post series on spatial machine learning with R.</p>
+<p>This is the sixth and the final blog post in a series on spatial machine learning with R.</p>
 <p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
 </div>
 </div>
@@ -372,7 +379,8 @@ test_count   195.000000000 0.0000000000 195.000000000 0.0000000000</code></pre>
 <h1>blockCV</h1>
 <p>The <strong>blockCV</strong> (<a href="https://doi.org/10.1111/2041-210X.13107" class="uri">https://doi.org/10.1111/2041-210X.13107</a>) package provides a set of functions for block cross-validation, spatial and environmental clustering, and spatial autocorrelation estimation. The package itself does not fit the models.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(blockCV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github("cran/automap")</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(blockCV)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Cross-validation strategies separate the data into training and testing sets to evaluate the model’s performance. The <strong>blockCV</strong> package provides several cross-validation strategies, including block cross-validation, spatial clustering, environmental clustering, buffering LOO, and Nearest Neighbour Distance Matching (NNDM) LOO.</p>
 <p>The block cross-validation is performed using the <code>cv_spatial()</code> function. It assigns blocks to the training and testing folds randomly, systematically or in a checkerboard pattern (the <code>selection</code> argument).</p>
@@ -703,11 +711,12 @@ colour.
 </div>
 </div>
 <p>More examples of the package’s use can be found at <a href="https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html" class="uri">https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html</a>.</p>
-<!-- # Closing remarks
-
-other tools, methods, packages
-deep learning is not covered in this series
-more in the future -->
+</section>
+<section id="closing-remarks" class="level1">
+<h1>Closing remarks</h1>
+<p>This blog post concludes the series on machine learning for spatial data with R. It showed established frameworks for machine learning in R, such as <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>, but focused on how to use them for spatial data problems. Next, we presented specialized R packages for spatial machine learning, such as <strong>spatialRF</strong>, <strong>RandomForestsGLS</strong>, and <strong>meteo</strong> and two R packages aimed for spatial cross-validation: <strong>sperrorest</strong> and <strong>blockCV</strong>.</p>
+<p>The series focused on the so-called “classical” machine learning methods, with a focus on the random forest method. At the same time, the series did not cover deep learning methods, as they require a different approach and tools. You can find more information on deep learning in R in the documentation of the packages like <strong>keras3</strong> (<a href="https://keras3.posit.co/" class="uri">https://keras3.posit.co/</a>), <strong>torch</strong> (<a href="https://torch.mlverse.org/" class="uri">https://torch.mlverse.org/</a>), or <strong>luz</strong> (<a href="https://mlverse.github.io/luz/" class="uri">https://mlverse.github.io/luz/</a>). Moreover, the <strong>sits</strong> package provides various deep learning tools for satellite image time series analysis – you can learn more about it in the book <a href="https://e-sensing.github.io/sitsbook/">“Satellite Image Time Series Analysis on Earth Observation Data Cubes”</a>.</p>
+<p>The number of methods and tools for spatial machine learning is growing rapidly, and it is impossible to cover all of them in a single series. However, the presented packages and methods should provide a good starting point for anyone interested in spatial machine learning with R. If you have any suggestions for other packages and methods that should be included in this series, feel free to contact me – you can find my contact details on my <a href="https://jakubnowosad.com">website</a>.</p>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -730,16 +739,17 @@ more in the future -->
 <li id="fn2"><p>There are several other partition functions available in the package, including <code>partition_disc()</code>, <code>partition_tiles()</code>, and <code>partition_cv()</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>This approach is a form of leave-one-out cross-validation.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
   author = {Nowosad, Jakub},
   title = {Specialized {R} Packages for Spatial Cross-Validation:
     Sperrorest and {blockCV}},
+  date = {2025-07-09},
   url = {https://geocompx.org/post/2025/sml-bp6/},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad" class="csl-entry quarto-appendix-citeas" role="listitem">
-Nowosad, Jakub. n.d. <span>“Specialized R Packages for Spatial
-Cross-Validation: Sperrorest and blockCV.”</span> <a href="https://geocompx.org/post/2025/sml-bp6/">https://geocompx.org/post/2025/sml-bp6/</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. 2025. <span>“Specialized R Packages for Spatial
+Cross-Validation: Sperrorest and blockCV.”</span> July 9, 2025. <a href="https://geocompx.org/post/2025/sml-bp6/">https://geocompx.org/post/2025/sml-bp6/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

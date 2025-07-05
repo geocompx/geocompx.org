@@ -10,7 +10,1222 @@
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 09 Jul 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Specialized R packages for spatial cross-validation: sperrorest and blockCV</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2025/sml-bp6/</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This is the sixth and the final blog post in a series on spatial machine learning with R.</p>
+<p>You can find the list of other blog posts in this series <a href="post/2025/sml-bp1/">in part one</a>.</p>
+</div>
+</div>
+</div>
+<p>This document provides an overview of two R packages, <strong>sperrorest</strong> and <strong>blockCV</strong>, that can be used for spatial cross validation, but are outside of standard machine learning frameworks like <strong>caret</strong>, <strong>tidymodels</strong>, or <strong>mlr3</strong>.</p>
+<p>All of the examples below use the same dataset, which includes the temperature measurements in Spain, a set of covariates, and the spatial coordinates of the temperature measurements.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">spain <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/spain.gpkg"</span>)</span>
+<span id="cb1-2">covariates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rast</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/predictors.tif"</span>)</span>
+<span id="cb1-3">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://github.com/LOEK-RS/FOSSGIS2025-examples/raw/refs/heads/main/data/temp_train.gpkg"</span>)</span>
+<span id="cb1-4"></span>
+<span id="cb1-5">temperature <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> terra<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract</span>(covariates, temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bind =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb1-6">    sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_as_sf</span>()</span></code></pre></div>
+</div>
+<section id="sperrorest" class="level1">
+<h1>sperrorest</h1>
+<p>The <strong>sperrorest</strong> (<a href="https://doi.org/10.32614/CRAN.package.sperrorest" class="uri">https://doi.org/10.32614/CRAN.package.sperrorest</a>) package is designed for spatial error estimation and variable importance assessment for predictive models. The package itself does not fit the models but provides a set of functions for spatial cross-validation, including data partitioning and model cross-validation.</p>
+<p>While the <strong>sperrorest</strong> package has many functions (including a set of functions for data partitioning), its main function is <code>sperrorest()</code>. It performs spatial cross-validation for spatial prediction models, including variable importance assessment and prediction error estimation. To use this function, we need to provide the formula, the data, the coordinates, the model function, the model arguments, the prediction function, the sampling function, and the sampling arguments.</p>
+<p>Let’s do it step by step. First, we need to prepare the data by extracting the coordinates and creating a data frame with the dependent variable, covariates, and coordinates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(sperrorest)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ranger)</span>
+<span id="cb2-3"></span>
+<span id="cb2-4">coordinates <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_coordinates</span>(temperature)</span>
+<span id="cb2-5">temperature_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sf<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">st_drop_geometry</span>(temperature)</span>
+<span id="cb2-6">temperature_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> coordinates[, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]</span>
+<span id="cb2-7">temperature_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> coordinates[, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span></code></pre></div>
+</div>
+<p>Second, we need to define the formula for the model and the prediction function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">response_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span></span>
+<span id="cb3-2">covariate_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(temperature_df)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature_df) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>)]</span>
+<span id="cb3-3">fo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.formula</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(</span>
+<span id="cb3-4">    response_name,</span>
+<span id="cb3-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~"</span>,</span>
+<span id="cb3-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(covariate_names, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" + "</span>)</span>
+<span id="cb3-7">))</span></code></pre></div>
+</div>
+<p>Third, we need to define the custom prediction function. The <strong>sperrorest</strong> package works with many model functions, but it requires a custom prediction function to extract the predictions from the model object. In this example, we use the <code>ranger</code> model, so we need to define a custom prediction function that extracts the predictions from the <code>ranger</code> model object. The <code>predict()</code> function from the <code>ranger</code> package returns a list with several elements, so we need to extract the predictions from this list.<sup>1</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">mypred <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(object, newdata) {</span>
+<span id="cb4-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(object, newdata)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>predictions</span>
+<span id="cb4-3">}</span></code></pre></div>
+</div>
+<p>Fourth, we can perform the spatial cross-validation using the <code>sperrorest()</code> function. We just need to provide previously prepared data, the formula, the model function, and the prediction function. Moreover, we can also define some additional parameters of the model, such as the number of trees in the <code>ranger</code> model. Finally, the important part is to define the sampling function (<code>smp_fun</code>) and its arguments (<code>smp_args</code>). The sampling function is used to partition the data into training and testing sets: here, we use the <code>partition_kmeans()</code> function to partition the data spatially into folds using k-means clustering of the coordinates.<sup>2</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Spatial cross-validation</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span>
+<span id="cb5-3">sp_res <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sperrorest</span>(</span>
+<span id="cb5-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">formula =</span> fo,</span>
+<span id="cb5-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature_df,</span>
+<span id="cb5-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>),</span>
+<span id="cb5-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model_fun =</span> ranger,</span>
+<span id="cb5-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model_args =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>),</span>
+<span id="cb5-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pred_fun =</span> mypred,</span>
+<span id="cb5-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">smp_fun =</span> partition_kmeans,</span>
+<span id="cb5-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">smp_args =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">repetition =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nfold =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>),</span>
+<span id="cb5-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb5-13">)</span></code></pre></div>
+</div>
+<p>The result is a list with several components, including the error at the repetition and fold levels, the resampling object, the variable importance (only when <code>importance = TRUE</code>), the benchmark, and the package version.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(sp_res<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>error_rep)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      mean           sd        median          IQR
+train_bias     0.003667002 0.0224183696   0.003667002 0.0158521812
+train_stddev   0.399217628 0.0044832845   0.399217628 0.0031701609
+train_rmse     0.399038491 0.0042677806   0.399038491 0.0030177766
+train_mad      0.316892003 0.0078406248   0.316892003 0.0055441590
+train_median   0.033006028 0.0001897285   0.033006028 0.0001341583
+train_iqr      0.427813987 0.0083456683   0.427813987 0.0059012787
+train_count  390.000000000 0.0000000000 390.000000000 0.0000000000
+test_bias     -0.009090677 0.0742284999  -0.009090677 0.0524874756
+test_stddev    1.447676903 0.0934364402   1.447676903 0.0660695405
+test_rmse      1.444959463 0.0926651037   1.444959463 0.0655241232
+test_mad       1.341466967 0.1144815717   1.341466967 0.0809506957
+test_median    0.101932523 0.0950544902   0.101932523 0.0672136746
+test_iqr       1.876642239 0.1533036116   1.876642239 0.1084020233
+test_count   195.000000000 0.0000000000 195.000000000 0.0000000000</code></pre>
+</div>
+</div>
+<p>We can contrast the obtained results with the non-spatial cross-validation by changing the sampling function to <code>partition_cv()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Non-spatial cross-validation</span></span>
+<span id="cb8-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)</span>
+<span id="cb8-3">nsp_res <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sperrorest</span>(</span>
+<span id="cb8-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">formula =</span> fo,</span>
+<span id="cb8-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> temperature_df,</span>
+<span id="cb8-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>),</span>
+<span id="cb8-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model_fun =</span> ranger,</span>
+<span id="cb8-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">model_args =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>),</span>
+<span id="cb8-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pred_fun =</span> mypred,</span>
+<span id="cb8-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">smp_fun =</span> partition_cv,</span>
+<span id="cb8-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">smp_args =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">repetition =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nfold =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>),</span>
+<span id="cb8-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb8-13">)</span></code></pre></div>
+</div>
+<p>To compare both results, we can plot the RMSE values for the training and testing sets of both spatial and non-spatial cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb9-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Extract train/test RMSE from spatial CV</span></span>
+<span id="cb9-3">sp_train_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sp_res<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>error_rep<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>train_rmse</span>
+<span id="cb9-4">sp_test_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sp_res<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>error_rep<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>test_rmse</span>
+<span id="cb9-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Extract train/test RMSE from non-spatial CV</span></span>
+<span id="cb9-6">nsp_train_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> nsp_res<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>error_rep<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>train_rmse</span>
+<span id="cb9-7">nsp_test_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> nsp_res<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>error_rep<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>test_rmse</span>
+<span id="cb9-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Build data frame</span></span>
+<span id="cb9-9">rmse_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb9-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CV_Type =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Spatial"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Non-Spatial"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">each =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>),</span>
+<span id="cb9-11">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">Set =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Train"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Test"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">each =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb9-12">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">RMSE =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(sp_train_rmse, sp_test_rmse, nsp_train_rmse, nsp_test_rmse)</span>
+<span id="cb9-13">)</span>
+<span id="cb9-14"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>(rmse_df, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> CV_Type, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> RMSE, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> Set)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-15">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_boxplot</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-16">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">facet_wrap</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span>Set) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb9-17">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RMSE Comparison"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"CV Method"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RMSE"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The results show that the estimation using the spatial-cross validation is less optimistic than the non-spatial cross-validation for the test set.</p>
+<p>More examples of the package use can be found at <a href="https://giscience-fsu.github.io/sperrorest/articles/spatial-modeling-use-case.html" class="uri">https://giscience-fsu.github.io/sperrorest/articles/spatial-modeling-use-case.html</a>/</p>
+</section>
+<section id="blockcv" class="level1">
+<h1>blockCV</h1>
+<p>The <strong>blockCV</strong> (<a href="https://doi.org/10.1111/2041-210X.13107" class="uri">https://doi.org/10.1111/2041-210X.13107</a>) package provides a set of functions for block cross-validation, spatial and environmental clustering, and spatial autocorrelation estimation. The package itself does not fit the models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># remotes::install_github("cran/automap")</span></span>
+<span id="cb10-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(blockCV)</span></code></pre></div>
+</div>
+<p>Cross-validation strategies separate the data into training and testing sets to evaluate the model’s performance. The <strong>blockCV</strong> package provides several cross-validation strategies, including block cross-validation, spatial clustering, environmental clustering, buffering LOO, and Nearest Neighbour Distance Matching (NNDM) LOO.</p>
+<p>The block cross-validation is performed using the <code>cv_spatial()</code> function. It assigns blocks to the training and testing folds randomly, systematically or in a checkerboard pattern (the <code>selection</code> argument).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">61</span>)</span>
+<span id="cb11-2">sb1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_spatial</span>(</span>
+<span id="cb11-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature,</span>
+<span id="cb11-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># number of folds</span></span>
+<span id="cb11-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">300000</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># size of the blocks in meters</span></span>
+<span id="cb11-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"random"</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># random blocks-to-fold</span></span>
+<span id="cb11-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">iteration =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># find evenly dispersed folds</span></span>
+<span id="cb11-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb11-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">biomod2 =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb11-10">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   train test
+1    170   25
+2    169   26
+3    171   24
+4    180   15
+5    181   14
+6    183   12
+7    182   13
+8    165   30
+9    179   16
+10   175   20</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The result is a list with several components, including the folds list, the folds IDs, the biomod table, the number of folds, the input size, the column name, the blocks, and the records. For example, we can check the structure of the folds list with the <code>str()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(sb1<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>folds_list)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 10
+ $ :List of 2
+  ..$ : int [1:170] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:25] 23 31 57 39 58 60 21 22 32 27 ...
+ $ :List of 2
+  ..$ : int [1:169] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:26] 153 155 93 108 95 91 88 154 94 140 ...
+ $ :List of 2
+  ..$ : int [1:171] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:24] 12 45 175 176 166 20 177 19 167 16 ...
+ $ :List of 2
+  ..$ : int [1:180] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:15] 134 138 136 133 187 192 174 173 189 190 ...
+ $ :List of 2
+  ..$ : int [1:181] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:14] 161 142 143 150 160 149 146 147 158 151 ...
+ $ :List of 2
+  ..$ : int [1:183] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:12] 4 8 5 2 193 1 6 194 164 3 ...
+ $ :List of 2
+  ..$ : int [1:182] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:13] 128 124 129 130 127 132 131 120 126 125 ...
+ $ :List of 2
+  ..$ : int [1:165] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:30] 61 70 75 52 77 83 79 86 50 48 ...
+ $ :List of 2
+  ..$ : int [1:179] 23 31 57 39 58 60 21 22 32 27 ...
+  ..$ : int [1:16] 117 87 103 84 105 99 119 101 98 97 ...
+ $ :List of 2
+  ..$ : int [1:175] 117 87 103 84 105 99 119 101 98 97 ...
+  ..$ : int [1:20] 163 181 159 157 186 67 71 41 178 179 ...</code></pre>
+</div>
+</div>
+<p>The <code>cv_plot()</code> function additionally allows for the visualization of cross-validation results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(sb1, temperature)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s compare the results of the block cross-validation with systematic and checkerboard patterns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>)</span>
+<span id="cb16-2">sb2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_spatial</span>(</span>
+<span id="cb16-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature,</span>
+<span id="cb16-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>,</span>
+<span id="cb16-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">rows_cols =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>),</span>
+<span id="cb16-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">hexagon =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb16-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"systematic"</span></span>
+<span id="cb16-8">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   train test
+1    172   23
+2    180   15
+3    177   18
+4    169   26
+5    178   17
+6    182   13
+7    180   15
+8    162   33
+9    178   17
+10   177   18</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(sb2, temperature)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-13-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>)</span>
+<span id="cb19-2">sb3 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_spatial</span>(</span>
+<span id="cb19-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature,</span>
+<span id="cb19-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>,</span>
+<span id="cb19-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">300000</span>,</span>
+<span id="cb19-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">hexagon =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,</span>
+<span id="cb19-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selection =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"checkerboard"</span></span>
+<span id="cb19-8">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  train test
+1    98   97
+2    97   98</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(sb3, temperature)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-14-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The clustering strategies (<code>cv_cluster()</code>) are used to group the data into clusters based on spatial or environmental similarity. The spatial similarity is based only on the clustering of the spatial coordinates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>)</span>
+<span id="cb22-2">scv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_cluster</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   train test
+1    169   26
+2    169   26
+3    173   22
+4    178   17
+5    179   16
+6    182   13
+7    176   19
+8    171   24
+9    178   17
+10   180   15</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(scv, temperature)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The environmental clustering, on the other hand, is based on the clustering of the values of the covariates extracted from the raster data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span>
+<span id="cb25-2">ecv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_cluster</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> covariates, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">k =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scale =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  train test
+1   164   31
+2   190    5
+3   182   13
+4   154   41
+5    90  105</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(ecv, temperature)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The next cross-validation strategy is buffering LOO (also known as Spatial LOO). It is performed using the <code>cv_buffer()</code> function, which selects a buffer around each point (test point) and uses the points outside the buffer as the testing set.<sup>3</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">21</span>)</span>
+<span id="cb28-2">bloo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_buffer</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">300000</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     train            test  
+ Min.   : 97.0   Min.   :1  
+ Mean   :132.7   Mean   :1  
+ Max.   :170.0   Max.   :1  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(bloo, temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num_plots =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that above, we plot only the first, 50th, and 100th points to avoid overplotting.</p>
+<p>The last cross-validation strategy implemented in the <strong>blockCV</strong> package is the Nearest Neighbour Distance Matching (NNDM) LOO. It is performed using the <code>cv_nndm()</code> function, which tries to match the nearest neighbor distance distribution function between the test and training data to the nearest neighbor distance distribution function between the target prediction and training points. Thus, in this base, we need to provide more arguments, including a raster with the covariates, the number of samples, the sampling strategy, and the minimum training size.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>)</span>
+<span id="cb31-2">nncv <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_nndm</span>(</span>
+<span id="cb31-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature,</span>
+<span id="cb31-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> covariates,</span>
+<span id="cb31-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">300000</span>,</span>
+<span id="cb31-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num_sample =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>,</span>
+<span id="cb31-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sampling =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"regular"</span>,</span>
+<span id="cb31-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">min_train =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.1</span>,</span>
+<span id="cb31-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb31-10">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     train            test  
+ Min.   :192.0   Min.   :1  
+ Mean   :192.9   Mean   :1  
+ Max.   :193.0   Max.   :1  </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_plot</span>(nncv, temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num_plots =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-18-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s now use the block cross-validation to fit and evaluate a model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># define formula</span></span>
+<span id="cb34-2">response_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span></span>
+<span id="cb34-3">covariate_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(temperature_df)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(temperature_df) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>)]</span>
+<span id="cb34-4">fo <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.formula</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(</span>
+<span id="cb34-5">    response_name,</span>
+<span id="cb34-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~"</span>,</span>
+<span id="cb34-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(covariate_names, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" + "</span>)</span>
+<span id="cb34-8">))</span>
+<span id="cb34-9"></span>
+<span id="cb34-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># extract the folds</span></span>
+<span id="cb34-11">folds <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sb1<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>folds_list</span>
+<span id="cb34-12"></span>
+<span id="cb34-13">model_rmse <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fold =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_along</span>(folds), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">rmse =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(folds)))</span>
+<span id="cb34-14"></span>
+<span id="cb34-15"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> (k <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_along</span>(folds)) {</span>
+<span id="cb34-16">    trainSet <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(folds[[k]][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># training set indices; first element</span></span>
+<span id="cb34-17">    testSet <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(folds[[k]][<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># testing set indices; second element</span></span>
+<span id="cb34-18">    rf <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ranger</span>(fo, temperature_df[trainSet, ], <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num.trees =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># model fitting on training set</span></span>
+<span id="cb34-19">    pred <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">predict</span>(rf, temperature_df[testSet, ])<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>predictions <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># predict the test set</span></span>
+<span id="cb34-20">    model_rmse[k, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rmse"</span>] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(</span>
+<span id="cb34-21">        (temperature_df[testSet, response_name] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> pred)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb34-22">    )) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># calculate RMSE</span></span>
+<span id="cb34-23">}</span>
+<span id="cb34-24">model_rmse</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   fold      rmse
+1     1 1.1401856
+2     2 0.7848595
+3     3 0.9219486
+4     4 0.8007453
+5     5 0.6485726
+6     6 1.2989341
+7     7 0.8140209
+8     8 1.2050918
+9     9 0.9696801
+10   10 0.8681127</code></pre>
+</div>
+</div>
+<p>The <strong>blockCV</strong> package also provides functions for checking the similarity between the folds (<code>cv_similarity()</code>) and estimating the effective range of spatial autocorrelation (<code>cv_spatial_autocor()</code>). The first function is used to check the similarity between the folds in the cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_similarity</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cv =</span> sb1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> temperature, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> covariates, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The following aesthetics were dropped during statistical transformation:
+colour.
+ℹ This can happen when ggplot fails to infer the correct grouping structure in
+  the data.
+ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+  variable into a factor?</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The second function is used to estimate the effective range of spatial autocorrelation of all input raster layers or the response data – its role is to help to determine the size of the blocks in the block cross-validation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cv_spatial_autocor</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">r =</span> covariates, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">num_sample =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">progress =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://geocompx.org/post/2025/sml-bp6/index_files/figure-html/misc-scv-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cv_spatial_autocor"</code></pre>
+</div>
+</div>
+<p>More examples of the package’s use can be found at <a href="https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html" class="uri">https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html</a>.</p>
+</section>
+<section id="closing-remarks" class="level1">
+<h1>Closing remarks</h1>
+<p>This blog post concludes the series on machine learning for spatial data with R. It showed established frameworks for machine learning in R, such as <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>, but focused on how to use them for spatial data problems. Next, we presented specialized R packages for spatial machine learning, such as <strong>spatialRF</strong>, <strong>RandomForestsGLS</strong>, and <strong>meteo</strong> and two R packages aimed for spatial cross-validation: <strong>sperrorest</strong> and <strong>blockCV</strong>.</p>
+<p>The series focused on the so-called “classical” machine learning methods, with a focus on the random forest method. At the same time, the series did not cover deep learning methods, as they require a different approach and tools. You can find more information on deep learning in R in the documentation of the packages like <strong>keras3</strong> (<a href="https://keras3.posit.co/" class="uri">https://keras3.posit.co/</a>), <strong>torch</strong> (<a href="https://torch.mlverse.org/" class="uri">https://torch.mlverse.org/</a>), or <strong>luz</strong> (<a href="https://mlverse.github.io/luz/" class="uri">https://mlverse.github.io/luz/</a>). Moreover, the <strong>sits</strong> package provides various deep learning tools for satellite image time series analysis – you can learn more about it in the book <a href="https://e-sensing.github.io/sitsbook/">“Satellite Image Time Series Analysis on Earth Observation Data Cubes”</a>.</p>
+<p>The number of methods and tools for spatial machine learning is growing rapidly, and it is impossible to cover all of them in a single series. However, the presented packages and methods should provide a good starting point for anyone interested in spatial machine learning with R. If you have any suggestions for other packages and methods that should be included in this series, feel free to contact me – you can find my contact details on my <a href="https://jakubnowosad.com">website</a>.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This blog post was originally written as a supplement to the poster “An Inventory of Spatial Machine Learning Packages in R” presented at the FOSSGIS 2025 conference in Muenster, Germany. The poster is available at <a href="https://doi.org/10.5281/zenodo.15088973" class="uri">https://doi.org/10.5281/zenodo.15088973</a>.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>More information on the custom prediction functions is at <a href="https://cran.r-project.org/web/packages/sperrorest/vignettes/custom-pred-and-model-functions.html" class="uri">https://cran.r-project.org/web/packages/sperrorest/vignettes/custom-pred-and-model-functions.html</a>.↩︎</p></li>
+<li id="fn2"><p>There are several other partition functions available in the package, including <code>partition_disc()</code>, <code>partition_tiles()</code>, and <code>partition_cv()</code>.↩︎</p></li>
+<li id="fn3"><p>This approach is a form of leave-one-out cross-validation.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
+  author = {Nowosad, Jakub},
+  title = {Specialized {R} Packages for Spatial Cross-Validation:
+    Sperrorest and {blockCV}},
+  date = {2025-07-09},
+  url = {https://geocompx.org/post/2025/sml-bp6/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2025. <span>“Specialized R Packages for Spatial
+Cross-Validation: Sperrorest and blockCV.”</span> July 9, 2025. <a href="https://geocompx.org/post/2025/sml-bp6/">https://geocompx.org/post/2025/sml-bp6/</a>.
+</div></div></section></div> ]]></description>
+  <category>rstats</category>
+  <category>sml</category>
+  <guid>https://geocompx.org/post/2025/sml-bp6/</guid>
+  <pubDate>Wed, 09 Jul 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Specialized R packages for spatial machine learning: An introduction to RandomForestsGLS, spatialRF, and meteo</title>
   <dc:creator>Jakub Nowosad</dc:creator>
@@ -9326,434 +10541,6 @@ Lovelace, Jakub Nowosad, Jannes Muenchow, Robin. 2021.
   <category>rstats</category>
   <guid>https://geocompx.org/post/2021/geocompr2-bp1/</guid>
   <pubDate>Mon, 06 Sep 2021 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Conversions between different spatial classes in R</title>
-  <dc:creator>Jakub Nowosad</dc:creator>
-  <link>https://geocompx.org/post/2021/spatial-classes-conversion/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>The R programming language has, over the past two decades, evolved substantial spatial data analysis capabilities, and is now one of the most powerful environments for undertaking geographic research using a reproducible command line interface. Currently, dedicated R packages allow to read spatial data and apply a plethora of different kinds of spatial methods in a reproducible fashion.</p>
-<p>There are two main<sup>1</sup> spatial data models - spatial vector data and spatial raster data. Natively R does not support spatial data and does not have a definition of spatial classes. Therefore, there had been <a href="https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial">a need to create R tools able to represent spatial vector and raster data</a>. Spatial classes are slightly different from regular R objects, such as data frames or matrices, as they need to not only store values, but also information about spatial locations and their <a href="https://geocompr.robinlovelace.net/spatial-class.html#crs-intro">coordinate reference systems</a>.</p>
-<p>Nowadays, the most prominent packages to represent spatial vector data are <strong>sf</strong> <span class="citation" data-cites="R-sf">(Pebesma 2021a)</span> and its predecessor <strong>sp</strong> <span class="citation" data-cites="R-sp">(Pebesma and Bivand 2021)</span>, however, the <strong>terra</strong> <span class="citation" data-cites="R-terra">(Hijmans 2021b)</span> package also has its own spatial class for vector data. Spatial raster data can be stored as objects from <strong>terra</strong> <span class="citation" data-cites="R-terra">(Hijmans 2021b)</span> and its predecessor <strong>raster</strong> <span class="citation" data-cites="R-raster">(Hijmans 2021a)</span>, or alternatively the <strong>stars</strong> package <span class="citation" data-cites="R-stars">(Pebesma 2021b)</span>.</p>
-<p>As you could see in <a href="../../../post/2020/whyr_webinar004/">our Why R? webinar talk</a>, the spatial capabilities of R constantly expand, but also evolve. New packages are being developed, while old ones are modified or superseded. In this process, new methods are created, higher performance code is added, and possible workflows are expanded. Alternative approaches allow for a (hopefully) healthy competition, resulting in better packages. Of course, having more than one package (with its own spatial class/es) for a vector or raster data model could be problematic, especially for new or inexperienced users.</p>
-<p>First, it takes time to understand how different spatial classes are organized. To illustrate this, let’s read the same spatial data, <code>srtm.tif</code> from the <strong>spDataLarge</strong> package <span class="citation" data-cites="R-spDataLarge">(Nowosad and Lovelace 2021)</span>, using <strong>raster</strong> and <strong>stars</strong>. The <strong>raster</strong> object:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">raster_file_path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"raster/srtm.tif"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"spDataLarge"</span>)</span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(raster)</span>
-<span id="cb1-3">srtm_raster <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">raster</span>(raster_file_path)</span>
-<span id="cb1-4">srtm_raster</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>class      : RasterLayer 
-dimensions : 457, 465, 212505  (nrow, ncol, ncell)
-resolution : 0.0008333333, 0.0008333333  (x, y)
-extent     : -113.2396, -112.8521, 37.13208, 37.51292  (xmin, xmax, ymin, ymax)
-crs        : +proj=longlat +datum=WGS84 +no_defs 
-source     : srtm.tif 
-names      : srtm 
-values     : 1024, 2892  (min, max)</code></pre>
-</div>
-</div>
-<p>The <strong>stars</strong> object:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(stars)</span>
-<span id="cb3-2">srtm_stars <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_stars</span>(raster_file_path)</span>
-<span id="cb3-3">srtm_stars</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>stars object with 2 dimensions and 1 attribute
-attribute(s):
-          Min. 1st Qu. Median     Mean 3rd Qu. Max.
-srtm.tif  1024    1535   1837 1842.548    2114 2892
-dimension(s):
-  from  to  offset        delta refsys point x/y
-x    1 465 -113.24  0.000833333 WGS 84 FALSE [x]
-y    1 457 37.5129 -0.000833333 WGS 84 FALSE [y]</code></pre>
-</div>
-</div>
-<p>Secondly, other packages with methods we want to use, could only accept one specific spatial class, but not the other. For example, the current version of the <strong>sabre</strong> package <span class="citation" data-cites="R-sabre">(Nowosad and Stepinski 2019)</span> (0.3.2) accepts objects from the <strong>raster</strong> package, but not ones from <strong>terra</strong> or <strong>stars</strong><sup>2</sup>. The <code>partitions1</code> and <code>partitions2</code> objects are of the <code>RasterLayer</code> class from <strong>raster</strong>, so the <code>vmeasure_calc()</code> function works correctly.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sabre)</span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(raster)</span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"partitions1"</span>)</span>
-<span id="cb5-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"partitions2"</span>)</span>
-<span id="cb5-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vmeasure_calc</span>(partitions1, partitions2)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The SABRE results:
-
- V-measure: 0.36 
- Homogeneity: 0.32 
- Completeness: 0.42 
-
- The spatial objects can be retrieved with:
- $map1 - the first map
- $map2 - the second map </code></pre>
-</div>
-</div>
-<p>However, when the input object (representing the same spatial data!) is of the <code>SpatRaster</code> class from <strong>terra</strong>, the calculation results in error.</p>
-<pre><code>vmeasure_calc(partitions1_terra, partitions1_terra)</code></pre>
-<pre><code>## Error in UseMethod("vmeasure_calc") : 
-##  no applicable method for 'vmeasure_calc' applied to an object of class "SpatRaster"</code></pre>
-<p>Some packages, such as <strong>tmap</strong> <span class="citation" data-cites="R-tmap">(Tennekes 2021)</span>, accept many R spatial classes, however, this takes a lot of effort from package creators to make it possible and to maintain it. Gladly, a number of functions exist that allow to convert between different R spatial classes. Using them, we can work with our favorite spatial data representation, switch to some other representation just for a certain calculation, and then convert the result back into our class. The next two sections showcase how to move between different spatial vector and raster data classes in R.</p>
-<section id="spatial-vector-data" class="level2">
-<h2 class="anchored" data-anchor-id="spatial-vector-data">Spatial vector data</h2>
-<p>The <code>world.gpkg</code> file from the <strong>spData</strong> <span class="citation" data-cites="R-spData">(Bivand, Nowosad, and Lovelace 2020)</span> contains spatial vector data with world countries.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">world_path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"shapes/world.gpkg"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"spData"</span>)</span></code></pre></div>
-</div>
-<p>Now, we can read this file, for example, as an <code>sf</code> object, and convert it into other spatial vector data classes.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sf)</span>
-<span id="cb10-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(sp)</span>
-<span id="cb10-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(terra)</span>
-<span id="cb10-4"></span>
-<span id="cb10-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># read as sf</span></span>
-<span id="cb10-6">world <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_sf</span>(world_path)</span>
-<span id="cb10-7"></span>
-<span id="cb10-8"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># sf to sp</span></span>
-<span id="cb10-9">world_sp1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as</span>(world, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Spatial"</span>)</span>
-<span id="cb10-10"></span>
-<span id="cb10-11"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># sf to terra vect</span></span>
-<span id="cb10-12">world_terra1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vect</span>(world)</span>
-<span id="cb10-13"></span>
-<span id="cb10-14"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># sp to terra vect</span></span>
-<span id="cb10-15">world_terra2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vect</span>(world_sp1)</span>
-<span id="cb10-16"></span>
-<span id="cb10-17"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># sp to sf</span></span>
-<span id="cb10-18">world_sf2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sf</span>(world_sp1)</span>
-<span id="cb10-19"></span>
-<span id="cb10-20"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># terra vect to sf</span></span>
-<span id="cb10-21">world_sf3 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_sf</span>(world_terra1)</span>
-<span id="cb10-22"></span>
-<span id="cb10-23"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># terra vect to sp</span></span>
-<span id="cb10-24">world_sp2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as</span>(world_terra1, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Spatial"</span>)</span></code></pre></div>
-</div>
-<p>In summary, <code>st_as_sf()</code> converts other classes into <code>sf</code>, <code>vect()</code> transform other classes into <strong>terra</strong>’s <code>SpatVector</code>, and with <code>as(x, "Spatial")</code> it is possible to get <strong>sp</strong>’s vectors.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">sf</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">sp</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">terra</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">sf</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "Spatial")</td>
-<td style="text-align: left; font-style: italic;">vect()</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">sp</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">st_as_sf()</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
-<td style="text-align: left; font-style: italic;">vect()</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">terra</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">st_as_sf()</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "Spatial")</td>
-<td style="text-align: left; font-style: italic;"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="spatial-raster-data" class="level2">
-<h2 class="anchored" data-anchor-id="spatial-raster-data">Spatial raster data</h2>
-<p>The <code>srtm.tif</code> file from the <strong>spDataLarge</strong> <span class="citation" data-cites="R-spDataLarge">(Nowosad and Lovelace 2021)</span> contains a raster elevation model for the Zion National Park in the USA.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">srtm_path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"raster/srtm.tif"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"spDataLarge"</span>)</span></code></pre></div>
-</div>
-<p>Now, we can read this file, for example, as a <strong>raster</strong> object, and convert it into other spatial vector data classes.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(raster)</span>
-<span id="cb12-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(stars)</span>
-<span id="cb12-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(terra)</span>
-<span id="cb12-4"></span>
-<span id="cb12-5">srtm_raster1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">raster</span>(srtm_path)</span>
-<span id="cb12-6"></span>
-<span id="cb12-7"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># raster to terra</span></span>
-<span id="cb12-8">srtm_terra1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rast</span>(srtm_raster1)</span>
-<span id="cb12-9"></span>
-<span id="cb12-10"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># terra to raster</span></span>
-<span id="cb12-11">srtm_raster2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">raster</span>(srtm_terra1)</span>
-<span id="cb12-12"></span>
-<span id="cb12-13"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># raster to stars</span></span>
-<span id="cb12-14">srtm_stars1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_stars</span>(srtm_raster1)</span>
-<span id="cb12-15"></span>
-<span id="cb12-16"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># stars to raster</span></span>
-<span id="cb12-17">srtm_raster2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as</span>(srtm_stars1, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Raster"</span>)</span>
-<span id="cb12-18"></span>
-<span id="cb12-19"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># terra to stars</span></span>
-<span id="cb12-20">srtm_stars2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">st_as_stars</span>(srtm_terra1)</span>
-<span id="cb12-21"></span>
-<span id="cb12-22"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># stars to terra</span></span>
-<span id="cb12-23">srtm_terra1a <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as</span>(srtm_stars1, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"SpatRaster"</span>)</span></code></pre></div>
-</div>
-<p>As you can see - in most cases, we can just use one function to move from one class to another.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">FROM/TO</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">raster</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">terra</th>
-<th style="text-align: left;" data-quarto-table-cell-role="th">stars</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">raster</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">rast()</td>
-<td style="text-align: left; font-style: italic;">st_as_stars()</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">terra</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">raster()</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;"></td>
-<td style="text-align: left; font-style: italic;">st_as_stars()</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; border-right: 1px solid; font-weight: bold;">stars</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">raster()</td>
-<td style="text-align: left; border-right: 1px solid; font-style: italic;">as(x, "SpatRaster")</td>
-<td style="text-align: left; font-style: italic;"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>This blog post summarizes how to move between different R spatial vector and raster classes. All of the functions mentioned above have one role: to change classes of input objects. They do not, however, change geometries or underlining values in the data.</p>
-<p>Additionally, switching from the spatial vector data model to the spatial raster data model (and vice versa) is also possible. These operations are known as rasterization and vectorization, and they could impact spatial and nonspatial information in the input data. To learn more about them, read <a href="https://geocompr.robinlovelace.net/geometric-operations.html#raster-vector">the Raster-Vector Interactions section</a> in <a href="https://geocompr.robinlovelace.net/">Geocomputation with R</a>.</p>
-</section>
-<section id="references" class="level2">
-
-
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0">
-<div id="ref-R-spData" class="csl-entry">
-Bivand, Roger, Jakub Nowosad, and Robin Lovelace. 2020. <em>spData: Datasets for Spatial Analysis</em>. <a href="https://nowosad.github.io/spData/">https://nowosad.github.io/spData/</a>.
-</div>
-<div id="ref-R-raster" class="csl-entry">
-Hijmans, Robert J. 2021a. <em>Raster: Geographic Data Analysis and Modeling</em>. <a href="https://rspatial.org/raster">https://rspatial.org/raster</a>.
-</div>
-<div id="ref-R-terra" class="csl-entry">
-———. 2021b. <em>Terra: Spatial Data Analysis</em>. <a href="https://rspatial.org/terra">https://rspatial.org/terra</a>.
-</div>
-<div id="ref-R-spDataLarge" class="csl-entry">
-Nowosad, Jakub, and Robin Lovelace. 2021. <em>spDataLarge: Large Datasets for Spatial Analysis</em>. <a href="https://github.com/Nowosad/spData">https://github.com/Nowosad/spData</a>.
-</div>
-<div id="ref-R-sabre" class="csl-entry">
-Nowosad, Jakub, and Tomasz Stepinski. 2019. <em>Sabre: Spatial Association Between Regionalizations</em>. <a href="https://nowosad.github.io/sabre/">https://nowosad.github.io/sabre/</a>.
-</div>
-<div id="ref-R-sf" class="csl-entry">
-Pebesma, Edzer. 2021a. <em>Sf: Simple Features for r</em>.
-</div>
-<div id="ref-R-stars" class="csl-entry">
-———. 2021b. <em>Stars: Spatiotemporal Arrays, Raster and Vector Data Cubes</em>.
-</div>
-<div id="ref-R-sp" class="csl-entry">
-Pebesma, Edzer, and Roger Bivand. 2021. <em>Sp: Classes and Methods for Spatial Data</em>. <a href="https://CRAN.R-project.org/package=sp">https://CRAN.R-project.org/package=sp</a>.
-</div>
-<div id="ref-R-tmap" class="csl-entry">
-Tennekes, Martijn. 2021. <em>Tmap: Thematic Maps</em>. <a href="https://github.com/mtennekes/tmap">https://github.com/mtennekes/tmap</a>.
-</div>
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>There are also other spatial data models, including meshes or point clouds.↩︎</p></li>
-<li id="fn2"><p>I plan to improve that in a future release.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2021,
-  author = {Nowosad, Jakub},
-  title = {Conversions Between Different Spatial Classes in {R}},
-  date = {2021-06-17},
-  url = {https://geocompx.org/post/2021/spatial-classes-conversion/},
-  langid = {en}
-}
-</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2021" class="csl-entry quarto-appendix-citeas">
-Nowosad, Jakub. 2021. <span>“Conversions Between Different Spatial
-Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org/post/2021/spatial-classes-conversion/">https://geocompx.org/post/2021/spatial-classes-conversion/</a>.
-</div></div></section></div> ]]></description>
-  <category>vignette</category>
-  <category>rstats</category>
-  <guid>https://geocompx.org/post/2021/spatial-classes-conversion/</guid>
-  <pubDate>Thu, 17 Jun 2021 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
