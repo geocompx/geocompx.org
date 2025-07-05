@@ -4,13 +4,13 @@ author:
   - name: Jakub Nowosad
     url: https://jakubnowosad.com
     orcid:  0000-0002-1057-3721
-date: ""
+date: "2025-07-09"
 slug: sml-bp6
 categories:
   - rstats
   - sml
 tags: [caret, CAST, mlr3, tidymodels, machine-learning, spatial-machine-learning]
-draft: true
+draft: false
 mermaid-format: png
 knitr:
   opts_chunk:
@@ -163,6 +163,7 @@ The **blockCV** (<https://doi.org/10.1111/2041-210X.13107>) package provides a s
 The package itself does not fit the models.
 
 ```{r misc-scv-9 }
+# remotes::install_github("cran/automap")
 library(blockCV)
 ```
 
@@ -314,11 +315,20 @@ cv_spatial_autocor(r = covariates, num_sample = 5000, progress = FALSE)
 
 More examples of the package's use can be found at <https://cran.r-project.org/web/packages/blockCV/vignettes/tutorial_2.html>.
 
-<!-- # Closing remarks
+# Closing remarks
 
-other tools, methods, packages
-deep learning is not covered in this series
-more in the future -->
+This blog post concludes the series on machine learning for spatial data with R.
+It showed established frameworks for machine learning in R, such as **caret**, **tidymodels**, and **mlr3**, but focused on how to use them for spatial data problems.
+Next, we presented specialized R packages for spatial machine learning, such as **spatialRF**, **RandomForestsGLS**, and **meteo** and two R packages aimed for spatial cross-validation: **sperrorest** and **blockCV**.
+
+The series focused on the so-called "classical" machine learning methods, with a focus on the random forest method.
+At the same time, the series did not cover deep learning methods, as they require a different approach and tools. 
+You can find more information on deep learning in R in the documentation of the packages like **keras3** (<https://keras3.posit.co/>), **torch** (<https://torch.mlverse.org/>), or **luz** (<https://mlverse.github.io/luz/>).
+Moreover, the **sits** package provides various deep learning tools for satellite image time series analysis -- you can learn more about it in the book ["Satellite Image Time Series Analysis on Earth Observation Data Cubes"](https://e-sensing.github.io/sitsbook/).
+
+The number of methods and tools for spatial machine learning is growing rapidly, and it is impossible to cover all of them in a single series.
+However, the presented packages and methods should provide a good starting point for anyone interested in spatial machine learning with R.
+If you have any suggestions for other packages and methods that should be included in this series, feel free to contact me -- you can find my contact details on my [website](https://jakubnowosad.com).
 
 ::: {.callout-note appearance="simple"}
 
