@@ -11,6 +11,7 @@ listing:
   fields: [date, title, reading-time, description, categories]
   feed:
     categories: [rstats, python]
+    items: 100
 page-layout: full
 title-block-banner: false
 ---
