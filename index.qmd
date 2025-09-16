@@ -13,27 +13,37 @@ Here you will find content, including books and beyond, on reproducible geograph
 
 ::: {.grid .justify}
 
-::: {.g-col-12 .g-col-md-4}
+
+::: {.g-col-12 .g-col-md-3}
 <center>
-<a href="https://r.geocompx.org/"><img alt="Geocomputation with R" width=75% src="static/img/book_cover_r2.jpg"/></a>
+<a href="https://r.geocompx.org/"><img alt="Geocomputation with R" width=100% src="static/img/book_cover_r2.jpg"/></a>
 
 **Geocomputation with R**
 </center>
 :::
 
-::: {.g-col-12 .g-col-md-4}
+::: {.g-col-12 .g-col-md-3}
 <center>
-<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=75% src="static/img/book_cover_py.png"/></a>
+<a href="https://py.geocompx.org/"><img alt="Geocomputation with Python" width=100% src="static/img/book_cover_py.png"/></a>
 
 **Geocomputation with Python**
 </center>
 :::
 
-::: {.g-col-12 .g-col-md-4}
+
+::: {.g-col-12 .g-col-md-3}
 <center>
-<a href="https://jl.geocompx.org/"><img alt="Geocomputation with Julia" width=75% src="static/img/book_cover_jl.png"/></a>
+<a href="https://jl.geocompx.org/"><img alt="Geocomputation with Julia" width=100% src="static/img/book_cover_jl.png"/></a>
 
 **Geocomputation with Julia** (*work in progress*)
+</center>
+:::
+
+::: {.g-col-12 .g-col-md-3}
+<center>
+<a href="https://tmap.geocompx.org/"><img alt="Spatial Data Visualization with tmap" width=100% src="static/img/book_cover_tmap_tmp.png"/></a>
+
+**Spatial Data Visualization with tmap** (*work in progress*)
 </center>
 :::
 
