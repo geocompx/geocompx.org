@@ -1,0 +1,38 @@
+---
+title: "Second edition of *Geocomputation with R* is complete"
+author: Jakub Nowosad
+date: "2025-10-13"
+slug: tmap-bp1
+categories:
+  - updates
+  - rstats
+tags: [geocompr, tmap, geocompx, viz, rstats, book]
+draft: true
+---
+
+<!-- bp intro -->
+<!-- Spatial Data Visualization with **tmap**: A Practical Guide to Thematic Mapping in R
+Martijn Tennekes and Jakub Nowosad
+https://tmap.geocompx.org/ -->
+
+## The **tmap** package
+
+<!-- short intro to tmap -->
+<!-- mention recent changes -->
+<!-- features -->
+
+## Book overview
+
+<!-- what is in the book -->
+<!-- https://tmap.geocompx.org/#what-youll-learn -->
+<!-- who is the book for -->
+
+## Current status
+
+<!-- what is done -->
+<!-- what is missing -->
+
+## How to get involved
+
+<!-- how to contribute -->
+<!-- how to report issues -->
