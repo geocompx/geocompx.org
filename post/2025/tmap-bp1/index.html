@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Jakub Nowosad, Robin Lovelace, Jannes Muenchow">
-<meta name="dcterms.date" content="2022-01-27">
+<meta name="author" content="Jakub Nowosad">
+<meta name="dcterms.date" content="2025-10-13">
 
-<title>Progress update: Geocomputation with R Second Edition Part 1 – geocompx</title>
+<title>Second edition of Geocomputation with R is complete – geocompx</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,6 +79,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
+<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../../style.css">
@@ -87,7 +88,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -162,11 +163,10 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#major-changes" id="toc-major-changes" class="nav-link active" data-scroll-target="#major-changes">Major changes</a></li>
-  <li><a href="#changes-to-specific-chapters" id="toc-changes-to-specific-chapters" class="nav-link" data-scroll-target="#changes-to-specific-chapters">Changes to specific chapters</a></li>
-  <li><a href="#book-infrastructure" id="toc-book-infrastructure" class="nav-link" data-scroll-target="#book-infrastructure">Book infrastructure</a></li>
-  <li><a href="#minor-changes" id="toc-minor-changes" class="nav-link" data-scroll-target="#minor-changes">Minor changes</a></li>
-  <li><a href="#outro" id="toc-outro" class="nav-link" data-scroll-target="#outro">Outro</a></li>
+  <li><a href="#the-tmap-package" id="toc-the-tmap-package" class="nav-link active" data-scroll-target="#the-tmap-package">The <strong>tmap</strong> package</a></li>
+  <li><a href="#book-overview" id="toc-book-overview" class="nav-link" data-scroll-target="#book-overview">Book overview</a></li>
+  <li><a href="#current-status" id="toc-current-status" class="nav-link" data-scroll-target="#current-status">Current status</a></li>
+  <li><a href="#how-to-get-involved" id="toc-how-to-get-involved" class="nav-link" data-scroll-target="#how-to-get-involved">How to get involved</a></li>
   </ul>
 </nav>
     </div>
@@ -175,7 +175,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Progress update: Geocomputation with R Second Edition Part 1</h1>
+<h1 class="title">Second edition of <em>Geocomputation with R</em> is complete</h1>
   <div class="quarto-categories">
     <div class="quarto-category">updates</div>
     <div class="quarto-category">rstats</div>
@@ -189,14 +189,14 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Jakub Nowosad, Robin Lovelace, Jannes Muenchow </p>
+             <p>Jakub Nowosad </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 27, 2022</p>
+      <p class="date">October 13, 2025</p>
     </div>
   </div>
   
@@ -208,69 +208,45 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </header>
 
 
-<p>Geocomputation with R is a book on geographic data analysis, visualization, and modeling. The First Edition was first published as a physical book in 2019 and we have reached 500k people through via the website at https://geocompr.robinlovelace.net/ and <a href="https://www.routledge.com/9781138304512">the physical book</a> since then.</p>
-<p>The book has also become a key part of many university courses, lectures, and has been endorsed by many people who have found it vital for their work and for learning new geographic skills, as outlined in our <a href="https://geocompr.github.io/guestbook/">guestbook at geocompr.github.io/guestbook/</a>. Tools and methods for geographic data analysis are evolving quickly, especially in the R-Spatial ecosystem. Because of these changes, and demand from our readers and the wider community, we decided in September 2021 to start working on the second edition of the book. The second edition (work in progress) is available at https://geocompr.robinlovelace.net/, while you can find the first edition at https://bookdown.org/robinlovelace/geocompr/.</p>
-<p>At the time of writing (January 2022), we have already made many changes to first part of the book called <em>Foundations</em>. In this post we list and explain the changes.</p>
-<section id="major-changes" class="level2">
-<h2 class="anchored" data-anchor-id="major-changes">Major changes</h2>
-<p>Several major changes have happened to #rspatial since the release of the first version of the book. Most importantly:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<ul>
-<li>PROJ library was refactored mainly, which have had an impact on a plethora of GIS software, including R spatial packages</li>
-<li>The <strong>raster</strong> package, highlighted in the 1st edition, is now being replaced by its successor <strong>terra</strong></li>
-</ul>
-<p><img src="ch2fig.png" class="img-fluid"></p>
-<p>Both of these changes are now addressed in Geocomputation with R. Chapter <a href="https://geocompr.robinlovelace.net/reproj-geo-data.html">“Reprojecting geographic data”</a> has undergone numerous modifications, including an explanation of the currently recommended WKT coordinate reference systems representation, information on how to get and set CRSs, or a much-improved section on creating custom projections. Similarly, we already replaced <strong>raster</strong>’s descriptions and functions with <strong>terra</strong> in the book’s first eight chapters.</p>
+<!-- bp intro -->
+<!-- Spatial Data Visualization with **tmap**: A Practical Guide to Thematic Mapping in R
+Martijn Tennekes and Jakub Nowosad
+https://tmap.geocompx.org/ -->
+<section id="the-tmap-package" class="level2">
+<h2 class="anchored" data-anchor-id="the-tmap-package">The <strong>tmap</strong> package</h2>
+<!-- short intro to tmap -->
+<!-- mention recent changes -->
+<!-- features -->
 </section>
-<section id="changes-to-specific-chapters" class="level2">
-<h2 class="anchored" data-anchor-id="changes-to-specific-chapters">Changes to specific chapters</h2>
-<p>Additionally, almost all chapters received significant edits. Section <a href="https://geocompr.robinlovelace.net/intro.html#the-history-of-r-spatial">The history of R-spatial</a> in 1st chapter was updated with summary of various new #rspatial developments, including <strong>terra</strong>, <strong>stars</strong>, <strong>lidR</strong>, <strong>rayshader</strong>, <strong>ggspatial</strong>, <strong>mapsf</strong>, etc. We also used this section to highlight that packages <a href="https://stat.ethz.ch/pipermail/r-sig-geo/2021-September/028760.html"><strong>rgdal</strong>, <strong>rgeos</strong>, and <strong>maptools</strong> will be retired at the end of 2023</a> and that anyone still using these packages should “<strong>transition to sf/stars/terra functions using GDAL and PROJ at your earliest convenience</strong>”.”</p>
-<p>Second chapter got an information about <strong>s2</strong>, an interface to spherical geometry library already used by the <strong>sf</strong> package, and a <a href="https://geocompr.robinlovelace.net/spatial-class.html#r-packages-for-working-with-raster-data">comparison between <strong>terra</strong> and <strong>stars</strong></a>.</p>
-<p>In Chapter 4, we added <a href="https://geocompr.robinlovelace.net/spatial-operations.html#topological-relations">improved communication of binary spatial predicates in Chapter 4</a> and a new <a href="https://geocompr.robinlovelace.net/spatial-operations.html#de-9im-strings">section</a> on the dimensionally extended 9 intersection model (DE-9IM).</p>
-<p><img src="ch4fig.png" class="img-fluid"></p>
-<p>The vector part of Chapter 5 received <a href="https://geocompr.robinlovelace.net/geometric-operations.html#subsetting-and-clipping">a new section on the links between subsetting and clipping</a>, while the raster part got a much improved <a href="https://geocompr.robinlovelace.net/geometric-operations.html#resampling">part on resampling methods</a>. We also decided to split out the text related raster-vector interactions into <a href="https://geocompr.robinlovelace.net/raster-vector.html">a new 6th chapter</a>.</p>
-<p>Finally, <a href="https://geocompr.robinlovelace.net/read-write.html#read-write">Chapter 8</a> got a bunch of improvements, including mentions of more data packages, alternative ways of reading-in OSM data, a part about geocoding, and information about Cloud Optimized GeoTIFF (COG). We also spent some time to show how to <a href="https://geocompr.robinlovelace.net/read-write.html#iovec">read just a part of vector data file using OGR SQL queries and WKT filters</a>, and <a href="https://geocompr.robinlovelace.net/read-write.html#raster-data-read">extract only a portion of a COG raster file</a>.</p>
-<p><img src="ch8fig.png" class="img-fluid"></p>
+<section id="book-overview" class="level2">
+<h2 class="anchored" data-anchor-id="book-overview">Book overview</h2>
+<!-- what is in the book -->
+<!-- https://tmap.geocompx.org/#what-youll-learn -->
+<!-- who is the book for -->
 </section>
-<section id="book-infrastructure" class="level2">
-<h2 class="anchored" data-anchor-id="book-infrastructure">Book infrastructure</h2>
-<p>We also decided that the 2nd edition is a good time to improve the book infrastructure, i.e., data packages, storage of the exercises and solutions, automatic book builds, etc.</p>
-<p>The most visible change is the visual theme of the book website. Now it uses the Bootstrap 4 framework through the <code>bookdown::bs4_book</code> theme with slightly customized elements, such as font families or a text blocks style.</p>
-<p>Next, we created an external bookdown-based website for solutions of the Geocomputation with R exercises. You can find its early version at https://geocompr.github.io/solutions/, and we plan to describe it in more detail in a future blog post.</p>
-<p>The book still uses two external packages, <strong>spData</strong> and <strong>spDataLarge</strong>, to store example datasets. However, we made an important change here – we saved some R spatial objects to files (e.g., <strong>raster</strong> objects to GeoTIFF) – this way, we can read data using <strong>raster</strong>/<strong>terra</strong>/<strong>stars</strong>, instead of just loading one package’s class object into R memory.</p>
-<p>We refactored build settings, so the book builds on Docker images in the <a href="https://github.com/geocompr/docker">geocompr/docker</a> repo, and improved the experience of using the book in Binder (ideal for trying out the code before installing or updating the necessary R packages), as documented in issue <a href="https://github.com/Robinlovelace/geocompr/issues/691">#691</a> (thanks to <a href="https://github.com/yuvipanda">yuvipanda</a>).</p>
+<section id="current-status" class="level2">
+<h2 class="anchored" data-anchor-id="current-status">Current status</h2>
+<!-- what is done -->
+<!-- what is missing -->
 </section>
-<section id="minor-changes" class="level2">
-<h2 class="anchored" data-anchor-id="minor-changes">Minor changes</h2>
-<p>We reworked several plots using the <strong>tmap</strong> package to improve the visual consistency of the book.</p>
-<p><img src="figtmap.png" class="img-fluid"></p>
-<p>The book also received (almost) countless minor changes, including rephrasing many concepts and reordering of our prose to make some ideas easier to understand.</p>
-</section>
-<section id="outro" class="level2">
-<h2 class="anchored" data-anchor-id="outro">Outro</h2>
-<p>Our plan now is to switch attention to the second part of the book called Extensions, while Part 1 is sent for peer review. We will work on the enhanced Making maps chapter, updates on Bridges to GIS software and Statistical learning.</p>
-<p>The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers! We want to thank all of you, including authors of recent Pull Requests (<em>ec-nebi</em>, <em>e-clin</em>, Oliver Leroy <em>defuneste</em>, Ivan Dubrovin <em>iod-ine</em>, Floris Vanderhaeghe <em>florisvdh</em>, Hasmukh K Mistry <em>hasukmistry</em>, John S. Erickson <em>olyerickson</em>) and people raising new GitHub issues. We are still actively working on the book, and thus – let us know if you have any <a href="https://github.com/Robinlovelace/geocompr/issues">issues or suggestions</a> and feel free to create any <a href="https://github.com/Robinlovelace/geocompr/pulls">Pull Request</a> from fixing typos, clarifying unclear sentences, to changes to the code and prose. You can also contact us on <a href="https://discord.gg/Te3gWeDwmf">the Geocomputation with R discord channel</a>.</p>
+<section id="how-to-get-involved" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-get-involved">How to get involved</h2>
+<!-- how to contribute -->
+<!-- how to report issues -->
 
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>There are also other significant changes, such as the retirement of <strong>RQGIS</strong> and <strong>mlr</strong>, but we plan to focus on them while updating the second part of the book.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad,_robin_lovelace,_jannes_muenchow2022,
-  author = {Nowosad, Robin Lovelace, Jannes Muenchow, Jakub},
-  title = {Progress Update: {Geocomputation} with {R} {Second} {Edition}
-    {Part} 1},
-  date = {2022-01-27},
-  url = {https://geocompx.org/post/2022/geocompr2-bp2/},
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
+  author = {Nowosad, Jakub},
+  title = {Second Edition of {*Geocomputation} with {R*} Is Complete},
+  date = {2025-10-13},
+  url = {https://geocompx.org/post/2025/tmap-bp1/},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad,_robin_lovelace,_jannes_muenchow2022" class="csl-entry quarto-appendix-citeas" role="listitem">
-Nowosad, Robin Lovelace, Jannes Muenchow, Jakub. 2022. <span>“Progress
-Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
-2022. <a href="https://geocompx.org/post/2022/geocompr2-bp2/">https://geocompx.org/post/2022/geocompr2-bp2/</a>.
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Nowosad, Jakub. 2025. <span>“Second Edition of *Geocomputation with R*
+Is Complete.”</span> October 13, 2025. <a href="https://geocompx.org/post/2025/tmap-bp1/">https://geocompx.org/post/2025/tmap-bp1/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
