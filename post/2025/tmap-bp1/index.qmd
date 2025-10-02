@@ -1,5 +1,5 @@
 ---
-title: "Second edition of *Geocomputation with R* is complete"
+title: "New, work-in-progress book on spatial data visualization in R"
 author: Jakub Nowosad
 date: "2025-10-13"
 slug: tmap-bp1
@@ -10,29 +10,63 @@ tags: [geocompr, tmap, geocompx, viz, rstats, book]
 draft: true
 ---
 
-<!-- bp intro -->
-<!-- Spatial Data Visualization with **tmap**: A Practical Guide to Thematic Mapping in R
-Martijn Tennekes and Jakub Nowosad
-https://tmap.geocompx.org/ -->
+We introduce a new, work-in-progress book on spatial data visualization in R using the **tmap** package. 
+The current version of the book, titled *Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R*, is available online at [https://tmap.geocompx.org/](https://tmap.geocompx.org/).
+This blog post provides an overview of the book, its current status, and how you can get involved in its development.
 
 ## The **tmap** package
 
-<!-- short intro to tmap -->
-<!-- mention recent changes -->
-<!-- features -->
+The **tmap** package is a powerful tool for creating thematic maps in R.
+Its development started more than a decade ago, and it has since become one of the most popular packages for spatial data visualization in the R ecosystem.
+It allows to create various types of maps, from simple static maps to complex interactive visualizations and web maps.
+
+![tmap logo](logo.png){width=300}
+
+In recent years, **tmap** has undergone significant changes that are now available in version 4.0.
+It includes an overhaul of the internal structure, improved and expanded syntax, and new features that enhance its capabilities.
+These features include improved default color palettes, additional options for positioning map elements, tools to assist in selecting map projections, the ability to create bivariate maps, expanded faceting options, and more.
+
+![Examples of map projections for the whole world](fig-exprojs-1.png)
+  
+Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for other spatial classes, or provide connections to additional visualization libraries.
+Currently, there are several extensions available, including **tmap.cartogram**, **tmap.glyphs**, **tmap.networks**, and **tmap.mapgl**.
+
+Given the broad range of features and capabilities of the **tmap** package, there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively.
+This is where the new book comes in.
 
 ## Book overview
 
-<!-- what is in the book -->
-<!-- https://tmap.geocompx.org/#what-youll-learn -->
-<!-- who is the book for -->
+The book's idea is to provide a practical guide to creating clear, effective maps in R with the **tmap** package.
+It is designed for a broad audience, including beginners in geospatial analysis, experienced GIS users transitioning to R, and anyone interested in visualizing spatial data.
 
-## Current status
+![Visual variables in tmap](fig-visual-variables-1.png)
 
-<!-- what is done -->
-<!-- what is missing -->
+The book covers the whole process of thematic mapping with **tmap**, from loading and preparing spatial data to creating and customizing maps for various audiences.
+In it, we try to combine concise explanations, reproducible code, and tips on good design and geospatial practices.
 
-## How to get involved
+![An example of a bivariate map created with tmap](fig-tmrastbiv-2.png)
 
-<!-- how to contribute -->
-<!-- how to report issues -->
+The book is divided into five parts:
+
+1. Basics. It should allow you to create simple maps quickly.
+2. Building blocks. This part explains the core components of **tmap**, including shapes, layers, and visual variables, and how to customize map appearance with legends, scales, and layouts.
+3. Adding new tools. The goal of this part is to provide a deeper understanding of **tmap** features, including map projections, map arrangements, faceting, and animations.
+4. Expanding the toolbox. This part focuses on creating interactive maps, integrating **tmap** maps into web apps, and extending **tmap** with new layer types and spatial data classes.
+5. Mastering the craft. The final part aims to help you apply good design practices to create maps that are clear, consistent, and effective.
+
+## Current status and how to get involved
+
+The book is currently a work in progress, with chapters belonging to the first three parts mostly completed.
+Thus, if you are interested in learning the basics of **tmap** and its core components, especially for static maps, you can already start using the book.
+The remaining chapters, those in parts four and five, are still under development.
+
+The **tmap** book is a part of the [geocomp*x*](https://geocompx.org/) project, which aims to provide open-source resources for geospatial analysis and visualization in R.
+As such, the book is open for contributions from the community.
+If you are interested in contributing to the book, you can do so by:
+
+- Reporting issues or suggesting improvements on the book's [GitHub repository](https://github.com/geocompx/tmap) or through our social media channels
+- Submitting pull requests with new content, examples, or corrections
+- Providing feedback on the book's content and structure
+- Sharing the book with others who might find it useful
+
+We welcome contributions from anyone interested in helping to improve the book and make it a valuable resource for the R, R spatial, and geospatial community, in general.
