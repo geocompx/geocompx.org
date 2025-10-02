@@ -9,7 +9,7 @@
 <meta name="author" content="Jakub Nowosad">
 <meta name="dcterms.date" content="2025-10-13">
 
-<title>Second edition of Geocomputation with R is complete – geocompx</title>
+<title>New, work-in-progress book on spatial data visualization in R – geocompx</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -165,8 +165,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
   <ul>
   <li><a href="#the-tmap-package" id="toc-the-tmap-package" class="nav-link active" data-scroll-target="#the-tmap-package">The <strong>tmap</strong> package</a></li>
   <li><a href="#book-overview" id="toc-book-overview" class="nav-link" data-scroll-target="#book-overview">Book overview</a></li>
-  <li><a href="#current-status" id="toc-current-status" class="nav-link" data-scroll-target="#current-status">Current status</a></li>
-  <li><a href="#how-to-get-involved" id="toc-how-to-get-involved" class="nav-link" data-scroll-target="#how-to-get-involved">How to get involved</a></li>
+  <li><a href="#current-status-and-how-to-get-involved" id="toc-current-status-and-how-to-get-involved" class="nav-link" data-scroll-target="#current-status-and-how-to-get-involved">Current status and how to get involved</a></li>
   </ul>
 </nav>
     </div>
@@ -175,7 +174,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Second edition of <em>Geocomputation with R</em> is complete</h1>
+<h1 class="title">New, work-in-progress book on spatial data visualization in R</h1>
   <div class="quarto-categories">
     <div class="quarto-category">updates</div>
     <div class="quarto-category">rstats</div>
@@ -208,45 +207,77 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </header>
 
 
-<!-- bp intro -->
-<!-- Spatial Data Visualization with **tmap**: A Practical Guide to Thematic Mapping in R
-Martijn Tennekes and Jakub Nowosad
-https://tmap.geocompx.org/ -->
+<p>We introduce a new, work-in-progress book on spatial data visualization in R using the <strong>tmap</strong> package. The current version of the book, titled <em>Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R</em>, is available online at <a href="https://tmap.geocompx.org/">https://tmap.geocompx.org/</a>. This blog post provides an overview of the book, its current status, and how you can get involved in its development.</p>
 <section id="the-tmap-package" class="level2">
 <h2 class="anchored" data-anchor-id="the-tmap-package">The <strong>tmap</strong> package</h2>
-<!-- short intro to tmap -->
-<!-- mention recent changes -->
-<!-- features -->
+<p>The <strong>tmap</strong> package is a powerful tool for creating thematic maps in R. Its development started more than a decade ago, and it has since become one of the most popular packages for spatial data visualization in the R ecosystem. It allows to create various types of maps, from simple static maps to complex interactive visualizations and web maps.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="logo.png" class="img-fluid figure-img" width="300"></p>
+<figcaption>tmap logo</figcaption>
+</figure>
+</div>
+<p>In recent years, <strong>tmap</strong> has undergone significant changes that are now available in version 4.0. It includes an overhaul of the internal structure, improved and expanded syntax, and new features that enhance its capabilities. These features include improved default color palettes, additional options for positioning map elements, tools to assist in selecting map projections, the ability to create bivariate maps, expanded faceting options, and more.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig-exprojs-1.png" class="img-fluid figure-img"></p>
+<figcaption>Examples of map projections for the whole world</figcaption>
+</figure>
+</div>
+<p>Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for other spatial classes, or provide connections to additional visualization libraries. Currently, there are several extensions available, including <strong>tmap.cartogram</strong>, <strong>tmap.glyphs</strong>, <strong>tmap.networks</strong>, and <strong>tmap.mapgl</strong>.</p>
+<p>Given the broad range of features and capabilities of the <strong>tmap</strong> package, there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively. This is where the new book comes in.</p>
 </section>
 <section id="book-overview" class="level2">
 <h2 class="anchored" data-anchor-id="book-overview">Book overview</h2>
-<!-- what is in the book -->
-<!-- https://tmap.geocompx.org/#what-youll-learn -->
-<!-- who is the book for -->
+<p>The book’s idea is to provide a practical guide to creating clear, effective maps in R with the <strong>tmap</strong> package. It is designed for a broad audience, including beginners in geospatial analysis, experienced GIS users transitioning to R, and anyone interested in visualizing spatial data.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig-visual-variables-1.png" class="img-fluid figure-img"></p>
+<figcaption>Visual variables in tmap</figcaption>
+</figure>
+</div>
+<p>The book covers the whole process of thematic mapping with <strong>tmap</strong>, from loading and preparing spatial data to creating and customizing maps for various audiences. In it, we try to combine concise explanations, reproducible code, and tips on good design and geospatial practices.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig-tmrastbiv-2.png" class="img-fluid figure-img"></p>
+<figcaption>An example of a bivariate map created with tmap</figcaption>
+</figure>
+</div>
+<p>The book is divided into five parts:</p>
+<ol type="1">
+<li>Basics. It should allow you to create simple maps quickly.</li>
+<li>Building blocks. This part explains the core components of <strong>tmap</strong>, including shapes, layers, and visual variables, and how to customize map appearance with legends, scales, and layouts.</li>
+<li>Adding new tools. The goal of this part is to provide a deeper understanding of <strong>tmap</strong> features, including map projections, map arrangements, faceting, and animations.</li>
+<li>Expanding the toolbox. This part focuses on creating interactive maps, integrating <strong>tmap</strong> maps into web apps, and extending <strong>tmap</strong> with new layer types and spatial data classes.</li>
+<li>Mastering the craft. The final part aims to help you apply good design practices to create maps that are clear, consistent, and effective.</li>
+</ol>
 </section>
-<section id="current-status" class="level2">
-<h2 class="anchored" data-anchor-id="current-status">Current status</h2>
-<!-- what is done -->
-<!-- what is missing -->
-</section>
-<section id="how-to-get-involved" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-get-involved">How to get involved</h2>
-<!-- how to contribute -->
-<!-- how to report issues -->
+<section id="current-status-and-how-to-get-involved" class="level2">
+<h2 class="anchored" data-anchor-id="current-status-and-how-to-get-involved">Current status and how to get involved</h2>
+<p>The book is currently a work in progress, with chapters belonging to the first three parts mostly completed. Thus, if you are interested in learning the basics of <strong>tmap</strong> and its core components, especially for static maps, you can already start using the book. The remaining chapters, those in parts four and five, are still under development.</p>
+<p>The <strong>tmap</strong> book is a part of the <a href="https://geocompx.org/">geocomp<em>x</em></a> project, which aims to provide open-source resources for geospatial analysis and visualization in R. As such, the book is open for contributions from the community. If you are interested in contributing to the book, you can do so by:</p>
+<ul>
+<li>Reporting issues or suggesting improvements on the book’s <a href="https://github.com/geocompx/tmap">GitHub repository</a> or through our social media channels</li>
+<li>Submitting pull requests with new content, examples, or corrections</li>
+<li>Providing feedback on the book’s content and structure</li>
+<li>Sharing the book with others who might find it useful</li>
+</ul>
+<p>We welcome contributions from anyone interested in helping to improve the book and make it a valuable resource for the R, R spatial, and geospatial community, in general.</p>
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
   author = {Nowosad, Jakub},
-  title = {Second Edition of {*Geocomputation} with {R*} Is Complete},
+  title = {New, Work-in-Progress Book on Spatial Data Visualization in
+    {R}},
   date = {2025-10-13},
   url = {https://geocompx.org/post/2025/tmap-bp1/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Nowosad, Jakub. 2025. <span>“Second Edition of *Geocomputation with R*
-Is Complete.”</span> October 13, 2025. <a href="https://geocompx.org/post/2025/tmap-bp1/">https://geocompx.org/post/2025/tmap-bp1/</a>.
+Nowosad, Jakub. 2025. <span>“New, Work-in-Progress Book on Spatial Data
+Visualization in R.”</span> October 13, 2025. <a href="https://geocompx.org/post/2025/tmap-bp1/">https://geocompx.org/post/2025/tmap-bp1/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
