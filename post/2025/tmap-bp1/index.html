@@ -207,7 +207,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </header>
 
 
-<p>We introduce a new, work-in-progress book on spatial data visualization in R using the <strong>tmap</strong> package. The current version of the book, titled <em>Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R</em>, is available online at <a href="https://tmap.geocompx.org/">https://tmap.geocompx.org/</a>. This blog post provides an overview of the book, its current status, and how you can get involved in its development.</p>
+<p>We want to introduce a new, work-in-progress book on spatial data visualization in R using the <strong>tmap</strong> package. The current version of the book, titled <em>Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R</em>, is available online at <a href="https://tmap.geocompx.org/">https://tmap.geocompx.org/</a>. This blog post provides an overview of the book, its current status, and how you can get involved in its development.</p>
 <section id="the-tmap-package" class="level2">
 <h2 class="anchored" data-anchor-id="the-tmap-package">The <strong>tmap</strong> package</h2>
 <p>The <strong>tmap</strong> package is a powerful tool for creating thematic maps in R. Its development started more than a decade ago, and it has since become one of the most popular packages for spatial data visualization in the R ecosystem. It allows to create various types of maps, from simple static maps to complex interactive visualizations and web maps.</p>
@@ -217,15 +217,15 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <figcaption>tmap logo</figcaption>
 </figure>
 </div>
-<p>In recent years, <strong>tmap</strong> has undergone significant changes that are now available in version 4.0. It includes an overhaul of the internal structure, improved and expanded syntax, and new features that enhance its capabilities. These features include improved default color palettes, additional options for positioning map elements, tools to assist in selecting map projections, the ability to create bivariate maps, expanded faceting options, and more.</p>
+<p>In recent years, <strong>tmap</strong> has undergone significant changes that are now available in version 4.0. It includes an overhaul of the internal package’s structure, unified and expanded syntax, and new features that enhance its capabilities. These features include improved defaults (e.g., color palettes), additional options for positioning map elements, tools to assist in selecting map projections, the ability to create bivariate maps, expanded faceting options, and more.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="fig-exprojs-1.png" class="img-fluid figure-img"></p>
 <figcaption>Examples of map projections for the whole world</figcaption>
 </figure>
 </div>
-<p>Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for other spatial classes, or provide connections to additional visualization libraries. Currently, there are several extensions available, including <strong>tmap.cartogram</strong>, <strong>tmap.glyphs</strong>, <strong>tmap.networks</strong>, and <strong>tmap.mapgl</strong>.</p>
-<p>Given the broad range of features and capabilities of the <strong>tmap</strong> package, there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively. This is where the new book comes in.</p>
+<p>Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for support of other spatial classes, or provide connections to additional visualization libraries. Currently, there are several extensions available, including <strong>tmap.cartogram</strong>, <strong>tmap.glyphs</strong>, <strong>tmap.networks</strong>, and <strong>tmap.mapgl</strong>.</p>
+<p>Given the broad range of features and capabilities of the <strong>tmap</strong> package,we feel there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively. This is where the new book comes in.</p>
 </section>
 <section id="book-overview" class="level2">
 <h2 class="anchored" data-anchor-id="book-overview">Book overview</h2>
@@ -243,13 +243,13 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <figcaption>An example of a bivariate map created with tmap</figcaption>
 </figure>
 </div>
-<p>The book is divided into five parts:</p>
+<p>The book is divided into five general parts:</p>
 <ol type="1">
-<li>Basics. It should allow you to create simple maps quickly.</li>
-<li>Building blocks. This part explains the core components of <strong>tmap</strong>, including shapes, layers, and visual variables, and how to customize map appearance with legends, scales, and layouts.</li>
-<li>Adding new tools. The goal of this part is to provide a deeper understanding of <strong>tmap</strong> features, including map projections, map arrangements, faceting, and animations.</li>
-<li>Expanding the toolbox. This part focuses on creating interactive maps, integrating <strong>tmap</strong> maps into web apps, and extending <strong>tmap</strong> with new layer types and spatial data classes.</li>
-<li>Mastering the craft. The final part aims to help you apply good design practices to create maps that are clear, consistent, and effective.</li>
+<li><strong>Basics</strong>. It should allow you to understand the fundamental concepts of <strong>tmap</strong> and to create simple maps quickly.</li>
+<li><strong>Building blocks</strong>. This part explains the core components of <strong>tmap</strong>, including shapes, layers, and visual variables, and shows how to customize map appearance with legends, scales, and layouts.</li>
+<li><strong>Adding new tools</strong>. The goal of this part is to provide a deeper understanding of <strong>tmap</strong> features, including map projections, map arrangements, faceting, and animations.</li>
+<li><strong>Expanding the toolbox</strong>. This part focuses on creating interactive maps, integrating <strong>tmap</strong> maps into web apps, and extending <strong>tmap</strong> with new layer types and spatial data classes.</li>
+<li><strong>Mastering the craft</strong>. The final part aims to help you apply good design practices to create maps that are clear, consistent, and effective.</li>
 </ol>
 </section>
 <section id="current-status-and-how-to-get-involved" class="level2">
@@ -257,12 +257,13 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <p>The book is currently a work in progress, with chapters belonging to the first three parts mostly completed. Thus, if you are interested in learning the basics of <strong>tmap</strong> and its core components, especially for static maps, you can already start using the book. The remaining chapters, those in parts four and five, are still under development.</p>
 <p>The <strong>tmap</strong> book is a part of the <a href="https://geocompx.org/">geocomp<em>x</em></a> project, which aims to provide open-source resources for geospatial analysis and visualization in R. As such, the book is open for contributions from the community. If you are interested in contributing to the book, you can do so by:</p>
 <ul>
-<li>Reporting issues or suggesting improvements on the book’s <a href="https://github.com/geocompx/tmap">GitHub repository</a> or through our social media channels</li>
-<li>Submitting pull requests with new content, examples, or corrections</li>
+<li>Reporting issues or suggesting improvements</li>
 <li>Providing feedback on the book’s content and structure</li>
+<li>Submitting pull requests with new content, examples, or corrections</li>
 <li>Sharing the book with others who might find it useful</li>
 </ul>
-<p>We welcome contributions from anyone interested in helping to improve the book and make it a valuable resource for the R, R spatial, and geospatial community, in general.</p>
+<p>The best way to get involved is through the book’s <a href="https://github.com/geocompx/tmap">GitHub repository</a>, our <a href="https://discord.gg/PMztXYgNxp">Discord server</a>, or our social media channels.</p>
+<p>We invite you to contribute and join us in making it a valuable resource for the R, R spatial, and geospatial community, in general.</p>
 
 
 </section>
