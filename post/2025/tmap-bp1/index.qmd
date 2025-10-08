@@ -39,12 +39,12 @@ This is where the new book comes in.
 The book's idea is to provide a practical guide to creating clear, effective maps in R with the **tmap** package.
 It is designed for a broad audience, including beginners in geospatial analysis, experienced GIS users transitioning to R, and anyone interested in visualizing spatial data.
 
-![Visual variables in tmap](fig-visual-variables-1.png)
+![Example of a map with four groups of map layers and additional map elements](fig-rmap2-1.png)
 
 The book covers the whole process of thematic mapping with **tmap**, from loading and preparing spatial data to creating and customizing maps for various audiences.
 In it, we try to combine concise explanations, reproducible code, and tips on good design and geospatial practices.
 
-![An example of a bivariate map created with tmap](fig-tmrastbiv-2.png)
+![Examples of different scales applied to the same variable](fig-scales-1.png)
 
 The book is divided into five general parts:
 
