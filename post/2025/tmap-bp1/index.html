@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jakub Nowosad">
-<meta name="dcterms.date" content="2025-10-13">
+<meta name="author" content="Martijn Tennekes">
+<meta name="dcterms.date" content="2025-10-14">
 
 <title>New, work-in-progress book on spatial data visualization in R – geocompx</title>
 <style>
@@ -79,7 +80,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </script>
-<meta name="quarto:status" content="draft">
 
 
 <link rel="stylesheet" href="../../../style.css">
@@ -88,7 +88,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -176,7 +176,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="quarto-title">
 <h1 class="title">New, work-in-progress book on spatial data visualization in R</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">updates</div>
+    <div class="quarto-category">tmap</div>
     <div class="quarto-category">rstats</div>
   </div>
   </div>
@@ -186,16 +186,17 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Authors</div>
     <div class="quarto-title-meta-contents">
-             <p>Jakub Nowosad </p>
+             <p><a href="https://jakubnowosad.com">Jakub Nowosad</a> <a href="https://orcid.org/0000-0002-1057-3721" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+             <p><a href="https://10mapz.com/">Martijn Tennekes</a> </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 13, 2025</p>
+      <p class="date">October 14, 2025</p>
     </div>
   </div>
   
@@ -225,7 +226,7 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </figure>
 </div>
 <p>Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for support of other spatial classes, or provide connections to additional visualization libraries. Currently, there are several extensions available, including <strong>tmap.cartogram</strong>, <strong>tmap.glyphs</strong>, <strong>tmap.networks</strong>, and <strong>tmap.mapgl</strong>.</p>
-<p>Given the broad range of features and capabilities of the <strong>tmap</strong> package,we feel there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively. This is where the new book comes in.</p>
+<p>Given the broad range of features and capabilities of the <strong>tmap</strong> package, we feel there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively. This is where the new book comes in.</p>
 </section>
 <section id="book-overview" class="level2">
 <h2 class="anchored" data-anchor-id="book-overview">Book overview</h2>
@@ -269,16 +270,16 @@ gtag('config', 'G-PS0D9S7P17', { 'anonymize_ip': true});
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
-  author = {Nowosad, Jakub},
+  author = {Nowosad, Jakub and Tennekes, Martijn},
   title = {New, Work-in-Progress Book on Spatial Data Visualization in
     {R}},
-  date = {2025-10-13},
+  date = {2025-10-14},
   url = {https://geocompx.org/post/2025/tmap-bp1/},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas" role="listitem">
-Nowosad, Jakub. 2025. <span>“New, Work-in-Progress Book on Spatial Data
-Visualization in R.”</span> October 13, 2025. <a href="https://geocompx.org/post/2025/tmap-bp1/">https://geocompx.org/post/2025/tmap-bp1/</a>.
+Nowosad, Jakub, and Martijn Tennekes. 2025. <span>“New, Work-in-Progress
+Book on Spatial Data Visualization in R.”</span> October 14, 2025. <a href="https://geocompx.org/post/2025/tmap-bp1/">https://geocompx.org/post/2025/tmap-bp1/</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

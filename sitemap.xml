@@ -2,170 +2,174 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://geocompx.org/post.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/py.html</loc>
-    <lastmod>2025-10-08T08:15:34.828Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.342Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/about.html</loc>
-    <lastmod>2025-10-08T08:15:34.710Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.227Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/geocompy-bp1/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.813Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.328Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/rgdal-retirement/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.815Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.330Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/geocompy-bp2/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.823Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.337Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp4/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.824Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.339Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp3/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.824Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.338Z</lastmod>
+  </url>
+  <url>
+    <loc>https://geocompx.org/post/2025/tmap-bp1/index.html</loc>
+    <lastmod>2025-10-13T09:01:14.340Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/crs-projections-transformations/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/tmap-styles/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2021/geocompr2-bp1/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2022/geocompr2-bp2/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.811Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.326Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2020/installing-r-spatial-packages-linux/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2020/recent-changes-in-r-spatial-and-how-to-be-ready-for-them/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2024/spData-bp1/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.821Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.336Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2024/support/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.822Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.337Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/workshops/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.954Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.466Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.924Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.437Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/img/book_cover_py_tmp.html</loc>
-    <lastmod>2025-10-08T08:15:34.831Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.345Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/presentations/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.878Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.392Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/presentations/libs/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.889Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.403Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/workshops/erum2018/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.912Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.426Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/static/workshops/libs/leaflet-binding/lib/leaflet-providers/rstudio_install.html</loc>
-    <lastmod>2025-10-08T08:15:34.943Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.455Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2024/cover-competition-results/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.815Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.330Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2024/rsi-bp1/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.821Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.336Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2024/geocompr2-bp3/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.819Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.334Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2020/r-spatial-demo-covid-19/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2022/geocompr-solutions/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.325Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2021/spatial-classes-conversion/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.809Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.324Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/tmap-grid/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2019/ggplot2-inset-maps/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp6/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.824Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.339Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp1/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.823Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.338Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp2/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.824Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.338Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2025/sml-bp5/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.824Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.339Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/map-cover-competition/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.815Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.330Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/beyond-sf/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.812Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.327Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/post/2023/ogh23/index.html</loc>
-    <lastmod>2025-10-08T08:15:34.815Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.330Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/jl.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/guestbook.html</loc>
-    <lastmod>2025-10-08T08:15:34.808Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.323Z</lastmod>
   </url>
   <url>
     <loc>https://geocompx.org/r.html</loc>
-    <lastmod>2025-10-08T08:15:34.828Z</lastmod>
+    <lastmod>2025-10-13T09:01:14.342Z</lastmod>
   </url>
 </urlset>
