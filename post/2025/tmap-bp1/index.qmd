@@ -1,13 +1,18 @@
 ---
 title: "New, work-in-progress book on spatial data visualization in R"
-author: Jakub Nowosad
-date: "2025-10-13"
+author:
+  - name: Jakub Nowosad
+    url: https://jakubnowosad.com
+    orcid:  0000-0002-1057-3721
+  - name: Martijn Tennekes
+    url: https://10mapz.com/
+date: "2025-10-14"
 slug: tmap-bp1
 categories:
-  - updates
+  - tmap
   - rstats
 tags: [geocompr, tmap, geocompx, viz, rstats, book]
-draft: true
+draft: false
 ---
 
 We want to introduce a new, work-in-progress book on spatial data visualization in R using the **tmap** package. 
@@ -31,7 +36,7 @@ These features include improved defaults (e.g., color palettes), additional opti
 Additionally, a system of extensions has been introduced, allowing creation of packages that add new map layers, allow for support of other spatial classes, or provide connections to additional visualization libraries.
 Currently, there are several extensions available, including **tmap.cartogram**, **tmap.glyphs**, **tmap.networks**, and **tmap.mapgl**.
 
-Given the broad range of features and capabilities of the **tmap** package,we feel there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively.
+Given the broad range of features and capabilities of the **tmap** package, we feel there is a need for comprehensive documentation and guidance on how to use it for spatial data visualization effectively.
 This is where the new book comes in.
 
 ## Book overview
