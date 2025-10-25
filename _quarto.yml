@@ -28,7 +28,7 @@ website:
       - href: about.qmd
         text: About us
     right:
-      - href: https://donate.stripe.com/4gweWl94Q9E35AQ6oo
+      - href: post/2025/support/index.qmd
         text: Support this project
       # - icon: twitter
       #   href: https://twitter.com/hashtag/geocompx
