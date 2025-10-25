@@ -40,7 +40,7 @@ website:
         href: post.xml
   draft-mode: unlinked
   google-analytics: "G-PS0D9S7P17"
-  cookie-consent: true
+  #cookie-consent: true
   page-footer: 
      left: "geocompx, 2016 - 2025" 
      right:
