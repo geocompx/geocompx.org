@@ -28,7 +28,7 @@ However, creating, maintaining, and contributing to such resources is time-consu
 
 Now, we opened two ways to support the **geocomp*x*** project financially:
 
-1. First, you can **donate to the project using the following link**: [donate.stripe.com/4gweWl94Q9E35AQ6oo](https://donate.stripe.com/4gweWl94Q9E35AQ6oo).
+1. First, you can **donate to the project using the following link**: [donate.stripe.com/4gM9ATaF6gjvaeog0y1gs01](https://donate.stripe.com/4gM9ATaF6gjvaeog0y1gs01).
 2. Second, you can **sponsor the project on GitHub** at [github.com/sponsors/geocompx](https://github.com/sponsors/geocompx).
 
 The donations and sponsorships will be used to support the development and maintenance of the project.
