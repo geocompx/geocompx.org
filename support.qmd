@@ -13,6 +13,8 @@ There are two primary ways to support the geocomp*x* project financially:
 
 ### 1. One-time or recurring donations
 
+<!-- update to librepay -->
+
 You can donate directly via Stripe:
 
 * **Donate via Stripe:** [https://donate.stripe.com/4gM9ATaF6gjvaeog0y1gs01](https://donate.stripe.com/4gM9ATaF6gjvaeog0y1gs01)

@@ -1,0 +1,36 @@
+---
+title: ""
+author: Jakub Nowosad
+date: "2026-01-06"
+slug: support
+categories:
+  - posts
+  - rstats
+  - python
+tags: [geocompr, geocompx, geocompy, rstats, python]
+draft: true
+---
+
+<!-- 1. intro -->
+
+<!-- 2. Book published -->
+
+<!-- Geocomputation with Python -->
+
+<!-- Geocomputation with R -->
+
+<!-- 3. Books-in-progress -->
+
+<!-- the tmap book -->
+
+<!-- the julia book -->
+
+<!-- 4. Blog posts -->
+
+<!-- a blog post series on spatial machine learning -->
+
+<!-- 5. Financialss -->
+
+<!-- hosting -->
+<!-- send books -->
+<!-- costs (stripe...) -->
