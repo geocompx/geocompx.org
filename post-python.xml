@@ -10,7 +10,81 @@
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 21 Dec 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>2025 geocompx report: advancing spatial data analysis across languages</title>
+  <dc:creator>Jakub Nowosad</dc:creator>
+  <link>https://geocompx.org/post/2025/updates-2025/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>The <strong>geocomp<em>x</em></strong> project provides open-source, open-access resources for learning and teaching about geocomputation in multiple programming languages. The year 2025 was special for the project, marked by various milestones and progress. This post summarizes the key updates from 2025, outlines the current work in progress, and speaks on how you can support the project.</p>
+<section id="books-published" class="level2">
+<h2 class="anchored" data-anchor-id="books-published">Books published</h2>
+<p>In 2025, we published two major books as part of the <strong>geocomp<em>x</em></strong> project:</p>
+<ul>
+<li><a href="https://r.geocompx.org/"><strong>Geocomputation with R (2nd edition)</strong></a>: This updated edition of the book on geocomputation in R with many parts rewritten and new content added. See <a href="../../../post/2024/geocompr2-bp3/">our blog post</a> for more details.</li>
+<li><a href="https://py.geocompx.org/"><strong>Geocomputation with Python</strong></a>: This is the first edition of the book on geocomputation in Python, covering various aspects of spatial data analysis, from understanding spatial objects, by operations on them, to making maps, using popular Python libraries.</li>
+</ul>
+<div class="columns">
+<div class="column">
+<p><img src="https://geocompx.org/post/2025/updates-2025/book_cover_r2.jpg" class="img-fluid"></p>
+</div><div class="column">
+<p><img src="https://geocompx.org/post/2025/updates-2025/book_cover_py.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Both books are available online for free, and printed copies can be purchased from various retailers.</p>
+<p>This year is also marked by the release of the Japanese translation of <strong>Geocomputation with R</strong> by Baba Yoshihiko<sup>1</sup>. You can find it at <a href="https://r.geocompx.org/jp/" class="uri">https://r.geocompx.org/jp/</a>.</p>
+</section>
+<section id="blog-posts" class="level2">
+<h2 class="anchored" data-anchor-id="blog-posts">Blog posts</h2>
+<p>We published a six-part blog post series on spatial machine learning with R in 2025. It presents and compares various machine learning frameworks in R, <strong>caret</strong>, <strong>tidymodels</strong>, and <strong>mlr3</strong>. It also showcases specialized R packages for spatial machine learning and spatial cross-validation. All blog posts include reproducible code examples and are available at <a href="https://geocompx.org/post/2025/sml-bp1/" class="uri">https://geocompx.org/post/2025/sml-bp1/</a>.</p>
+<p><img src="https://geocompx.org/post/2025/updates-2025/cast.png" class="img-fluid"></p>
+</section>
+<section id="work-in-progress" class="level2">
+<h2 class="anchored" data-anchor-id="work-in-progress">Work in progress</h2>
+<p>We are currently working on two new books as part of the <strong>geocomp<em>x</em></strong> project. It includes “Spatial Data Visualization with tmap: A Practical Guide to Thematic Mapping in R” and “Geocomputation with Julia”. The <strong>tmap</strong> book is more than halfway done, and the first three out of five parts are available online at <a href="https://tmap.geocompx.org/" class="uri">https://tmap.geocompx.org/</a><sup>2</sup>. The <strong>Julia</strong> book is in the early stages of development, with the first draft of the initial chapters available at <a href="https://jl.geocompx.org/" class="uri">https://jl.geocompx.org/</a>. You may also get involved in the development of these books by contributing code, examples, or reporting issues to the respective GitHub repositories: <a href="https://github.com/geocompx/tmap/" class="uri">https://github.com/geocompx/tmap/</a> and <a href="https://github.com/geocompx/geocompjl/" class="uri">https://github.com/geocompx/geocompjl/</a>.</p>
+<p><img src="https://geocompx.org/post/2025/updates-2025/fig-rmap2-1.png" class="img-fluid"></p>
+</section>
+<section id="support-the-project" class="level2">
+<h2 class="anchored" data-anchor-id="support-the-project">Support the project</h2>
+<p>We would like to thank everyone who has supported the <strong>geocomp<em>x</em></strong> project so far, either by sharing it with others, contributing code or content, or providing any type of support. During the year, we received <a href="https://geocompx.org/post/2024/support/">a financial contribution via GitHub Sponsors and Stripe donation</a>. After various expenses, we received a total of 75 EUR in 2025. This money was used to cover domain costs for the project and send a few copies of the book to readers. We had several issues with the Stripe donation platform<sup>3</sup>, and thus, we have now moved to <a href="https://liberapay.com/geocompx/">Liberapay</a> as the main donation platform.</p>
+<script src="https://liberapay.com/geocompx/widgets/button.js"></script>
+<p>We encourage you <a href="../../../support.html">to support the <strong>geocomp<em>x</em></strong> project financially</a> if you find our resources useful.</p>
+<p>All the best in 2026!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Thank you!↩︎</p></li>
+<li id="fn2"><p>we encourage you to check it out and provide feedback↩︎</p></li>
+<li id="fn3"><p>due to fraudulent payments and related chargeback costs↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
+  author = {Nowosad, Jakub},
+  title = {2025 Geocompx Report: Advancing Spatial Data Analysis Across
+    Languages},
+  date = {2025-12-21},
+  url = {https://geocompx.org/post/2025/updates-2025/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-nowosad2025" class="csl-entry quarto-appendix-citeas">
+Nowosad, Jakub. 2025. <span>“2025 Geocompx Report: Advancing Spatial
+Data Analysis Across Languages.”</span> December 21, 2025. <a href="https://geocompx.org/post/2025/updates-2025/">https://geocompx.org/post/2025/updates-2025/</a>.
+</div></div></section></div> ]]></description>
+  <category>posts</category>
+  <category>rstats</category>
+  <category>python</category>
+  <category>updates</category>
+  <guid>https://geocompx.org/post/2025/updates-2025/</guid>
+  <pubDate>Sun, 21 Dec 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Geocomputation with Python has arrived</title>
   <dc:creator>Jakub Nowosad, Michael Dorman, Anita Graser, Robin Lovelace</dc:creator>
