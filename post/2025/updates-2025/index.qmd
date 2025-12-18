@@ -62,7 +62,7 @@ You may also get involved in the development of these books by contributing code
 ## Support the project
 
 We would like to thank everyone who has supported the **geocomp*x*** project so far, either by sharing it with others, contributing code or content, or providing any type of support.
-During the year, we received [a financial contribution via GitHub Sponsors and Stripe donation](https://geocompx.org/post/2024/support/).
+During the year, we got [financial contributions via GitHub Sponsors and Stripe donation](https://geocompx.org/post/2024/support/)^[Thank you -- this is a signal that the project is useful to others!].
 After various expenses, we received a total of 75 EUR in 2025.
 This money was used to cover domain costs for the project and send a few copies of the book to readers.
 We had several issues with the Stripe donation platform^[due to fraudulent payments and related chargeback costs], and thus, we have now moved to [Liberapay](https://liberapay.com/geocompx/) as the main donation platform.
