@@ -50,7 +50,7 @@
 </section>
 <section id="support-the-project" class="level2">
 <h2 class="anchored" data-anchor-id="support-the-project">Support the project</h2>
-<p>We would like to thank everyone who has supported the <strong>geocomp<em>x</em></strong> project so far, either by sharing it with others, contributing code or content, or providing any type of support. During the year, we received <a href="https://geocompx.org/post/2024/support/">a financial contribution via GitHub Sponsors and Stripe donation</a>. After various expenses, we received a total of 75 EUR in 2025. This money was used to cover domain costs for the project and send a few copies of the book to readers. We had several issues with the Stripe donation platform<sup>3</sup>, and thus, we have now moved to <a href="https://liberapay.com/geocompx/">Liberapay</a> as the main donation platform.</p>
+<p>We would like to thank everyone who has supported the <strong>geocomp<em>x</em></strong> project so far, either by sharing it with others, contributing code or content, or providing any type of support. During the year, we got <a href="https://geocompx.org/post/2024/support/">financial contributions via GitHub Sponsors and Stripe donation</a><sup>3</sup>. After various expenses, we received a total of 75 EUR in 2025. This money was used to cover domain costs for the project and send a few copies of the book to readers. We had several issues with the Stripe donation platform<sup>4</sup>, and thus, we have now moved to <a href="https://liberapay.com/geocompx/">Liberapay</a> as the main donation platform.</p>
 <script src="https://liberapay.com/geocompx/widgets/button.js"></script>
 <p>We encourage you <a href="../../../support.html">to support the <strong>geocomp<em>x</em></strong> project financially</a> if you find our resources useful.</p>
 <p>All the best in 2026!</p>
@@ -64,7 +64,8 @@
 <ol>
 <li id="fn1"><p>Thank you!↩︎</p></li>
 <li id="fn2"><p>we encourage you to check it out and provide feedback↩︎</p></li>
-<li id="fn3"><p>due to fraudulent payments and related chargeback costs↩︎</p></li>
+<li id="fn3"><p>Thank you – this is a signal that the project is useful to others!↩︎</p></li>
+<li id="fn4"><p>due to fraudulent payments and related chargeback costs↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{nowosad2025,
   author = {Nowosad, Jakub},
