@@ -1,7 +1,7 @@
 ---
 title: "2025 geocompx report: advancing spatial data analysis across languages"
 author: Jakub Nowosad
-date: "2026-01-06"
+date: "2025-12-21"
 slug: support
 categories:
   - posts
@@ -9,7 +9,7 @@ categories:
   - python
   - updates
 tags: [geocompr, geocompx, geocompy, rstats, python]
-draft: true
+draft: false
 ---
 
 The **geocomp*x*** project provides open-source, open-access resources for learning and teaching about geocomputation in multiple programming languages.
@@ -67,6 +67,9 @@ After various expenses, we received a total of 75 EUR in 2025.
 This money was used to cover domain costs for the project and send a few copies of the book to readers.
 We had several issues with the Stripe donation platform^[due to fraudulent payments and related chargeback costs], and thus, we have now moved to [Liberapay](https://liberapay.com/geocompx/) as the main donation platform.
 
+<script src="https://liberapay.com/geocompx/widgets/button.js"></script>
+
 We encourage you [to support the **geocomp*x*** project financially](/support.html) if you find our resources useful.
+
 
 All the best in 2026!
