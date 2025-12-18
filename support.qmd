@@ -1,0 +1,44 @@
+---
+title-prefix: "geocompx"
+title: "Support the project"
+page-layout: full
+---
+
+The **geocomp*x*** project develops open-source, open-access resources for geocomputation.
+Financial support helps sustain development, maintenance, and community engagement.
+
+## Ways to support
+
+There are two primary ways to support the geocomp*x* project financially:
+
+### 1. One-time or recurring donations
+
+You can donate directly via Liberapay:
+
+- **Donate via Liberapay:** [https://liberapay.com/geocompx/](https://liberapay.com/geocompx/)
+
+### 2. GitHub sponsorship
+
+You can sponsor the project through GitHub Sponsors:
+
+- **GitHub Sponsors:** [https://github.com/sponsors/geocompx](https://github.com/sponsors/geocompx)
+
+## How contributions are used
+
+Financial contributions are used to support the ongoing development and maintenance of the project. 
+Depending on available funds, this may include:
+
+- Covering domain, hosting, and other infrastructure costs
+- Supporting contributors (e.g., book copies, small bounties, or other forms of recognition)
+- Organizing community activities such as competitions, workshops, or other engagement events
+
+## Other ways to help
+
+In addition to financial support, you can help by:
+
+- Contributing code, documentation, or examples
+- Reporting issues or suggesting improvements
+- Proposing blog posts or tutorials
+- Sharing the project with colleagues, students, and communities
+
+Every form of support helps make open-source geocomputational resources more sustainable and accessible (and motivates us to keep going)!

@@ -28,7 +28,7 @@ website:
       - href: about.qmd
         text: About us
     right:
-      - href: https://geocompx.org/post/2024/support/
+      - href: support.qmd
         text: Support this project
       # - icon: twitter
       #   href: https://twitter.com/hashtag/geocompx
