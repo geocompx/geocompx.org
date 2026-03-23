@@ -126,7 +126,8 @@ grid <- build_tile_grid(
 # ---- logo plot builder ----
 base_logo_plot <- function() {
   ggplot() +
-    # left hemisphere outline
+    # left hemisphere fill (behind) and outline
+    geom_polygon(data = ellipse, aes(x, y), fill = "white", color = NA) +
     geom_path(data = ellipse, aes(x, y), linewidth = outline_lwd) +
     # meridians
     geom_path(data = meridians, aes(x, y, group = gid), linewidth = grid_lwd) +
@@ -137,7 +138,7 @@ base_logo_plot <- function() {
       data = grid, aes(x, y),
       width = pixel_size,
       height = pixel_size,
-      fill = NA,
+      fill = "white",
       color = "black",
       linewidth = tile_lwd
     ) +
@@ -172,6 +173,32 @@ logo_horizontal <- base_logo_plot() +
   ) +
   coord_equal(xlim = c(-1.1, 5.1), ylim = c(-1.1, 1.1), clip = "off")
 
+# --- white-text variants (plain white text, for dark shirts) ---
+logo_vertical_white <- base_logo_plot() +
+  annotate(
+    "text",
+    x = 0, y = -1.25,
+    label = logo_text,
+    family = font_light_family,
+    fontface = "plain",
+    size = 32,
+    colour = "white"
+  ) +
+  coord_equal(xlim = c(-1.1, 1.1), ylim = c(-1.65, 1.1), clip = "off")
+
+logo_horizontal_white <- base_logo_plot() +
+  annotate(
+    "text",
+    x = 1.15, y = 0.15,
+    label = logo_text,
+    family = font_light_family,
+    fontface = "plain",
+    size = 48,
+    hjust = 0,
+    colour = "white"
+  ) +
+  coord_equal(xlim = c(-1.1, 5.1), ylim = c(-1.1, 1.1), clip = "off")
+
 favicon_plot <- base_logo_plot() +
   coord_equal(xlim = c(-1.05, 1.05), ylim = c(-1.05, 1.05), clip = "off")
 
@@ -179,10 +206,16 @@ svg_web_fonts <- systemfonts::fonts_as_import(font_family, weight = "light")
 
 # ---- saves ----
 # Final portable SVGs may require converting text to paths in Inkscape.
-ggsave("logo/geocompx-logo-only2026.png", logo_only, width = 4, height = 4, dpi = 300, bg = "white", device = ragg::agg_png)
-ggsave("logo/geocompx-logo-vertical2026.png", logo_vertical, width = 5.5, height = 5, dpi = 300, bg = "white", device = ragg::agg_png)
-ggsave("logo/geocompx-logo-horizontal2026.png", logo_horizontal, width = 11, height = 4, dpi = 300, bg = "white", device = ragg::agg_png)
-ggsave("logo/geocompx-logo-only2026.svg", logo_only, width = 4, height = 4, bg = "white", device = svglite::svglite, web_fonts = svg_web_fonts)
-ggsave("logo/geocompx-logo-vertical2026.svg", logo_vertical, width = 5.5, height = 5, bg = "white", device = svglite::svglite, web_fonts = svg_web_fonts)
-ggsave("logo/geocompx-logo-horizontal2026.svg", logo_horizontal, width = 11, height = 4, bg = "white", device = svglite::svglite, web_fonts = svg_web_fonts)
-ggsave("logo/favicon-512.png", favicon_plot, width = 512 / 96, height = 512 / 96, dpi = 96, bg = "white", device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-only2026.png", logo_only, width = 4, height = 4, dpi = 300, bg = NULL, device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-vertical2026.png", logo_vertical, width = 5.5, height = 5, dpi = 300, bg = "white", device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-horizontal2026.png", logo_horizontal, width = 11, height = 4, dpi = 300, bg = "white", device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-only2026.svg", logo_only, width = 4, height = 4, bg = NULL, device = svglite::svglite, web_fonts = svg_web_fonts)
+ggsave("static/logo/geocompx-logo-vertical2026.svg", logo_vertical, width = 5.5, height = 5, bg = NULL, device = svglite::svglite, web_fonts = svg_web_fonts)
+ggsave("static/logo/geocompx-logo-horizontal2026.svg", logo_horizontal, width = 11, height = 4, bg = NULL, device = svglite::svglite, web_fonts = svg_web_fonts)
+ggsave("static/logo/favicon-512.png", favicon_plot, width = 512 / 96, height = 512 / 96, dpi = 96, bg = NULL, device = ragg::agg_png)
+
+# ---- saves for white-text variants ----
+ggsave("static/logo/geocompx-logo-vertical-white2026.png", logo_vertical_white, width = 5.5, height = 5, dpi = 300, bg = "black", device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-vertical-white2026.svg", logo_vertical_white, width = 5.5, height = 5, bg = NULL, device = svglite::svglite, web_fonts = svg_web_fonts)
+ggsave("static/logo/geocompx-logo-horizontal-white2026.png", logo_horizontal_white, width = 11, height = 4, dpi = 300, bg = "black", device = ragg::agg_png)
+ggsave("static/logo/geocompx-logo-horizontal-white2026.svg", logo_horizontal_white, width = 11, height = 4, bg = NULL, device = svglite::svglite, web_fonts = svg_web_fonts)
