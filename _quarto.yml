@@ -45,7 +45,7 @@ website:
     storage: "none"              # do not store cookies
     anonymize-ip: true           # anonymize user IPs
   page-footer: 
-     left: "geocompx, 2016 - 2025" 
+     left: "geocompx, 2016 -- 2026" 
      right:
       - icon: github
         href: https://github.com/geocompx/geocompx.org
