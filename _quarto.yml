@@ -3,7 +3,7 @@ project:
   resources: "static/img/tmview-1.html"
 
 website:
-  favicon: "static/favicon.ico"
+  favicon: "static/favicon-512.png"
   # twitter-card: true
   # open-graph: true
   title: "geocompx"
@@ -11,7 +11,7 @@ website:
   description: "geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software"
   navbar:
     # logo: "static/geocompx-text.png"
-    logo: "static/geocompx-logo-h.png"
+    logo: "static/geocompx-logo-horizontal2026s.png"
     logo-alt: "geocompx"
     title: false
     left:
