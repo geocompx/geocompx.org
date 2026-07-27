@@ -23,6 +23,10 @@ You can sponsor the project through GitHub Sponsors:
 
 - **GitHub Sponsors:** [https://github.com/sponsors/geocompx](https://github.com/sponsors/geocompx)
 
+### 3. Get **geocomp*x*** merchandise
+
+- **Buy geocomp*x* merchandise (t-shirts, mugs, etc.):** [https://geocompx.tpopsite.com/](https://geocompx.tpopsite.com/)
+
 ## How contributions are used
 
 Financial contributions are used to support the ongoing development and maintenance of the project. 
