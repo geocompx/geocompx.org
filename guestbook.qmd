@@ -10,7 +10,7 @@ page-layout: full
 
 ### Modules using the book
 
-- [CASA0005 Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/), [Andy MacLachlan](https://twitter.com/andymaclachlan) and [Adam Dennett](https://twitter.com/adam_dennett), Centre for Advanced Spatial Analysis, Univeristy College London
+- [CASA0005 Geographic Information Systems and Science](https://andrewmaclachlan.github.io/CASA0005repo/), [Andy MacLachlan](https://twitter.com/andymaclachlan) and [Adam Dennett](https://twitter.com/adam_dennett), Centre for Advanced Spatial Analysis, University College London
 - [ECS530 Analysing spatial data](https://www.nhh.no/en/courses/analysing-spatial-data/), [Roger Bivand](https://www.nhh.no/en/employees/faculty/roger-bivand/), Norwegian School of Economics
 - [GEOG 495](http://geog.uoregon.edu/bartlein/courses/geog495/readings.html) and [595: Geographic Data Analysis](https://pjbartlein.github.io/GeogDataAnalysis/), University of Oregon
 - [ESPM 288: Reproducible and Collaborative Data Science](https://espm-288.carlboettiger.info/), [Berkeley](https://classes.berkeley.edu/content/2018-spring-espm-288-001-lab-001) University of California
@@ -21,8 +21,8 @@ page-layout: full
 - [CRD 298: Spatial Methods in Community Research](https://crd230.github.io/index.html),  Professor [Noli Brazil](https://humanecology.ucdavis.edu/people/noli-brazil), University of California, Davis 
 - [CP6521 Advanced GIS](https://rstudio-pubs-static.s3.amazonaws.com/460816_f7e4d237e0334e9887323686041bd762.html), [Yongsun Lee](https://sites.google.com/view/yongsunglee), Georgia Tech
 - [Urban Data Analytics in R](https://sia.planning.unc.edu/teaching/techniques-course/), [Nikhil Kaza](https://sia.planning.unc.edu/), University of North Carolina at Chapel Hill
--  [Geospatial Analytics](https://le.ac.uk/modules/2019/gy7707), taught by Dr [Nick Tate](https://www2.le.ac.uk/departments/geography/people/njt9) as part of the MSc in Geographical Information Science at the Unversity of Leicester, UK.
--  [GEOG 28402 & 28403: Geographic Information Science II & III](https://geography.uchicago.edu/content/geographical-sciences-and-gis-courses), [Marynia Kolak](https://makosak.github.io/) at the [Center for Spatial Data Science](https://makosak.github.io/), Unversity of Chicago
+-  [Geospatial Analytics](https://le.ac.uk/modules/2019/gy7707), taught by Dr [Nick Tate](https://www2.le.ac.uk/departments/geography/people/njt9) as part of the MSc in Geographical Information Science at the University of Leicester, UK.
+-  [GEOG 28402 & 28403: Geographic Information Science II & III](https://geography.uchicago.edu/content/geographical-sciences-and-gis-courses), [Marynia Kolak](https://makosak.github.io/) at the [Center for Spatial Data Science](https://makosak.github.io/), University of Chicago
 
 ### Other teaching courses/lectures/guides using the book
 
@@ -41,19 +41,31 @@ See the rest of these reviews and maybe add your own review [here](https://www.a
 
 ### Social media
 
-{{< tweet dgkeyes 1212123222931456000 >}}
-{{< tweet dikayodata 1519067757811228672 >}}
-{{< tweet BriChronister 1471963795908009986 >}}
-{{< tweet AuliaRBachtiar 1435036079485112321 >}}
-<!-- {{< tweet dr_bala_s 1314211766893645824 >}} -->
-{{< tweet kyle_e_walker 1252604577037385728 >}}
-<!-- {{< tweet virtualnaman 1222392518177783811 >}} -->
-<!-- {{< tweet jcusens 1202893592009805825 >}} -->
-<!-- {{< tweet MaryniaKolak 1103527764035096576 >}} -->
-{{< tweet geoviews 1084753004178358272 >}}
-{{< tweet KitMacleod 1074561874195292162 >}}
-{{< tweet cdhowe 1073280734926909442 >}}
-<!-- {{< tweet PONiittynen 1073112001382105088 >}} -->
-{{< tweet Thienthanh_le 1046710705267695616 >}}
-{{< tweet harpactes 1046560803745406977 >}}
-{{< tweet mbrcalles 1032678122859032576 >}}
+> “Wonderful wonderful resource.
+> I’ve read it multiple times and it really puts a fun spin on learning R for data science.”
+>
+> — [DiKayo Data](https://x.com/dikayodata/status/1519067757811228672)
+
+> “Your book lay foundation for my graduate thesis, excited to see it improved.”
+>
+> — [Aulia Rahman Bachtiar](https://x.com/AuliaRBachtiar/status/1435036079485112321)
+
+> “I’d recommend working through *Geocomputation with R* … it is accessible to beginners and covers conceptual foundations really well.”
+>
+> — [Kyle Walker](https://x.com/kyle_e_walker/status/1252604577037385728)
+
+> “I learned a ton by reading Robin Lovelace, Jakub Nowosad, and Jannes Muenchow’s *Geocomputation with R*.”
+>
+> — [David Keyes](https://x.com/dgkeyes/status/1212123222931456000)
+
+> “Geocomputation with R is an awesome book.”
+>
+> — [Carl Howe](https://x.com/cdhowe/status/1073280734926909442)
+
+> “Such a fantastic resource for spatial #rstats.”
+>
+> — [Charlotte Chang](https://x.com/harpactes/status/1046560803745406977)
+
+> “What a fantastic resource, I really can’t recommend it enough.”
+>
+> — [Michael Branion-Calles](https://x.com/mbrcalles/status/1032678122859032576)
