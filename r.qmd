@@ -9,7 +9,7 @@ page-layout: full
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-<a href="https://r.geocompx.org/"><img width=80% src="static/img/book_cover_r2.jpg"/></a>
+<a href="https://r.geocompx.org/"><img alt="Cover of Geocomputation with R" width=80% src="static/img/book_cover_r2.jpg"/></a>
 :::
 
 ::: {.g-col-12 .g-col-md-6}
@@ -61,7 +61,7 @@ Additionally, the first edition of the book has been officially translated into 
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-<a href="https://tmap.geocompx.org/"><img width=80% src="https://tmap.geocompx.org/images/cover_tmp_all_mockup.png"/></a>
+<a href="https://tmap.geocompx.org/"><img alt="Cover of Spatial Data Visualization with tmap" width=80% src="https://tmap.geocompx.org/images/cover_tmp_all_mockup.png"/></a>
 :::
 
 :::

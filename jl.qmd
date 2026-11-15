@@ -13,11 +13,11 @@ page-layout: full
 
 **Website:** <https://jl.geocompx.org/>
 
-**Github repo:** <https://github.com/geocompx/geocompjl>
+**GitHub repo:** <https://github.com/geocompx/geocompjl>
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-<a href="https://jl.geocompx.org/"><img width=80% src="static/img/book_cover_jl.png"/></a>
+<a href="https://jl.geocompx.org/"><img alt="Cover of Geocomputation with Julia" width=80% src="static/img/book_cover_jl.png"/></a>
 
 :::
 
