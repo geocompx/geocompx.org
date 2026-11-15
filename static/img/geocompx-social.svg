@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="1200"
+     height="630"
+     viewBox="0 0 1200 630"
+     role="img"
+     aria-labelledby="title description">
+  <title id="title">geocompx</title>
+  <desc id="description">Open resources for geocomputation</desc>
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <image href="../logo/geocompx-logo-horizontal2026.svg"
+         xlink:href="../logo/geocompx-logo-horizontal2026.svg"
+         x="-62"
+         y="-23"
+         width="1280"
+         height="465"
+         preserveAspectRatio="xMidYMid meet"/>
+  <text x="60"
+        y="510"
+        fill="#333333"
+        font-family="Oswald, Arial, Helvetica, sans-serif"
+        font-size="48"
+        font-weight="300"
+        letter-spacing="0.6"
+        text-anchor="start">Open resources for geocomputation</text>
+</svg>

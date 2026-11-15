@@ -4,8 +4,11 @@ project:
 
 website:
   favicon: "static/favicon-512.png"
-  # twitter-card: true
-  # open-graph: true
+  image: "static/img/geocompx-social.png"
+  image-alt: "geocompx: open resources for geocomputation"
+  twitter-card:
+    card-style: summary_large_image
+  open-graph: true
   title: "geocompx"
   site-url: https://geocompx.org/
   description: "geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software"

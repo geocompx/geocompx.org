@@ -2,6 +2,8 @@
 pagetitle: "geocompx"
 page-layout: full
 toc: false
+image: "static/img/geocompx-social.png"
+image-alt: "geocompx: open resources for geocomputation"
 ---
 ## Welcome to **geocomp*x***!
 
