@@ -13,6 +13,16 @@
   padding-top: 1rem;
   border-top: 1px solid var(--bs-border-color);
   font-size: 0.95rem;
+  color: var(--bs-secondary-color);
+}
+
+.post-support p {
+  margin-bottom: 0.5rem;
+}
+
+.post-support p:first-child {
+  color: var(--bs-body-color);
+  font-weight: 600;
 }
 
 .post-support p:last-child {
