@@ -9,3 +9,5 @@ tags: [rspatial, rstats]
 draft: true
 bibliography: refs.bib
 ---
+
+{{< include /post/_support-footer.qmd >}}

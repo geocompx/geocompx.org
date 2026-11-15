@@ -59,3 +59,5 @@ Now, the image contains vector and raster data (which is the focus of the 1st pa
 Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover.
 Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project! 
 
+
+{{< include /post/_support-footer.qmd >}}

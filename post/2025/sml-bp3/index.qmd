@@ -274,3 +274,5 @@ This blog post was originally written as a supplement to the poster "An Inventor
 The poster is available at <https://doi.org/10.5281/zenodo.15088973>.
 
 :::
+
+{{< include /post/_support-footer.qmd >}}

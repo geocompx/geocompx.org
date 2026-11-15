@@ -39,3 +39,5 @@ Many thanks also to Jannes Muenchow, whose work was essential for parts of the b
 If you want to connect with us, you can join the [geocompx discord channel](https://discord.gg/Te3gWeDwmf).
 We also use the `#geocompx` hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.
 
+
+{{< include /post/_support-footer.qmd >}}

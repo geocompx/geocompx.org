@@ -1,0 +1,6 @@
+::: {.post-support role="complementary" aria-label="Support geocompx"}
+Found this post helpful?
+
+[Follow **geocomp*x*** on GitHub](https://github.com/geocompx) or star a repository you use, and [consider supporting the project](/support.html).
+Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.
+:::

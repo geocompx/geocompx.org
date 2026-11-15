@@ -61,3 +61,5 @@ The winner will receive a $150 voucher for Taylor and Francis books, a copy of t
 A runner-up will receive a copy of the book.
 
 We look forward to seeing your ideas!
+
+{{< include /post/_support-footer.qmd >}}

@@ -267,3 +267,5 @@ More specific resources on projections include:
 
 Check out the questions in the exercises section of Chapter 6 of Geocomputation with R.
 
+
+{{< include /post/_support-footer.qmd >}}

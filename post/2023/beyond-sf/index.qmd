@@ -307,3 +307,5 @@ Each library can convert to and from **sf** geometries as well.
 
 Happy programming! 
 
+
+{{< include /post/_support-footer.qmd >}}

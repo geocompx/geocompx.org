@@ -239,3 +239,5 @@ An useful feature would be adding methods of simpler product filtering, based on
 Other feature could be focused on time series analysis, by calculating indices for each available item in selected time span.
 
 I'm looking forward into the future developements of **rsi**. 
+
+{{< include /post/_support-footer.qmd >}}

@@ -76,3 +76,5 @@ It would also be great if you could share the message about the book with your f
 You can also join our [Discord](https://discord.gg/PMztXYgNxp) server to discuss the project.
 
 Thank you!
+
+{{< include /post/_support-footer.qmd >}}

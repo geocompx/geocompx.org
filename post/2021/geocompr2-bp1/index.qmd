@@ -31,3 +31,5 @@ The book is already much stronger thanks to community, with 50+ people contribut
 Thanks from the Geocomputation with R team,
 
 Robin Lovelace, Jakub Nowosad, and Jannes Muenchow
+
+{{< include /post/_support-footer.qmd >}}

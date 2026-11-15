@@ -24,3 +24,5 @@ We hope that this change will serve as a good example and encourage others to us
 At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future.
 Thus, if you use the **spData** package, be aware of this change and update your code accordingly.
 Also, if you have any comments or suggestions, please let us know in the issue on the package's GitHub page at <https://github.com/Nowosad/spData/issues/62>.
+
+{{< include /post/_support-footer.qmd >}}

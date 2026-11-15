@@ -11,5 +11,12 @@ In that folder, create a new file named `index.qmd` and add the content of the p
 
 If you want to add any images, you can add them directly in your post folder.
 
+End each post with the shared support footer:
+
+```markdown
+{{< include /post/_support-footer.qmd >}}
+```
+
+Omit the footer from posts whose main purpose is already to discuss project support.
 
 

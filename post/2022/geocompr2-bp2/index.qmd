@@ -87,3 +87,5 @@ The work and updates on the second edition of Geocomputation with R would not be
 We want to thank all of you, including authors of recent Pull Requests (*ec-nebi*, *e-clin*, Oliver Leroy *defuneste*, Ivan Dubrovin *iod-ine*, Floris Vanderhaeghe *florisvdh*, Hasmukh K Mistry *hasukmistry*, John S. Erickson *olyerickson*) and people raising new GitHub issues.
 We are still actively working on the book, and thus -- let us know if you have any [issues or suggestions](https://github.com/Robinlovelace/geocompr/issues) and feel free to create any [Pull Request](https://github.com/Robinlovelace/geocompr/pulls) from fixing typos, clarifying unclear sentences, to changes to the code and prose.
 You can also contact us on [the Geocomputation with R discord channel](https://discord.gg/Te3gWeDwmf).
+
+{{< include /post/_support-footer.qmd >}}

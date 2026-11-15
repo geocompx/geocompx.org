@@ -213,3 +213,5 @@ These operations are known as rasterization and vectorization, and they could im
 To learn more about them, read [the Raster-Vector Interactions section](https://geocompr.robinlovelace.net/geometric-operations.html#raster-vector) in [Geocomputation with R](https://geocompr.robinlovelace.net/).
 
 ## References
+
+{{< include /post/_support-footer.qmd >}}

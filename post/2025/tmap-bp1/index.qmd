@@ -77,3 +77,5 @@ If you are interested in contributing to the book, you can do so by:
 The best way to get involved is through the book's [GitHub repository](https://github.com/geocompx/tmap), our [Discord server](https://discord.gg/PMztXYgNxp), or our social media channels.
 
 We invite you to contribute and join us in making it a valuable resource for the R, R spatial, and geospatial community, in general.
+
+{{< include /post/_support-footer.qmd >}}

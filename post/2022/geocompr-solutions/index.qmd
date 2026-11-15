@@ -100,3 +100,5 @@ It should also encourage others to get involved: can you think of another exerci
 You have all the info you need to contribute now.
 Let us know your comments or suggestions at https://github.com/geocompr/solutions!
 Pull Requests are also welcome!
+
+{{< include /post/_support-footer.qmd >}}

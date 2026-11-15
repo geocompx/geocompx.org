@@ -151,3 +151,5 @@ tm_shape(world) +
   tm_layout(inner.margins = 0)
 ```
 
+
+{{< include /post/_support-footer.qmd >}}

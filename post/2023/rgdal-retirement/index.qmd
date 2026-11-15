@@ -188,3 +188,5 @@ Good luck!
 
 I would like to thank [Roger Bivand](https://fosstodon.org/@rsbivand) and [Maximilian H.K. Hesselbarth](https://www.maxhesselbarth.com/) for their comments and suggestions that helped to improve this document.
 
+
+{{< include /post/_support-footer.qmd >}}

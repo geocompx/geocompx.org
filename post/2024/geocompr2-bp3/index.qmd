@@ -120,3 +120,5 @@ The list is very long -- you can find it at <https://r.geocompx.org/preface#ackn
 We feel very grateful for all the help we received from the community.
 Thank you!
 
+
+{{< include /post/_support-footer.qmd >}}

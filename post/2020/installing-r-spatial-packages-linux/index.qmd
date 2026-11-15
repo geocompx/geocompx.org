@@ -242,3 +242,5 @@ This will take time but, building on [OSGeo](https://www.osgeo.org/) libraries, 
 ![](https://www.osgeo.org/wp-content/themes/roots/assets/img/logo-osgeo.svg)
 
 Be the [FOSS4G](https://wiki.osgeo.org/wiki/FOSS4G) change you want to see in the world!
+
+{{< include /post/_support-footer.qmd >}}

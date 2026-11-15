@@ -389,3 +389,5 @@ sessioninfo::session_info()
 ```
 
 </details>
+
+{{< include /post/_support-footer.qmd >}}

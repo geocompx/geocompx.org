@@ -38,3 +38,5 @@ Discussing these set-up options, and questions of compatibility between geograph
 You can find the slides for the talk at https://nowosad.github.io/whyr_webinar004/.
 
 {{< video https://www.youtube.com/embed/Va0STgco7-4 >}}
+
+{{< include /post/_support-footer.qmd >}}

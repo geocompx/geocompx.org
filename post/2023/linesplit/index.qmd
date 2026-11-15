@@ -234,3 +234,5 @@ knitr::kable(times_combined)
 
 
 
+
+{{< include /post/_support-footer.qmd >}}

@@ -252,3 +252,5 @@ Other examples of inset maps with **ggplot2** can be found in the [Inset Maps](h
 
 The decision which option to use depends on the expected map type preferred R packages, etc.
 Try different approaches on your own data and decide what works best for you!
+
+{{< include /post/_support-footer.qmd >}}

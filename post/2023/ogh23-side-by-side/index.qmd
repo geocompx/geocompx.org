@@ -551,3 +551,5 @@ For more information, the following resources are recommended:
 - [Geocomputation with Python](https://py.geocompx.org/)
 - [Spatial Data Science with applications in R and Python](https://r-spatial.org/python/), which provides R and Python code side-by-side
 - A great tutorial that simultaneously covers R and Python is [Tools and packages to query and process Sentinel-1 and Sentinel-2 data with R and Python](https://github.com/loreabad6/ogh23) by Lorena Abad.
+
+{{< include /post/_support-footer.qmd >}}
