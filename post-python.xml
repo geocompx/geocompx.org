@@ -9,6 +9,13 @@
 <link>https://geocompx.org/post.html#category=python</link>
 <atom:link href="https://geocompx.org/post-python.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
+<image>
+<url>https://geocompx.org/static/img/geocompx-social.png</url>
+<title>geocompx</title>
+<link>https://geocompx.org/post.html#category=python</link>
+<height>76</height>
+<width>144</width>
+</image>
 <generator>quarto-1.7.32</generator>
 <lastBuildDate>Sun, 21 Dec 2025 00:00:00 GMT</lastBuildDate>
 <item>
@@ -128,6 +135,10 @@ Data Analysis Across Languages.”</span> December 21, 2025. <a href="https://ge
 </figure>
 </div>
 <p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">geocompx discord channel</a>. We also use the <code>#geocompx</code> hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 
@@ -277,6 +288,10 @@ Development of Open-Source Geocomputation Resources!”</span> December 6,
 <p>If you want to contribute, please open an issue or a pull request on <a href="https://github.com/geocompx/geocompy">GitHub</a>. Now, when the book is in the late stages of development, it is the perfect time to provide feedback as it can still be incorporated into the soon-to-be-published book.</p>
 <p>It would also be great if you could share the message about the book with your friends and colleagues and communicate about it online. You can also join our <a href="https://discord.gg/PMztXYgNxp">Discord</a> server to discuss the project.</p>
 <p>Thank you!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>

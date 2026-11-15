@@ -9,6 +9,13 @@
 <link>https://geocompx.org/post.html</link>
 <atom:link href="https://geocompx.org/post.xml" rel="self" type="application/rss+xml"/>
 <description>geocompx hosts free resources on reproducible geographic data analysis, modelling and visualization with open source software</description>
+<image>
+<url>https://geocompx.org/static/img/geocompx-social.png</url>
+<title>geocompx</title>
+<link>https://geocompx.org/post.html</link>
+<height>76</height>
+<width>144</width>
+</image>
 <generator>quarto-1.7.32</generator>
 <lastBuildDate>Sun, 21 Dec 2025 00:00:00 GMT</lastBuildDate>
 <item>
@@ -153,6 +160,10 @@ Data Analysis Across Languages.”</span> December 21, 2025. <a href="https://ge
 </ul>
 <p>The best way to get involved is through the book’s <a href="https://github.com/geocompx/tmap">GitHub repository</a>, our <a href="https://discord.gg/PMztXYgNxp">Discord server</a>, or our social media channels.</p>
 <p>We invite you to contribute and join us in making it a valuable resource for the R, R spatial, and geospatial community, in general.</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -6403,6 +6414,10 @@ Tidymodels, and Mlr3.”</span> April 30, 2025. <a href="https://geocompx.org/po
 </figure>
 </div>
 <p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">geocompx discord channel</a>. We also use the <code>#geocompx</code> hashtag on social media to share news and updates about the project, so feel free to use it to connect with us and others.</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 
@@ -6546,6 +6561,10 @@ Development of Open-Source Geocomputation Resources!”</span> December 6,
 <h2 class="anchored" data-anchor-id="how-to-connect-and-acknowledgments">How to connect and acknowledgments</h2>
 <p>If you want to connect with us, you can join the <a href="https://discord.gg/Te3gWeDwmf">Geocomputation with R discord channel</a>. You can find us on GitHub, where you can open an issue or submit a pull request to <a href="https://github.com/geocompx/geocompr/issues">the book’s repository</a>. We also use the <code>#geocompr</code> hashtag on social media to share news and updates about the book, and encourage you to do the same.</p>
 <p>This work was certainly not possible without the interest and activity of many people. Several people contributed to the text and code, many other people raised issues and suggested improvements, and many more people provided feedback and support. The list is very long – you can find it at <a href="https://r.geocompx.org/preface#acknowledgements" class="uri">https://r.geocompx.org/preface#acknowledgements</a>. We feel very grateful for all the help we received from the community. Thank you!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -6585,6 +6604,10 @@ Edition of *Geocomputation with R* Is Complete.”</span> October 6, 2024.
 <p>The ESRI Shapefile format is possibly the most popular data format for storing spatial vector data. It is well-established, widely supported, and can be used in most GIS software. At the same time, it has many shortcomings and limitations: it is not a single file, but a collection of files; it has a limit of 2GB per file; it does not support more than one geometry type per file, and more.<sup>1</sup> In the last few years, a few improved alternatives to the Shapefile format have been developed, such as the <a href="https://www.geopackage.org/">GeoPackage</a> and the <a href="https://github.com/flatgeobuf/flatgeobuf">FlatGeobuf</a> format.<sup>2</sup></p>
 <p>In 2017, together with Roger Bivand and Robin Lovelace, we created the <a href="https://github.com/Nowosad/spData"><strong>spData</strong></a> R package – a collection of spatial data both as R objects and external file formats. The package has two main goals: to provide easy access to spatial data for teaching purposes and to provide datasets that could be used as examples in the documentation of other packages. Many of the datasets in the package are stored in the ESRI Shapefile format, which is not ideal.</p>
 <p>Thus, after some discussions, we decided to replace the Shapefile format with the GeoPackage format in the <strong>spData</strong> package (version number: 2.3.1). We hope that this change will serve as a good example and encourage others to use modern spatial data formats. At the time of writing (June 2024), we added GeoPackage versions of all the datasets in the package, but we also plan to remove the ESRI Shapefile versions in the near future. Thus, if you use the <strong>spData</strong> package, be aware of this change and update your code accordingly. Also, if you have any comments or suggestions, please let us know in the issue on the package’s GitHub page at <a href="https://github.com/Nowosad/spData/issues/62" class="uri">https://github.com/Nowosad/spData/issues/62</a>.</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 
@@ -6667,6 +6690,10 @@ Note
 </figure>
 </div>
 <p>Overall, I enjoyed creating this cover, and even more so with the exchanges with the authors and the iterations that led to the final version of the cover. Many thanks to Robin, Jakub and Jannes for allowing me to make a small contribution to this great project!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -7493,6 +7520,10 @@ January 10, 2024. <a href="https://geocompx.org/post/2024/rsi-bp1/">https://geoc
 <p>If you want to contribute, please open an issue or a pull request on <a href="https://github.com/geocompx/geocompy">GitHub</a>. Now, when the book is in the late stages of development, it is the perfect time to provide feedback as it can still be incorporated into the soon-to-be-published book.</p>
 <p>It would also be great if you could share the message about the book with your friends and colleagues and communicate about it online. You can also join our <a href="https://discord.gg/PMztXYgNxp">Discord</a> server to discuss the project.</p>
 <p>Thank you!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -7590,6 +7621,10 @@ Python’</span>.”</span> December 12, 2023. <a href="https://geocompx.org/pos
 <h1>Prizes</h1>
 <p>The winner will receive a $150 voucher for Taylor and Francis books, a copy of the second edition of Geocomputation with R and will be credited in the book. A runner-up will receive a copy of the book.</p>
 <p>We look forward to seeing your ideas!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -10564,6 +10599,10 @@ cat(res, sep = '\n')
 <li>Once a week, another <a href="https://github.com/geocompr/solutions/actions/workflows/main.yaml">GitHub Actions workflow</a> runs in the solutions repository.</li>
 </ol>
 <p>This approach ensures that the solutions are always up-to-date, reproducible, and in sync. with the manuscript. It creates a resources dedicated to the exercises and their solutions, helping people learn. It should also encourage others to get involved: can you think of another exercise or an alternative solution to existing exercises? You have all the info you need to contribute now. Let us know your comments or suggestions at https://github.com/geocompr/solutions! Pull Requests are also welcome!</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -10641,6 +10680,10 @@ with R Solutions.”</span> February 24, 2022. <a href="https://geocompx.org/pos
 <h2 class="anchored" data-anchor-id="outro">Outro</h2>
 <p>Our plan now is to switch attention to the second part of the book called Extensions, while Part 1 is sent for peer review. We will work on the enhanced Making maps chapter, updates on Bridges to GIS software and Statistical learning.</p>
 <p>The work and updates on the second edition of Geocomputation with R would not be possible without the interest and activity of our readers! We want to thank all of you, including authors of recent Pull Requests (<em>ec-nebi</em>, <em>e-clin</em>, Oliver Leroy <em>defuneste</em>, Ivan Dubrovin <em>iod-ine</em>, Floris Vanderhaeghe <em>florisvdh</em>, Hasmukh K Mistry <em>hasukmistry</em>, John S. Erickson <em>olyerickson</em>) and people raising new GitHub issues. We are still actively working on the book, and thus – let us know if you have any <a href="https://github.com/Robinlovelace/geocompr/issues">issues or suggestions</a> and feel free to create any <a href="https://github.com/Robinlovelace/geocompr/pulls">Pull Request</a> from fixing typos, clarifying unclear sentences, to changes to the code and prose. You can also contact us on <a href="https://discord.gg/Te3gWeDwmf">the Geocomputation with R discord channel</a>.</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 </section>
@@ -10685,6 +10728,10 @@ Update: Geocomputation with R Second Edition Part 1.”</span> January 27,
 <p>The book is already much stronger thanks to community, with 50+ people contributing to the codebase already and many more supporting in the issue tracker and the guestbook. <strong>Please take a few minutes to let us know your thoughts on the current edition, and suggestions for the next one using <a href="https://forms.gle/nq9RmbxJyZXQgc948">the Google form</a>.</strong></p>
 <p>Thanks from the Geocomputation with R team,</p>
 <p>Robin Lovelace, Jakub Nowosad, and Jannes Muenchow</p>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 
@@ -11153,6 +11200,10 @@ Classes in R.”</span> June 17, 2021. <a href="https://geocompx.org/post/2021/s
 <p>In the first part of the talk, we showcase several recent advances in R packages. It includes the largest recent change related to the developments in the PROJ library. We explain why the changes happened and how they impact R users. The second part focus on how to prepare for the changes, including computer set-up and running R spatial packages using Docker (briefly covered in a previous <a href="https://geocompr.github.io/post/2020/installing-r-spatial-ubuntu/">post</a> and outlined in the new <a href="https://github.com/geocompr/docker#geocomputation-with-r-in-docker">geocompr/docker</a> repo). We outline important considerations when setting-up operating systems for geographic R packages. To reduce set-up times you can use geographic R packages Docker, a flexible and scalable technology containerization technology. Docker can run on modern computers and on your browser via services such as Binder, greatly reducing set-up times. Discussing these set-up options, and questions of compatibility between geographic R packages and paradigms such as the tidyverse and data.table, ensure that after the talk everyone can empower themselves with open source software for geographic data analysis in a powerful and flexible statistical programming environment.</p>
 <p>You can find the slides for the talk at https://nowosad.github.io/whyr_webinar004/.</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/Va0STgco7-4" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
+<div class="post-support" aria-label="Support geocompx">
+<p>Found this post helpful?</p>
+<p><a href="https://github.com/geocompx">Follow <strong>geocomp<em>x</em></strong> on GitHub</a> or star a repository you use, and <a href="../../../support.html">consider supporting the project</a>. Your support helps us sustain and expand open-source, open-access resources for the geocomputation community.</p>
+</div>
 
 
 
